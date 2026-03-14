@@ -60,7 +60,7 @@ a { color:inherit; text-decoration:none; }
 #bg-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(7,11,20,0.32);
+  background: rgba(5,8,18,0.12);
   z-index: 1;
   pointer-events: none;
 }
@@ -800,7 +800,7 @@ a { color:inherit; text-decoration:none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 14px 8px;
+  padding: 10px 14px;
   flex-shrink: 0;
 }
 
@@ -809,6 +809,7 @@ a { color:inherit; text-decoration:none; }
   font-size: .88rem;
   font-weight: 700;
   color: var(--tx);
+  line-height: 1;
 }
 
 .cal-nav {
@@ -821,19 +822,20 @@ a { color:inherit; text-decoration:none; }
   font-size: 1rem;
   line-height: 1;
   transition: all .2s;
+  flex-shrink: 0;
 }
 .cal-nav:hover { border-color:var(--ac); color:var(--ac); background:rgba(56,189,248,.08); }
 
 .cal-wdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: 0 10px 4px;
+  padding: 0 8px 4px;
   flex-shrink: 0;
 }
 
 .cal-wday {
   text-align: center;
-  font-size: .68rem;
+  font-size: .65rem;
   font-weight: 700;
   color: var(--txd);
   padding: 2px 0;
@@ -842,34 +844,64 @@ a { color:inherit; text-decoration:none; }
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: 0 10px 10px;
+  padding: 0 8px 8px;
   gap: 2px;
   flex: 1;
   overflow: hidden;
+  align-content: start;
 }
 
+/* Each day cell */
 .cal-day {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  aspect-ratio: 1;
-  border-radius: 50%;
+  padding: 3px 1px;
+  border-radius: 6px;
+  cursor: default;
+  min-height: 32px;
+  transition: background .15s;
+  gap: 1px;
+}
+
+.cal-num {
   font-size: .78rem;
   font-weight: 600;
   color: var(--txm);
-  cursor: default;
-  transition: background .15s;
+  line-height: 1;
 }
 
-.cal-day.other { color: var(--txd); }
-.cal-day.sun   { color: #f87171; }
-.cal-day.sat   { color: var(--ac); }
+.cal-day.other .cal-num { color: var(--txd); }
 
+/* Weekend & holiday = red */
+.cal-day.holiday .cal-num { color: #f87171; font-weight: 700; }
+
+/* Workday (補班/補課) = green */
+.cal-day.workday .cal-num { color: #4ade80; font-weight: 700; }
+
+/* Today highlight */
 .cal-day.today {
   background: var(--ac);
-  color: #03111e;
-  font-weight: 800;
+  border-radius: 6px;
 }
+.cal-day.today .cal-num { color: #03111e; font-weight: 800; }
+.cal-day.today .cal-label { color: #03111e; }
+
+/* Holiday / workday label */
+.cal-label {
+  font-size: .52rem;
+  font-weight: 600;
+  color: var(--txm);
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.cal-day.holiday .cal-label { color: #f87171; }
+.cal-day.workday .cal-label { color: #4ade80; }
 
 /* ══════════════════════════════
    RESPONSIVE

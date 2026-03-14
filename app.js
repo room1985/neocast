@@ -943,6 +943,68 @@ function onResize() {
 /* ─────────────────────────────────────
    CALENDAR WIDGET
 ───────────────────────────────────── */
+/* ─────────────────────────────────────
+   CALENDAR — Holiday Cache & Fetch
+───────────────────────────────────── */
+const HOLIDAY_LS  = 'neocast_holidays';
+const HOLIDAY_TTL = 24 * 60 * 60 * 1000; // 1 day
+
+// holidayMap: { 'YYYY-MM-DD': { name, isHoliday, isWork } }
+let holidayMap = {};
+
+async function loadHolidays(year) {
+  // Check localStorage cache
+  try {
+    const raw = localStorage.getItem(HOLIDAY_LS + '_' + year);
+    if (raw) {
+      const c = JSON.parse(raw);
+      if (Date.now() - c.fetchedAt < HOLIDAY_TTL) {
+        holidayMap = { ...holidayMap, ...c.data };
+        return;
+      }
+    }
+  } catch(_) {}
+
+  // Fetch from 行政院人事行政總處 open data
+  try {
+    const url = `https://data.ntpc.gov.tw/api/datasets/308DCD75-6119-4125-8324-09DB544E1FB8/json?size=500&page=0`;
+    const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+    const res  = await fetch(proxy, { signal: AbortSignal.timeout(10000) });
+    if (!res.ok) throw new Error('fetch fail');
+    const json = await res.json();
+    const arr  = JSON.parse(json.contents);
+
+    const data = {};
+    arr.forEach(item => {
+      // item fields: date (YYYYMMDD), name, isHoliday, holidayCategory, description
+      const raw = item.date || item['西元日期'] || item['date'];
+      if (!raw) return;
+      const d = raw.length === 8
+        ? `${raw.slice(0,4)}-${raw.slice(4,6)}-${raw.slice(6,8)}`
+        : raw;
+      const name     = item.description || item['說明'] || item.name || '';
+      const isHoliday= item.isHoliday === 'Y' || item['是否放假'] === '2';
+      const isWork   = item.isHoliday === 'N' && (
+        (name.includes('補班') || name.includes('補課') || item['holidayCategory'] === '補上班日')
+      );
+      data[d] = { name: name.slice(0,5), isHoliday, isWork };
+    });
+
+    // Merge into holidayMap
+    holidayMap = { ...holidayMap, ...data };
+
+    // Cache
+    localStorage.setItem(HOLIDAY_LS + '_' + year, JSON.stringify({
+      fetchedAt: Date.now(), data
+    }));
+  } catch(e) {
+    console.warn('[NeoCast] Holiday fetch failed:', e.message);
+  }
+}
+
+/* ─────────────────────────────────────
+   CALENDAR WIDGET
+───────────────────────────────────── */
 function buildCalendarWidget() {
   const outer = el('div');
   outer.style.cssText = 'display:flex;flex-direction:column;height:100%;overflow:hidden;';
@@ -954,16 +1016,19 @@ function buildCalendarWidget() {
   let viewYear  = new Date().getFullYear();
   let viewMonth = new Date().getMonth();
 
-  function render() {
+  async function render() {
     outer.innerHTML = '';
+
+    // Pre-load holidays for current view year
+    await loadHolidays(viewYear);
 
     const today = new Date();
     const isCurrentMonth = today.getFullYear() === viewYear && today.getMonth() === viewMonth;
 
-    // Header
-    const head = el('div', 'cal-head');
-    const prev = el('button', 'cal-nav', '‹');
-    const next = el('button', 'cal-nav', '›');
+    // ── Header ──
+    const head  = el('div', 'cal-head');
+    const prev  = el('button', 'cal-nav', '‹');
+    const next  = el('button', 'cal-nav', '›');
     const title = el('div', 'cal-title', `${viewYear}年 ${viewMonth+1}月`);
     prev.addEventListener('click', () => {
       viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } render();
@@ -976,43 +1041,65 @@ function buildCalendarWidget() {
     head.appendChild(next);
     outer.appendChild(head);
 
-    // Weekday labels
+    // ── Weekday labels ──
     const wdays = el('div', 'cal-wdays');
     ['日','一','二','三','四','五','六'].forEach(d => {
-      const c = el('div', 'cal-wday', d);
-      wdays.appendChild(c);
+      wdays.appendChild(el('div', 'cal-wday', d));
     });
     outer.appendChild(wdays);
 
-    // Days grid
-    const grid = el('div', 'cal-grid');
-    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
-    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
-    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
+    // ── Days grid ──
+    const grid       = el('div', 'cal-grid');
+    const firstDay   = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth= new Date(viewYear, viewMonth+1, 0).getDate();
+    const daysInPrev = new Date(viewYear, viewMonth, 0).getDate();
 
-    // Previous month fill
+    // Previous month fill (greyed out)
     for (let i = firstDay - 1; i >= 0; i--) {
-      const d = el('div', 'cal-day other', String(daysInPrev - i));
-      grid.appendChild(d);
+      grid.appendChild(el('div', 'cal-day other', String(daysInPrev - i)));
     }
 
-    // Current month
+    // Current month days
     for (let i = 1; i <= daysInMonth; i++) {
-      const d   = el('div', 'cal-day');
-      d.textContent = i;
-      if (isCurrentMonth && i === today.getDate()) d.classList.add('today');
-      const dow = new Date(viewYear, viewMonth, i).getDay();
-      if (dow === 0) d.classList.add('sun');
-      if (dow === 6) d.classList.add('sat');
-      grid.appendChild(d);
+      const dateStr = `${viewYear}-${String(viewMonth+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+      const dow     = new Date(viewYear, viewMonth, i).getDay();
+      const hInfo   = holidayMap[dateStr];
+
+      const cell = el('div', 'cal-day');
+
+      // Number span
+      const num = el('span', 'cal-num', String(i));
+      cell.appendChild(num);
+
+      // Determine color class
+      const isWeekend = dow === 0 || dow === 6;
+      const isHoliday = hInfo?.isHoliday;
+      const isWork    = hInfo?.isWork;
+
+      if (isWork) {
+        cell.classList.add('workday');        // green — 補班/補課
+      } else if (isHoliday || isWeekend) {
+        cell.classList.add('holiday');        // red — 假日/六日
+      }
+
+      if (isCurrentMonth && i === today.getDate()) {
+        cell.classList.add('today');
+      }
+
+      // Holiday / workday label (max 5 chars)
+      if (hInfo?.name) {
+        const lbl = el('span', 'cal-label', hInfo.name.slice(0, 5));
+        cell.appendChild(lbl);
+      }
+
+      grid.appendChild(cell);
     }
 
     // Next month fill
-    const total = firstDay + daysInMonth;
+    const total  = firstDay + daysInMonth;
     const remain = total % 7 === 0 ? 0 : 7 - (total % 7);
     for (let i = 1; i <= remain; i++) {
-      const d = el('div', 'cal-day other', String(i));
-      grid.appendChild(d);
+      grid.appendChild(el('div', 'cal-day other', String(i)));
     }
 
     outer.appendChild(grid);
