@@ -28,9 +28,9 @@ let S = {
   shortcuts:  [],
   groups:     [],
   widgets: {
-    clock:     { col:0,  row:0, w:8,  h:4, visible:true },
-    shortcuts: { col:8,  row:0, w:16, h:5, visible:true },
-    news:      { col:0,  row:4, w:8,  h:6, visible:true }
+    clock:     { col:0, row:0, w:6, h:2, visible:true },
+    shortcuts: { col:5, row:0, w:6, h:5, visible:true },
+    news:      { col:0, row:3, w:6, h:5, visible:true }
   },
   news: {
     items:    [],
