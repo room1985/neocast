@@ -29,7 +29,7 @@ let S = {
   groups:     [],
   widgets: {
     clock:     { col:0, row:0, w:6, h:2, visible:true },
-    shortcuts: { col:6, row:0, w:6, h:5, visible:true },
+    shortcuts: { col:6, row:2, w:6, h:5, visible:true },
     news:      { col:0, row:2, w:6, h:5, visible:true }
   },
   news: {
@@ -382,18 +382,18 @@ const WIDGET_META = {
 /* Default positions for when a widget is re-added */
 const WIDGET_DEFAULT = {
   clock:     { col:0, row:0, w:6, h:2, visible:true },
-  shortcuts: { col:6, row:0, w:6, h:5, visible:true },
+  shortcuts: { col:6, row:2, w:6, h:5, visible:true },
   news:      { col:0, row:2, w:6, h:5, visible:true }
 };
 
 function renderAddWidgetPanel() {
   const panel = $('add-widget-panel');
   if (!panel) return;
-  panel.innerHTML = '<div class="awp-title">＋ 新增 Widget</div>';
+  panel.innerHTML = '<div class="awp-title">＋ 新增小工具</div>';
 
   const hidden = Object.keys(WIDGET_META).filter(wid => S.widgets[wid]?.visible === false);
   if (hidden.length === 0) {
-    panel.innerHTML += '<div class="awp-empty">所有 Widget 已顯示</div>';
+    panel.innerHTML += '<div class="awp-empty">所有小工具已顯示</div>';
     return;
   }
 
