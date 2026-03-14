@@ -581,12 +581,11 @@ function initSearch() {
    SHORTCUTS
 ───────────────────────────────────── */
 function buildShortcutsWidget() {
-  const body = el('div');
-  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+  const body = el('div', 'sc-inner');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
   const w = makeWidget('shortcuts', '', body, 'sc-widget');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
-  w.dataset.scbody = '1';
   renderShortcutsWidget(body);
 }
 
@@ -716,28 +715,16 @@ function initScDrag(grid) {
 }
 
 function rerenderShortcuts() {
-  const w = document.querySelector('.widget[data-wid="shortcuts"] [data-scbody]');
-  if (w) renderShortcutsWidget(w.parentElement.querySelector('[data-scbody]') || findScBody());
-  else {
-    // fallback: find sc widget and re-render its inner container
-    const sw = document.querySelector('.widget[data-wid="shortcuts"]');
-    if (!sw) return;
-    const body = sw.children[0];
-    renderShortcutsWidget(body);
-  }
+  const body = document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
+  if (body) renderShortcutsWidget(body);
 }
 
 function findScBody() {
-  const sw = document.querySelector('.widget[data-wid="shortcuts"]');
-  return sw ? sw.children[0] : null;
+  return document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
 }
 
-// re-render shortcut widget body properly
 function rerenderSc() {
-  const sw = document.querySelector('.widget[data-wid="shortcuts"]');
-  if (!sw) return;
-  // The widget's first child is the body flex container
-  const body = Array.from(sw.children).find(c => !c.classList.contains('resize-handle'));
+  const body = document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
   if (body) renderShortcutsWidget(body);
 }
 
@@ -747,8 +734,8 @@ function rerenderSc() {
 let newsListEl = null;
 
 function buildNewsWidget() {
-  const outer = el('div');
-  outer.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+  const outer = el('div', 'news-inner');
+  outer.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
   const w = makeWidget('news', '', outer, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(outer, w.querySelector('.resize-handle'));
