@@ -11,7 +11,7 @@
    CONSTANTS
 ───────────────────────────────────── */
 const ROW_H   = 78;   // px, must match CSS --row
-const COLS    = 12;
+const COLS    = 24;
 const GAP     = 10;
 const IDB_DB  = 'neocast';
 const IDB_VER = 1;
@@ -28,9 +28,10 @@ let S = {
   shortcuts:  [],
   groups:     [],
   widgets: {
-    clock:     { col:0, row:0, w:4, h:4 },
-    shortcuts: { col:4, row:0, w:8, h:5 },
-    news:      { col:0, row:4, w:4, h:6 }
+    clock:     { col:0,  row:0, w:8,  h:4 },
+    shortcuts: { col:8,  row:0, w:16, h:5 },
+    news:      { col:0,  row:4, w:8,  h:6 },
+    calendar:  { col:8,  row:5, w:8,  h:5 }
   },
   news: {
     items:    [],
@@ -389,73 +390,22 @@ function makeWidget(wid, titleText, bodyEl, extraClass = '') {
 /* ─────────────────────────────────────
    FLIP CLOCK
 ───────────────────────────────────── */
-/* ── Glass Clock Digit ── */
-class GlassDigit {
-  constructor() {
-    this.val = -1;
-    this.el  = el('div', 'gc-digit');
-    this.el.innerHTML = `
-      <div class="gc-cur"><span>0</span></div>
-      <div class="gc-nxt"><span>0</span></div>
-    `;
-    this.cur  = this.el.querySelector('.gc-cur span');
-    this.nxt  = this.el.querySelector('.gc-nxt span');
-    this.wrap = this.el;
-  }
-
-  set(n) {
-    if (n === this.val) return;
-    this.val = n;
-    this.nxt.textContent = n;
-
-    this.wrap.classList.remove('fading');
-    void this.wrap.offsetWidth;
-    this.wrap.classList.add('fading');
-
-    setTimeout(() => {
-      this.cur.textContent = n;
-      this.wrap.classList.remove('fading');
-    }, 320);
-  }
-}
-
-class GlassClock {
+class SimpleClock {
   constructor(container) {
-    this.digits    = [];
     this.container = container;
 
-    const fc = el('div', 'glass-clock');
+    const wrap = el('div', 'simple-clock-wrap');
 
-    const group = (n) => {
-      const g = el('div', 'gc-group');
-      for (let i = 0; i < n; i++) {
-        const d = new GlassDigit();
-        g.appendChild(d.el);
-        this.digits.push(d);
-      }
-      return g;
-    };
+    this.timeEl  = el('div', 'simple-clock-time');
+    this.dateEl  = el('div', 'simple-clock-date');
+    this.greetEl = el('div', 'simple-clock-greeting');
 
-    const sep = () => {
-      const s = el('div', 'gc-sep');
-      s.innerHTML = '<span></span><span></span>';
-      return s;
-    };
+    wrap.appendChild(this.timeEl);
+    wrap.appendChild(this.dateEl);
+    wrap.appendChild(this.greetEl);
+    container.appendChild(wrap);
 
-    fc.appendChild(group(2)); fc.appendChild(sep());
-    fc.appendChild(group(2)); fc.appendChild(sep());
-    fc.appendChild(group(2));
-
-    const meta    = el('div', 'clock-meta');
-    this.dateEl   = el('div', 'clock-date');
-    this.greetEl  = el('div', 'clock-greeting');
-    meta.appendChild(this.greetEl);
-    meta.appendChild(this.dateEl);
-
-    container.appendChild(fc);
-    container.appendChild(meta);
-
-    // Adaptive sizing
+    // Adaptive font size
     this._ro = new ResizeObserver(() => this._resize());
     this._ro.observe(container);
     this._resize();
@@ -464,32 +414,20 @@ class GlassClock {
   _resize() {
     const cw = this.container.clientWidth;
     const ch = this.container.clientHeight;
-    const avail = Math.min(cw * 0.88, ch * 0.62);
-    const dw  = Math.max(30, Math.floor(avail / 7.5));
-    const dh  = Math.floor(dw * 1.38);
-    const fs  = Math.floor(dh * 0.58);
-    document.querySelectorAll('.gc-digit').forEach(d => {
-      d.style.setProperty('--gc-w', dw + 'px');
-      d.style.setProperty('--gc-h', dh + 'px');
-      d.style.setProperty('--gc-fs', fs + 'px');
-    });
+    const fs = Math.max(24, Math.min(Math.floor(cw / 5.2), Math.floor(ch / 2.2)));
+    this.timeEl.style.fontSize = fs + 'px';
   }
 
   tick() {
     const now = new Date();
-    const h   = now.getHours();
-    const m   = now.getMinutes();
-    const s   = now.getSeconds();
-
-    this.digits[0].set(Math.floor(h / 10));
-    this.digits[1].set(h % 10);
-    this.digits[2].set(Math.floor(m / 10));
-    this.digits[3].set(m % 10);
-    this.digits[4].set(Math.floor(s / 10));
-    this.digits[5].set(s % 10);
+    const h   = String(now.getHours()).padStart(2,'0');
+    const m   = String(now.getMinutes()).padStart(2,'0');
+    const s   = String(now.getSeconds()).padStart(2,'0');
+    this.timeEl.textContent = `${h}:${m}:${s}`;
 
     const W = ['日','一','二','三','四','五','六'];
-    this.dateEl.textContent  = `${now.getMonth()+1}月${now.getDate()}日 週${W[now.getDay()]}`;
+    this.dateEl.textContent = `${now.getMonth()+1}月${now.getDate()}日 週${W[now.getDay()]}`;
+
     const hr = now.getHours();
     this.greetEl.textContent = hr < 5 ? '深夜好' : hr < 12 ? '早安 ☀' : hr < 18 ? '午安 🌤' : '晚安 🌙';
   }
@@ -503,7 +441,7 @@ function buildClockWidget() {
   w.querySelector('.w-body')?.remove();
   w.querySelector('.w-head')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
-  clockRef = new GlassClock(body);
+  clockRef = new SimpleClock(body);
   clockRef.tick();
   setInterval(() => clockRef.tick(), 1000);
 }
@@ -1003,6 +941,87 @@ function onResize() {
 }
 
 /* ─────────────────────────────────────
+   CALENDAR WIDGET
+───────────────────────────────────── */
+function buildCalendarWidget() {
+  const outer = el('div');
+  outer.style.cssText = 'display:flex;flex-direction:column;height:100%;overflow:hidden;';
+  const w = makeWidget('calendar', '', outer);
+  w.querySelector('.w-body')?.remove();
+  w.querySelector('.w-head')?.remove();
+  w.insertBefore(outer, w.querySelector('.resize-handle'));
+
+  let viewYear  = new Date().getFullYear();
+  let viewMonth = new Date().getMonth();
+
+  function render() {
+    outer.innerHTML = '';
+
+    const today = new Date();
+    const isCurrentMonth = today.getFullYear() === viewYear && today.getMonth() === viewMonth;
+
+    // Header
+    const head = el('div', 'cal-head');
+    const prev = el('button', 'cal-nav', '‹');
+    const next = el('button', 'cal-nav', '›');
+    const title = el('div', 'cal-title', `${viewYear}年 ${viewMonth+1}月`);
+    prev.addEventListener('click', () => {
+      viewMonth--; if (viewMonth < 0) { viewMonth = 11; viewYear--; } render();
+    });
+    next.addEventListener('click', () => {
+      viewMonth++; if (viewMonth > 11) { viewMonth = 0; viewYear++; } render();
+    });
+    head.appendChild(prev);
+    head.appendChild(title);
+    head.appendChild(next);
+    outer.appendChild(head);
+
+    // Weekday labels
+    const wdays = el('div', 'cal-wdays');
+    ['日','一','二','三','四','五','六'].forEach(d => {
+      const c = el('div', 'cal-wday', d);
+      wdays.appendChild(c);
+    });
+    outer.appendChild(wdays);
+
+    // Days grid
+    const grid = el('div', 'cal-grid');
+    const firstDay = new Date(viewYear, viewMonth, 1).getDay();
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    const daysInPrev  = new Date(viewYear, viewMonth, 0).getDate();
+
+    // Previous month fill
+    for (let i = firstDay - 1; i >= 0; i--) {
+      const d = el('div', 'cal-day other', String(daysInPrev - i));
+      grid.appendChild(d);
+    }
+
+    // Current month
+    for (let i = 1; i <= daysInMonth; i++) {
+      const d   = el('div', 'cal-day');
+      d.textContent = i;
+      if (isCurrentMonth && i === today.getDate()) d.classList.add('today');
+      const dow = new Date(viewYear, viewMonth, i).getDay();
+      if (dow === 0) d.classList.add('sun');
+      if (dow === 6) d.classList.add('sat');
+      grid.appendChild(d);
+    }
+
+    // Next month fill
+    const total = firstDay + daysInMonth;
+    const remain = total % 7 === 0 ? 0 : 7 - (total % 7);
+    for (let i = 1; i <= remain; i++) {
+      const d = el('div', 'cal-day other', String(i));
+      grid.appendChild(d);
+    }
+
+    outer.appendChild(grid);
+  }
+
+  render();
+}
+
+/* ─────────────────────────────────────
    RENDER ALL
 ───────────────────────────────────── */
 function renderAll() {
@@ -1034,6 +1053,7 @@ async function init() {
   buildClockWidget();
   buildShortcutsWidget();
   buildNewsWidget();
+  buildCalendarWidget();
 
   // Search + voice
   initSearch();

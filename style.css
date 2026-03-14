@@ -21,7 +21,7 @@
   --rsm:     9px;
   --rxs:     6px;
   --row:     78px;
-  --cols:    12;
+  --cols:    24;
   --gap:     10px;
 }
 
@@ -196,111 +196,47 @@ a { color:inherit; text-decoration:none; }
 .hdr-btn.active { color:var(--ac); border-color:var(--ac); background:rgba(56,189,248,.1); }
 
 /* ══════════════════════════════
-   GLASS CLOCK WIDGET
+   SIMPLE CLOCK WIDGET
 ══════════════════════════════ */
 .clock-body {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 12px;
-  padding: 12px;
+  padding: 16px;
   overflow: hidden;
 }
 
-.glass-clock {
-  display: flex;
-  align-items: center;
-  gap: clamp(4px, 1vw, 10px);
-}
-
-.gc-group { display: flex; gap: clamp(3px, 0.5vw, 6px); }
-
-.gc-sep {
+.simple-clock-wrap {
   display: flex;
   flex-direction: column;
-  gap: clamp(4px, 1vh, 10px);
   align-items: center;
   justify-content: center;
-  padding-bottom: 2px;
-}
-.gc-sep span {
-  width: clamp(4px, 0.5vw, 6px);
-  height: clamp(4px, 0.5vw, 6px);
-  border-radius: 50%;
-  background: var(--ac);
-  opacity: .8;
-  animation: sepblink 1s infinite;
-}
-@keyframes sepblink { 0%,100%{opacity:.8} 50%{opacity:.2} }
-
-/* Single digit card */
-.gc-digit {
-  position: relative;
-  width: var(--gc-w, 52px);
-  height: var(--gc-h, 72px);
-  border-radius: 10px;
-  background: rgba(255,255,255,.14);
-  border: 1px solid rgba(255,255,255,.25);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  overflow: hidden;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 4px 20px rgba(0,0,0,.3);
-  flex-shrink: 0;
+  gap: 6px;
+  text-align: center;
 }
 
-/* Horizontal divider line in middle */
-.gc-digit::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  top: 50%;
-  height: 1px;
-  background: rgba(0,0,0,.45);
-  z-index: 2;
-}
-
-/* Each digit has two layers that cross-fade */
-.gc-digit .gc-cur,
-.gc-digit .gc-nxt {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.gc-digit .gc-cur span,
-.gc-digit .gc-nxt span {
+.simple-clock-time {
   font-family: 'JetBrains Mono', monospace;
-  font-size: var(--gc-fs, 2.4rem);
   font-weight: 800;
   color: var(--tx);
   line-height: 1;
-  letter-spacing: -1px;
-  user-select: none;
+  letter-spacing: -2px;
+  transition: font-size .15s;
 }
 
-.gc-digit .gc-nxt {
-  opacity: 0;
+.simple-clock-date {
+  font-size: .88rem;
+  color: var(--txm);
+  font-weight: 600;
+  letter-spacing: .01em;
 }
 
-/* Fade transition */
-.gc-digit.fading .gc-cur { animation: gcFadeOut .3s ease forwards; }
-.gc-digit.fading .gc-nxt { animation: gcFadeIn  .3s ease forwards; }
-
-@keyframes gcFadeOut { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(1.08)} }
-@keyframes gcFadeIn  { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
-
-.clock-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
+.simple-clock-greeting {
+  font-size: .8rem;
+  color: var(--ac);
+  font-weight: 700;
 }
-.clock-date    { font-size:.82rem; color:var(--txm); font-weight:600; }
-.clock-greeting{ font-size:.78rem; color:var(--ac);  font-weight:700; }
 #grid-overlay {
   position: fixed;
   top: 58px; left: 0; right: 0; bottom: 0;
@@ -309,7 +245,7 @@ a { color:inherit; text-decoration:none; }
   background-image:
     linear-gradient(rgba(56,189,248,.07) 1px, transparent 1px),
     linear-gradient(90deg, rgba(56,189,248,.07) 1px, transparent 1px);
-  background-size: calc(100%/12) var(--row);
+  background-size: calc(100%/24) var(--row);
   background-position: 0 0;
 }
 #grid-overlay.hidden { display:none; }
@@ -858,11 +794,87 @@ a { color:inherit; text-decoration:none; }
 .spin svg { animation:spin .8s linear infinite; }
 
 /* ══════════════════════════════
+   CALENDAR WIDGET
+══════════════════════════════ */
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px 8px;
+  flex-shrink: 0;
+}
+
+.cal-title {
+  font-family: 'Syne', sans-serif;
+  font-size: .88rem;
+  font-weight: 700;
+  color: var(--tx);
+}
+
+.cal-nav {
+  background: var(--sf);
+  border: 1px solid var(--bd);
+  color: var(--txm);
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  line-height: 1;
+  transition: all .2s;
+}
+.cal-nav:hover { border-color:var(--ac); color:var(--ac); background:rgba(56,189,248,.08); }
+
+.cal-wdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 10px 4px;
+  flex-shrink: 0;
+}
+
+.cal-wday {
+  text-align: center;
+  font-size: .68rem;
+  font-weight: 700;
+  color: var(--txd);
+  padding: 2px 0;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0 10px 10px;
+  gap: 2px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.cal-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--txm);
+  cursor: default;
+  transition: background .15s;
+}
+
+.cal-day.other { color: var(--txd); }
+.cal-day.sun   { color: #f87171; }
+.cal-day.sat   { color: var(--ac); }
+
+.cal-day.today {
+  background: var(--ac);
+  color: #03111e;
+  font-weight: 800;
+}
+
+/* ══════════════════════════════
    RESPONSIVE
 ══════════════════════════════ */
 @media (max-width:640px) {
   #header { padding: 0 10px; }
-  .flip-digit { width:44px; height:62px; }
-  .fd-top span, .fd-bot span, .flap-t span, .flap-b span { font-size:2.1rem; }
-  .fd-bot span, .flap-b span { margin-top:-30px; }
+  .simple-clock-time { font-size: 2rem !important; }
 }
