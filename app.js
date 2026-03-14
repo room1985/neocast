@@ -392,19 +392,21 @@ function makeWidget(wid, titleText, bodyEl, extraClass = '') {
 class FlipDigit {
   constructor() {
     this.val = -1;
-    this.el = el('div', 'flip-digit');
+    this.el  = el('div', 'flip-digit');
+    // Each half has a .num wrapper that is 200% tall so the number
+    // sits centred across the full digit height, then gets clipped
     this.el.innerHTML = `
-      <div class="fd-top"><span>0</span></div>
-      <div class="fd-bot"><span>0</span></div>
-      <div class="flap-t"><span>0</span></div>
-      <div class="flap-b"><span>0</span></div>
+      <div class="fd-top"><div class="num"><span>0</span></div></div>
+      <div class="fd-bot"><div class="num"><span>0</span></div></div>
+      <div class="flap-t"><div class="num"><span>0</span></div></div>
+      <div class="flap-b"><div class="num"><span>0</span></div></div>
     `;
-    this.top  = this.el.querySelector('.fd-top span');
-    this.bot  = this.el.querySelector('.fd-bot span');
-    this.ft   = this.el.querySelector('.flap-t');
-    this.fb   = this.el.querySelector('.flap-b');
-    this.fts  = this.ft.querySelector('span');
-    this.fbs  = this.fb.querySelector('span');
+    this.topS  = this.el.querySelector('.fd-top span');
+    this.botS  = this.el.querySelector('.fd-bot span');
+    this.flapT = this.el.querySelector('.flap-t');
+    this.flapTS= this.el.querySelector('.flap-t span');
+    this.flapB = this.el.querySelector('.flap-b');
+    this.flapBS= this.el.querySelector('.flap-b span');
   }
 
   set(n) {
@@ -412,26 +414,25 @@ class FlipDigit {
     const old = this.val < 0 ? n : this.val;
     this.val  = n;
 
-    // Setup flaps
-    this.fts.textContent = old;
-    this.fbs.textContent = n;
-    this.top.textContent = n;
+    // Static halves show the new number
+    this.topS.textContent = n;
+    this.botS.textContent = n;
+    // Animated flap-top shows old number and folds down
+    this.flapTS.textContent = old;
+    // Animated flap-bottom shows new number and folds up into view
+    this.flapBS.textContent = n;
 
-    // Restart animation
-    this.ft.classList.remove('anim');
-    this.fb.classList.remove('anim');
-    void this.ft.offsetWidth; // reflow
+    this.flapT.classList.remove('anim');
+    this.flapB.classList.remove('anim');
+    void this.flapT.offsetWidth; // force reflow
 
-    this.ft.classList.add('anim');
-    this.fb.classList.add('anim');
+    this.flapT.classList.add('anim');
+    this.flapB.classList.add('anim');
 
     setTimeout(() => {
-      this.bot.textContent = n;
-      this.ft.classList.remove('anim');
-      this.fb.classList.remove('anim');
-      this.fts.textContent = n;
-      this.fbs.textContent = n;
-    }, 450);
+      this.flapT.classList.remove('anim');
+      this.flapB.classList.remove('anim');
+    }, 460);
   }
 }
 

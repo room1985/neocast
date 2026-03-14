@@ -102,7 +102,6 @@ a { color:inherit; text-decoration:none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
   padding: 0 16px;
   z-index: 200;
   background: rgba(7,11,20,0.6);
@@ -112,22 +111,22 @@ a { color:inherit; text-decoration:none; }
 }
 
 #search-wrap {
-  flex: 1;
   display: flex;
   align-items: center;
   gap: 10px;
-  background: var(--sf);
-  border: 1px solid var(--bd);
-  border-radius: 50px;
-  padding: 0 16px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--bd);
+  border-radius: 0;
+  padding: 0 12px;
   height: 38px;
   transition: border-color .2s, box-shadow .2s;
-  max-width: 560px;
+  width: min(520px, 60vw);
 }
 
 #search-wrap:focus-within {
-  border-color: rgba(56,189,248,.5);
-  box-shadow: 0 0 0 3px rgba(56,189,248,.08);
+  border-color: rgba(56,189,248,.6);
+  box-shadow: none;
 }
 
 #search-wrap .ico { color:var(--txm); width:16px; height:16px; flex-shrink:0; }
@@ -160,7 +159,13 @@ a { color:inherit; text-decoration:none; }
 
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-#hdr-right { display:flex; align-items:center; gap:6px; margin-left:auto; }
+#hdr-right { 
+  position: absolute;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
 
 .hdr-btn {
   background: var(--sf);
@@ -178,31 +183,30 @@ a { color:inherit; text-decoration:none; }
 /* ── Edit Done Float Button ── */
 #edit-banner {
   position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 68px;
+  right: 16px;
   z-index: 190;
   animation: floatIn .2s ease;
 }
 #edit-banner.hidden { display:none; }
 
 @keyframes floatIn {
-  from { opacity:0; transform:translateX(-50%) translateY(10px); }
-  to   { opacity:1; transform:translateX(-50%) translateY(0); }
+  from { opacity:0; transform:translateY(-8px); }
+  to   { opacity:1; transform:translateY(0); }
 }
 
 #edit-done {
   background: var(--ac);
   border: none;
   color: #03111e;
-  padding: 10px 26px;
+  padding: 8px 18px;
   border-radius: 50px;
-  font-size: .88rem;
+  font-size: .82rem;
   font-weight: 800;
-  box-shadow: 0 4px 24px rgba(56,189,248,.35);
+  box-shadow: 0 4px 20px rgba(56,189,248,.3);
   transition: opacity .2s, transform .2s;
 }
-#edit-done:hover { opacity:.88; transform:translateY(-2px); }
+#edit-done:hover { opacity:.88; transform:translateY(-1px); }
 
 /* ── Grid Overlay ── */
 #grid-overlay {
@@ -323,7 +327,7 @@ a { color:inherit; text-decoration:none; }
   align-items: center;
   justify-content: center;
   height: 100%;
-  gap: 10px;
+  gap: 12px;
   padding: 12px;
   overflow: hidden;
 }
@@ -334,10 +338,7 @@ a { color:inherit; text-decoration:none; }
   gap: clamp(3px, 0.8vw, 8px);
 }
 
-.flip-group {
-  display: flex;
-  gap: clamp(2px, 0.4vw, 5px);
-}
+.flip-group { display: flex; gap: clamp(2px, 0.4vw, 5px); }
 
 .flip-sep {
   display: flex;
@@ -345,124 +346,100 @@ a { color:inherit; text-decoration:none; }
   gap: clamp(4px, 1vh, 10px);
   align-items: center;
   justify-content: center;
-  padding-bottom: 4px;
 }
 
 .flip-sep span {
-  width: clamp(4px, 0.6vw, 7px);
-  height: clamp(4px, 0.6vw, 7px);
+  width: clamp(4px, 0.5vw, 6px);
+  height: clamp(4px, 0.5vw, 6px);
   border-radius: 50%;
   background: var(--ac);
   opacity: .8;
   animation: sepblink 1s infinite;
 }
-
 @keyframes sepblink { 0%,100%{opacity:.8} 50%{opacity:.2} }
 
-/* Single flip digit — size driven by CSS var set by JS */
+/* ── Single Flip Digit ── */
 .flip-digit {
   position: relative;
-  width: var(--fd-w, 58px);
-  height: var(--fd-h, 80px);
+  width: var(--fd-w, 54px);
+  height: var(--fd-h, 76px);
   perspective: 400px;
   flex-shrink: 0;
 }
 
-.fd-top, .fd-bot {
+/* All four halves share base styles */
+.fd-top, .fd-bot, .flap-t, .flap-b {
   position: absolute;
   left: 0; right: 0;
   height: 50%;
   overflow: hidden;
   background: rgba(255,255,255,.07);
   border: 1px solid rgba(255,255,255,.1);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
 
-.fd-top {
+.fd-top, .flap-t {
   top: 0;
-  border-radius: 7px 7px 0 0;
-  border-bottom: 1px solid rgba(0,0,0,.6);
-  padding-bottom: 1px;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid rgba(0,0,0,.55);
 }
 
-.fd-bot {
+.fd-bot, .flap-b {
   bottom: 0;
-  border-radius: 0 0 7px 7px;
-  align-items: flex-start;
-  padding-top: 1px;
-  box-shadow: inset 0 -1px 0 rgba(255,255,255,.05);
+  border-radius: 0 0 8px 8px;
+  border-top: none;
 }
 
-.fd-top span, .fd-bot span,
-.flap-t span, .flap-b span {
+/* .num is a full-height wrapper so the number is centred
+   in the complete digit card; each half clips half of it */
+.fd-top .num, .flap-t .num {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 200%;          /* full digit height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fd-bot .num, .flap-b .num {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 200%;          /* full digit height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fd-top .num span, .fd-bot .num span,
+.flap-t .num span, .flap-b .num span {
   font-family: 'Syne', monospace;
-  font-size: var(--fd-fs, 2.8rem);
+  font-size: var(--fd-fs, 2.6rem);
   font-weight: 800;
   color: var(--tx);
   line-height: 1;
   letter-spacing: -1px;
-  /* Vertically position so the digit appears at the fold */
-  position: absolute;
+  user-select: none;
 }
 
-/* Top half: number anchored to bottom of top card */
-.fd-top span {
-  bottom: 1px;
-}
-
-/* Bottom half: number anchored to top, shifted up by half its own height */
-.fd-bot span {
-  top: 1px;
-  transform: translateY(0);
-  clip-path: inset(0 0 0 0);
-}
-
-.flap-t, .flap-b {
-  position: absolute;
-  left: 0; right: 0;
-  height: 50%;
-  overflow: hidden;
-  background: rgba(255,255,255,.1);
-  border: 1px solid rgba(255,255,255,.12);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  z-index: 2;
-}
-
+/* Flap animation */
 .flap-t {
-  top: 0;
-  border-radius: 7px 7px 0 0;
-  border-bottom: 1px solid rgba(0,0,0,.6);
   transform-origin: bottom center;
-  transform: rotateX(0deg);
-  padding-bottom: 1px;
+  z-index: 2;
+  background: rgba(255,255,255,.11);
 }
-
 .flap-b {
-  bottom: 0;
-  border-radius: 0 0 7px 7px;
-  align-items: flex-start;
   transform-origin: top center;
+  z-index: 2;
   transform: rotateX(90deg);
-  padding-top: 1px;
+  background: rgba(255,255,255,.11);
 }
-
-.flap-t span { bottom: 1px; }
-.flap-b span { top: 1px; }
 
 .flap-t.anim { animation: flipT .42s cubic-bezier(.4,0,.2,1) forwards; }
 .flap-b.anim { animation: flipB .42s cubic-bezier(.4,0,.2,1) forwards; }
 
-@keyframes flipT { 0%{transform:rotateX(0)} 100%{transform:rotateX(-90deg)} }
-@keyframes flipB { 0%{transform:rotateX(90deg)} 100%{transform:rotateX(0)} }
+@keyframes flipT { 0%{transform:rotateX(0deg)} 100%{transform:rotateX(-90deg)} }
+@keyframes flipB { 0%{transform:rotateX(90deg)} 100%{transform:rotateX(0deg)} }
 
 .clock-meta {
   display: flex;
@@ -470,18 +447,8 @@ a { color:inherit; text-decoration:none; }
   align-items: center;
   gap: 3px;
 }
-
-.clock-date {
-  font-size: .82rem;
-  color: var(--txm);
-  font-weight: 600;
-}
-
-.clock-greeting {
-  font-size: .78rem;
-  color: var(--ac);
-  font-weight: 700;
-}
+.clock-date   { font-size:.82rem; color:var(--txm); font-weight:600; }
+.clock-greeting { font-size:.78rem; color:var(--ac); font-weight:700; }
 
 /* ══════════════════════════════
    SHORTCUTS WIDGET
