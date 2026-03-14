@@ -381,9 +381,9 @@ const WIDGET_META = {
 
 /* Default positions for when a widget is re-added */
 const WIDGET_DEFAULT = {
-  clock:     { col:0,  row:0, w:8,  h:4, visible:true },
-  shortcuts: { col:8,  row:0, w:16, h:5, visible:true },
-  news:      { col:0,  row:4, w:8,  h:6, visible:true }
+  clock:     { col:18, row:1, w:5, h:2, visible:true },
+  shortcuts: { col:18, row:1, w:6, h:6, visible:true },
+  news:      { col:18, row:1, w:5, h:6, visible:true }
 };
 
 function renderAddWidgetPanel() {
@@ -407,18 +407,11 @@ function renderAddWidgetPanel() {
 }
 
 function addWidget(wid) {
-  // Reset to default pos (bottom-right area)
-  const def = { ...WIDGET_DEFAULT[wid] };
-  // Place at row 8 to avoid overlap
-  def.row = 8;
-  def.col = 0;
-  S.widgets[wid] = { ...def, visible: true };
+  S.widgets[wid] = { ...WIDGET_DEFAULT[wid] };
   lsSave();
-
-  // Build the widget
   buildWidgetById(wid);
   renderAddWidgetPanel();
-  setEditMode(true); // refresh edit state on new widget
+  setEditMode(true);
 }
 
 function removeWidget(wid) {
