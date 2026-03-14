@@ -1069,7 +1069,6 @@ async function init() {
   $('edit-btn').addEventListener('click', () => setEditMode(!S.editMode));
   $('edit-done').addEventListener('click', () => setEditMode(false));
   $('sync-btn').addEventListener('click', async () => {
-    await gistPull();
     await gistPush();
   });
   $('settings-btn').addEventListener('click', openSettingsModal);
@@ -1093,7 +1092,13 @@ async function init() {
 
   // Settings modal
   $('cfg-ok').addEventListener('click', saveSettings);
-  $('cfg-sync-now').addEventListener('click', async () => { await gistPull(); await gistPush(); });
+  $('cfg-sync-now').addEventListener('click', async () => {
+    if (confirm('從雲端還原？這會覆蓋你目前的本機設定。')) {
+      await gistPull();
+      renderAll();
+      toast('已從雲端還原設定 ✓');
+    }
+  });
   $('rm-vid').addEventListener('click', removeVideo);
 
   // Cancel buttons (data-m attribute)
@@ -1111,11 +1116,6 @@ async function init() {
 
   // PWA
   registerSW();
-
-  // Auto Gist pull on load (silently)
-  if (S.cfg.token && S.cfg.gistId) {
-    gistPull().catch(()=>{});
-  }
 }
 
 document.addEventListener('DOMContentLoaded', init);
