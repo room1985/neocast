@@ -1002,8 +1002,16 @@ a { color:inherit; text-decoration:none; }
    RESPONSIVE — MOBILE
 ══════════════════════════════ */
 @media (max-width:640px) {
-  #header { padding: 0 10px; }
-  #search-wrap { width: 100%; max-width: unset; }
+  #header { padding: 0 8px; }
+
+  /* Shrink search bar on mobile */
+  #search-wrap {
+    width: 38vw;
+    min-width: 120px;
+    padding: 0 10px;
+  }
+
+  #search-wrap .ico { display: none; }
 
   /* Hide widget container, show mobile layout instead */
   #wc { display: none; }
@@ -1015,7 +1023,7 @@ a { color:inherit; text-decoration:none; }
     flex-direction: column;
     gap: 12px;
     padding: 70px 14px 24px;
-    height: 100vh;
+    min-height: 100vh;
     overflow-y: auto;
     position: fixed;
     inset: 0;
@@ -1031,9 +1039,19 @@ a { color:inherit; text-decoration:none; }
     padding: 14px;
   }
 
-  .mobile-sc-panel .sc-groups { padding: 0 0 10px; }
-  .mobile-sc-panel .sc-grid   { padding: 0; }
-  .mobile-sc-panel .sc-add-btn{ margin: 10px 0 0; }
+  .mobile-sc-panel .sc-groups  { padding: 0 0 10px; }
+  .mobile-sc-panel .sc-add-btn { margin: 10px 0 0; }
+
+  /* Adaptive grid: auto-fill with equal width columns */
+  .mobile-sc-panel .sc-grid {
+    padding: 0;
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Make shortcut items fill their column */
+  .mobile-sc-panel .sc-item {
+    width: 100%;
+  }
 }
 
 @media (min-width: 641px) {

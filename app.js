@@ -1045,8 +1045,11 @@ function initMobileLayout() {
 
   // Shortcuts panel
   const panel = el('div', 'mobile-sc-panel glass-panel');
-  renderShortcutsWidget(panel);
+  const inner = el('div', 'sc-inner');
+  inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+  panel.appendChild(inner);
   container.appendChild(panel);
+  renderShortcutsWidget(inner);
 }
 
 /* ─────────────────────────────────────
