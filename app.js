@@ -28,9 +28,9 @@ let S = {
   shortcuts:  [],
   groups:     [],
   widgets: {
-    clock:     { col:0,  row:0, w:8,  h:4 },
-    shortcuts: { col:8,  row:0, w:16, h:5 },
-    news:      { col:0,  row:4, w:8,  h:6 }
+    clock:     { col:0,  row:0, w:8,  h:4, visible:true },
+    shortcuts: { col:8,  row:0, w:16, h:5, visible:true },
+    news:      { col:0,  row:4, w:8,  h:6, visible:true }
   },
   news: {
     items:    [],
@@ -360,6 +360,81 @@ function setEditMode(on) {
   $('grid-overlay').classList.toggle('hidden', !on);
   $('edit-btn').classList.toggle('active', on);
   document.querySelectorAll('.widget').forEach(w => w.classList.toggle('editable', on));
+
+  // Show/hide delete buttons on each widget
+  document.querySelectorAll('.w-delete-btn').forEach(b => {
+    b.classList.toggle('hidden', !on);
+  });
+
+  // Show/hide add widget panel
+  const addPanel = $('add-widget-panel');
+  if (addPanel) addPanel.classList.toggle('hidden', !on);
+  if (on) renderAddWidgetPanel();
+}
+
+/* Widget meta registry */
+const WIDGET_META = {
+  clock:     { label: '時鐘',    icon: '🕐' },
+  shortcuts: { label: '捷徑',    icon: '⭐' },
+  news:      { label: 'AI新聞',  icon: '📰' }
+};
+
+/* Default positions for when a widget is re-added */
+const WIDGET_DEFAULT = {
+  clock:     { col:0,  row:0, w:8,  h:4, visible:true },
+  shortcuts: { col:8,  row:0, w:16, h:5, visible:true },
+  news:      { col:0,  row:4, w:8,  h:6, visible:true }
+};
+
+function renderAddWidgetPanel() {
+  const panel = $('add-widget-panel');
+  if (!panel) return;
+  panel.innerHTML = '<div class="awp-title">＋ 新增 Widget</div>';
+
+  const hidden = Object.keys(WIDGET_META).filter(wid => !S.widgets[wid]?.visible);
+  if (hidden.length === 0) {
+    panel.innerHTML += '<div class="awp-empty">所有 Widget 已顯示</div>';
+    return;
+  }
+
+  hidden.forEach(wid => {
+    const m    = WIDGET_META[wid];
+    const item = el('button', 'awp-item');
+    item.innerHTML = `<span class="awp-icon">${m.icon}</span><span>${m.label}</span>`;
+    item.addEventListener('click', () => addWidget(wid));
+    panel.appendChild(item);
+  });
+}
+
+function addWidget(wid) {
+  // Reset to default pos (bottom-right area)
+  const def = { ...WIDGET_DEFAULT[wid] };
+  // Place at row 8 to avoid overlap
+  def.row = 8;
+  def.col = 0;
+  S.widgets[wid] = { ...def, visible: true };
+  lsSave();
+
+  // Build the widget
+  buildWidgetById(wid);
+  renderAddWidgetPanel();
+  setEditMode(true); // refresh edit state on new widget
+}
+
+function removeWidget(wid) {
+  S.widgets[wid].visible = false;
+  lsSave();
+  const w = document.querySelector(`.widget[data-wid="${wid}"]`);
+  if (w) w.remove();
+  renderAddWidgetPanel();
+}
+
+function buildWidgetById(wid) {
+  // Remove existing first
+  document.querySelector(`.widget[data-wid="${wid}"]`)?.remove();
+  if (wid === 'clock')     buildClockWidget();
+  if (wid === 'shortcuts') buildShortcutsWidget();
+  if (wid === 'news')      buildNewsWidget();
 }
 
 /* ─────────────────────────────────────
@@ -372,6 +447,18 @@ function makeWidget(wid, titleText, bodyEl, extraClass = '') {
   const head = el('div', 'w-head');
   const ttl  = el('div', 'w-title', titleText);
   head.appendChild(ttl);
+
+  // Delete button (hidden unless in edit mode)
+  const delBtn = el('button', 'w-delete-btn hidden', '✕');
+  delBtn.title = '移除 Widget';
+  delBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    if (confirm(`移除「${WIDGET_META[wid]?.label || wid}」Widget？`)) {
+      removeWidget(wid);
+    }
+  });
+  head.appendChild(delBtn);
+
   w.appendChild(head);
   w.appendChild(bodyEl);
 
@@ -987,10 +1074,10 @@ async function init() {
   await idbOpen().catch(()=>{});
   await loadVideo().catch(()=>{});
 
-  // Build widgets
-  buildClockWidget();
-  buildShortcutsWidget();
-  buildNewsWidget();
+  // Build widgets (only if visible)
+  if (S.widgets.clock?.visible    !== false) buildClockWidget();
+  if (S.widgets.shortcuts?.visible !== false) buildShortcutsWidget();
+  if (S.widgets.news?.visible     !== false) buildNewsWidget();
   initMobileLayout();
 
   // Search + voice

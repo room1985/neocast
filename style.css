@@ -5,10 +5,10 @@
 
 :root {
   --bg:      #070b14;
-  --sf:      rgba(20,60,110,0.45);
-  --sf2:     rgba(30,75,130,0.60);
-  --bd:      rgba(80,140,220,0.25);
-  --bd2:     rgba(100,170,255,0.40);
+  --sf:      rgba(255,255,255,0.08);
+  --sf2:     rgba(255,255,255,0.14);
+  --bd:      rgba(255,255,255,0.15);
+  --bd2:     rgba(255,255,255,0.28);
   --tx:      #f0f4fb;
   --txm:     #94a8c0;
   --txd:     #3a4e64;
@@ -16,7 +16,7 @@
   --ac2:     #a78bfa;
   --red:     #f87171;
   --grn:     #4ade80;
-  --blur:    blur(22px);
+  --blur:    blur(28px);
   --r:       14px;
   --rsm:     9px;
   --rxs:     6px;
@@ -334,6 +334,78 @@ a { color:inherit; text-decoration:none; }
 }
 .w-btn svg { width:13px; height:13px; }
 .w-btn:hover { color:var(--tx); background:var(--sf2); }
+
+/* Widget delete button */
+.w-delete-btn {
+  background: rgba(248,113,113,0.15);
+  border: 1px solid rgba(248,113,113,0.3);
+  color: var(--red);
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  font-size: .75rem;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.w-delete-btn:hover {
+  background: rgba(248,113,113,0.35);
+  transform: scale(1.1);
+}
+.w-delete-btn.hidden { display: none; }
+
+/* Add Widget Panel */
+#add-widget-panel {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 190;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(10,20,40,0.85);
+  border: 1px solid var(--bd2);
+  border-radius: 50px;
+  padding: 8px 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+#add-widget-panel.hidden { display: none; }
+
+.awp-title {
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--txm);
+  white-space: nowrap;
+}
+
+.awp-empty {
+  font-size: .75rem;
+  color: var(--txd);
+}
+
+.awp-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--sf);
+  border: 1px solid var(--bd);
+  color: var(--tx);
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: .8rem;
+  font-weight: 700;
+  transition: all .2s;
+}
+.awp-item:hover {
+  border-color: var(--ac);
+  color: var(--ac);
+  background: rgba(56,189,248,.1);
+}
+.awp-icon { font-size: 1rem; }
 
 .w-body {
   flex: 1;
