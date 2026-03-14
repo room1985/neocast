@@ -61,6 +61,9 @@ const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
 /* ─────────────────────────────────────
    PERSISTENCE — localStorage
 ───────────────────────────────────── */
+/* ── Auto-sync debounce timer ── */
+let _autoSyncTimer = null;
+
 function lsSave() {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({
@@ -71,6 +74,14 @@ function lsSave() {
       cfg:       S.cfg
     }));
   } catch(_) {}
+
+  // Auto-push to Gist 2 seconds after last change
+  if (S.cfg.token && S.cfg.gistId) {
+    clearTimeout(_autoSyncTimer);
+    _autoSyncTimer = setTimeout(() => {
+      gistPush(true); // silent push
+    }, 2000);
+  }
 }
 
 function lsLoad() {
@@ -135,12 +146,14 @@ const gistData = () => ({
   newsLang:  S.news.lang
 });
 
-async function gistPush() {
+async function gistPush(silent = false) {
   const { token, gistId } = S.cfg;
-  if (!token) return toast('請先在設定中填入 GitHub Token','warn');
+  if (!token) {
+    if (!silent) toast('請先在設定中填入 GitHub Token','warn');
+    return;
+  }
 
-  const setSpin = on => $('sync-btn').classList.toggle('spin', on);
-  setSpin(true);
+  if (!silent) $('sync-btn').classList.add('spin');
 
   const body = JSON.stringify({
     description: 'NeoCast Settings',
@@ -159,11 +172,11 @@ async function gistPush() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const data = await res.json();
     if (!gistId) { S.cfg.gistId = data.id; lsSave(); $('cfg-gid').value = data.id; }
-    toast('已同步到 Gist ✓');
+    if (!silent) toast('已同步到 Gist ✓');
   } catch(e) {
-    toast('同步失敗：' + e.message, 'err');
+    if (!silent) toast('同步失敗：' + e.message, 'err');
   } finally {
-    setSpin(false);
+    if (!silent) $('sync-btn').classList.remove('spin');
   }
 }
 
