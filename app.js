@@ -615,7 +615,7 @@ function makeGrpTab(id, name, deletable = false) {
 function getFav(url) {
   try {
     const u = new URL(/^https?/.test(url) ? url : 'https://'+url);
-    return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=64`;
+    return `https://www.google.com/s2/favicons?domain=${u.hostname}&sz=128`;
   } catch(_) { return null; }
 }
 
@@ -627,17 +627,21 @@ function makeScItem(sc) {
   a.dataset.id  = sc.id;
   a.draggable   = true;
 
+  // iOS-style icon wrapper
+  const wrap = el('div', 'sc-icon-wrap');
+
   const fav = getFav(sc.url);
   if (fav) {
     const img    = el('img', 'sc-fav');
     img.src      = fav;
     img.alt      = '';
     img.loading  = 'lazy';
-    img.onerror  = () => img.replaceWith(makeFb(sc.name));
-    a.appendChild(img);
+    img.onerror  = () => { img.remove(); wrap.appendChild(makeFb(sc.name)); };
+    wrap.appendChild(img);
   } else {
-    a.appendChild(makeFb(sc.name));
+    wrap.appendChild(makeFb(sc.name));
   }
+  a.appendChild(wrap);
 
   const nm = el('span', 'sc-name', esc(sc.name));
   a.appendChild(nm);
