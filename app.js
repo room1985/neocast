@@ -19,7 +19,7 @@ const IDB_ST  = 'blobs';
 const VID_KEY = 'bg_video';
 const LS_KEY  = 'neocast_v2';
 const NEWS_CACHE_MS = 25 * 60 * 1000;  // 25 min
-const RSS_PROXY = 'https://api.allorigins.win/get?url=';
+const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
 /* ─────────────────────────────────────
    STATE
@@ -443,14 +443,12 @@ class FlipClock {
 
     const group = (n) => {
       const g = el('div', 'flip-group');
-      const ds = [];
       for (let i = 0; i < n; i++) {
         const d = new FlipDigit();
         g.appendChild(d.el);
-        ds.push(d);
         this.digits.push(d);
       }
-      return { g, ds };
+      return g;
     };
 
     const sep = () => {
@@ -459,22 +457,39 @@ class FlipClock {
       return s;
     };
 
-    const { g: g1 } = group(2);
-    const { g: g2 } = group(2);
-    const { g: g3 } = group(2);
+    fc.appendChild(group(2)); fc.appendChild(sep());
+    fc.appendChild(group(2)); fc.appendChild(sep());
+    fc.appendChild(group(2));
 
-    fc.appendChild(g1); fc.appendChild(sep());
-    fc.appendChild(g2); fc.appendChild(sep());
-    fc.appendChild(g3);
-
-    const meta  = el('div', 'clock-meta');
-    this.dateEl = el('div', 'clock-date');
-    this.greetEl= el('div', 'clock-greeting');
+    const meta   = el('div', 'clock-meta');
+    this.dateEl  = el('div', 'clock-date');
+    this.greetEl = el('div', 'clock-greeting');
     meta.appendChild(this.greetEl);
     meta.appendChild(this.dateEl);
 
     container.appendChild(fc);
     container.appendChild(meta);
+    this.fc = fc;
+
+    // Adaptive sizing via ResizeObserver
+    this._ro = new ResizeObserver(() => this._resize());
+    this._ro.observe(container);
+    this._resize();
+  }
+
+  _resize() {
+    const cw = this.container.clientWidth;
+    const ch = this.container.clientHeight;
+    // 6 digits + 2 separators — fit width with padding
+    const available = Math.min(cw * 0.9, ch * 0.65);
+    const dw = Math.max(32, Math.floor(available / 7.2));
+    const dh = Math.floor(dw * 1.38);
+    const fs = Math.floor(dh * 0.62);
+    document.querySelectorAll('.flip-digit').forEach(d => {
+      d.style.setProperty('--fd-w', dw + 'px');
+      d.style.setProperty('--fd-h', dh + 'px');
+      d.style.setProperty('--fd-fs', fs + 'px');
+    });
   }
 
   tick() {
@@ -836,25 +851,21 @@ async function fetchNews() {
   for (const kw of S.news.keywords) {
     try {
       const rssUrl  = `https://news.google.com/rss/search?q=${encodeURIComponent(kw)}&hl=${hl}&gl=${gl}&ceid=${ceid}`;
-      const proxyUrl= RSS_PROXY + encodeURIComponent(rssUrl);
-      const res     = await fetch(proxyUrl, { signal: AbortSignal.timeout(12000) });
+      const apiUrl  = RSS2JSON + encodeURIComponent(rssUrl);
+      const res     = await fetch(apiUrl, { signal: AbortSignal.timeout(12000) });
       if (!res.ok) continue;
-      const json    = await res.json();
-      const xml     = json.contents;
-      const doc     = new DOMParser().parseFromString(xml, 'text/xml');
-      const items   = [...doc.querySelectorAll('item')].slice(0, 2);
+      const data    = await res.json();
+      if (data.status !== 'ok' || !Array.isArray(data.items)) continue;
 
-      items.forEach(it => {
-        const titleRaw = it.querySelector('title')?.textContent || '';
-        // Google News title format: "Article Title - Source Name"
-        const dashIdx  = titleRaw.lastIndexOf(' - ');
-        const title    = dashIdx > 0 ? titleRaw.slice(0, dashIdx) : titleRaw;
-        const source   = dashIdx > 0 ? titleRaw.slice(dashIdx + 3) : '';
-        const link     = it.querySelector('link')?.nextSibling?.nodeValue?.trim()
-                      || it.querySelector('guid')?.textContent
-                      || '';
-        const pubDate  = it.querySelector('pubDate')?.textContent || '';
-        allItems.push({ kw, title, source, link, date: parseDate(pubDate) });
+      data.items.slice(0, 2).forEach(item => {
+        // Google News title: "Headline - Source"
+        const raw     = item.title || '';
+        const dashIdx = raw.lastIndexOf(' - ');
+        const title   = dashIdx > 0 ? raw.slice(0, dashIdx) : raw;
+        const source  = dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || '');
+        const link    = item.link || item.guid || '';
+        const date    = item.pubDate ? parseDate(item.pubDate) : '';
+        allItems.push({ kw, title, source, link, date });
       });
     } catch(_) {}
   }

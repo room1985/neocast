@@ -101,6 +101,7 @@ a { color:inherit; text-decoration:none; }
   height: 58px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   padding: 0 16px;
   z-index: 200;
@@ -121,7 +122,7 @@ a { color:inherit; text-decoration:none; }
   padding: 0 16px;
   height: 38px;
   transition: border-color .2s, box-shadow .2s;
-  max-width: 640px;
+  max-width: 560px;
 }
 
 #search-wrap:focus-within {
@@ -174,34 +175,34 @@ a { color:inherit; text-decoration:none; }
 .hdr-btn:hover { color:var(--tx); border-color:var(--bd2); background:var(--sf2); }
 .hdr-btn.active { color:var(--ac); border-color:var(--ac); background:rgba(56,189,248,.1); }
 
-/* ── Edit Banner ── */
+/* ── Edit Done Float Button ── */
 #edit-banner {
   position: fixed;
-  top: 58px; left: 0; right: 0;
-  background: rgba(56,189,248,.12);
-  border-bottom: 1px solid rgba(56,189,248,.25);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 20px;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 190;
-  font-size: .82rem;
-  color: var(--ac);
-  font-weight: 600;
-  backdrop-filter: var(--blur);
-  -webkit-backdrop-filter: var(--blur);
+  animation: floatIn .2s ease;
 }
 #edit-banner.hidden { display:none; }
+
+@keyframes floatIn {
+  from { opacity:0; transform:translateX(-50%) translateY(10px); }
+  to   { opacity:1; transform:translateX(-50%) translateY(0); }
+}
 
 #edit-done {
   background: var(--ac);
   border: none;
   color: #03111e;
-  padding: 5px 14px;
+  padding: 10px 26px;
   border-radius: 50px;
-  font-size: .8rem;
+  font-size: .88rem;
   font-weight: 800;
+  box-shadow: 0 4px 24px rgba(56,189,248,.35);
+  transition: opacity .2s, transform .2s;
 }
+#edit-done:hover { opacity:.88; transform:translateY(-2px); }
 
 /* ── Grid Overlay ── */
 #grid-overlay {
@@ -330,26 +331,26 @@ a { color:inherit; text-decoration:none; }
 .flip-clock {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: clamp(3px, 0.8vw, 8px);
 }
 
 .flip-group {
   display: flex;
-  gap: 4px;
+  gap: clamp(2px, 0.4vw, 5px);
 }
 
 .flip-sep {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: clamp(4px, 1vh, 10px);
   align-items: center;
   justify-content: center;
   padding-bottom: 4px;
 }
 
 .flip-sep span {
-  width: 5px;
-  height: 5px;
+  width: clamp(4px, 0.6vw, 7px);
+  height: clamp(4px, 0.6vw, 7px);
   border-radius: 50%;
   background: var(--ac);
   opacity: .8;
@@ -358,15 +359,15 @@ a { color:inherit; text-decoration:none; }
 
 @keyframes sepblink { 0%,100%{opacity:.8} 50%{opacity:.2} }
 
-/* Single flip digit */
+/* Single flip digit — size driven by CSS var set by JS */
 .flip-digit {
   position: relative;
-  width: 58px;
-  height: 80px;
-  perspective: 300px;
+  width: var(--fd-w, 58px);
+  height: var(--fd-h, 80px);
+  perspective: 400px;
+  flex-shrink: 0;
 }
 
-/* Static halves */
 .fd-top, .fd-bot {
   position: absolute;
   left: 0; right: 0;
@@ -385,7 +386,7 @@ a { color:inherit; text-decoration:none; }
   top: 0;
   border-radius: 7px 7px 0 0;
   border-bottom: 1px solid rgba(0,0,0,.6);
-  padding-bottom: 2px;
+  padding-bottom: 1px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
 }
 
@@ -393,26 +394,34 @@ a { color:inherit; text-decoration:none; }
   bottom: 0;
   border-radius: 0 0 7px 7px;
   align-items: flex-start;
-  padding-top: 2px;
+  padding-top: 1px;
   box-shadow: inset 0 -1px 0 rgba(255,255,255,.05);
 }
 
 .fd-top span, .fd-bot span,
 .flap-t span, .flap-b span {
   font-family: 'Syne', monospace;
-  font-size: 2.8rem;
+  font-size: var(--fd-fs, 2.8rem);
   font-weight: 800;
   color: var(--tx);
   line-height: 1;
   letter-spacing: -1px;
+  /* Vertically position so the digit appears at the fold */
+  position: absolute;
 }
 
+/* Top half: number anchored to bottom of top card */
+.fd-top span {
+  bottom: 1px;
+}
+
+/* Bottom half: number anchored to top, shifted up by half its own height */
 .fd-bot span {
-  /* Shift up so the number aligns properly at the fold */
-  margin-top: -40px;
+  top: 1px;
+  transform: translateY(0);
+  clip-path: inset(0 0 0 0);
 }
 
-/* Animated flaps */
 .flap-t, .flap-b {
   position: absolute;
   left: 0; right: 0;
@@ -434,7 +443,7 @@ a { color:inherit; text-decoration:none; }
   border-bottom: 1px solid rgba(0,0,0,.6);
   transform-origin: bottom center;
   transform: rotateX(0deg);
-  padding-bottom: 2px;
+  padding-bottom: 1px;
 }
 
 .flap-b {
@@ -443,12 +452,11 @@ a { color:inherit; text-decoration:none; }
   align-items: flex-start;
   transform-origin: top center;
   transform: rotateX(90deg);
-  padding-top: 2px;
+  padding-top: 1px;
 }
 
-.flap-b span {
-  margin-top: -40px;
-}
+.flap-t span { bottom: 1px; }
+.flap-b span { top: 1px; }
 
 .flap-t.anim { animation: flipT .42s cubic-bezier(.4,0,.2,1) forwards; }
 .flap-b.anim { animation: flipB .42s cubic-bezier(.4,0,.2,1) forwards; }
@@ -456,7 +464,6 @@ a { color:inherit; text-decoration:none; }
 @keyframes flipT { 0%{transform:rotateX(0)} 100%{transform:rotateX(-90deg)} }
 @keyframes flipB { 0%{transform:rotateX(90deg)} 100%{transform:rotateX(0)} }
 
-/* Clock date/greeting */
 .clock-meta {
   display: flex;
   flex-direction: column;
@@ -485,7 +492,7 @@ a { color:inherit; text-decoration:none; }
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  padding: 0 14px 8px;
+  padding: 12px 14px 8px;
   flex-shrink: 0;
 }
 
@@ -593,7 +600,7 @@ a { color:inherit; text-decoration:none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 14px 8px;
+  padding: 12px 14px 8px;
 }
 
 .news-kws {
