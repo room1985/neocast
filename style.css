@@ -265,7 +265,10 @@ a { color:inherit; text-decoration:none; }
   border: 1px solid var(--bd);
   backdrop-filter: var(--blur);
   -webkit-backdrop-filter: var(--blur);
-  box-shadow: 0 0 0 1px rgba(255,255,255,.03), 0 16px 40px rgba(0,0,0,.3);
+  box-shadow:
+    0 0 0 1px rgba(56,189,248,0.12),
+    0 0 18px rgba(56,189,248,0.06),
+    0 16px 40px rgba(0,0,0,.25);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -276,10 +279,16 @@ a { color:inherit; text-decoration:none; }
 /* Edit mode widget styles */
 .widget.editable {
   cursor: grab;
-  box-shadow: 0 0 0 2px rgba(56,189,248,.3), 0 16px 40px rgba(0,0,0,.3);
+  box-shadow:
+    0 0 0 2px rgba(56,189,248,.4),
+    0 0 24px rgba(56,189,248,.12),
+    0 16px 40px rgba(0,0,0,.3);
 }
 .widget.editable:hover {
-  box-shadow: 0 0 0 2px var(--ac), 0 16px 40px rgba(0,0,0,.4);
+  box-shadow:
+    0 0 0 2px var(--ac),
+    0 0 32px rgba(56,189,248,.2),
+    0 16px 40px rgba(0,0,0,.4);
 }
 .widget.dragging-widget {
   opacity: .7;
@@ -303,13 +312,19 @@ a { color:inherit; text-decoration:none; }
 .widget.editable .resize-handle { opacity: .7; }
 .widget.editable .resize-handle:hover { opacity: 1; }
 
-/* Widget header (drag handle) */
+/* Widget header */
 .w-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px 6px;
+  padding: 8px 10px 4px;
   flex-shrink: 0;
+  min-height: 0;
+}
+
+/* If w-head has no title text, make it very compact */
+.w-head:has(.w-title:empty) {
+  padding: 6px 10px 0;
 }
 
 .w-title {

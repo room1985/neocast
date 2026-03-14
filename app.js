@@ -391,7 +391,7 @@ function renderAddWidgetPanel() {
   if (!panel) return;
   panel.innerHTML = '<div class="awp-title">＋ 新增 Widget</div>';
 
-  const hidden = Object.keys(WIDGET_META).filter(wid => !S.widgets[wid]?.visible);
+  const hidden = Object.keys(WIDGET_META).filter(wid => S.widgets[wid]?.visible === false);
   if (hidden.length === 0) {
     panel.innerHTML += '<div class="awp-empty">所有 Widget 已顯示</div>';
     return;
@@ -523,9 +523,10 @@ let clockRef = null;
 
 function buildClockWidget() {
   const body = el('div', 'clock-body');
-  const w    = makeWidget('clock', '時鐘', body);
+  const w    = makeWidget('clock', '', body);
+  // Keep w-head (has delete button) but remove the extra w-body
   w.querySelector('.w-body')?.remove();
-  w.querySelector('.w-head')?.remove();
+  // Move body before resize handle
   w.insertBefore(body, w.querySelector('.resize-handle'));
   clockRef = new SimpleClock(body);
   clockRef.tick();
@@ -581,10 +582,9 @@ function initSearch() {
 ───────────────────────────────────── */
 function buildShortcutsWidget() {
   const body = el('div');
-  body.style.cssText = 'display:flex;flex-direction:column;height:100%;overflow:hidden;';
-  const w = makeWidget('shortcuts', '捷徑', body, 'sc-widget');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+  const w = makeWidget('shortcuts', '', body, 'sc-widget');
   w.querySelector('.w-body')?.remove();
-  w.querySelector('.w-head')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
   w.dataset.scbody = '1';
   renderShortcutsWidget(body);
@@ -748,10 +748,9 @@ let newsListEl = null;
 
 function buildNewsWidget() {
   const outer = el('div');
-  outer.style.cssText = 'display:flex;flex-direction:column;height:100%;overflow:hidden;';
+  outer.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
   const w = makeWidget('news', '', outer, '');
   w.querySelector('.w-body')?.remove();
-  w.querySelector('.w-head')?.remove();
   w.insertBefore(outer, w.querySelector('.resize-handle'));
 
   // Header
@@ -1074,7 +1073,7 @@ async function init() {
   await idbOpen().catch(()=>{});
   await loadVideo().catch(()=>{});
 
-  // Build widgets (only if visible)
+  // Build widgets (only if visible, undefined counts as visible)
   if (S.widgets.clock?.visible    !== false) buildClockWidget();
   if (S.widgets.shortcuts?.visible !== false) buildShortcutsWidget();
   if (S.widgets.news?.visible     !== false) buildNewsWidget();
