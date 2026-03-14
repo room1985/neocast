@@ -1,0 +1,13 @@
+{
+  "name": "NeoCast — 個人化新分頁",
+  "short_name": "NeoCast",
+  "description": "玻璃風格個人化儀表板 · 無限捷徑 · Flip Clock · AI新聞",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#070b14",
+  "theme_color": "#070b14",
+  "orientation": "any",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
