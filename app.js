@@ -173,8 +173,10 @@ async function gistPush(silent = false) {
     const data = await res.json();
     if (!gistId) { S.cfg.gistId = data.id; lsSave(); $('cfg-gid').value = data.id; }
     if (!silent) toast('已同步到 Gist ✓');
+    else toast('已自動同步 ✓');
   } catch(e) {
     if (!silent) toast('同步失敗：' + e.message, 'err');
+    else toast('自動同步失敗：' + e.message, 'err');
   } finally {
     if (!silent) $('sync-btn').classList.remove('spin');
   }
