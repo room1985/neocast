@@ -29,8 +29,8 @@ let S = {
   groups:     [],
   widgets: {
     clock:     { col:0, row:0, w:6, h:2, visible:true },
-    shortcuts: { col:5, row:0, w:6, h:5, visible:true },
-    news:      { col:0, row:3, w:6, h:5, visible:true }
+    shortcuts: { col:6, row:0, w:6, h:5, visible:true },
+    news:      { col:0, row:2, w:6, h:5, visible:true }
   },
   news: {
     items:    [],
@@ -382,8 +382,8 @@ const WIDGET_META = {
 /* Default positions for when a widget is re-added */
 const WIDGET_DEFAULT = {
   clock:     { col:0, row:0, w:6, h:2, visible:true },
-  shortcuts: { col:5, row:0, w:6, h:5, visible:true },
-  news:      { col:0, row:3, w:6, h:5, visible:true }
+  shortcuts: { col:6, row:0, w:6, h:5, visible:true },
+  news:      { col:0, row:2, w:6, h:5, visible:true }
 };
 
 function renderAddWidgetPanel() {
