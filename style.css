@@ -99,9 +99,9 @@ a { color:inherit; text-decoration:none; }
   position: fixed;
   top: 0; left: 0; right: 0;
   height: 58px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: center;
   padding: 0 16px;
   z-index: 200;
   background: rgba(7,11,20,0.6);
@@ -110,6 +110,8 @@ a { color:inherit; text-decoration:none; }
   border-bottom: 1px solid var(--bd);
 }
 
+#hdr-left { /* spacer */ }
+
 #search-wrap {
   display: flex;
   align-items: center;
@@ -117,11 +119,10 @@ a { color:inherit; text-decoration:none; }
   background: transparent;
   border: none;
   border-bottom: 1px solid var(--bd);
-  border-radius: 0;
   padding: 0 12px;
   height: 38px;
-  transition: border-color .2s, box-shadow .2s;
-  width: min(520px, 60vw);
+  transition: border-color .2s;
+  width: min(520px, 55vw);
 }
 
 #search-wrap:focus-within {
@@ -159,13 +160,27 @@ a { color:inherit; text-decoration:none; }
 
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
-#hdr-right { 
-  position: absolute;
-  right: 16px;
+#hdr-right {
   display: flex;
   align-items: center;
   gap: 6px;
+  justify-content: flex-end;
 }
+
+#edit-done {
+  background: var(--ac);
+  border: none;
+  color: #03111e;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: .8rem;
+  font-weight: 800;
+  font-family: inherit;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+#edit-done:hover { opacity: .85; }
+#edit-done.hidden { display: none; }
 
 .hdr-btn {
   background: var(--sf);
@@ -180,35 +195,112 @@ a { color:inherit; text-decoration:none; }
 .hdr-btn:hover { color:var(--tx); border-color:var(--bd2); background:var(--sf2); }
 .hdr-btn.active { color:var(--ac); border-color:var(--ac); background:rgba(56,189,248,.1); }
 
-/* ── Edit Done Float Button ── */
-#edit-banner {
-  position: fixed;
-  top: 68px;
-  right: 16px;
-  z-index: 190;
-  animation: floatIn .2s ease;
+/* ══════════════════════════════
+   GLASS CLOCK WIDGET
+══════════════════════════════ */
+.clock-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 12px;
+  padding: 12px;
+  overflow: hidden;
 }
-#edit-banner.hidden { display:none; }
 
-@keyframes floatIn {
-  from { opacity:0; transform:translateY(-8px); }
-  to   { opacity:1; transform:translateY(0); }
+.glass-clock {
+  display: flex;
+  align-items: center;
+  gap: clamp(4px, 1vw, 10px);
 }
 
-#edit-done {
+.gc-group { display: flex; gap: clamp(3px, 0.5vw, 6px); }
+
+.gc-sep {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 1vh, 10px);
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 2px;
+}
+.gc-sep span {
+  width: clamp(4px, 0.5vw, 6px);
+  height: clamp(4px, 0.5vw, 6px);
+  border-radius: 50%;
   background: var(--ac);
-  border: none;
-  color: #03111e;
-  padding: 8px 18px;
-  border-radius: 50px;
-  font-size: .82rem;
-  font-weight: 800;
-  box-shadow: 0 4px 20px rgba(56,189,248,.3);
-  transition: opacity .2s, transform .2s;
+  opacity: .8;
+  animation: sepblink 1s infinite;
 }
-#edit-done:hover { opacity:.88; transform:translateY(-1px); }
+@keyframes sepblink { 0%,100%{opacity:.8} 50%{opacity:.2} }
 
-/* ── Grid Overlay ── */
+/* Single digit card */
+.gc-digit {
+  position: relative;
+  width: var(--gc-w, 52px);
+  height: var(--gc-h, 72px);
+  border-radius: 9px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  overflow: hidden;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.1), 0 4px 16px rgba(0,0,0,.25);
+  flex-shrink: 0;
+}
+
+/* Horizontal divider line in middle */
+.gc-digit::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0,0,0,.45);
+  z-index: 2;
+}
+
+/* Each digit has two layers that cross-fade */
+.gc-digit .gc-cur,
+.gc-digit .gc-nxt {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gc-digit .gc-cur span,
+.gc-digit .gc-nxt span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: var(--gc-fs, 2.4rem);
+  font-weight: 800;
+  color: var(--tx);
+  line-height: 1;
+  letter-spacing: -1px;
+  user-select: none;
+}
+
+.gc-digit .gc-nxt {
+  opacity: 0;
+}
+
+/* Fade transition */
+.gc-digit.fading .gc-cur { animation: gcFadeOut .3s ease forwards; }
+.gc-digit.fading .gc-nxt { animation: gcFadeIn  .3s ease forwards; }
+
+@keyframes gcFadeOut { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(1.08)} }
+@keyframes gcFadeIn  { from{opacity:0;transform:scale(0.92)} to{opacity:1;transform:scale(1)} }
+
+.clock-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.clock-date    { font-size:.82rem; color:var(--txm); font-weight:600; }
+.clock-greeting{ font-size:.78rem; color:var(--ac);  font-weight:700; }
 #grid-overlay {
   position: fixed;
   top: 58px; left: 0; right: 0; bottom: 0;
@@ -318,137 +410,6 @@ a { color:inherit; text-decoration:none; }
   padding: 6px 14px 12px;
 }
 
-/* ══════════════════════════════
-   FLIP CLOCK WIDGET
-══════════════════════════════ */
-.clock-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  gap: 12px;
-  padding: 12px;
-  overflow: hidden;
-}
-
-.flip-clock {
-  display: flex;
-  align-items: center;
-  gap: clamp(3px, 0.8vw, 8px);
-}
-
-.flip-group { display: flex; gap: clamp(2px, 0.4vw, 5px); }
-
-.flip-sep {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(4px, 1vh, 10px);
-  align-items: center;
-  justify-content: center;
-}
-
-.flip-sep span {
-  width: clamp(4px, 0.5vw, 6px);
-  height: clamp(4px, 0.5vw, 6px);
-  border-radius: 50%;
-  background: var(--ac);
-  opacity: .8;
-  animation: sepblink 1s infinite;
-}
-@keyframes sepblink { 0%,100%{opacity:.8} 50%{opacity:.2} }
-
-/* ── Single Flip Digit ── */
-.flip-digit {
-  position: relative;
-  width: var(--fd-w, 54px);
-  height: var(--fd-h, 76px);
-  perspective: 400px;
-  flex-shrink: 0;
-}
-
-/* All four halves share base styles */
-.fd-top, .fd-bot, .flap-t, .flap-b {
-  position: absolute;
-  left: 0; right: 0;
-  height: 50%;
-  overflow: hidden;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-}
-
-.fd-top, .flap-t {
-  top: 0;
-  border-radius: 8px 8px 0 0;
-  border-bottom: 1px solid rgba(0,0,0,.55);
-}
-
-.fd-bot, .flap-b {
-  bottom: 0;
-  border-radius: 0 0 8px 8px;
-  border-top: none;
-}
-
-/* .num is a full-height wrapper so the number is centred
-   in the complete digit card; each half clips half of it */
-.fd-top .num, .flap-t .num {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 200%;          /* full digit height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fd-bot .num, .flap-b .num {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 200%;          /* full digit height */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.fd-top .num span, .fd-bot .num span,
-.flap-t .num span, .flap-b .num span {
-  font-family: 'Syne', monospace;
-  font-size: var(--fd-fs, 2.6rem);
-  font-weight: 800;
-  color: var(--tx);
-  line-height: 1;
-  letter-spacing: -1px;
-  user-select: none;
-}
-
-/* Flap animation */
-.flap-t {
-  transform-origin: bottom center;
-  z-index: 2;
-  background: rgba(255,255,255,.11);
-}
-.flap-b {
-  transform-origin: top center;
-  z-index: 2;
-  transform: rotateX(90deg);
-  background: rgba(255,255,255,.11);
-}
-
-.flap-t.anim { animation: flipT .42s cubic-bezier(.4,0,.2,1) forwards; }
-.flap-b.anim { animation: flipB .42s cubic-bezier(.4,0,.2,1) forwards; }
-
-@keyframes flipT { 0%{transform:rotateX(0deg)} 100%{transform:rotateX(-90deg)} }
-@keyframes flipB { 0%{transform:rotateX(90deg)} 100%{transform:rotateX(0deg)} }
-
-.clock-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-.clock-date   { font-size:.82rem; color:var(--txm); font-weight:600; }
-.clock-greeting { font-size:.78rem; color:var(--ac); font-weight:700; }
 
 /* ══════════════════════════════
    SHORTCUTS WIDGET

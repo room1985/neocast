@@ -11,7 +11,7 @@
   <link rel="icon" href="icon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -27,6 +27,7 @@
 
   <!-- ── Header ── -->
   <header id="header">
+    <div id="hdr-left"></div>
     <div id="search-wrap">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input id="search-input" type="text" placeholder="搜尋或輸入網址… （/ 鍵快速聚焦）" autocomplete="off" spellcheck="false">
@@ -38,6 +39,7 @@
       <button class="hdr-btn" id="edit-btn" title="編輯佈局">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       </button>
+      <button id="edit-done" class="hidden" title="完成編輯">✓ 完成</button>
       <button class="hdr-btn" id="sync-btn" title="同步 Gist">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
       </button>
@@ -47,10 +49,7 @@
     </div>
   </header>
 
-  <!-- ── Edit Mode Banner ── -->
-  <div id="edit-banner" class="hidden">
-    <button id="edit-done">✓ 完成編輯</button>
-  </div>
+  <!-- ── Edit Mode Banner (removed, done button now in header) ── -->
 
   <!-- ── Grid Overlay ── -->
   <div id="grid-overlay" class="hidden"></div>

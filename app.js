@@ -356,7 +356,7 @@ function initWidgetDrag(wid, widgetEl) {
 
 function setEditMode(on) {
   S.editMode = on;
-  $('edit-banner').classList.toggle('hidden', !on);
+  $('edit-done').classList.toggle('hidden', !on);
   $('grid-overlay').classList.toggle('hidden', !on);
   $('edit-btn').classList.toggle('active', on);
   document.querySelectorAll('.widget').forEach(w => w.classList.toggle('editable', on));
@@ -389,63 +389,47 @@ function makeWidget(wid, titleText, bodyEl, extraClass = '') {
 /* ─────────────────────────────────────
    FLIP CLOCK
 ───────────────────────────────────── */
-class FlipDigit {
+/* ── Glass Clock Digit ── */
+class GlassDigit {
   constructor() {
     this.val = -1;
-    this.el  = el('div', 'flip-digit');
-    // Each half has a .num wrapper that is 200% tall so the number
-    // sits centred across the full digit height, then gets clipped
+    this.el  = el('div', 'gc-digit');
     this.el.innerHTML = `
-      <div class="fd-top"><div class="num"><span>0</span></div></div>
-      <div class="fd-bot"><div class="num"><span>0</span></div></div>
-      <div class="flap-t"><div class="num"><span>0</span></div></div>
-      <div class="flap-b"><div class="num"><span>0</span></div></div>
+      <div class="gc-cur"><span>0</span></div>
+      <div class="gc-nxt"><span>0</span></div>
     `;
-    this.topS  = this.el.querySelector('.fd-top span');
-    this.botS  = this.el.querySelector('.fd-bot span');
-    this.flapT = this.el.querySelector('.flap-t');
-    this.flapTS= this.el.querySelector('.flap-t span');
-    this.flapB = this.el.querySelector('.flap-b');
-    this.flapBS= this.el.querySelector('.flap-b span');
+    this.cur  = this.el.querySelector('.gc-cur span');
+    this.nxt  = this.el.querySelector('.gc-nxt span');
+    this.wrap = this.el;
   }
 
   set(n) {
     if (n === this.val) return;
-    const old = this.val < 0 ? n : this.val;
-    this.val  = n;
+    this.val = n;
+    this.nxt.textContent = n;
 
-    // Static halves show the new number
-    this.topS.textContent = n;
-    this.botS.textContent = n;
-    // Animated flap-top shows old number and folds down
-    this.flapTS.textContent = old;
-    // Animated flap-bottom shows new number and folds up into view
-    this.flapBS.textContent = n;
-
-    this.flapT.classList.remove('anim');
-    this.flapB.classList.remove('anim');
-    void this.flapT.offsetWidth; // force reflow
-
-    this.flapT.classList.add('anim');
-    this.flapB.classList.add('anim');
+    this.wrap.classList.remove('fading');
+    void this.wrap.offsetWidth;
+    this.wrap.classList.add('fading');
 
     setTimeout(() => {
-      this.flapT.classList.remove('anim');
-      this.flapB.classList.remove('anim');
-    }, 460);
+      this.cur.textContent = n;
+      this.wrap.classList.remove('fading');
+    }, 320);
   }
 }
 
-class FlipClock {
+class GlassClock {
   constructor(container) {
-    this.digits = [];
+    this.digits    = [];
     this.container = container;
-    const fc = el('div', 'flip-clock');
+
+    const fc = el('div', 'glass-clock');
 
     const group = (n) => {
-      const g = el('div', 'flip-group');
+      const g = el('div', 'gc-group');
       for (let i = 0; i < n; i++) {
-        const d = new FlipDigit();
+        const d = new GlassDigit();
         g.appendChild(d.el);
         this.digits.push(d);
       }
@@ -453,7 +437,7 @@ class FlipClock {
     };
 
     const sep = () => {
-      const s = el('div', 'flip-sep');
+      const s = el('div', 'gc-sep');
       s.innerHTML = '<span></span><span></span>';
       return s;
     };
@@ -462,17 +446,16 @@ class FlipClock {
     fc.appendChild(group(2)); fc.appendChild(sep());
     fc.appendChild(group(2));
 
-    const meta   = el('div', 'clock-meta');
-    this.dateEl  = el('div', 'clock-date');
-    this.greetEl = el('div', 'clock-greeting');
+    const meta    = el('div', 'clock-meta');
+    this.dateEl   = el('div', 'clock-date');
+    this.greetEl  = el('div', 'clock-greeting');
     meta.appendChild(this.greetEl);
     meta.appendChild(this.dateEl);
 
     container.appendChild(fc);
     container.appendChild(meta);
-    this.fc = fc;
 
-    // Adaptive sizing via ResizeObserver
+    // Adaptive sizing
     this._ro = new ResizeObserver(() => this._resize());
     this._ro.observe(container);
     this._resize();
@@ -481,15 +464,14 @@ class FlipClock {
   _resize() {
     const cw = this.container.clientWidth;
     const ch = this.container.clientHeight;
-    // 6 digits + 2 separators — fit width with padding
-    const available = Math.min(cw * 0.9, ch * 0.65);
-    const dw = Math.max(32, Math.floor(available / 7.2));
-    const dh = Math.floor(dw * 1.38);
-    const fs = Math.floor(dh * 0.62);
-    document.querySelectorAll('.flip-digit').forEach(d => {
-      d.style.setProperty('--fd-w', dw + 'px');
-      d.style.setProperty('--fd-h', dh + 'px');
-      d.style.setProperty('--fd-fs', fs + 'px');
+    const avail = Math.min(cw * 0.88, ch * 0.62);
+    const dw  = Math.max(30, Math.floor(avail / 7.5));
+    const dh  = Math.floor(dw * 1.38);
+    const fs  = Math.floor(dh * 0.58);
+    document.querySelectorAll('.gc-digit').forEach(d => {
+      d.style.setProperty('--gc-w', dw + 'px');
+      d.style.setProperty('--gc-h', dh + 'px');
+      d.style.setProperty('--gc-fs', fs + 'px');
     });
   }
 
@@ -507,9 +489,9 @@ class FlipClock {
     this.digits[5].set(s % 10);
 
     const W = ['日','一','二','三','四','五','六'];
-    this.dateEl.textContent = `${now.getMonth()+1}月${now.getDate()}日 週${W[now.getDay()]}`;
-    const g = h < 5 ? '深夜好' : h < 12 ? '早安 ☀' : h < 18 ? '午安 🌤' : '晚安 🌙';
-    this.greetEl.textContent = g;
+    this.dateEl.textContent  = `${now.getMonth()+1}月${now.getDate()}日 週${W[now.getDay()]}`;
+    const hr = now.getHours();
+    this.greetEl.textContent = hr < 5 ? '深夜好' : hr < 12 ? '早安 ☀' : hr < 18 ? '午安 🌤' : '晚安 🌙';
   }
 }
 
@@ -521,7 +503,7 @@ function buildClockWidget() {
   w.querySelector('.w-body')?.remove();
   w.querySelector('.w-head')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
-  clockRef = new FlipClock(body);
+  clockRef = new GlassClock(body);
   clockRef.tick();
   setInterval(() => clockRef.tick(), 1000);
 }
