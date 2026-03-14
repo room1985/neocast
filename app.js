@@ -723,17 +723,26 @@ function initScDrag(grid) {
 }
 
 function rerenderShortcuts() {
+  // Desktop
   const body = document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
   if (body) renderShortcutsWidget(body);
+  // Mobile
+  const mobileBody = document.querySelector('#mobile-layout .sc-inner');
+  if (mobileBody) renderShortcutsWidget(mobileBody);
 }
 
 function findScBody() {
-  return document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
+  return document.querySelector('.widget[data-wid="shortcuts"] .sc-inner')
+      || document.querySelector('#mobile-layout .sc-inner');
 }
 
 function rerenderSc() {
+  // Desktop
   const body = document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
   if (body) renderShortcutsWidget(body);
+  // Mobile
+  const mobileBody = document.querySelector('#mobile-layout .sc-inner');
+  if (mobileBody) renderShortcutsWidget(mobileBody);
 }
 
 /* ─────────────────────────────────────

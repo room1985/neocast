@@ -103,7 +103,15 @@ a { color:inherit; text-decoration:none; }
   background: transparent;
 }
 
-#hdr-left { /* spacer */ }
+#hdr-left { display:flex; align-items:center; }
+
+#version-tag {
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--txd);
+  letter-spacing: .04em;
+  font-family: 'JetBrains Mono', monospace;
+}
 
 #search-wrap {
   display: flex;
