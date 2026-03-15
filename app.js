@@ -725,6 +725,108 @@ function initScDrag(grid) {
       lsSave(); rerenderShortcuts();
     });
   });
+
+  // Touch drag for mobile
+  initTouchDrag(grid);
+}
+
+function initTouchDrag(grid) {
+  let touchSrcId  = null;
+  let ghost       = null;
+  let longPressTimer = null;
+  let isDragging  = false;
+  let offsetX = 0, offsetY = 0;
+
+  grid.querySelectorAll('.sc-item').forEach(item => {
+    item.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      touchSrcId = item.dataset.id;
+
+      longPressTimer = setTimeout(() => {
+        isDragging = true;
+
+        // Create ghost clone
+        const rect = item.getBoundingClientRect();
+        ghost = item.cloneNode(true);
+        ghost.classList.add('touch-drag-ghost');
+        ghost.style.width  = rect.width + 'px';
+        ghost.style.height = rect.height + 'px';
+        ghost.style.left   = rect.left + 'px';
+        ghost.style.top    = rect.top  + 'px';
+        document.body.appendChild(ghost);
+
+        offsetX = touch.clientX - rect.left;
+        offsetY = touch.clientY - rect.top;
+
+        item.classList.add('touch-dragging');
+      }, 500);
+    }, { passive: true });
+
+    item.addEventListener('touchmove', e => {
+      if (!isDragging) { clearTimeout(longPressTimer); return; }
+      e.preventDefault();
+
+      const touch = e.touches[0];
+
+      // Move ghost
+      if (ghost) {
+        ghost.style.left = (touch.clientX - offsetX) + 'px';
+        ghost.style.top  = (touch.clientY - offsetY) + 'px';
+      }
+
+      // Find which item we're over
+      ghost.style.display = 'none';
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      ghost.style.display = '';
+
+      grid.querySelectorAll('.touch-drag-over').forEach(i => i.classList.remove('touch-drag-over'));
+
+      const target = el?.closest('.sc-item');
+      if (target && target.dataset.id !== touchSrcId) {
+        target.classList.add('touch-drag-over');
+      }
+    }, { passive: false });
+
+    item.addEventListener('touchend', e => {
+      clearTimeout(longPressTimer);
+      if (!isDragging) { touchSrcId = null; return; }
+
+      const touch = e.changedTouches[0];
+
+      // Find drop target
+      if (ghost) ghost.style.display = 'none';
+      const el = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (ghost) { ghost.style.display = ''; ghost.remove(); ghost = null; }
+
+      const target = el?.closest('.sc-item');
+      if (target && target.dataset.id && target.dataset.id !== touchSrcId) {
+        const si = S.shortcuts.findIndex(s => s.id === touchSrcId);
+        const di = S.shortcuts.findIndex(s => s.id === target.dataset.id);
+        if (si >= 0 && di >= 0) {
+          const [m] = S.shortcuts.splice(si, 1);
+          S.shortcuts.splice(di, 0, m);
+          lsSave(); rerenderShortcuts();
+        }
+      }
+
+      grid.querySelectorAll('.touch-dragging, .touch-drag-over').forEach(i => {
+        i.classList.remove('touch-dragging', 'touch-drag-over');
+      });
+
+      isDragging  = false;
+      touchSrcId  = null;
+    }, { passive: true });
+
+    item.addEventListener('touchcancel', () => {
+      clearTimeout(longPressTimer);
+      if (ghost) { ghost.remove(); ghost = null; }
+      grid.querySelectorAll('.touch-dragging, .touch-drag-over').forEach(i => {
+        i.classList.remove('touch-dragging', 'touch-drag-over');
+      });
+      isDragging = false;
+      touchSrcId = null;
+    }, { passive: true });
+  });
 }
 
 function rerenderShortcuts() {
