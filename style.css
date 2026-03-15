@@ -929,6 +929,39 @@ a { color:inherit; text-decoration:none; }
 
 /* ── Spin ── */
 @keyframes spin { to{transform:rotate(360deg)} }
+
+/* Toast notification system */
+#toast-container {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast-item {
+  padding: 9px 20px;
+  border-radius: 50px;
+  font-size: .82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: toast-in .25s cubic-bezier(.34,1.56,.64,1) forwards;
+  transition: transform .3s ease, opacity .3s ease;
+}
+.toast-item.toast-out {
+  animation: toast-out .25s ease forwards;
+}
+.toast-item.toast-ok   { background:#0a2340; border:1px solid #38bdf8; color:#7dd3fc; }
+.toast-item.toast-err  { background:#3d0f0f; border:1px solid #f87171; color:#f87171; }
+.toast-item.toast-warn { background:#2a2200; border:1px solid #f59e0b; color:#fcd34d; }
+
+@keyframes toast-in  { from{opacity:0;transform:translateY(16px) scale(.92)} to{opacity:1;transform:translateY(0) scale(1)} }
+@keyframes toast-out { from{opacity:1;transform:translateY(0) scale(1)} to{opacity:0;transform:translateY(-10px) scale(.95)} }
 .spin svg { animation:spin .8s linear infinite; }
 
 /* ══════════════════════════════

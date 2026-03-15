@@ -220,20 +220,33 @@ async function gistPull() {
 /* ─────────────────────────────────────
    TOAST
 ───────────────────────────────────── */
+const MAX_TOASTS = 4;
+
 function toast(msg, type = 'ok') {
-  const t = el('div');
-  t.style.cssText = `
-    position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
-    background:${type==='err'?'#3d0f0f':type==='warn'?'#2a2200':'#0a2340'};
-    border:1px solid ${type==='err'?'#f87171':type==='warn'?'#f59e0b':'#38bdf8'};
-    color:${type==='err'?'#f87171':type==='warn'?'#fcd34d':'#7dd3fc'};
-    padding:9px 20px; border-radius:50px; font-size:.82rem; font-weight:700;
-    z-index:9999; white-space:nowrap; pointer-events:none;
-    animation: toastin .25s ease forwards;
-  `;
+  const container = $('toast-container');
+  if (!container) return;
+
+  // Remove oldest if over limit
+  const existing = container.querySelectorAll('.toast-item');
+  if (existing.length >= MAX_TOASTS) {
+    dismissToast(existing[existing.length - 1]);
+  }
+
+  const t = el('div', `toast-item toast-${type}`);
   t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3200);
+  container.insertBefore(t, container.firstChild);
+
+  // Auto dismiss after 3s
+  const timer = setTimeout(() => dismissToast(t), 3000);
+  t._timer = timer;
+}
+
+function dismissToast(t) {
+  if (!t || t._dismissed) return;
+  t._dismissed = true;
+  clearTimeout(t._timer);
+  t.classList.add('toast-out');
+  setTimeout(() => t.remove(), 280);
 }
 
 /* ─────────────────────────────────────
@@ -1042,10 +1055,14 @@ function buildNewsWidget() {
     fetchNews(true);
   });
 
-  const refBtn = el('button', 'w-btn', `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`);
+  const refBtn = el('button', 'w-btn');
   refBtn.id = 'news-ref-btn';
   refBtn.title = '重新整理';
-  refBtn.addEventListener('click', () => { fetchNews(true); });
+  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  refBtn.addEventListener('click', () => {
+    refBtn.classList.add('spin');
+    fetchNews(true).finally(() => refBtn.classList.remove('spin'));
+  });
 
   acts.appendChild(langPill); acts.appendChild(refBtn);
   head.appendChild(ttl); head.appendChild(acts);
@@ -1124,8 +1141,6 @@ async function fetchNews(force = false) {
 
   const refBtn = $('news-ref-btn');
   const mobileRefBtn = $('mobile-news-ref-btn');
-  if (refBtn) refBtn.classList.add('spin');
-  if (mobileRefBtn) mobileRefBtn.classList.add('spin');
   renderNewsLoading();
 
   const isZh = S.news.lang === 'zh-TW';
@@ -1161,8 +1176,6 @@ async function fetchNews(force = false) {
   S.news.fetchedAt = Date.now();
   lsSave();
 
-  if ($('news-ref-btn')) $('news-ref-btn').classList.remove('spin');
-  if ($('mobile-news-ref-btn')) $('mobile-news-ref-btn').classList.remove('spin');
   renderNewsItems();
 
   // Re-query DOM fresh after async to avoid stale references
@@ -1406,7 +1419,10 @@ function renderMobileNews(container) {
   const refBtn = el('button', 'w-btn');
   refBtn.id = 'mobile-news-ref-btn';
   refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
-  refBtn.addEventListener('click', () => { fetchNews(true); });
+  refBtn.addEventListener('click', () => {
+    refBtn.classList.add('spin');
+    fetchNews(true).finally(() => refBtn.classList.remove('spin'));
+  });
 
   head.appendChild(ttl);
   head.appendChild(langPill);
