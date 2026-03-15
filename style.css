@@ -742,7 +742,7 @@ a { color:inherit; text-decoration:none; }
   flex: 1;
   overflow: hidden;
   min-height: 0;
-  height: 100%;
+  height: 0; /* Force flex child to respect parent height */
 }
 
 .sticky-list {
@@ -842,6 +842,19 @@ a { color:inherit; text-decoration:none; }
   transition: transform .15s;
 }
 .sticky-float-del:hover { transform: scale(1.15); }
+
+/* Inline del button in colorRow */
+.sticky-inline-del {
+  background: none;
+  border: none;
+  color: #f87171;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform .15s;
+}
+.sticky-inline-del:hover { transform: scale(1.15); }
 
 .sticky-text {
   flex: 1;

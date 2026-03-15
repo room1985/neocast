@@ -1334,43 +1334,7 @@ function makeStickyCard(sticky, container) {
   card.appendChild(textEl);
   card.appendChild(pinBtn);
 
-  // Floating del button appended to body (avoids blur conflict)
-  let floatDel = null;
-
-  const showFloatDel = () => {
-    if (floatDel) floatDel.remove();
-    const rect = card.getBoundingClientRect();
-    floatDel = el('button', 'sticky-float-del');
-    floatDel.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
-    floatDel.style.cssText = `position:fixed;left:${rect.left - 28}px;top:${rect.top + rect.height/2 - 12}px;z-index:9999;`;
-    floatDel.addEventListener('click', () => {
-      if (!confirm('確認刪除？')) { floatDel.remove(); floatDel = null; return; }
-      floatDel.remove(); floatDel = null;
-      card.style.transition = 'transform .32s ease, opacity .32s ease';
-      card.style.transform  = 'translateX(110%)';
-      card.style.opacity    = '0';
-      setTimeout(() => {
-        S.stickies = S.stickies.filter(s => s.id !== sticky.id);
-        lsSave();
-        renderStickiesWidget(container);
-      }, 340);
-    });
-    document.body.appendChild(floatDel);
-
-    // Hide on outside click
-    setTimeout(() => {
-      const hide = (e) => {
-        if (floatDel && !floatDel.contains(e.target) && !card.contains(e.target)) {
-          floatDel.remove(); floatDel = null;
-          document.removeEventListener('pointerdown', hide, true);
-        }
-      };
-      document.addEventListener('pointerdown', hide, true);
-    }, 50);
-  };
-
   const onLongPress = () => {
-    showFloatDel();
     startEdit(sticky, textEl, card, container);
   };
 
@@ -1396,8 +1360,26 @@ function startEdit(sticky, textEl, card, container) {
   const pinBtn = card.querySelector('.sticky-pin');
   if (pinBtn) pinBtn.style.display = 'none';
 
-  // Show color picker inline in card during edit
+  // Show color picker + del button inline during edit
   const colorRow = el('div', 'sticky-edit-colors');
+
+  // Del button inside colorRow (leftmost)
+  const delBtn = el('button', 'sticky-inline-del');
+  delBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+  delBtn.title = '刪除';
+  delBtn.addEventListener('mousedown', e => {
+    e.preventDefault(); // prevent blur
+    if (!confirm('確認刪除？')) return;
+    card.style.transition = 'transform .32s ease, opacity .32s ease';
+    card.style.transform  = 'translateX(110%)';
+    card.style.opacity    = '0';
+    setTimeout(() => {
+      S.stickies = S.stickies.filter(s => s.id !== sticky.id);
+      lsSave();
+      renderStickiesWidget(container);
+    }, 340);
+  });
+  colorRow.appendChild(delBtn);
   ['blue','green','red','yellow'].forEach(key => {
     const sq = el('button', 'sticky-color-sq sticky-sq-' + key + (sticky.color === key ? ' on' : ''));
     sq.addEventListener('mousedown', e => {
