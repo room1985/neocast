@@ -1369,6 +1369,7 @@ function makeStickyCard(sticky, container) {
   });
 
   card.appendChild(delBtn);
+  card.appendChild(delBtn);
   card.appendChild(drag);
   card.appendChild(chk);
   card.appendChild(textEl);
@@ -1401,12 +1402,16 @@ function startEdit(sticky, textEl, card, container) {
   inp.focus();
   inp.select();
 
+  // Hide pin button during edit
+  const pinBtn = card.querySelector('.sticky-pin');
+  if (pinBtn) pinBtn.style.display = 'none';
+
   // Show color picker inline in card during edit
   const colorRow = el('div', 'sticky-edit-colors');
   ['blue','green','red','yellow'].forEach(key => {
     const sq = el('button', 'sticky-color-sq sticky-sq-' + key + (sticky.color === key ? ' on' : ''));
     sq.addEventListener('mousedown', e => {
-      e.preventDefault(); // prevent blur on input
+      e.preventDefault();
       const st = S.stickies.find(s => s.id === sticky.id);
       if (st) {
         st.color = st.color === key ? 'none' : key;
