@@ -1381,13 +1381,14 @@ function renderMobileNews(container) {
   container.innerHTML = '';
   container.className = 'mobile-news-inner';
 
-  // News header with title + lang toggle + refresh
+  // News header: [title] [中文] [↻] ............. [replace stays in panel corner]
   const head = el('div', 'news-head');
-  const ttl  = el('div', 'w-title', S.news.title || '即時新聞');
+  head.style.cssText = 'justify-content:flex-start;gap:6px;padding-right:36px;';
 
-  const acts = el('div', 'w-actions');
+  const ttl = el('div', 'w-title', S.news.title || '即時新聞');
 
   const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
+  langPill.style.cssText = 'font-size:.65rem;padding:2px 7px;flex-shrink:0;';
   langPill.addEventListener('click', () => {
     S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
     langPill.textContent = S.news.lang === 'zh-TW' ? '中文' : 'EN';
@@ -1398,13 +1399,12 @@ function renderMobileNews(container) {
 
   const refBtn = el('button', 'w-btn');
   refBtn.id = 'mobile-news-ref-btn';
-  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
   refBtn.addEventListener('click', () => { S.news.fetchedAt = 0; fetchNews(); });
 
-  acts.appendChild(langPill);
-  acts.appendChild(refBtn);
   head.appendChild(ttl);
-  head.appendChild(acts);
+  head.appendChild(langPill);
+  head.appendChild(refBtn);
   container.appendChild(head);
 
   // Keywords
