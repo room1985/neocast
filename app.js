@@ -414,7 +414,7 @@ function setEditMode(on) {
   // Toggle edit-btn between grid icon and ✓ 完成
   const editBtn = $('edit-btn');
   if (on) {
-    editBtn.innerHTML = '✓';
+    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><polyline points="20 6 9 17 4 12"/></svg>`;
     editBtn.classList.add('edit-done-mode');
     editBtn.title = '完成編輯';
   } else {
