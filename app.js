@@ -1224,47 +1224,45 @@ function buildStickiesWidget() {
 function renderStickiesWidget(container) {
   container.innerHTML = '';
 
-  // List area
   const list = el('div', 'sticky-list');
   container.appendChild(list);
 
-  // Empty state
   if (!S.stickies.length) {
     list.innerHTML = '<div class="sticky-empty">輸入新增待辦事項…</div>';
   } else {
-    // Pinned first, then rest
     const sorted = [
       ...S.stickies.filter(s => s.pinned),
       ...S.stickies.filter(s => !s.pinned)
     ];
     sorted.forEach(s => list.appendChild(makeStickyCard(s, container)));
+    initStickyListDrag(list, container);
   }
 
-  // Input bar at bottom
+  // Input bar
   const bar = el('div', 'sticky-input-bar');
+
+  // 2×2 color grid
+  let selectedColor = 'none';
+  const colorGrid = el('div', 'sticky-color-grid');
+  ['blue','green','red','yellow'].forEach(key => {
+    const sq = el('button', 'sticky-color-sq sticky-sq-' + key);
+    sq.title = STICKY_COLORS[key].label;
+    sq.addEventListener('click', () => {
+      selectedColor = selectedColor === key ? 'none' : key;
+      colorGrid.querySelectorAll('.sticky-color-sq').forEach(s => s.classList.remove('on'));
+      if (selectedColor !== 'none') sq.classList.add('on');
+    });
+    colorGrid.appendChild(sq);
+  });
+
   const inp = el('input', 'sticky-input');
   inp.type = 'text';
   inp.placeholder = '新增待辦…';
   inp.autocomplete = 'off';
 
-  // Color picker
-  let selectedColor = 'none';
-  const colorWrap = el('div', 'sticky-color-wrap');
-  Object.entries(STICKY_COLORS).forEach(([key, c]) => {
-    if (key === 'none') return;
-    const dot = el('button', 'sticky-color-dot' + (selectedColor === key ? ' on' : ''));
-    dot.style.background = c.border;
-    dot.title = c.label;
-    dot.addEventListener('click', () => {
-      selectedColor = key;
-      colorWrap.querySelectorAll('.sticky-color-dot').forEach(d => d.classList.remove('on'));
-      dot.classList.add('on');
-    });
-    colorWrap.appendChild(dot);
-  });
-
   const addBtn = el('button', 'sticky-add-btn');
-  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M2 12l20-8-8 20-4-8-8-4z"/></svg>`;
+  addBtn.title = '新增';
 
   function doAdd() {
     const text = inp.value.trim();
@@ -1278,69 +1276,89 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  bar.appendChild(colorWrap);
+  bar.appendChild(colorGrid);
   bar.appendChild(inp);
   bar.appendChild(addBtn);
   container.appendChild(bar);
 }
 
 function makeStickyCard(sticky, container) {
-  const c      = STICKY_COLORS[sticky.color] || STICKY_COLORS.none;
-  const card   = el('div', 'sticky-card' + (sticky.pinned ? ' pinned' : ''));
+  const c    = STICKY_COLORS[sticky.color] || STICKY_COLORS.none;
+  const card = el('div', 'sticky-card' + (sticky.pinned ? ' pinned' : ''));
+  card.dataset.id = sticky.id;
   card.style.background  = c.bg;
   card.style.borderColor = c.border;
 
-  // Left: drag handle
+  // Drag handle
   const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
-  drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="19" r="1" fill="currentColor"/><circle cx="15" cy="5" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="19" r="1" fill="currentColor"/></svg>`;
+  drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>`;
 
-  // Middle: text (long press to edit)
+  // Square checkbox (confirm before delete)
+  const chk = el('button', 'sticky-chk');
+  chk.title = '完成並刪除';
+  chk.addEventListener('click', () => {
+    if (!confirm('確認完成並刪除？')) return;
+    card.style.transition = 'transform .32s ease, opacity .32s ease';
+    card.style.transform  = 'translateX(110%)';
+    card.style.opacity    = '0';
+    setTimeout(() => {
+      S.stickies = S.stickies.filter(s => s.id !== sticky.id);
+      lsSave();
+      renderStickiesWidget(container);
+    }, 340);
+  });
+
+  // Text (long press to edit)
   const textEl = el('div', 'sticky-text', esc(sticky.text));
   let editTimer = null;
-
   textEl.addEventListener('mousedown', () => {
-    if (sticky.pinned) return;
     editTimer = setTimeout(() => startEdit(sticky, textEl, container), 500);
   });
   textEl.addEventListener('mouseup', () => clearTimeout(editTimer));
   textEl.addEventListener('touchstart', () => {
-    if (sticky.pinned) return;
     editTimer = setTimeout(() => startEdit(sticky, textEl, container), 500);
   }, { passive: true });
   textEl.addEventListener('touchend', () => clearTimeout(editTimer), { passive: true });
 
-  // Right: pin + check
-  const actions = el('div', 'sticky-actions');
+  // Right: 2×2 color grid + pin (bigger)
+  const rightCol = el('div', 'sticky-right-col');
+
+  const cardColors = el('div', 'sticky-card-colors');
+  ['blue','green','red','yellow'].forEach(key => {
+    const sq = el('button', 'sticky-card-sq sticky-sq-' + key + (sticky.color === key ? ' on' : ''));
+    sq.addEventListener('click', e => {
+      e.stopPropagation();
+      const st = S.stickies.find(s => s.id === sticky.id);
+      if (st) st.color = st.color === key ? 'none' : key;
+      lsSave();
+      renderStickiesWidget(container);
+    });
+    cardColors.appendChild(sq);
+  });
 
   const pinBtn = el('button', 'sticky-pin' + (sticky.pinned ? ' on' : ''));
-  pinBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="${sticky.pinned?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+  pinBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="${sticky.pinned?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
   pinBtn.title = sticky.pinned ? '取消置頂' : '置頂';
-  pinBtn.addEventListener('click', () => {
-    sticky.pinned = !sticky.pinned;
+  pinBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const st = S.stickies.find(s => s.id === sticky.id);
+    if (st) st.pinned = !st.pinned;
     lsSave();
     renderStickiesWidget(container);
   });
 
-  const checkBtn = el('button', 'sticky-chk');
-  checkBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>`;
-  checkBtn.title = '完成並刪除';
-  checkBtn.addEventListener('click', () => completeSticky(sticky.id, card, container));
-
-  actions.appendChild(pinBtn);
-  actions.appendChild(checkBtn);
+  rightCol.appendChild(cardColors);
+  rightCol.appendChild(pinBtn);
 
   card.appendChild(drag);
+  card.appendChild(chk);
   card.appendChild(textEl);
-  card.appendChild(actions);
+  card.appendChild(rightCol);
 
-  // Context menu for desktop right-click
   card.addEventListener('contextmenu', e => {
     e.preventDefault();
-    if (!sticky.pinned) startEdit(sticky, textEl, container);
+    startEdit(sticky, textEl, container);
   });
-
-  // Init drag sort (only non-pinned)
-  if (!sticky.pinned) initStickyDrag(card, sticky, container);
 
   return card;
 }
@@ -1352,61 +1370,119 @@ function startEdit(sticky, textEl, container) {
   textEl.replaceWith(inp);
   inp.focus();
   inp.select();
-
-  function save() {
+  const save = () => {
     const val = inp.value.trim();
-    if (val) sticky.text = val;
+    if (val) { const st = S.stickies.find(s => s.id === sticky.id); if (st) st.text = val; }
     lsSave();
     renderStickiesWidget(container);
-  }
-
-  inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') save();
-    if (e.key === 'Escape') renderStickiesWidget(container);
-  });
+  };
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') renderStickiesWidget(container); });
   inp.addEventListener('blur', save);
 }
 
-function completeSticky(id, card, container) {
-  // Slide right animation then remove
-  card.style.transition = 'transform .3s ease, opacity .3s ease';
-  card.style.transform  = 'translateX(110%)';
-  card.style.opacity    = '0';
-  setTimeout(() => {
-    S.stickies = S.stickies.filter(s => s.id !== id);
-    lsSave();
-    renderStickiesWidget(container);
-  }, 320);
-}
+function initStickyListDrag(list, container) {
+  let dragSrcId = null;
+  let ghost     = null;
+  let startX    = 0;
+  let startY    = 0;
 
-function initStickyDrag(card, sticky, container) {
-  let dragSrc = null;
-  card.draggable = true;
-  card.addEventListener('dragstart', () => {
-    dragSrc = sticky.id;
-    setTimeout(() => card.classList.add('sticky-dragging'), 0);
-  });
-  card.addEventListener('dragend', () => {
-    card.classList.remove('sticky-dragging');
-    container.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
-    dragSrc = null;
-  });
-  card.addEventListener('dragover', e => {
-    e.preventDefault();
-    if (sticky.pinned || sticky.id === dragSrc) return;
-    container.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
-    card.classList.add('sticky-drag-over');
-  });
-  card.addEventListener('drop', e => {
-    e.preventDefault();
-    if (!dragSrc || dragSrc === sticky.id || sticky.pinned) return;
-    const si = S.stickies.findIndex(s => s.id === dragSrc);
-    const di = S.stickies.findIndex(s => s.id === sticky.id);
-    if (si < 0 || di < 0) return;
-    const [m] = S.stickies.splice(si, 1);
-    S.stickies.splice(di, 0, m);
-    lsSave();
-    renderStickiesWidget(container);
+  list.querySelectorAll('.sticky-card:not(.pinned)').forEach(card => {
+    const handle = card.querySelector('.sticky-handle');
+    if (!handle) return;
+
+    // Desktop drag on entire card
+    card.draggable = true;
+    card.addEventListener('dragstart', e => {
+      dragSrcId = card.dataset.id;
+      setTimeout(() => card.classList.add('sticky-dragging'), 0);
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('sticky-dragging');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      dragSrcId = null;
+    });
+    card.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (card.dataset.id === dragSrcId) return;
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      card.classList.add('sticky-drag-over');
+    });
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrcId || dragSrcId === card.dataset.id) return;
+      const si = S.stickies.findIndex(s => s.id === dragSrcId);
+      const di = S.stickies.findIndex(s => s.id === card.dataset.id);
+      if (si < 0 || di < 0) return;
+      const [m] = S.stickies.splice(si, 1);
+      S.stickies.splice(di, 0, m);
+      lsSave();
+      renderStickiesWidget(container);
+    });
+
+    // Mobile touch drag via handle
+    handle.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      dragSrcId = card.dataset.id;
+
+      setTimeout(() => {
+        if (!dragSrcId) return;
+        card.classList.add('sticky-dragging');
+        const rect = card.getBoundingClientRect();
+        ghost = card.cloneNode(true);
+        ghost.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.85;z-index:9999;pointer-events:none;`;
+        document.body.appendChild(ghost);
+      }, 150);
+    }, { passive: true });
+
+    handle.addEventListener('touchmove', e => {
+      if (!dragSrcId || !ghost) return;
+      const touch = e.touches[0];
+      const dy = touch.clientY - startY;
+      const dx = touch.clientX - startX;
+      if (Math.abs(dx) > Math.abs(dy) + 10) { // horizontal = ignore (page swipe)
+        dragSrcId = null;
+        if (ghost) { ghost.remove(); ghost = null; }
+        card.classList.remove('sticky-dragging');
+        return;
+      }
+      e.preventDefault();
+      ghost.style.top = (parseFloat(ghost.style.top) + (touch.clientY - startY)) + 'px';
+      startY = touch.clientY;
+
+      ghost.style.display = 'none';
+      const el2 = document.elementFromPoint(touch.clientX, touch.clientY);
+      ghost.style.display = '';
+      const target = el2?.closest('.sticky-card:not(.pinned)');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      if (target && target.dataset.id !== dragSrcId) target.classList.add('sticky-drag-over');
+    }, { passive: false });
+
+    handle.addEventListener('touchend', () => {
+      if (!dragSrcId) return;
+      const over = list.querySelector('.sticky-drag-over');
+      if (over && over.dataset.id !== dragSrcId) {
+        const si = S.stickies.findIndex(s => s.id === dragSrcId);
+        const di = S.stickies.findIndex(s => s.id === over.dataset.id);
+        if (si >= 0 && di >= 0) {
+          const [m] = S.stickies.splice(si, 1);
+          S.stickies.splice(di, 0, m);
+          lsSave();
+        }
+      }
+      if (ghost) { ghost.remove(); ghost = null; }
+      card.classList.remove('sticky-dragging');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      dragSrcId = null;
+      renderStickiesWidget(container);
+    }, { passive: true });
+
+    handle.addEventListener('touchcancel', () => {
+      if (ghost) { ghost.remove(); ghost = null; }
+      card.classList.remove('sticky-dragging');
+      dragSrcId = null;
+    }, { passive: true });
   });
 }
 
@@ -1921,7 +1997,7 @@ async function init() {
   if (S.widgets.clock?.visible     !== false) buildClockWidget();
   if (S.widgets.shortcuts?.visible !== false) buildShortcutsWidget();
   if (S.widgets.news?.visible      !== false) buildNewsWidget();
-  if (S.widgets.stickies?.visible  === true)  buildStickiesWidget();
+  if (S.widgets.stickies?.visible !== false && S.widgets.stickies) buildStickiesWidget();
   initMobileLayout();
 
   // Search + voice
