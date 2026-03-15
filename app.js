@@ -94,7 +94,7 @@ function lsSave() {
     clearTimeout(_autoSyncTimer);
     _autoSyncTimer = setTimeout(() => {
       gistPush(true); // silent push
-    }, 2000);
+    }, 10000);
   }
 }
 
