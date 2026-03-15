@@ -387,16 +387,15 @@ function setEditMode(on) {
   $('grid-overlay').classList.toggle('hidden', !on);
   $('edit-btn').classList.toggle('active', on);
   document.querySelectorAll('.widget').forEach(w => w.classList.toggle('editable', on));
-
-  // Show/hide delete buttons on each widget
-  document.querySelectorAll('.w-delete-btn').forEach(b => {
-    b.classList.toggle('hidden', !on);
-  });
-
-  // Show/hide add widget panel
+  document.querySelectorAll('.w-delete-btn').forEach(b => b.classList.toggle('hidden', !on));
   const addPanel = $('add-widget-panel');
   if (addPanel) addPanel.classList.toggle('hidden', !on);
   if (on) renderAddWidgetPanel();
+
+  // Mobile: show/hide replace buttons and add-page button
+  document.querySelectorAll('.mobile-page-replace-btn').forEach(b => b.classList.toggle('hidden', !on));
+  const addPageBtn = document.querySelector('.mobile-add-page-btn');
+  if (addPageBtn) addPageBtn.classList.toggle('hidden', !on);
 }
 
 /* Widget meta registry */
@@ -503,19 +502,20 @@ class SimpleClock {
     const wrap = el('div', 'simple-clock-wrap');
 
     this.timeEl   = el('div', 'simple-clock-time');
-    this.dateEl   = el('div', 'simple-clock-date');
-    this.greetRow = el('div', 'simple-clock-greet-row');
+
+    // Bottom row: date + greeting + weather all on same line
+    this.infoRow  = el('div', 'simple-clock-info-row');
+    this.dateEl   = el('span', 'simple-clock-date');
     this.greetEl  = el('span', 'simple-clock-greeting');
     this.weatherEl= el('span', 'simple-clock-weather');
-    this.greetRow.appendChild(this.greetEl);
-    this.greetRow.appendChild(this.weatherEl);
+    this.infoRow.appendChild(this.dateEl);
+    this.infoRow.appendChild(this.greetEl);
+    this.infoRow.appendChild(this.weatherEl);
 
     wrap.appendChild(this.timeEl);
-    wrap.appendChild(this.dateEl);
-    wrap.appendChild(this.greetRow);
+    wrap.appendChild(this.infoRow);
     container.appendChild(wrap);
 
-    // Adaptive font size
     this._ro = new ResizeObserver(() => this._resize());
     this._ro.observe(container);
     this._resize();
@@ -1456,8 +1456,8 @@ function initMobileLayout() {
       // Widget content
       buildMobileWidgetContent(page.widget, panel);
 
-      // Replace widget button (shown at top right of panel)
-      const replaceBtn = el('button', 'mobile-page-replace-btn', '換');
+      // Replace widget button - only visible in edit mode
+      const replaceBtn = el('button', 'mobile-page-replace-btn hidden', '換');
       replaceBtn.title = '更換小工具';
       replaceBtn.addEventListener('click', () => openMobileWidgetPicker(idx));
       panel.appendChild(replaceBtn);
@@ -1543,13 +1543,13 @@ function initMobileLayout() {
 
 /* Mobile widget picker modal */
 function openMobileWidgetPicker(pageIdx) {
-  const existing = S.mobilePages.map(p => p.widget);
-  const choices  = Object.entries(MOBILE_WIDGET_TYPES).filter(([key]) => {
-    if (key === 'shortcuts') return false; // shortcuts固定在第1頁
-    return true; // 允許重複（同類型不同設定）
+  // All widget types except clock (fixed at top) and shortcuts (fixed page 1)
+  const choices = Object.entries(MOBILE_WIDGET_TYPES).filter(([key]) => {
+    if (key === 'clock') return false;     // clock fixed at top
+    if (key === 'shortcuts' && pageIdx === 0) return false; // shortcuts fixed page 1
+    return true;
   });
 
-  // Simple modal-style picker
   const overlay = el('div', 'mobile-picker-overlay');
   overlay.innerHTML = `
     <div class="mobile-picker-box glass">
@@ -1572,7 +1572,6 @@ function openMobileWidgetPicker(pageIdx) {
   });
 
   overlay.querySelector('.mobile-picker-cancel').addEventListener('click', () => {
-    // If new empty page, remove it
     if (!S.mobilePages[pageIdx].widget) {
       S.mobilePages.splice(pageIdx, 1);
       if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1;
@@ -1582,7 +1581,9 @@ function openMobileWidgetPicker(pageIdx) {
     document.body.removeChild(overlay);
   });
 
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.querySelector('.mobile-picker-cancel').click(); });
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.querySelector('.mobile-picker-cancel').click();
+  });
   document.body.appendChild(overlay);
 }
 

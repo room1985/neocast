@@ -249,6 +249,15 @@ a { color:inherit; text-decoration:none; }
   transition: font-size .15s;
 }
 
+/* Info row: date + greeting + weather on same line */
+.simple-clock-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .simple-clock-date {
   font-size: .88rem;
   color: var(--txm);
@@ -260,14 +269,6 @@ a { color:inherit; text-decoration:none; }
   font-size: .8rem;
   color: var(--ac);
   font-weight: 700;
-}
-
-.simple-clock-greet-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
 }
 
 .simple-clock-weather {
@@ -1108,12 +1109,18 @@ a { color:inherit; text-decoration:none; }
   }
 
   .mobile-clock-wrap .clock-body {
-    height: 120px !important;
+    height: 100px !important;
     padding: 8px !important;
   }
 
   .mobile-clock-wrap .simple-clock-time {
-    font-size: 2.4rem !important;
+    font-size: 3rem !important;
+    letter-spacing: -2px !important;
+  }
+
+  .mobile-clock-wrap .simple-clock-info-row {
+    font-size: .78rem;
+    gap: 5px;
   }
 
   /* Swipe area */
@@ -1168,35 +1175,41 @@ a { color:inherit; text-decoration:none; }
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 8px 0 12px;
+    gap: 12px;
+    padding: 12px 0 32px;
   }
 
   .mobile-dot {
-    width: 7px; height: 7px;
+    width: 10px; height: 10px;
     border-radius: 50%;
     background: var(--txd);
     cursor: pointer;
     transition: all .2s;
+    /* Bigger touch target */
+    padding: 8px;
+    box-sizing: content-box;
   }
   .mobile-dot.active {
     background: var(--ac);
-    width: 18px;
-    border-radius: 4px;
+    width: 24px;
+    border-radius: 5px;
   }
 
   .mobile-add-page-btn {
     background: var(--sf);
     border: 1px dashed var(--bd);
     color: var(--txm);
-    width: 22px; height: 22px;
+    width: 28px; height: 28px;
     border-radius: 50%;
-    font-size: 1rem;
+    font-size: 1.1rem;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     transition: all .2s;
+    padding: 6px;
+    box-sizing: content-box;
   }
   .mobile-add-page-btn:hover { border-color:var(--ac); color:var(--ac); }
+  .mobile-add-page-btn.hidden { display: none; }
 
   /* Mobile news inner */
   .mobile-news-inner {
