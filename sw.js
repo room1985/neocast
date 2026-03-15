@@ -1,5 +1,5 @@
 /* NeoCast Service Worker */
-const CACHE = 'neocast-v27';
+const CACHE = 'neocast-v28';
 const SHELL = ['./', './index.html', './style.css', './app.js', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', e => {

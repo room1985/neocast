@@ -480,6 +480,7 @@ a { color:inherit; text-decoration:none; }
   overflow-y: auto;
   flex: 1;
   align-content: start;
+  justify-content: center;
 }
 
 .sc-item {
