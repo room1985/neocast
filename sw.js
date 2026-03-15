@@ -1,5 +1,5 @@
 /* NeoCast Service Worker */
-const CACHE = 'neocast-v29';
+const CACHE = 'neocast-v30';
 const SHELL = ['./', './index.html', './style.css', './app.js', './manifest.json', './icon.svg'];
 
 self.addEventListener('install', e => {
@@ -13,16 +13,20 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // Network-first for external requests, cache-first for app shell
+  if (e.request.url.includes('chrome-extension')) return;
   const url = new URL(e.request.url);
-  if (url.origin !== location.origin) return; // Let external requests go through normally
+  if (url.origin !== location.origin) return;
+
+  // Network-first: always try network, fall back to cache
   e.respondWith(
-    caches.match(e.request).then(cached => {
-      const network = fetch(e.request).then(res => {
-        if (res.ok) caches.open(CACHE).then(c => c.put(e.request, res.clone()));
+    fetch(e.request)
+      .then(res => {
+        if (res.ok) {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+        }
         return res;
-      });
-      return cached || network;
-    })
+      })
+      .catch(() => caches.match(e.request))
   );
 });
