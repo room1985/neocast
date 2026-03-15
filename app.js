@@ -436,7 +436,11 @@ function renderAddWidgetPanel() {
   if (!panel) return;
   panel.innerHTML = '<div class="awp-title">＋ 新增小工具</div>';
 
-  const hidden = Object.keys(WIDGET_META).filter(wid => S.widgets[wid]?.visible === false);
+  const hidden = Object.keys(WIDGET_META).filter(wid => {
+    // stickies and any widget not in S.widgets yet = available to add
+    if (!S.widgets[wid]) return true;
+    return S.widgets[wid]?.visible === false;
+  });
   if (hidden.length === 0) {
     panel.innerHTML += '<div class="awp-empty">所有小工具已顯示</div>';
     return;
