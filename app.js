@@ -1223,8 +1223,16 @@ function buildStickiesWidget() {
   const w = makeWidget('stickies', '便利貼', body, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
-  // Force widget to use flex properly
   w.style.overflow = 'hidden';
+  // stickies-inner must fill remaining height in widget (below w-head)
+  const updateHeight = () => {
+    const head = w.querySelector('.w-head');
+    const headH = head ? head.offsetHeight : 36;
+    body.style.height = (w.offsetHeight - headH) + 'px';
+  };
+  updateHeight();
+  // Update on resize
+  new ResizeObserver(updateHeight).observe(w);
   renderStickiesWidget(body);
 }
 
@@ -1400,18 +1408,14 @@ function startEdit(sticky, textEl, card, container) {
   });
   inp.after(colorRow);
 
-  const save = (e) => {
-    // If focus moved to the del button, don't save/rerender yet
-    const delBtn = card.querySelector('.sticky-del-btn');
-    if (e && e.relatedTarget && delBtn && delBtn.contains(e.relatedTarget)) return;
-
+  const save = () => {
     const val = inp.value.trim();
     if (val) { const st = S.stickies.find(s => s.id === sticky.id); if (st) st.text = val; }
     lsSave();
     renderStickiesWidget(container);
   };
   inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') save(null);
+    if (e.key === 'Enter') save();
     if (e.key === 'Escape') renderStickiesWidget(container);
   });
   inp.addEventListener('blur', save);
