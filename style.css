@@ -1433,8 +1433,8 @@ a { color:inherit; text-decoration:none; }
 
   /* Each page panel */
   .mobile-page-panel {
-    flex: 0 0 100%;
-    width: 100%;
+    flex: 0 0 calc(100% - 28px);
+    width: calc(100% - 28px);
     display: none;
     flex-direction: column;
     overflow-y: auto;
