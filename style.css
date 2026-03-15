@@ -474,8 +474,8 @@ a { color:inherit; text-decoration:none; }
 
 .sc-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 80px);
-  gap: 6px;
+  grid-template-columns: repeat(auto-fill, 72px);
+  gap: 4px;
   padding: 4px 10px 8px;
   overflow-y: auto;
   flex: 1;
@@ -486,9 +486,9 @@ a { color:inherit; text-decoration:none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 8px 4px 7px;
-  width: 80px;
+  gap: 5px;
+  padding: 7px 4px 6px;
+  width: 72px;
   border-radius: 10px;
   border: 1px solid transparent;
   cursor: pointer;
