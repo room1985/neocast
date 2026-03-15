@@ -186,7 +186,11 @@ async function gistPush(silent = false) {
       headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
       body
     });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+    if (!res.ok) {
+      if (res.status === 403) throw new Error('HTTP 403 Token 權限不足或已過期');
+      if (res.status === 404) throw new Error('HTTP 404 Gist ID 不存在');
+      throw new Error('HTTP ' + res.status);
+    }
     const data = await res.json();
     if (!gistId) { S.cfg.gistId = data.id; lsSave(); $('cfg-gid').value = data.id; }
     if (!silent) toast('已同步到 Gist ✓');
@@ -1224,15 +1228,17 @@ function buildStickiesWidget() {
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
   w.style.overflow = 'hidden';
-  // stickies-inner must fill remaining height in widget (below w-head)
-  const updateHeight = () => {
+
+  const updateBodyHeight = () => {
     const head = w.querySelector('.w-head');
     const headH = head ? head.offsetHeight : 36;
     body.style.height = (w.offsetHeight - headH) + 'px';
   };
-  updateHeight();
-  // Update on resize
-  new ResizeObserver(updateHeight).observe(w);
+  // Run once after paint, then observe resize
+  requestAnimationFrame(() => {
+    updateBodyHeight();
+    new ResizeObserver(updateBodyHeight).observe(w);
+  });
   renderStickiesWidget(body);
 }
 
@@ -1737,7 +1743,7 @@ function buildMobileWidgetContent(widgetType, container) {
     if (weatherCache.text) c.updateWeather(weatherCache.text);
   } else if (widgetType === 'stickies') {
     const inner = el('div', 'stickies-inner');
-    inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+    inner.style.cssText = 'position:relative;flex:1;min-height:0;overflow:hidden;';
     container.appendChild(inner);
     renderStickiesWidget(inner);
   }

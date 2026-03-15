@@ -739,8 +739,8 @@ a { color:inherit; text-decoration:none; }
 .stickies-inner {
   position: relative;
   flex: 1;
-  overflow: hidden;
   min-height: 0;
+  overflow: hidden;
 }
 
 .sticky-list {
@@ -783,13 +783,14 @@ a { color:inherit; text-decoration:none; }
 /* Color row shown during edit */
 .sticky-edit-colors {
   display: flex;
-  gap: 5px;
+  align-items: center;
+  gap: 6px;
   width: 100%;
-  padding: 4px 0 2px 26px;
+  padding: 2px 4px;
 }
 
 .sticky-edit-colors .sticky-color-sq {
-  width: 18px; height: 18px;
+  width: 16px; height: 16px;
   border-radius: 4px;
 }
 
