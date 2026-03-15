@@ -1297,6 +1297,7 @@ function makeStickyCard(sticky, container) {
 
   // iOS-style delete button (hidden by default, shown on long press)
   const delBtn = el('button', 'sticky-del-btn hidden');
+  delBtn.tabIndex = 0;
   delBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
   delBtn.title = '刪除';
   delBtn.addEventListener('click', e => {
@@ -1436,14 +1437,18 @@ function startEdit(sticky, textEl, card, container) {
   });
   inp.after(colorRow);
 
-  const save = () => {
+  const save = (e) => {
+    // If focus moved to the del button, don't save/rerender yet
+    const delBtn = card.querySelector('.sticky-del-btn');
+    if (e && e.relatedTarget && delBtn && delBtn.contains(e.relatedTarget)) return;
+
     const val = inp.value.trim();
     if (val) { const st = S.stickies.find(s => s.id === sticky.id); if (st) st.text = val; }
     lsSave();
     renderStickiesWidget(container);
   };
   inp.addEventListener('keydown', e => {
-    if (e.key === 'Enter') save();
+    if (e.key === 'Enter') save(null);
     if (e.key === 'Escape') renderStickiesWidget(container);
   });
   inp.addEventListener('blur', save);
