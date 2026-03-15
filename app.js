@@ -1295,24 +1295,6 @@ function makeStickyCard(sticky, container) {
   card.style.background  = c.bg;
   card.style.borderColor = c.border;
 
-  // iOS-style delete button (hidden by default, shown on long press)
-  const delBtn = el('button', 'sticky-del-btn hidden');
-  delBtn.tabIndex = 0;
-  delBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
-  delBtn.title = '刪除';
-  delBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    if (!confirm('確認刪除？')) return;
-    card.style.transition = 'transform .32s ease, opacity .32s ease';
-    card.style.transform  = 'translateX(110%)';
-    card.style.opacity    = '0';
-    setTimeout(() => {
-      S.stickies = S.stickies.filter(s => s.id !== sticky.id);
-      lsSave();
-      renderStickiesWidget(container);
-    }, 340);
-  });
-
   // Drag handle
   const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
   drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>`;
@@ -1334,7 +1316,6 @@ function makeStickyCard(sticky, container) {
   // Text area
   const textEl = el('div', 'sticky-text' + (sticky.done ? ' strikethrough' : ''), esc(sticky.text));
   let longPressTimer = null;
-  let isLongPress    = false;
 
   // Pin button
   const pinBtn = el('button', 'sticky-pin' + (sticky.pinned ? ' on' : ''));
@@ -1348,58 +1329,57 @@ function makeStickyCard(sticky, container) {
     renderStickiesWidget(container);
   });
 
-  card.appendChild(delBtn);
   card.appendChild(drag);
   card.appendChild(chk);
   card.appendChild(textEl);
   card.appendChild(pinBtn);
 
-  // Use pointerdown with capture to detect outside clicks reliably
-  let hideDelBtnHandler = null;
-  const showDelBtn = () => {
-    delBtn.classList.remove('hidden');
-    card.classList.add('editing');
-    // Remove previous handler if any
-    if (hideDelBtnHandler) document.removeEventListener('pointerdown', hideDelBtnHandler, true);
-    hideDelBtnHandler = (e) => {
-      // Don't hide if clicking the del button itself
-      if (delBtn.contains(e.target)) return;
-      if (!card.contains(e.target)) {
-        delBtn.classList.add('hidden');
-        card.classList.remove('editing');
-        document.removeEventListener('pointerdown', hideDelBtnHandler, true);
-        hideDelBtnHandler = null;
-      }
-    };
-    // Use capture phase and setTimeout to avoid same-click triggering hide
+  // Floating del button appended to body (avoids blur conflict)
+  let floatDel = null;
+
+  const showFloatDel = () => {
+    if (floatDel) floatDel.remove();
+    const rect = card.getBoundingClientRect();
+    floatDel = el('button', 'sticky-float-del');
+    floatDel.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+    floatDel.style.cssText = `position:fixed;left:${rect.left - 28}px;top:${rect.top + rect.height/2 - 12}px;z-index:9999;`;
+    floatDel.addEventListener('click', () => {
+      if (!confirm('確認刪除？')) { floatDel.remove(); floatDel = null; return; }
+      floatDel.remove(); floatDel = null;
+      card.style.transition = 'transform .32s ease, opacity .32s ease';
+      card.style.transform  = 'translateX(110%)';
+      card.style.opacity    = '0';
+      setTimeout(() => {
+        S.stickies = S.stickies.filter(s => s.id !== sticky.id);
+        lsSave();
+        renderStickiesWidget(container);
+      }, 340);
+    });
+    document.body.appendChild(floatDel);
+
+    // Hide on outside click
     setTimeout(() => {
-      document.addEventListener('pointerdown', hideDelBtnHandler, true);
-    }, 0);
+      const hide = (e) => {
+        if (floatDel && !floatDel.contains(e.target) && !card.contains(e.target)) {
+          floatDel.remove(); floatDel = null;
+          document.removeEventListener('pointerdown', hide, true);
+        }
+      };
+      document.addEventListener('pointerdown', hide, true);
+    }, 50);
   };
 
-  textEl.addEventListener('mousedown', () => {
-    longPressTimer = setTimeout(() => {
-      isLongPress = true;
-      showDelBtn();
-      startEdit(sticky, textEl, card, container);
-    }, 500);
-  });
+  const onLongPress = () => {
+    showFloatDel();
+    startEdit(sticky, textEl, card, container);
+  };
+
+  textEl.addEventListener('mousedown', () => { longPressTimer = setTimeout(onLongPress, 500); });
   textEl.addEventListener('mouseup', () => clearTimeout(longPressTimer));
   textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
-  textEl.addEventListener('touchstart', () => {
-    longPressTimer = setTimeout(() => {
-      isLongPress = true;
-      showDelBtn();
-      startEdit(sticky, textEl, card, container);
-    }, 500);
-  }, { passive: true });
+  textEl.addEventListener('touchstart', () => { longPressTimer = setTimeout(onLongPress, 500); }, { passive: true });
   textEl.addEventListener('touchend', () => clearTimeout(longPressTimer), { passive: true });
-
-  card.addEventListener('contextmenu', e => {
-    e.preventDefault();
-    showDelBtn();
-    startEdit(sticky, textEl, card, container);
-  });
+  card.addEventListener('contextmenu', e => { e.preventDefault(); onLongPress(); });
 
   return card;
 }
