@@ -739,14 +739,13 @@ a { color:inherit; text-decoration:none; }
 .stickies-inner {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex: 1 1 0;
   overflow: hidden;
   min-height: 0;
-  height: 0; /* Force flex child to respect parent height */
 }
 
 .sticky-list {
-  flex: 1;
+  flex: 1 1 0;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 8px 10px 4px;
