@@ -1038,15 +1038,14 @@ function buildNewsWidget() {
   langPill.addEventListener('click', () => {
     S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
     langPill.textContent = S.news.lang === 'zh-TW' ? '中文' : 'EN';
-    S.news.fetchedAt = 0;
     lsSave();
-    fetchNews();
+    fetchNews(true);
   });
 
   const refBtn = el('button', 'w-btn', `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`);
   refBtn.id = 'news-ref-btn';
   refBtn.title = '重新整理';
-  refBtn.addEventListener('click', () => { S.news.fetchedAt = 0; fetchNews(); });
+  refBtn.addEventListener('click', () => { fetchNews(true); });
 
   acts.appendChild(langPill); acts.appendChild(refBtn);
   head.appendChild(ttl); head.appendChild(acts);
@@ -1117,9 +1116,9 @@ function parseDate(raw) {
   catch(_) { return ''; }
 }
 
-async function fetchNews() {
+async function fetchNews(force = false) {
   const cacheMs = (S.news.cacheMin || 25) * 60 * 1000;
-  if (Date.now() - S.news.fetchedAt < cacheMs && S.news.items.length) {
+  if (!force && Date.now() - S.news.fetchedAt < cacheMs && S.news.items.length) {
     renderNewsItems(); return;
   }
 
@@ -1329,8 +1328,7 @@ async function saveSettings() {
   lsSave();
   closeModal('m-cfg');
   renderNewsKws();
-  fetchNews();
-  // Re-init weather if city changed
+  fetchNews(true);
   if (city && S.cfg.weatherLat) initWeather();
   toast('設定已儲存 ✓');
 }
@@ -1401,15 +1399,14 @@ function renderMobileNews(container) {
   langPill.addEventListener('click', () => {
     S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
     langPill.textContent = S.news.lang === 'zh-TW' ? '中文' : 'EN';
-    S.news.fetchedAt = 0;
     lsSave();
-    fetchNews();
+    fetchNews(true);
   });
 
   const refBtn = el('button', 'w-btn');
   refBtn.id = 'mobile-news-ref-btn';
   refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
-  refBtn.addEventListener('click', () => { S.news.fetchedAt = 0; fetchNews(); });
+  refBtn.addEventListener('click', () => { fetchNews(true); });
 
   head.appendChild(ttl);
   head.appendChild(langPill);
