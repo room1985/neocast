@@ -2027,6 +2027,11 @@ function renderAll() {
   rerenderSc();
   renderNewsKws();
   renderNewsItems();
+  // Re-render stickies if widget exists
+  const stickyBody = document.querySelector('.widget[data-wid="stickies"] .stickies-inner');
+  if (stickyBody) renderStickiesWidget(stickyBody);
+  const mobileStickyBody = document.querySelector('#mobile-layout .stickies-inner');
+  if (mobileStickyBody) renderStickiesWidget(mobileStickyBody);
 }
 
 /* ─────────────────────────────────────
