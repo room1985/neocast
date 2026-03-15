@@ -1232,6 +1232,14 @@ function buildStickiesWidget() {
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
   renderStickiesWidget(body);
+  // Re-calculate list height on widget resize
+  new ResizeObserver(() => {
+    const list = body.querySelector('.sticky-list');
+    const bar  = body.querySelector('.sticky-input-bar');
+    if (list && bar) {
+      list.style.height = (body.offsetHeight - bar.offsetHeight) + 'px';
+    }
+  }).observe(body);
 }
 
 function renderStickiesWidget(container) {
@@ -1293,6 +1301,16 @@ function renderStickiesWidget(container) {
   bar.appendChild(inp);
   bar.appendChild(addBtn);
   container.appendChild(bar);
+
+  // JS height — most reliable, bypasses all flex overflow quirks
+  requestAnimationFrame(() => {
+    const barH = bar.offsetHeight || 53;
+    const containerH = container.offsetHeight;
+    if (containerH > barH) {
+      list.style.height = (containerH - barH) + 'px';
+      list.style.overflowY = 'auto';
+    }
+  });
 }
 
 function makeStickyCard(sticky, container) {
