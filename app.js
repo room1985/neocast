@@ -548,6 +548,11 @@ function initSearch() {
   const inp  = $('search-input');
   const vBtn = $('voice-btn');
 
+  // Shorter placeholder on mobile
+  if (window.innerWidth <= 640) {
+    inp.placeholder = '搜尋';
+  }
+
   inp.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
     const q = inp.value.trim();
