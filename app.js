@@ -27,6 +27,7 @@ const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
 let S = {
   shortcuts:  [],
   groups:     [],
+  stickies:   [],
   widgets: {
     clock:     { col:0, row:0, w:6, h:2, visible:true },
     shortcuts: { col:6, row:2, w:6, h:5, visible:true },
@@ -39,7 +40,8 @@ let S = {
     lang:       'zh-TW',
     title:      '即時新聞',
     perKeyword: 2,
-    cacheMin:   25
+    cacheMin:   25,
+    activeKw:   'all'
   },
   cfg: {
     token:       '',
@@ -79,6 +81,7 @@ function lsSave() {
     localStorage.setItem(LS_KEY, JSON.stringify({
       shortcuts: S.shortcuts,
       groups:    S.groups,
+      stickies:  S.stickies,
       widgets:   S.widgets,
       news:      { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:       S.cfg,
@@ -100,6 +103,7 @@ function lsLoad() {
     const d = JSON.parse(localStorage.getItem(LS_KEY)||'{}');
     if (d.shortcuts)   S.shortcuts = d.shortcuts;
     if (d.groups)      S.groups    = d.groups;
+    if (d.stickies)    S.stickies  = d.stickies;
     if (d.widgets)     Object.assign(S.widgets, d.widgets);
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
@@ -415,14 +419,16 @@ function setEditMode(on) {
 const WIDGET_META = {
   clock:     { label: '時鐘',    icon: '🕐' },
   shortcuts: { label: '捷徑',    icon: '⭐' },
-  news:      { label: 'AI新聞',  icon: '📰' }
+  news:      { label: 'AI新聞',  icon: '📰' },
+  stickies:  { label: '便利貼',  icon: '📝' }
 };
 
 /* Default positions for when a widget is re-added */
 const WIDGET_DEFAULT = {
-  clock:     { col:0, row:0, w:6, h:2, visible:true },
-  shortcuts: { col:6, row:2, w:6, h:5, visible:true },
-  news:      { col:0, row:2, w:6, h:5, visible:true }
+  clock:     { col:0,  row:0, w:6, h:2, visible:true },
+  shortcuts: { col:6,  row:2, w:6, h:5, visible:true },
+  news:      { col:0,  row:2, w:6, h:5, visible:true },
+  stickies:  { col:12, row:0, w:6, h:6, visible:true }
 };
 
 function renderAddWidgetPanel() {
@@ -462,11 +468,11 @@ function removeWidget(wid) {
 }
 
 function buildWidgetById(wid) {
-  // Remove existing first
   document.querySelector(`.widget[data-wid="${wid}"]`)?.remove();
   if (wid === 'clock')     buildClockWidget();
   if (wid === 'shortcuts') buildShortcutsWidget();
   if (wid === 'news')      buildNewsWidget();
+  if (wid === 'stickies')  buildStickiesWidget();
 }
 
 /* ─────────────────────────────────────
@@ -1088,20 +1094,32 @@ function renderNewsKws() {
   const kws = $('news-kws');
   if (!kws) return;
   kws.innerHTML = '';
+
+  // 全部 tab
+  const allTab = el('span', 'kw-tag' + (S.news.activeKw === 'all' ? ' on' : ''), '全部');
+  allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderNewsKws(); renderNewsItems(); });
+  kws.appendChild(allTab);
+
+  // Keyword tabs
   S.news.keywords.forEach(kw => {
-    const t = el('span', 'kw-tag', esc(kw));
+    const t = el('span', 'kw-tag' + (S.news.activeKw === kw ? ' on' : ''), esc(kw));
+    t.addEventListener('click', () => { S.news.activeKw = kw; renderNewsKws(); renderNewsItems(); });
     kws.appendChild(t);
   });
 }
 
 function renderNewsItems() {
   if (!newsListEl) return;
-  if (!S.news.items.length) {
+  const filtered = S.news.activeKw === 'all'
+    ? S.news.items
+    : S.news.items.filter(i => i.kw === S.news.activeKw);
+
+  if (!filtered.length) {
     newsListEl.innerHTML = '<div class="news-empty"><p>尚無新聞<br>點擊 ↻ 按鈕載入</p></div>';
     return;
   }
   newsListEl.innerHTML = '';
-  S.news.items.forEach(item => {
+  filtered.forEach(item => {
     const card = el('div', 'news-card');
     card.innerHTML = `
       <div class="nc-kw">${esc(item.kw||'')}</div>
@@ -1181,6 +1199,215 @@ async function fetchNews(force = false) {
   // Re-query DOM fresh after async to avoid stale references
   const mobileNews = document.querySelector('#mobile-layout .mobile-news-inner');
   if (mobileNews) renderMobileNews(mobileNews);
+}
+
+/* ─────────────────────────────────────
+   STICKIES WIDGET — 便利貼
+───────────────────────────────────── */
+const STICKY_COLORS = {
+  none:   { bg: 'rgba(255,255,255,0.06)', border: 'rgba(255,255,255,0.12)', label: '預設' },
+  blue:   { bg: 'rgba(56,189,248,0.12)',  border: 'rgba(56,189,248,0.3)',   label: '藍' },
+  green:  { bg: 'rgba(74,222,128,0.12)',  border: 'rgba(74,222,128,0.3)',   label: '綠' },
+  red:    { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.3)',  label: '紅' },
+  yellow: { bg: 'rgba(251,191,36,0.12)',  border: 'rgba(251,191,36,0.3)',   label: '黃' }
+};
+
+function buildStickiesWidget() {
+  const body = el('div', 'stickies-inner');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+  const w = makeWidget('stickies', '便利貼', body, '');
+  w.querySelector('.w-body')?.remove();
+  w.insertBefore(body, w.querySelector('.resize-handle'));
+  renderStickiesWidget(body);
+}
+
+function renderStickiesWidget(container) {
+  container.innerHTML = '';
+
+  // List area
+  const list = el('div', 'sticky-list');
+  container.appendChild(list);
+
+  // Empty state
+  if (!S.stickies.length) {
+    list.innerHTML = '<div class="sticky-empty">輸入新增待辦事項…</div>';
+  } else {
+    // Pinned first, then rest
+    const sorted = [
+      ...S.stickies.filter(s => s.pinned),
+      ...S.stickies.filter(s => !s.pinned)
+    ];
+    sorted.forEach(s => list.appendChild(makeStickyCard(s, container)));
+  }
+
+  // Input bar at bottom
+  const bar = el('div', 'sticky-input-bar');
+  const inp = el('input', 'sticky-input');
+  inp.type = 'text';
+  inp.placeholder = '新增待辦…';
+  inp.autocomplete = 'off';
+
+  // Color picker
+  let selectedColor = 'none';
+  const colorWrap = el('div', 'sticky-color-wrap');
+  Object.entries(STICKY_COLORS).forEach(([key, c]) => {
+    if (key === 'none') return;
+    const dot = el('button', 'sticky-color-dot' + (selectedColor === key ? ' on' : ''));
+    dot.style.background = c.border;
+    dot.title = c.label;
+    dot.addEventListener('click', () => {
+      selectedColor = key;
+      colorWrap.querySelectorAll('.sticky-color-dot').forEach(d => d.classList.remove('on'));
+      dot.classList.add('on');
+    });
+    colorWrap.appendChild(dot);
+  });
+
+  const addBtn = el('button', 'sticky-add-btn');
+  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+
+  function doAdd() {
+    const text = inp.value.trim();
+    if (!text) return;
+    S.stickies.unshift({ id: uid(), text, color: selectedColor, pinned: false });
+    inp.value = '';
+    lsSave();
+    renderStickiesWidget(container);
+  }
+
+  addBtn.addEventListener('click', doAdd);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
+
+  bar.appendChild(colorWrap);
+  bar.appendChild(inp);
+  bar.appendChild(addBtn);
+  container.appendChild(bar);
+}
+
+function makeStickyCard(sticky, container) {
+  const c      = STICKY_COLORS[sticky.color] || STICKY_COLORS.none;
+  const card   = el('div', 'sticky-card' + (sticky.pinned ? ' pinned' : ''));
+  card.style.background  = c.bg;
+  card.style.borderColor = c.border;
+
+  // Left: drag handle
+  const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
+  drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="19" r="1" fill="currentColor"/><circle cx="15" cy="5" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="19" r="1" fill="currentColor"/></svg>`;
+
+  // Middle: text (long press to edit)
+  const textEl = el('div', 'sticky-text', esc(sticky.text));
+  let editTimer = null;
+
+  textEl.addEventListener('mousedown', () => {
+    if (sticky.pinned) return;
+    editTimer = setTimeout(() => startEdit(sticky, textEl, container), 500);
+  });
+  textEl.addEventListener('mouseup', () => clearTimeout(editTimer));
+  textEl.addEventListener('touchstart', () => {
+    if (sticky.pinned) return;
+    editTimer = setTimeout(() => startEdit(sticky, textEl, container), 500);
+  }, { passive: true });
+  textEl.addEventListener('touchend', () => clearTimeout(editTimer), { passive: true });
+
+  // Right: pin + check
+  const actions = el('div', 'sticky-actions');
+
+  const pinBtn = el('button', 'sticky-pin' + (sticky.pinned ? ' on' : ''));
+  pinBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="${sticky.pinned?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+  pinBtn.title = sticky.pinned ? '取消置頂' : '置頂';
+  pinBtn.addEventListener('click', () => {
+    sticky.pinned = !sticky.pinned;
+    lsSave();
+    renderStickiesWidget(container);
+  });
+
+  const checkBtn = el('button', 'sticky-chk');
+  checkBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12"><polyline points="20 6 9 17 4 12"/></svg>`;
+  checkBtn.title = '完成並刪除';
+  checkBtn.addEventListener('click', () => completeSticky(sticky.id, card, container));
+
+  actions.appendChild(pinBtn);
+  actions.appendChild(checkBtn);
+
+  card.appendChild(drag);
+  card.appendChild(textEl);
+  card.appendChild(actions);
+
+  // Context menu for desktop right-click
+  card.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    if (!sticky.pinned) startEdit(sticky, textEl, container);
+  });
+
+  // Init drag sort (only non-pinned)
+  if (!sticky.pinned) initStickyDrag(card, sticky, container);
+
+  return card;
+}
+
+function startEdit(sticky, textEl, container) {
+  const inp = el('input', 'sticky-edit-input');
+  inp.value = sticky.text;
+  inp.autocomplete = 'off';
+  textEl.replaceWith(inp);
+  inp.focus();
+  inp.select();
+
+  function save() {
+    const val = inp.value.trim();
+    if (val) sticky.text = val;
+    lsSave();
+    renderStickiesWidget(container);
+  }
+
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') save();
+    if (e.key === 'Escape') renderStickiesWidget(container);
+  });
+  inp.addEventListener('blur', save);
+}
+
+function completeSticky(id, card, container) {
+  // Slide right animation then remove
+  card.style.transition = 'transform .3s ease, opacity .3s ease';
+  card.style.transform  = 'translateX(110%)';
+  card.style.opacity    = '0';
+  setTimeout(() => {
+    S.stickies = S.stickies.filter(s => s.id !== id);
+    lsSave();
+    renderStickiesWidget(container);
+  }, 320);
+}
+
+function initStickyDrag(card, sticky, container) {
+  let dragSrc = null;
+  card.draggable = true;
+  card.addEventListener('dragstart', () => {
+    dragSrc = sticky.id;
+    setTimeout(() => card.classList.add('sticky-dragging'), 0);
+  });
+  card.addEventListener('dragend', () => {
+    card.classList.remove('sticky-dragging');
+    container.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+    dragSrc = null;
+  });
+  card.addEventListener('dragover', e => {
+    e.preventDefault();
+    if (sticky.pinned || sticky.id === dragSrc) return;
+    container.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+    card.classList.add('sticky-drag-over');
+  });
+  card.addEventListener('drop', e => {
+    e.preventDefault();
+    if (!dragSrc || dragSrc === sticky.id || sticky.pinned) return;
+    const si = S.stickies.findIndex(s => s.id === dragSrc);
+    const di = S.stickies.findIndex(s => s.id === sticky.id);
+    if (si < 0 || di < 0) return;
+    const [m] = S.stickies.splice(si, 1);
+    S.stickies.splice(di, 0, m);
+    lsSave();
+    renderStickiesWidget(container);
+  });
 }
 
 /* ─────────────────────────────────────
@@ -1365,6 +1592,269 @@ function onResize() {
    Shows: search (in header) + shortcuts
 ───────────────────────────────────── */
 /* ─────────────────────────────────────
+   STICKIES WIDGET
+───────────────────────────────────── */
+const STICKY_COLORS = {
+  default: { bg: 'rgba(255,255,255,0.06)', border: 'rgba(255,255,255,0.12)' },
+  blue:    { bg: 'rgba(56,189,248,0.12)',  border: 'rgba(56,189,248,0.3)' },
+  green:   { bg: 'rgba(74,222,128,0.12)', border: 'rgba(74,222,128,0.3)' },
+  red:     { bg: 'rgba(248,113,113,0.12)', border: 'rgba(248,113,113,0.3)' },
+  yellow:  { bg: 'rgba(250,204,21,0.12)', border: 'rgba(250,204,21,0.3)' }
+};
+
+function buildStickiesWidget() {
+  const body = el('div', 'stickies-inner');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+  const w = makeWidget('stickies', '便利貼', body, 'stickies-widget');
+  w.querySelector('.w-body')?.remove();
+  w.insertBefore(body, w.querySelector('.resize-handle'));
+  renderStickiesWidget(body);
+}
+
+function renderStickiesWidget(container) {
+  container.innerHTML = '';
+
+  // List
+  const list = el('div', 'sticky-list');
+  container.appendChild(list);
+
+  // Empty state
+  if (!S.stickies.length) {
+    const empty = el('div', 'sticky-empty', '還沒有待辦事項，在下方輸入新增');
+    list.appendChild(empty);
+  } else {
+    // Pinned first, then rest
+    const sorted = [...S.stickies.filter(s => s.pinned), ...S.stickies.filter(s => !s.pinned)];
+    sorted.forEach(s => list.appendChild(makeStickyCard(s, container)));
+  }
+
+  // Input bar at bottom
+  const inputBar = el('div', 'sticky-input-bar');
+  const inp = el('input', 'sticky-input');
+  inp.type = 'text';
+  inp.placeholder = '新增待辦事項…';
+  inp.autocomplete = 'off';
+  inp.maxLength = 200;
+
+  const addBtn = el('button', 'sticky-add-btn', '＋');
+
+  const doAdd = () => {
+    const text = inp.value.trim();
+    if (!text) return;
+    S.stickies.unshift({ id: uid(), text, color: 'default', pinned: false, done: false });
+    lsSave();
+    inp.value = '';
+    renderStickiesWidget(container);
+  };
+
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
+  addBtn.addEventListener('click', doAdd);
+  inputBar.appendChild(inp);
+  inputBar.appendChild(addBtn);
+  container.appendChild(inputBar);
+
+  // Init drag for stickies
+  initStickyDrag(list, container);
+}
+
+function makeStickyCard(s, container) {
+  const colors = STICKY_COLORS[s.color] || STICKY_COLORS.default;
+  const card = el('div', 'sticky-card' + (s.pinned ? ' pinned' : ''));
+  card.dataset.id = s.id;
+  card.style.cssText = `background:${colors.bg};border-color:${colors.border};`;
+
+  // Drag handle (left)
+  const handle = el('div', 'sticky-handle' + (s.pinned ? ' disabled' : ''));
+  handle.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><circle cx="9" cy="5" r="1" fill="currentColor"/><circle cx="9" cy="12" r="1" fill="currentColor"/><circle cx="9" cy="19" r="1" fill="currentColor"/><circle cx="15" cy="5" r="1" fill="currentColor"/><circle cx="15" cy="12" r="1" fill="currentColor"/><circle cx="15" cy="19" r="1" fill="currentColor"/></svg>`;
+  card.appendChild(handle);
+
+  // Checkbox
+  const chk = el('button', 'sticky-chk');
+  chk.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>`;
+  chk.addEventListener('click', e => {
+    e.stopPropagation();
+    // Slide out animation then remove
+    card.classList.add('sticky-done');
+    setTimeout(() => {
+      S.stickies = S.stickies.filter(st => st.id !== s.id);
+      lsSave();
+      renderStickiesWidget(container);
+    }, 350);
+  });
+  card.appendChild(chk);
+
+  // Text (long press to edit)
+  const textEl = el('div', 'sticky-text', s.text);
+  let lpTimer = null;
+
+  textEl.addEventListener('mousedown', () => {
+    lpTimer = setTimeout(() => startEdit(), 500);
+  });
+  textEl.addEventListener('mouseup', () => clearTimeout(lpTimer));
+  textEl.addEventListener('touchstart', () => {
+    lpTimer = setTimeout(() => startEdit(), 500);
+  }, { passive: true });
+  textEl.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
+
+  function startEdit() {
+    const inp = el('input', 'sticky-edit-input');
+    inp.value = s.text;
+    inp.autocomplete = 'off';
+    textEl.replaceWith(inp);
+    inp.focus();
+    const save = () => {
+      const newText = inp.value.trim();
+      if (newText) {
+        const st = S.stickies.find(st => st.id === s.id);
+        if (st) st.text = newText;
+        lsSave();
+      }
+      renderStickiesWidget(container);
+    };
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') renderStickiesWidget(container); });
+    inp.addEventListener('blur', save);
+  }
+
+  card.appendChild(textEl);
+
+  // Right side actions: color picker + pin
+  const actions = el('div', 'sticky-actions');
+
+  // Color dots
+  const colorWrap = el('div', 'sticky-colors');
+  Object.keys(STICKY_COLORS).forEach(c => {
+    if (c === 'default') return;
+    const dot = el('button', 'sticky-color-dot sticky-color-' + c + (s.color === c ? ' on' : ''));
+    dot.addEventListener('click', e => {
+      e.stopPropagation();
+      const st = S.stickies.find(st => st.id === s.id);
+      if (st) st.color = st.color === c ? 'default' : c;
+      lsSave();
+      renderStickiesWidget(container);
+    });
+    colorWrap.appendChild(dot);
+  });
+
+  // Pin button
+  const pinBtn = el('button', 'sticky-pin' + (s.pinned ? ' on' : ''));
+  pinBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="${s.pinned ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" width="12" height="12"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>`;
+  pinBtn.title = s.pinned ? '取消置頂' : '置頂';
+  pinBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const st = S.stickies.find(st => st.id === s.id);
+    if (st) st.pinned = !st.pinned;
+    lsSave();
+    renderStickiesWidget(container);
+  });
+
+  actions.appendChild(colorWrap);
+  actions.appendChild(pinBtn);
+  card.appendChild(actions);
+
+  // Right-click context for desktop pin
+  card.addEventListener('contextmenu', e => {
+    e.preventDefault();
+    const st = S.stickies.find(st => st.id === s.id);
+    if (st) st.pinned = !st.pinned;
+    lsSave();
+    renderStickiesWidget(container);
+  });
+
+  return card;
+}
+
+function initStickyDrag(list, container) {
+  let dragSrc = null;
+  let ghost   = null;
+  let startY  = 0;
+  let startX  = 0;
+
+  list.querySelectorAll('.sticky-handle:not(.disabled)').forEach(handle => {
+    const card = handle.closest('.sticky-card');
+    if (!card) return;
+
+    // Desktop drag
+    card.draggable = true;
+    card.addEventListener('dragstart', e => {
+      dragSrc = card.dataset.id;
+      setTimeout(() => card.classList.add('sticky-dragging'), 0);
+    });
+    card.addEventListener('dragend', () => {
+      card.classList.remove('sticky-dragging');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      dragSrc = null;
+    });
+    card.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (card.dataset.id === dragSrc) return;
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      card.classList.add('sticky-drag-over');
+    });
+    card.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrc || dragSrc === card.dataset.id) return;
+      const si = S.stickies.findIndex(s => s.id === dragSrc);
+      const di = S.stickies.findIndex(s => s.id === card.dataset.id);
+      if (si < 0 || di < 0) return;
+      const [m] = S.stickies.splice(si, 1);
+      S.stickies.splice(di, 0, m);
+      lsSave();
+      renderStickiesWidget(container);
+    });
+
+    // Mobile touch drag
+    handle.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      startX = touch.clientX;
+      startY = touch.clientY;
+      dragSrc = card.dataset.id;
+      card.classList.add('sticky-dragging');
+
+      ghost = card.cloneNode(true);
+      ghost.classList.add('sticky-ghost');
+      const rect = card.getBoundingClientRect();
+      ghost.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;z-index:9999;pointer-events:none;opacity:.85;`;
+      document.body.appendChild(ghost);
+    }, { passive: true });
+
+    handle.addEventListener('touchmove', e => {
+      if (!dragSrc || !ghost) return;
+      const dx = e.touches[0].clientX - startX;
+      const dy = e.touches[0].clientY - startY;
+      if (Math.abs(dy) < Math.abs(dx)) return; // horizontal = page swipe, ignore
+      e.preventDefault();
+      ghost.style.top = (parseFloat(ghost.style.top) + (e.touches[0].clientY - startY)) + 'px';
+      startY = e.touches[0].clientY;
+      ghost.style.display = 'none';
+      const el2 = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+      ghost.style.display = '';
+      const target = el2?.closest('.sticky-card');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      if (target && target.dataset.id !== dragSrc) target.classList.add('sticky-drag-over');
+    }, { passive: false });
+
+    handle.addEventListener('touchend', e => {
+      if (!dragSrc) return;
+      const over = list.querySelector('.sticky-drag-over');
+      if (over && over.dataset.id !== dragSrc) {
+        const si = S.stickies.findIndex(s => s.id === dragSrc);
+        const di = S.stickies.findIndex(s => s.id === over.dataset.id);
+        if (si >= 0 && di >= 0) {
+          const [m] = S.stickies.splice(si, 1);
+          S.stickies.splice(di, 0, m);
+          lsSave();
+        }
+      }
+      if (ghost) { ghost.remove(); ghost = null; }
+      card.classList.remove('sticky-dragging');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      dragSrc = null;
+      renderStickiesWidget(container);
+    }, { passive: true });
+  });
+}
+
+/* ─────────────────────────────────────
    MOBILE LAYOUT — Paged System
 ───────────────────────────────────── */
 
@@ -1372,7 +1862,8 @@ function onResize() {
 const MOBILE_WIDGET_TYPES = {
   shortcuts: { label: '捷徑',   icon: '⭐' },
   news:      { label: '即時新聞', icon: '📰' },
-  clock:     { label: '時鐘',   icon: '🕐' }
+  clock:     { label: '時鐘',   icon: '🕐' },
+  stickies:  { label: '便利貼', icon: '📝' }
 };
 
 function buildMobileWidgetContent(widgetType, container) {
@@ -1394,6 +1885,11 @@ function buildMobileWidgetContent(widgetType, container) {
     c.tick();
     setInterval(() => c.tick(), 1000);
     if (weatherCache.text) c.updateWeather(weatherCache.text);
+  } else if (widgetType === 'stickies') {
+    const inner = el('div', 'stickies-inner');
+    inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+    container.appendChild(inner);
+    renderStickiesWidget(inner);
   }
 }
 
@@ -1429,23 +1925,39 @@ function renderMobileNews(container) {
   head.appendChild(refBtn);
   container.appendChild(head);
 
-  // Keywords
+  // Keywords with filter tabs
   const kws = el('div', 'news-kws');
+
+  const allTab = el('span', 'kw-tag' + (S.news.activeKw === 'all' ? ' on' : ''), '全部');
+  allTab.addEventListener('click', () => {
+    S.news.activeKw = 'all';
+    renderMobileNews(container);
+  });
+  kws.appendChild(allTab);
+
   S.news.keywords.forEach(kw => {
-    kws.appendChild(el('span', 'kw-tag', esc(kw)));
+    const t = el('span', 'kw-tag' + (S.news.activeKw === kw ? ' on' : ''), esc(kw));
+    t.addEventListener('click', () => {
+      S.news.activeKw = kw;
+      renderMobileNews(container);
+    });
+    kws.appendChild(t);
   });
   container.appendChild(kws);
 
-  // News list
+  // News list filtered
+  const filtered = S.news.activeKw === 'all'
+    ? S.news.items
+    : S.news.items.filter(i => i.kw === S.news.activeKw);
+
   const list = el('div', 'news-list');
   list.style.cssText = 'overflow-y:auto;flex:1;padding:0 14px 12px;';
   container.appendChild(list);
 
-  // Render items into this list
-  if (!S.news.items.length) {
+  if (!filtered.length) {
     list.innerHTML = '<div class="news-empty"><p>尚無新聞<br>點擊 ↻ 載入</p></div>';
   } else {
-    S.news.items.forEach(item => {
+    filtered.forEach(item => {
       const card = el('div', 'news-card');
       card.innerHTML = `
         <div class="nc-kw">${esc(item.kw||'')}</div>
@@ -1673,9 +2185,10 @@ async function init() {
   await loadVideo().catch(()=>{});
 
   // Build widgets (only if visible, undefined counts as visible)
-  if (S.widgets.clock?.visible    !== false) buildClockWidget();
+  if (S.widgets.clock?.visible     !== false) buildClockWidget();
   if (S.widgets.shortcuts?.visible !== false) buildShortcutsWidget();
-  if (S.widgets.news?.visible     !== false) buildNewsWidget();
+  if (S.widgets.news?.visible      !== false) buildNewsWidget();
+  if (S.widgets.stickies?.visible  === true)  buildStickiesWidget();
   initMobileLayout();
 
   // Search + voice
