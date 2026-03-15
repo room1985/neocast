@@ -1129,14 +1129,20 @@ a { color:inherit; text-decoration:none; }
     flex-direction: row !important;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 4px;
+    gap: 4px !important;
   }
 
   .mobile-clock-wrap .simple-clock-greet-weather {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 6px;
+    gap: 4px !important;
+  }
+
+  .mobile-clock-wrap .simple-clock-date,
+  .mobile-clock-wrap .simple-clock-greeting,
+  .mobile-clock-wrap .simple-clock-weather {
+    font-size: .78rem !important;
   }
 
   /* Swipe area */

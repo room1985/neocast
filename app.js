@@ -1124,7 +1124,9 @@ async function fetchNews() {
   }
 
   const refBtn = $('news-ref-btn');
+  const mobileRefBtn = $('mobile-news-ref-btn');
   if (refBtn) refBtn.classList.add('spin');
+  if (mobileRefBtn) mobileRefBtn.classList.add('spin');
   renderNewsLoading();
 
   const isZh = S.news.lang === 'zh-TW';
@@ -1160,10 +1162,11 @@ async function fetchNews() {
   S.news.fetchedAt = Date.now();
   lsSave();
 
-  if (refBtn) refBtn.classList.remove('spin');
+  if ($('news-ref-btn')) $('news-ref-btn').classList.remove('spin');
+  if ($('mobile-news-ref-btn')) $('mobile-news-ref-btn').classList.remove('spin');
   renderNewsItems();
 
-  // Also update mobile news panel if visible
+  // Re-query DOM fresh after async to avoid stale references
   const mobileNews = document.querySelector('#mobile-layout .mobile-news-inner');
   if (mobileNews) renderMobileNews(mobileNews);
 }
