@@ -1227,6 +1227,7 @@ const STICKY_COLORS = {
 
 function buildStickiesWidget() {
   const body = el('div', 'stickies-inner');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
   const w = makeWidget('stickies', '便利貼', body, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
