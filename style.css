@@ -1004,28 +1004,52 @@ a { color:inherit; text-decoration:none; }
 @media (max-width:640px) {
   #header {
     padding: 0 8px !important;
+    gap: 6px !important;
   }
 
+  #hdr-left { flex-shrink: 0; }
+
+  /* Search bar takes remaining space, voice stays inside */
   #search-wrap {
-    width: 42vw !important;
-    min-width: 100px !important;
-    max-width: 42vw !important;
-    padding: 0 10px !important;
+    flex: 1 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    padding: 0 8px !important;
+    overflow: hidden !important;
   }
 
   #search-wrap .ico { display: none !important; }
 
   #search-input {
     font-size: .8rem !important;
-  }
-
-  #search-input::placeholder {
-    content: '' !important;
+    min-width: 0 !important;
+    width: 0 !important; /* let flex handle it */
+    flex: 1 !important;
   }
 
   #voice-btn {
-    order: 1;
     flex-shrink: 0;
+    width: 24px !important;
+    height: 24px !important;
+  }
+  #voice-btn svg { width:13px; height:13px; }
+
+  /* Tighter right buttons */
+  #hdr-right {
+    gap: 4px !important;
+    flex-shrink: 0;
+  }
+
+  .hdr-btn {
+    width: 30px !important;
+    height: 30px !important;
+  }
+  .hdr-btn svg { width:13px !important; height:13px !important; }
+
+  #edit-done {
+    padding: 5px 10px !important;
+    font-size: .74rem !important;
   }
 
   /* Hide widget container, show mobile layout instead */
