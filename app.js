@@ -1332,29 +1332,8 @@ function makeStickyCard(sticky, container) {
 
   // Text area
   const textEl = el('div', 'sticky-text' + (sticky.done ? ' strikethrough' : ''), esc(sticky.text));
-
-  // Long press on card body → show del btn + enter edit mode
   let longPressTimer = null;
   let isLongPress    = false;
-
-  const onLongPress = () => {
-    isLongPress = true;
-    delBtn.classList.remove('hidden');
-    card.classList.add('editing');
-    startEdit(sticky, textEl, card, container);
-  };
-
-  textEl.addEventListener('mousedown', () => {
-    longPressTimer = setTimeout(onLongPress, 500);
-  });
-  textEl.addEventListener('mouseup', () => {
-    clearTimeout(longPressTimer);
-  });
-  textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
-  textEl.addEventListener('touchstart', () => {
-    longPressTimer = setTimeout(onLongPress, 500);
-  }, { passive: true });
-  textEl.addEventListener('touchend', () => clearTimeout(longPressTimer), { passive: true });
 
   // Pin button
   const pinBtn = el('button', 'sticky-pin' + (sticky.pinned ? ' on' : ''));
@@ -1369,25 +1348,55 @@ function makeStickyCard(sticky, container) {
   });
 
   card.appendChild(delBtn);
-  card.appendChild(delBtn);
   card.appendChild(drag);
   card.appendChild(chk);
   card.appendChild(textEl);
   card.appendChild(pinBtn);
 
-  // Click outside to hide del btn
-  document.addEventListener('click', function hideDelBtn(e) {
-    if (!card.contains(e.target)) {
-      delBtn.classList.add('hidden');
-      card.classList.remove('editing');
-      document.removeEventListener('click', hideDelBtn);
-    }
+  // Use pointerdown with capture to detect outside clicks reliably
+  let hideDelBtnHandler = null;
+  const showDelBtn = () => {
+    delBtn.classList.remove('hidden');
+    card.classList.add('editing');
+    // Remove previous handler if any
+    if (hideDelBtnHandler) document.removeEventListener('pointerdown', hideDelBtnHandler, true);
+    hideDelBtnHandler = (e) => {
+      // Don't hide if clicking the del button itself
+      if (delBtn.contains(e.target)) return;
+      if (!card.contains(e.target)) {
+        delBtn.classList.add('hidden');
+        card.classList.remove('editing');
+        document.removeEventListener('pointerdown', hideDelBtnHandler, true);
+        hideDelBtnHandler = null;
+      }
+    };
+    // Use capture phase and setTimeout to avoid same-click triggering hide
+    setTimeout(() => {
+      document.addEventListener('pointerdown', hideDelBtnHandler, true);
+    }, 0);
+  };
+
+  textEl.addEventListener('mousedown', () => {
+    longPressTimer = setTimeout(() => {
+      isLongPress = true;
+      showDelBtn();
+      startEdit(sticky, textEl, card, container);
+    }, 500);
   });
+  textEl.addEventListener('mouseup', () => clearTimeout(longPressTimer));
+  textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
+  textEl.addEventListener('touchstart', () => {
+    longPressTimer = setTimeout(() => {
+      isLongPress = true;
+      showDelBtn();
+      startEdit(sticky, textEl, card, container);
+    }, 500);
+  }, { passive: true });
+  textEl.addEventListener('touchend', () => clearTimeout(longPressTimer), { passive: true });
 
   card.addEventListener('contextmenu', e => {
     e.preventDefault();
-    delBtn.classList.remove('hidden');
-    card.classList.add('editing');
+    showDelBtn();
     startEdit(sticky, textEl, card, container);
   });
 

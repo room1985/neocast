@@ -742,15 +742,18 @@ a { color:inherit; text-decoration:none; }
   flex: 1;
   overflow: hidden;
   min-height: 0;
+  height: 100%;
 }
 
 .sticky-list {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 8px 10px 4px;
   display: flex;
   flex-direction: column;
   gap: 6px;
+  min-height: 0;
 }
 
 .sticky-empty {
