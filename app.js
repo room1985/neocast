@@ -1381,14 +1381,30 @@ function renderMobileNews(container) {
   container.innerHTML = '';
   container.className = 'mobile-news-inner';
 
-  // News header
+  // News header with title + lang toggle + refresh
   const head = el('div', 'news-head');
   const ttl  = el('div', 'w-title', S.news.title || '即時新聞');
+
   const acts = el('div', 'w-actions');
-  const refBtn = el('button', 'w-btn', `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`);
+
+  const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
+  langPill.addEventListener('click', () => {
+    S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
+    langPill.textContent = S.news.lang === 'zh-TW' ? '中文' : 'EN';
+    S.news.fetchedAt = 0;
+    lsSave();
+    fetchNews();
+  });
+
+  const refBtn = el('button', 'w-btn');
+  refBtn.id = 'mobile-news-ref-btn';
+  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
   refBtn.addEventListener('click', () => { S.news.fetchedAt = 0; fetchNews(); });
+
+  acts.appendChild(langPill);
   acts.appendChild(refBtn);
-  head.appendChild(ttl); head.appendChild(acts);
+  head.appendChild(ttl);
+  head.appendChild(acts);
   container.appendChild(head);
 
   // Keywords
@@ -1537,12 +1553,18 @@ function initMobileLayout() {
     }
   }
 
-  // Touch swipe
+  // Touch swipe — only trigger when horizontal dominates
   let touchStartX = 0;
-  swipeArea.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  let touchStartY = 0;
+  swipeArea.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
   swipeArea.addEventListener('touchend', e => {
     const dx = e.changedTouches[0].clientX - touchStartX;
-    if (Math.abs(dx) < 40) return;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    // Only switch page if horizontal movement is dominant and significant
+    if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
     if (dx < 0 && S.mobilePageIdx < S.mobilePages.length - 1) S.mobilePageIdx++;
     else if (dx > 0 && S.mobilePageIdx > 0) S.mobilePageIdx--;
     renderPages();
