@@ -769,13 +769,27 @@ a { color:inherit; text-decoration:none; }
   border-radius: 10px;
   border: 1px solid rgba(255,255,255,0.12);
   background: rgba(255,255,255,0.06);
-  transition: border-color .2s;
+  transition: border-color .2s, background .2s;
   overflow: hidden;
+  flex-wrap: wrap;
 }
 .sticky-card:hover { border-color: rgba(255,255,255,0.2); }
 .sticky-card.pinned { border-style: dashed; }
 .sticky-card.sticky-dragging { opacity: .4; }
 .sticky-card.sticky-drag-over { border-color: var(--ac) !important; background: rgba(56,189,248,.08) !important; }
+
+/* Color row shown during edit */
+.sticky-edit-colors {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+  padding: 4px 0 2px 26px;
+}
+
+.sticky-edit-colors .sticky-color-sq {
+  width: 18px; height: 18px;
+  border-radius: 4px;
+}
 
 .sticky-handle {
   color: var(--txd);

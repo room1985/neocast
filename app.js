@@ -1293,7 +1293,7 @@ function makeStickyCard(sticky, container) {
   const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
   drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>`;
 
-  // Square checkbox (confirm before delete)
+  // Square checkbox
   const chk = el('button', 'sticky-chk');
   chk.title = '完成並刪除';
   chk.addEventListener('click', () => {
@@ -1308,34 +1308,19 @@ function makeStickyCard(sticky, container) {
     }, 340);
   });
 
-  // Text (long press to edit)
+  // Text area
   const textEl = el('div', 'sticky-text', esc(sticky.text));
   let editTimer = null;
   textEl.addEventListener('mousedown', () => {
-    editTimer = setTimeout(() => startEdit(sticky, textEl, container), 500);
+    editTimer = setTimeout(() => startEdit(sticky, textEl, card, container), 500);
   });
   textEl.addEventListener('mouseup', () => clearTimeout(editTimer));
   textEl.addEventListener('touchstart', () => {
-    editTimer = setTimeout(() => startEdit(sticky, textEl, container), 500);
+    editTimer = setTimeout(() => startEdit(sticky, textEl, card, container), 500);
   }, { passive: true });
   textEl.addEventListener('touchend', () => clearTimeout(editTimer), { passive: true });
 
-  // Right: 2×2 color grid + pin (bigger)
-  const rightCol = el('div', 'sticky-right-col');
-
-  const cardColors = el('div', 'sticky-card-colors');
-  ['blue','green','red','yellow'].forEach(key => {
-    const sq = el('button', 'sticky-card-sq sticky-sq-' + key + (sticky.color === key ? ' on' : ''));
-    sq.addEventListener('click', e => {
-      e.stopPropagation();
-      const st = S.stickies.find(s => s.id === sticky.id);
-      if (st) st.color = st.color === key ? 'none' : key;
-      lsSave();
-      renderStickiesWidget(container);
-    });
-    cardColors.appendChild(sq);
-  });
-
+  // Pin button only on right
   const pinBtn = el('button', 'sticky-pin' + (sticky.pinned ? ' on' : ''));
   pinBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="${sticky.pinned?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
   pinBtn.title = sticky.pinned ? '取消置頂' : '置頂';
@@ -1347,36 +1332,58 @@ function makeStickyCard(sticky, container) {
     renderStickiesWidget(container);
   });
 
-  rightCol.appendChild(cardColors);
-  rightCol.appendChild(pinBtn);
-
   card.appendChild(drag);
   card.appendChild(chk);
   card.appendChild(textEl);
-  card.appendChild(rightCol);
+  card.appendChild(pinBtn);
 
   card.addEventListener('contextmenu', e => {
     e.preventDefault();
-    startEdit(sticky, textEl, container);
+    startEdit(sticky, textEl, card, container);
   });
 
   return card;
 }
 
-function startEdit(sticky, textEl, container) {
+function startEdit(sticky, textEl, card, container) {
   const inp = el('input', 'sticky-edit-input');
   inp.value = sticky.text;
   inp.autocomplete = 'off';
   textEl.replaceWith(inp);
   inp.focus();
   inp.select();
+
+  // Show color picker inline in card during edit
+  const colorRow = el('div', 'sticky-edit-colors');
+  ['blue','green','red','yellow'].forEach(key => {
+    const sq = el('button', 'sticky-color-sq sticky-sq-' + key + (sticky.color === key ? ' on' : ''));
+    sq.addEventListener('mousedown', e => {
+      e.preventDefault(); // prevent blur on input
+      const st = S.stickies.find(s => s.id === sticky.id);
+      if (st) {
+        st.color = st.color === key ? 'none' : key;
+        const newC = STICKY_COLORS[st.color] || STICKY_COLORS.none;
+        card.style.background  = newC.bg;
+        card.style.borderColor = newC.border;
+      }
+      colorRow.querySelectorAll('.sticky-color-sq').forEach(s => s.classList.remove('on'));
+      if (sticky.color === key) sq.classList.add('on');
+      lsSave();
+    });
+    colorRow.appendChild(sq);
+  });
+  inp.after(colorRow);
+
   const save = () => {
     const val = inp.value.trim();
     if (val) { const st = S.stickies.find(s => s.id === sticky.id); if (st) st.text = val; }
     lsSave();
     renderStickiesWidget(container);
   };
-  inp.addEventListener('keydown', e => { if (e.key === 'Enter') save(); if (e.key === 'Escape') renderStickiesWidget(container); });
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') save();
+    if (e.key === 'Escape') renderStickiesWidget(container);
+  });
   inp.addEventListener('blur', save);
 }
 
@@ -1997,7 +2004,7 @@ async function init() {
   if (S.widgets.clock?.visible     !== false) buildClockWidget();
   if (S.widgets.shortcuts?.visible !== false) buildShortcutsWidget();
   if (S.widgets.news?.visible      !== false) buildNewsWidget();
-  if (S.widgets.stickies?.visible !== false && S.widgets.stickies) buildStickiesWidget();
+  if (S.widgets.stickies?.visible  === true)  buildStickiesWidget();
   initMobileLayout();
 
   // Search + voice
