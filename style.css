@@ -1002,24 +1002,30 @@ a { color:inherit; text-decoration:none; }
    RESPONSIVE — MOBILE
 ══════════════════════════════ */
 @media (max-width:640px) {
-  #header { padding: 0 8px; }
-
-  /* Shrink search bar on mobile */
-  #search-wrap {
-    width: 38vw;
-    min-width: 120px;
-    padding: 0 10px;
+  #header {
+    padding: 0 8px !important;
   }
 
-  #search-wrap .ico { display: none; }
+  #search-wrap {
+    width: 36vw !important;
+    min-width: 100px !important;
+    max-width: 36vw !important;
+    padding: 0 8px !important;
+  }
+
+  #search-wrap .ico { display: none !important; }
+
+  #search-input {
+    font-size: .8rem !important;
+  }
 
   /* Hide widget container, show mobile layout instead */
-  #wc { display: none; }
-  #grid-overlay { display: none; }
+  #wc { display: none !important; }
+  #grid-overlay { display: none !important; }
 
   /* Mobile layout wrapper */
   #mobile-layout {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     gap: 12px;
     padding: 70px 14px 24px;
@@ -1042,18 +1048,18 @@ a { color:inherit; text-decoration:none; }
   .mobile-sc-panel .sc-groups  { padding: 0 0 10px; }
   .mobile-sc-panel .sc-add-btn { margin: 10px 0 0; }
 
-  /* Adaptive grid: auto-fill with equal width columns */
-  .mobile-sc-panel .sc-grid {
-    padding: 0;
-    grid-template-columns: repeat(4, 1fr);
+  /* Force 4-column adaptive grid on mobile */
+  .mobile-sc-panel .sc-grid,
+  #mobile-layout .sc-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    padding: 0 !important;
   }
 
-  /* Make shortcut items fill their column */
-  .mobile-sc-panel .sc-item {
-    width: 100%;
+  #mobile-layout .sc-item {
+    width: 100% !important;
   }
 }
 
 @media (min-width: 641px) {
-  #mobile-layout { display: none; }
+  #mobile-layout { display: none !important; }
 }

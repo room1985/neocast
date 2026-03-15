@@ -1038,13 +1038,11 @@ function onResize() {
    Shows: search (in header) + shortcuts
 ───────────────────────────────────── */
 function initMobileLayout() {
-  if (window.innerWidth > 640) return;
-
   const container = $('mobile-layout');
   if (!container) return;
 
-  // Shortcuts panel
-  const panel = el('div', 'mobile-sc-panel glass-panel');
+  // Always build mobile layout, CSS handles show/hide
+  const panel = el('div', 'mobile-sc-panel');
   const inner = el('div', 'sc-inner');
   inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
   panel.appendChild(inner);
