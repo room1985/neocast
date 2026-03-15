@@ -1016,7 +1016,7 @@ a { color:inherit; text-decoration:none; }
     min-width: 0 !important;
     max-width: none !important;
     padding: 0 8px !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   #search-wrap .ico { display: none !important; }
@@ -1024,16 +1024,15 @@ a { color:inherit; text-decoration:none; }
   #search-input {
     font-size: .8rem !important;
     min-width: 0 !important;
-    width: 0 !important; /* let flex handle it */
     flex: 1 !important;
   }
 
   #voice-btn {
-    flex-shrink: 0;
-    width: 24px !important;
-    height: 24px !important;
+    flex-shrink: 0 !important;
+    width: 22px !important;
+    height: 22px !important;
   }
-  #voice-btn svg { width:13px; height:13px; }
+  #voice-btn svg { width:12px !important; height:12px !important; }
 
   /* Tighter right buttons */
   #hdr-right {
