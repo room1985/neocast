@@ -42,11 +42,12 @@ let S = {
     token:  '',
     gistId: ''
   },
-  editMode:    false,
-  activeGroup: 'all',
-  ctxTarget:   null,
-  scEditing:   null,
-  dragSc:      null
+  editMode:       false,
+  activeGroup:    'all',
+  privateUnlocked: false,
+  ctxTarget:      null,
+  scEditing:      null,
+  dragSc:         null
 };
 
 /* ─────────────────────────────────────
@@ -542,6 +543,62 @@ function buildClockWidget() {
 }
 
 /* ─────────────────────────────────────
+   PRIVATE GROUP — Lock / Unlock
+───────────────────────────────────── */
+const PRIVATE_GROUP_ID = '__private__';
+
+function initLockBtn() {
+  const btn  = $('lock-btn');
+  const icon = $('lock-icon');
+  if (!btn) return;
+
+  let clickCount = 0;
+  let clickTimer = null;
+
+  // Unlocked SVG path
+  const SVG_UNLOCKED = `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.4-1.3"/>`;
+  const SVG_LOCKED   = `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>`;
+
+  btn.addEventListener('click', () => {
+    // If already unlocked, clicking once locks it
+    if (S.privateUnlocked) {
+      lockPrivate();
+      return;
+    }
+
+    // Triple-click within 1.5s
+    clickCount++;
+    clearTimeout(clickTimer);
+    clickTimer = setTimeout(() => { clickCount = 0; }, 1500);
+
+    if (clickCount >= 3) {
+      clickCount = 0;
+      clearTimeout(clickTimer);
+      unlockPrivate();
+    }
+  });
+
+  function unlockPrivate() {
+    S.privateUnlocked = true;
+    btn.classList.add('unlocked');
+    icon.innerHTML = SVG_UNLOCKED;
+    rerenderSc();
+    toast('私人群組已解鎖');
+  }
+
+  function lockPrivate() {
+    S.privateUnlocked = false;
+    btn.classList.remove('unlocked');
+    icon.innerHTML = SVG_LOCKED;
+    // If currently viewing private, switch to all
+    if (S.activeGroup === PRIVATE_GROUP_ID) {
+      S.activeGroup = 'all';
+    }
+    rerenderSc();
+  }
+}
+
+/* ─────────────────────────────────────
    SEARCH + VOICE
 ───────────────────────────────────── */
 function initSearch() {
@@ -609,16 +666,25 @@ function renderShortcutsWidget(container) {
   const bar = el('div', 'sc-groups');
   bar.appendChild(makeGrpTab('all', '全部'));
   S.groups.forEach(g => bar.appendChild(makeGrpTab(g.id, g.name, true)));
+
+  // Show private group tab only when unlocked
+  if (S.privateUnlocked) {
+    bar.appendChild(makeGrpTab(PRIVATE_GROUP_ID, '🔓 私人', false));
+  }
+
   const addGrpBtn = el('button', 'grp-tab add', '＋ 群組');
   addGrpBtn.addEventListener('click', () => openModal('m-grp'));
   bar.appendChild(addGrpBtn);
   container.appendChild(bar);
 
-  // Grid
+  // Grid — filter out private shortcuts from 'all'
   const grid = el('div', 'sc-grid');
-  const visible = S.activeGroup === 'all'
-    ? S.shortcuts
-    : S.shortcuts.filter(s => s.groupId === S.activeGroup);
+  let visible;
+  if (S.activeGroup === 'all') {
+    visible = S.shortcuts.filter(s => s.groupId !== PRIVATE_GROUP_ID);
+  } else {
+    visible = S.shortcuts.filter(s => s.groupId === S.activeGroup);
+  }
   visible.forEach(sc => grid.appendChild(makeScItem(sc)));
   container.appendChild(grid);
 
@@ -1085,6 +1151,13 @@ function openMoveModal(scId) {
     item.addEventListener('click', () => { doMove(scId, g.id); closeModal('m-mv'); });
     list.appendChild(item);
   });
+  // Show private group option only when unlocked
+  if (S.privateUnlocked) {
+    const priv = el('div', 'mv-item', '🔓 私人');
+    priv.style.color = 'var(--ac)';
+    priv.addEventListener('click', () => { doMove(scId, PRIVATE_GROUP_ID); closeModal('m-mv'); });
+    list.appendChild(priv);
+  }
   openModal('m-mv');
 }
 
@@ -1193,6 +1266,7 @@ async function init() {
 
   // Search + voice
   initSearch();
+  initLockBtn();
 
   // Context menu
   initCtx();
