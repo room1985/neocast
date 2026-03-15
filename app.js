@@ -409,9 +409,20 @@ function initWidgetDrag(wid, widgetEl) {
 
 function setEditMode(on) {
   S.editMode = on;
-  $('edit-done').classList.toggle('hidden', !on);
   $('grid-overlay').classList.toggle('hidden', !on);
-  $('edit-btn').classList.toggle('active', on);
+
+  // Toggle edit-btn between grid icon and ✓ 完成
+  const editBtn = $('edit-btn');
+  if (on) {
+    editBtn.innerHTML = '✓ 完成';
+    editBtn.classList.add('edit-done-mode');
+    editBtn.title = '完成編輯';
+  } else {
+    editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`;
+    editBtn.classList.remove('edit-done-mode');
+    editBtn.title = '編輯佈局';
+  }
+
   document.querySelectorAll('.widget').forEach(w => w.classList.toggle('editable', on));
   document.querySelectorAll('.w-delete-btn').forEach(b => b.classList.toggle('hidden', !on));
   const addPanel = $('add-widget-panel');
@@ -2072,7 +2083,6 @@ async function init() {
 
   // Buttons
   $('edit-btn').addEventListener('click', () => setEditMode(!S.editMode));
-  $('edit-done').addEventListener('click', () => setEditMode(false));
   $('sync-btn').addEventListener('click', async () => {
     await gistPush();
   });
