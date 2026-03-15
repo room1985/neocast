@@ -501,16 +501,18 @@ class SimpleClock {
 
     const wrap = el('div', 'simple-clock-wrap');
 
-    this.timeEl   = el('div', 'simple-clock-time');
+    this.timeEl = el('div', 'simple-clock-time');
 
-    // Bottom row: date + greeting + weather all on same line
-    this.infoRow  = el('div', 'simple-clock-info-row');
-    this.dateEl   = el('span', 'simple-clock-date');
-    this.greetEl  = el('span', 'simple-clock-greeting');
-    this.weatherEl= el('span', 'simple-clock-weather');
+    // Info row: date on first line, greeting+weather on second line
+    this.infoRow   = el('div', 'simple-clock-info-row');
+    this.dateEl    = el('span', 'simple-clock-date');
+    this.greetWrap = el('div', 'simple-clock-greet-weather');
+    this.greetEl   = el('span', 'simple-clock-greeting');
+    this.weatherEl = el('span', 'simple-clock-weather');
+    this.greetWrap.appendChild(this.greetEl);
+    this.greetWrap.appendChild(this.weatherEl);
     this.infoRow.appendChild(this.dateEl);
-    this.infoRow.appendChild(this.greetEl);
-    this.infoRow.appendChild(this.weatherEl);
+    this.infoRow.appendChild(this.greetWrap);
 
     wrap.appendChild(this.timeEl);
     wrap.appendChild(this.infoRow);
@@ -549,7 +551,7 @@ class SimpleClock {
   }
 
   updateWeather(text) {
-    this.weatherEl.textContent = text ? `　${text}` : '';
+    this.weatherEl.textContent = text || '';
   }
 }
 
@@ -1160,6 +1162,10 @@ async function fetchNews() {
 
   if (refBtn) refBtn.classList.remove('spin');
   renderNewsItems();
+
+  // Also update mobile news panel if visible
+  const mobileNews = document.querySelector('#mobile-layout .mobile-news-inner');
+  if (mobileNews) renderMobileNews(mobileNews);
 }
 
 /* ─────────────────────────────────────
