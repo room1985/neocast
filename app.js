@@ -414,7 +414,7 @@ function setEditMode(on) {
   // Toggle edit-btn between grid icon and ✓ 完成
   const editBtn = $('edit-btn');
   if (on) {
-    editBtn.innerHTML = '✓ 完成';
+    editBtn.innerHTML = '✓';
     editBtn.classList.add('edit-done-mode');
     editBtn.title = '完成編輯';
   } else {

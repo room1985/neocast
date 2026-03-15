@@ -195,12 +195,8 @@ a { color:inherit; text-decoration:none; }
   background: var(--ac);
   border-color: var(--ac);
   color: #03111e;
-  padding: 6px 14px;
-  border-radius: 50px;
-  font-size: .8rem;
+  font-size: 1rem;
   font-weight: 800;
-  width: auto;
-  height: 34px;
 }
 #edit-btn.edit-done-mode:hover { opacity: .85; background: var(--ac); }
 
@@ -1375,12 +1371,6 @@ a { color:inherit; text-decoration:none; }
     height: 30px !important;
   }
   .hdr-btn svg { width:13px !important; height:13px !important; }
-
-  #edit-btn.edit-done-mode {
-    padding: 5px 10px !important;
-    font-size: .74rem !important;
-    height: 30px !important;
-  }
 
   /* Hide widget container, show mobile layout instead */
   #wc { display: none !important; }
