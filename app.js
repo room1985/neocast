@@ -42,8 +42,12 @@ let S = {
     cacheMin:   25
   },
   cfg: {
-    token:  '',
-    gistId: ''
+    token:       '',
+    gistId:      '',
+    nickname:    '',
+    weatherCity: '',
+    weatherLat:  null,
+    weatherLon:  null
   },
   editMode:       false,
   activeGroup:    'all',
@@ -494,13 +498,17 @@ class SimpleClock {
 
     const wrap = el('div', 'simple-clock-wrap');
 
-    this.timeEl  = el('div', 'simple-clock-time');
-    this.dateEl  = el('div', 'simple-clock-date');
-    this.greetEl = el('div', 'simple-clock-greeting');
+    this.timeEl   = el('div', 'simple-clock-time');
+    this.dateEl   = el('div', 'simple-clock-date');
+    this.greetRow = el('div', 'simple-clock-greet-row');
+    this.greetEl  = el('span', 'simple-clock-greeting');
+    this.weatherEl= el('span', 'simple-clock-weather');
+    this.greetRow.appendChild(this.greetEl);
+    this.greetRow.appendChild(this.weatherEl);
 
     wrap.appendChild(this.timeEl);
     wrap.appendChild(this.dateEl);
-    wrap.appendChild(this.greetEl);
+    wrap.appendChild(this.greetRow);
     container.appendChild(wrap);
 
     // Adaptive font size
@@ -517,17 +525,27 @@ class SimpleClock {
   }
 
   tick() {
-    const now = new Date();
-    const h   = String(now.getHours()).padStart(2,'0');
-    const m   = String(now.getMinutes()).padStart(2,'0');
-    const s   = String(now.getSeconds()).padStart(2,'0');
+    const now  = new Date();
+    const h    = String(now.getHours()).padStart(2,'0');
+    const m    = String(now.getMinutes()).padStart(2,'0');
+    const s    = String(now.getSeconds()).padStart(2,'0');
     this.timeEl.textContent = `${h}:${m}:${s}`;
 
     const W = ['日','一','二','三','四','五','六'];
     this.dateEl.textContent = `${now.getMonth()+1}月${now.getDate()}日 週${W[now.getDay()]}`;
 
-    const hr = now.getHours();
-    this.greetEl.textContent = hr < 5 ? '深夜好' : hr < 12 ? '早安 ☀' : hr < 18 ? '午安 🌤' : '晚安 🌙';
+    const hr   = now.getHours();
+    const name = S.cfg.nickname ? `，${S.cfg.nickname}` : '';
+    let greet;
+    if      (hr < 5)  greet = `該睡囉${name} 🥱`;
+    else if (hr < 12) greet = `早上好${name} 🤗`;
+    else if (hr < 18) greet = `中午好${name} 😘`;
+    else              greet = `晚上好${name} 😍`;
+    this.greetEl.textContent = greet;
+  }
+
+  updateWeather(text) {
+    this.weatherEl.textContent = text ? `　${text}` : '';
   }
 }
 
@@ -543,6 +561,75 @@ function buildClockWidget() {
   clockRef = new SimpleClock(body);
   clockRef.tick();
   setInterval(() => clockRef.tick(), 1000);
+}
+
+/* ─────────────────────────────────────
+   WEATHER
+───────────────────────────────────── */
+const WEATHER_CACHE_MS = 30 * 60 * 1000;
+let weatherCache = { text: '', fetchedAt: 0 };
+
+const WMO_ICON = {
+  0:'☀️', 1:'🌤', 2:'⛅', 3:'☁️',
+  45:'🌫', 48:'🌫',
+  51:'🌦', 53:'🌦', 55:'🌧',
+  61:'🌧', 63:'🌧', 65:'🌧',
+  71:'🌨', 73:'🌨', 75:'🌨',
+  80:'🌦', 81:'🌧', 82:'⛈',
+  95:'⛈', 96:'⛈', 99:'⛈'
+};
+
+async function fetchWeather(lat, lon, cityName) {
+  try {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weathercode&timezone=auto`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) return;
+    const data = await res.json();
+    const temp = Math.round(data.current.temperature_2m);
+    const code = data.current.weathercode;
+    const icon = WMO_ICON[code] || '🌡';
+    const text = `${icon} ${temp}°C ${cityName || ''}`;
+    weatherCache = { text, fetchedAt: Date.now() };
+    if (clockRef) clockRef.updateWeather(text);
+  } catch(_) {}
+}
+
+async function initWeather() {
+  // Use cached if fresh
+  if (weatherCache.text && Date.now() - weatherCache.fetchedAt < WEATHER_CACHE_MS) {
+    if (clockRef) clockRef.updateWeather(weatherCache.text);
+    return;
+  }
+
+  const city = S.cfg.weatherCity;
+  const lat  = S.cfg.weatherLat;
+  const lon  = S.cfg.weatherLon;
+
+  if (lat && lon) {
+    await fetchWeather(lat, lon, city);
+  }
+
+  // Auto-refresh every 30 min
+  setTimeout(initWeather, WEATHER_CACHE_MS);
+}
+
+async function geoLocate() {
+  return new Promise((res, rej) => {
+    if (!navigator.geolocation) { rej('不支援定位'); return; }
+    navigator.geolocation.getCurrentPosition(
+      pos => res({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+      () => rej('定位失敗')
+    );
+  });
+}
+
+async function reverseGeocode(lat, lon) {
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json&accept-language=zh-TW`;
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    const d   = await res.json();
+    return d.address?.city || d.address?.town || d.address?.county || '';
+  } catch(_) { return ''; }
 }
 
 /* ─────────────────────────────────────
@@ -1188,6 +1275,9 @@ function openSettingsModal() {
   $('cfg-news-title').value = S.news.title || '即時新聞';
   $('cfg-per-kw').value     = String(S.news.perKeyword || 2);
   $('cfg-cache-min').value  = String(S.news.cacheMin || 25);
+  $('cfg-nickname').value   = S.cfg.nickname || '';
+  $('cfg-city').value       = S.cfg.weatherCity || '';
+  $('cfg-locate-status').textContent = '';
   openModal('m-cfg');
 }
 
@@ -1200,9 +1290,13 @@ async function saveSettings() {
   const newsTitle  = $('cfg-news-title').value.trim() || '即時新聞';
   const perKeyword = parseInt($('cfg-per-kw').value) || 2;
   const cacheMin   = parseInt($('cfg-cache-min').value) || 25;
+  const nickname   = $('cfg-nickname').value.trim();
+  const city       = $('cfg-city').value.trim();
 
   S.cfg.token        = token;
   S.cfg.gistId       = gistId;
+  S.cfg.nickname     = nickname;
+  S.cfg.weatherCity  = city;
   S.news.lang        = lang;
   S.news.keywords    = kws.length ? kws : ['最新新聞'];
   S.news.title       = newsTitle;
@@ -1222,6 +1316,8 @@ async function saveSettings() {
   closeModal('m-cfg');
   renderNewsKws();
   fetchNews();
+  // Re-init weather if city changed
+  if (city && S.cfg.weatherLat) initWeather();
   toast('設定已儲存 ✓');
 }
 
@@ -1293,6 +1389,7 @@ async function init() {
   // Search + voice
   initSearch();
   initLockBtn();
+  initWeather();
 
   // Context menu
   initCtx();
@@ -1332,6 +1429,23 @@ async function init() {
     }
   });
   $('rm-vid').addEventListener('click', removeVideo);
+
+  // Auto-locate button
+  $('cfg-locate').addEventListener('click', async () => {
+    const statusEl = $('cfg-locate-status');
+    statusEl.textContent = '定位中…';
+    try {
+      const { lat, lon } = await geoLocate();
+      const city = await reverseGeocode(lat, lon);
+      S.cfg.weatherLat = lat;
+      S.cfg.weatherLon = lon;
+      $('cfg-city').value = city;
+      statusEl.textContent = `✓ ${city}`;
+      lsSave();
+    } catch(e) {
+      statusEl.textContent = '定位失敗，請手動輸入';
+    }
+  });
 
   // Cancel buttons (data-m attribute)
   document.querySelectorAll('.bcx[data-m]').forEach(b => {

@@ -261,6 +261,20 @@ a { color:inherit; text-decoration:none; }
   color: var(--ac);
   font-weight: 700;
 }
+
+.simple-clock-greet-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.simple-clock-weather {
+  font-size: .8rem;
+  color: var(--txm);
+  font-weight: 600;
+}
 #grid-overlay {
   position: fixed;
   top: 58px; left: 0; right: 0; bottom: 0;

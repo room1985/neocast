@@ -28,7 +28,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag">v1.0.17</span>
+      <span id="version-tag">v1.0.18</span>
       <button id="lock-btn" title="私人群組" aria-label="解鎖私人群組">
         <svg id="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </button>
@@ -166,13 +166,7 @@
         </label>
         <label>
           每個關鍵字顯示幾則
-          <select id="cfg-per-kw">
-            <option value="1">1 則</option>
-            <option value="2">2 則</option>
-            <option value="3">3 則</option>
-            <option value="4">4 則</option>
-            <option value="5">5 則</option>
-          </select>
+          <input id="cfg-per-kw" type="number" min="1" placeholder="2">
         </label>
         <label>
           快取更新頻率
@@ -183,6 +177,27 @@
             <option value="60">1 小時</option>
           </select>
         </label>
+      </div>
+
+      <div class="cfg-sec">
+        <div class="cfg-sec-title">👤 個人設定</div>
+        <label>
+          暱稱
+          <input id="cfg-nickname" type="text" placeholder="宇">
+        </label>
+      </div>
+
+      <div class="cfg-sec">
+        <div class="cfg-sec-title">🌤 天氣設定</div>
+        <label>
+          城市名稱
+          <input id="cfg-city" type="text" placeholder="台南">
+          <span class="hint">顯示在時鐘問候語旁邊</span>
+        </label>
+        <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+          <button class="bsm" id="cfg-locate">📍 自動定位</button>
+          <span id="cfg-locate-status" class="hint"></span>
+        </div>
       </div>
 
       <div class="cfg-sec">
