@@ -1161,7 +1161,7 @@ a { color:inherit; text-decoration:none; }
     background: var(--sf2);
     border: 1px solid var(--bd);
     color: var(--txm);
-    width: 28px; height: 28px;
+    width: 26px; height: 26px;
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
@@ -1169,6 +1169,7 @@ a { color:inherit; text-decoration:none; }
     z-index: 10;
   }
   .mobile-page-replace-btn:hover { border-color:var(--ac); color:var(--ac); }
+  .mobile-page-replace-btn.hidden { display: none !important; }
 
   /* Dots bar */
   .mobile-dots-bar {
@@ -1177,40 +1178,39 @@ a { color:inherit; text-decoration:none; }
     align-items: center;
     justify-content: center;
     gap: 8px;
-    padding: 8px 0 28px;
+    padding: 6px 0 28px;
   }
 
   .mobile-dot {
-    width: 7px; height: 7px;
+    width: 6px; height: 6px;
     border-radius: 50%;
     background: var(--txd);
     cursor: pointer;
     transition: all .2s;
-    /* Larger touch target without changing visual size */
-    padding: 6px;
+    padding: 5px;
     box-sizing: content-box;
   }
   .mobile-dot.active {
     background: var(--ac);
-    width: 18px;
-    border-radius: 4px;
+    width: 14px;
+    border-radius: 3px;
   }
 
   .mobile-add-page-btn {
     background: var(--sf);
     border: 1px dashed var(--bd);
     color: var(--txm);
-    width: 22px; height: 22px;
+    width: 18px; height: 18px;
     border-radius: 50%;
-    font-size: 1rem;
+    font-size: .9rem;
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
     transition: all .2s;
-    padding: 6px;
+    padding: 5px;
     box-sizing: content-box;
   }
   .mobile-add-page-btn:hover { border-color:var(--ac); color:var(--ac); }
-  .mobile-add-page-btn.hidden { display: none; }
+  .mobile-add-page-btn.hidden { display: none !important; }
 
   /* Mobile news inner */
   .mobile-news-inner {
