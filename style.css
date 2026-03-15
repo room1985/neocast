@@ -737,16 +737,16 @@ a { color:inherit; text-decoration:none; }
    STICKIES WIDGET
 ══════════════════════════════ */
 .stickies-inner {
-  position: relative;
   flex: 1;
   min-height: 0;
+  position: relative;
   overflow: hidden;
 }
 
 .sticky-list {
   position: absolute;
   top: 0; left: 0; right: 0;
-  bottom: 52px;
+  bottom: 53px;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 8px 10px 4px;

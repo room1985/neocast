@@ -187,7 +187,10 @@ async function gistPush(silent = false) {
       body
     });
     if (!res.ok) {
-      if (res.status === 403) throw new Error('HTTP 403 Token 權限不足或已過期');
+      if (res.status === 403) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error('HTTP 403: ' + (errData.message || 'Token 權限不足'));
+      }
       if (res.status === 404) throw new Error('HTTP 404 Gist ID 不存在');
       throw new Error('HTTP ' + res.status);
     }
@@ -1227,18 +1230,6 @@ function buildStickiesWidget() {
   const w = makeWidget('stickies', '便利貼', body, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
-  w.style.overflow = 'hidden';
-
-  const updateBodyHeight = () => {
-    const head = w.querySelector('.w-head');
-    const headH = head ? head.offsetHeight : 36;
-    body.style.height = (w.offsetHeight - headH) + 'px';
-  };
-  // Run once after paint, then observe resize
-  requestAnimationFrame(() => {
-    updateBodyHeight();
-    new ResizeObserver(updateBodyHeight).observe(w);
-  });
   renderStickiesWidget(body);
 }
 
