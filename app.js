@@ -553,18 +553,21 @@ class SimpleClock {
   }
 }
 
-let clockRef = null;
+let clockRefs = [];
+
+function updateAllClocks(weatherText) {
+  clockRefs.forEach(c => c.updateWeather(weatherText));
+}
 
 function buildClockWidget() {
   const body = el('div', 'clock-body');
   const w    = makeWidget('clock', '', body);
-  // Keep w-head (has delete button) but remove the extra w-body
   w.querySelector('.w-body')?.remove();
-  // Move body before resize handle
   w.insertBefore(body, w.querySelector('.resize-handle'));
-  clockRef = new SimpleClock(body);
-  clockRef.tick();
-  setInterval(() => clockRef.tick(), 1000);
+  const c = new SimpleClock(body);
+  clockRefs.push(c);
+  c.tick();
+  setInterval(() => c.tick(), 1000);
 }
 
 /* ─────────────────────────────────────
@@ -594,14 +597,14 @@ async function fetchWeather(lat, lon, cityName) {
     const icon = WMO_ICON[code] || '🌡';
     const text = `${icon} ${temp}°C ${cityName || ''}`;
     weatherCache = { text, fetchedAt: Date.now() };
-    if (clockRef) clockRef.updateWeather(text);
+    updateAllClocks(text);
   } catch(_) {}
 }
 
 async function initWeather() {
   // Use cached if fresh
   if (weatherCache.text && Date.now() - weatherCache.fetchedAt < WEATHER_CACHE_MS) {
-    if (clockRef) clockRef.updateWeather(weatherCache.text);
+    updateAllClocks(weatherCache.text);
     return;
   }
 
@@ -1367,8 +1370,10 @@ function buildMobileWidgetContent(widgetType, container) {
     body.style.cssText = 'height:180px;flex-shrink:0;';
     container.appendChild(body);
     const c = new SimpleClock(body);
+    clockRefs.push(c);
     c.tick();
     setInterval(() => c.tick(), 1000);
+    if (weatherCache.text) c.updateWeather(weatherCache.text);
   }
 }
 
@@ -1432,8 +1437,10 @@ function initMobileLayout() {
   clockWrap.appendChild(clockBody);
   container.appendChild(clockWrap);
   const mClock = new SimpleClock(clockBody);
+  clockRefs.push(mClock);
   mClock.tick();
   setInterval(() => mClock.tick(), 1000);
+  if (weatherCache.text) mClock.updateWeather(weatherCache.text);
 
   // ── Swipe area ──
   const swipeArea = el('div', 'mobile-swipe-area');
@@ -1457,8 +1464,9 @@ function initMobileLayout() {
       buildMobileWidgetContent(page.widget, panel);
 
       // Replace widget button - only visible in edit mode
-      const replaceBtn = el('button', 'mobile-page-replace-btn hidden', '換');
+      const replaceBtn = el('button', 'mobile-page-replace-btn hidden');
       replaceBtn.title = '更換小工具';
+      replaceBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/></svg>`;
       replaceBtn.addEventListener('click', () => openMobileWidgetPicker(idx));
       panel.appendChild(replaceBtn);
 
@@ -1503,8 +1511,8 @@ function initMobileLayout() {
       dotsBar.appendChild(dot);
     });
 
-    // Add page button
-    const addBtn = el('button', 'mobile-add-page-btn', '＋');
+    // Add page button - hidden by default, shown in edit mode
+    const addBtn = el('button', 'mobile-add-page-btn hidden', '＋');
     addBtn.title = '新增頁面';
     addBtn.addEventListener('click', () => {
       const newPage = { id: uid(), widget: null };
@@ -1512,10 +1520,15 @@ function initMobileLayout() {
       S.mobilePageIdx = S.mobilePages.length - 1;
       lsSave();
       renderPages();
-      // Open picker for new empty page
       openMobileWidgetPicker(S.mobilePageIdx);
     });
     dotsBar.appendChild(addBtn);
+
+    // Sync edit mode state after rebuild
+    if (S.editMode) {
+      document.querySelectorAll('.mobile-page-replace-btn').forEach(b => b.classList.remove('hidden'));
+      addBtn.classList.remove('hidden');
+    }
 
     // Scroll active page into view
     const activePanels = swipeArea.querySelectorAll('.mobile-page-panel');
@@ -1664,6 +1677,21 @@ async function init() {
     }
   });
   $('rm-vid').addEventListener('click', removeVideo);
+
+  // Reset layout
+  $('cfg-reset-layout').addEventListener('click', () => {
+    if (!confirm('重置小工具佈局？位置和大小會恢復預設，捷徑和設定不受影響。')) return;
+    S.widgets = {
+      clock:     { col:0, row:0, w:6, h:2, visible:true },
+      shortcuts: { col:6, row:2, w:6, h:5, visible:true },
+      news:      { col:0, row:2, w:6, h:5, visible:true }
+    };
+    S.mobilePages = [{ id: 'shortcuts', widget: 'shortcuts' }];
+    S.mobilePageIdx = 0;
+    lsSave();
+    closeModal('m-cfg');
+    toast('佈局已重置，請重新整理頁面 ✓');
+  });
 
   // Auto-locate button
   $('cfg-locate').addEventListener('click', async () => {

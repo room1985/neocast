@@ -28,7 +28,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag">v1.0.20</span>
+      <span id="version-tag">v1.0.21</span>
       <button id="lock-btn" title="私人群組" aria-label="解鎖私人群組">
         <svg id="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </button>
@@ -45,8 +45,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
       </button>
       <button id="edit-done" class="hidden" title="完成編輯">✓ 完成</button>
-      <button class="hdr-btn" id="sync-btn" title="同步 Gist">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      <button class="hdr-btn" id="sync-btn" title="同步到雲端">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/></svg>
       </button>
       <button class="hdr-btn" id="settings-btn" title="設定">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -91,11 +91,11 @@
   <div id="m-sc" class="modal hidden">
     <div class="mbox glass">
       <h3 id="m-sc-title">新增捷徑</h3>
-      <label>名稱<input id="sc-name" type="text" placeholder="例：Google"></label>
-      <label>網址<input id="sc-url"  type="url"  placeholder="https://google.com"></label>
+      <label>名稱<input id="sc-name" type="text" autocomplete="off" placeholder="例：Google"></label>
+      <label>網址<input id="sc-url" type="url" autocomplete="off"  placeholder="https://google.com"></label>
       <label>
         自訂圖示網址 <span class="hint">（選填，留空自動抓取）</span>
-        <input id="sc-icon" type="url" placeholder="https://example.com/icon.png">
+        <input id="sc-icon" type="url" autocomplete="off" placeholder="https://example.com/icon.png">
       </label>
       <label>群組<select id="sc-grp"><option value="">無群組</option></select></label>
       <div class="mactions">
@@ -109,7 +109,7 @@
   <div id="m-grp" class="modal hidden">
     <div class="mbox glass">
       <h3>新增群組</h3>
-      <label>群組名稱<input id="grp-name" type="text" placeholder="工作、娛樂、學習…"></label>
+      <label>群組名稱<input id="grp-name" type="text" autocomplete="off" placeholder="工作、娛樂、學習…"></label>
       <div class="mactions">
         <button class="bcx" data-m="m-grp">取消</button>
         <button class="bco" id="grp-ok">建立</button>
@@ -137,25 +137,30 @@
         <div class="cfg-sec-title">🔄 GitHub Gist 同步</div>
         <label>
           Personal Access Token
-          <input id="cfg-tok" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <input id="cfg-tok" type="password" autocomplete="new-password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
           <span class="hint">Tokens (classic) → 只勾 gist · 僅存於本機</span>
         </label>
         <label>
           Gist ID <span class="hint">（第一次留空，會自動建立）</span>
-          <input id="cfg-gid" type="text" placeholder="首次儲存後自動填入">
+          <input id="cfg-gid" type="text" autocomplete="off" placeholder="首次儲存後自動填入">
         </label>
-        <button class="bsm" id="cfg-sync-now">從雲端還原設定</button>
+      <div class="cfg-sec">
+        <div class="cfg-sec-title">🔧 進階</div>
+        <button class="bsm danger" id="cfg-reset-layout">重置小工具佈局</button>
+        <span class="hint">只清除小工具位置，不影響捷徑和設定</span>
+        <button class="bsm" id="cfg-sync-now" style="margin-top:8px;">從雲端還原設定</button>
+      </div>
       </div>
 
       <div class="cfg-sec">
         <div class="cfg-sec-title">📰 新聞設定</div>
         <label>
           新聞標題
-          <input id="cfg-news-title" type="text" placeholder="即時新聞">
+          <input id="cfg-news-title" type="text" autocomplete="off" placeholder="即時新聞">
         </label>
         <label>
           關鍵字 <span class="hint">（逗號分隔）</span>
-          <input id="cfg-kw" type="text" placeholder="AI人工智慧, 台灣科技, 美伊衝突">
+          <input id="cfg-kw" type="text" autocomplete="off" placeholder="AI人工智慧, 台灣科技, 美伊衝突">
         </label>
         <label>
           語言
@@ -166,7 +171,7 @@
         </label>
         <label>
           每個關鍵字顯示幾則
-          <input id="cfg-per-kw" type="number" min="1" placeholder="2">
+          <input id="cfg-per-kw" type="number" autocomplete="off" min="1" placeholder="2">
         </label>
         <label>
           快取更新頻率
@@ -183,7 +188,7 @@
         <div class="cfg-sec-title">👤 個人設定</div>
         <label>
           暱稱
-          <input id="cfg-nickname" type="text" placeholder="宇">
+          <input id="cfg-nickname" type="text" autocomplete="off" placeholder="宇">
         </label>
       </div>
 
@@ -191,7 +196,7 @@
         <div class="cfg-sec-title">🌤 天氣設定</div>
         <label>
           城市名稱
-          <input id="cfg-city" type="text" placeholder="台南">
+          <input id="cfg-city" type="text" autocomplete="off" placeholder="台南">
           <span class="hint">顯示在時鐘問候語旁邊</span>
         </label>
         <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
