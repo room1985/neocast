@@ -54,7 +54,9 @@ let S = {
   privateUnlocked: false,
   ctxTarget:      null,
   scEditing:      null,
-  dragSc:         null
+  dragSc:         null,
+  mobilePages:    [{ id: 'shortcuts', widget: 'shortcuts' }],
+  mobilePageIdx:  0
 };
 
 /* ─────────────────────────────────────
@@ -79,7 +81,8 @@ function lsSave() {
       groups:    S.groups,
       widgets:   S.widgets,
       news:      { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
-      cfg:       S.cfg
+      cfg:       S.cfg,
+      mobilePages: S.mobilePages
     }));
   } catch(_) {}
 
@@ -95,11 +98,12 @@ function lsSave() {
 function lsLoad() {
   try {
     const d = JSON.parse(localStorage.getItem(LS_KEY)||'{}');
-    if (d.shortcuts) S.shortcuts = d.shortcuts;
-    if (d.groups)    S.groups    = d.groups;
-    if (d.widgets)   Object.assign(S.widgets, d.widgets);
-    if (d.news)      Object.assign(S.news, d.news);
-    if (d.cfg)       Object.assign(S.cfg, d.cfg);
+    if (d.shortcuts)   S.shortcuts = d.shortcuts;
+    if (d.groups)      S.groups    = d.groups;
+    if (d.widgets)     Object.assign(S.widgets, d.widgets);
+    if (d.news)        Object.assign(S.news, d.news);
+    if (d.cfg)         Object.assign(S.cfg, d.cfg);
+    if (d.mobilePages) S.mobilePages = d.mobilePages;
   } catch(_) {}
 }
 
@@ -986,10 +990,8 @@ function initTouchDrag(grid) {
 }
 
 function rerenderShortcuts() {
-  // Desktop
   const body = document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
   if (body) renderShortcutsWidget(body);
-  // Mobile
   const mobileBody = document.querySelector('#mobile-layout .sc-inner');
   if (mobileBody) renderShortcutsWidget(mobileBody);
 }
@@ -1000,12 +1002,12 @@ function findScBody() {
 }
 
 function rerenderSc() {
-  // Desktop
   const body = document.querySelector('.widget[data-wid="shortcuts"] .sc-inner');
   if (body) renderShortcutsWidget(body);
-  // Mobile
   const mobileBody = document.querySelector('#mobile-layout .sc-inner');
   if (mobileBody) renderShortcutsWidget(mobileBody);
+  const mobileNews = document.querySelector('#mobile-layout .mobile-news-inner');
+  if (mobileNews) renderMobileNews(mobileNews);
 }
 
 /* ─────────────────────────────────────
@@ -1339,17 +1341,249 @@ function onResize() {
    Only visible on screens ≤ 640px
    Shows: search (in header) + shortcuts
 ───────────────────────────────────── */
+/* ─────────────────────────────────────
+   MOBILE LAYOUT — Paged System
+───────────────────────────────────── */
+
+// Available widget types for mobile pages
+const MOBILE_WIDGET_TYPES = {
+  shortcuts: { label: '捷徑',   icon: '⭐' },
+  news:      { label: '即時新聞', icon: '📰' },
+  clock:     { label: '時鐘',   icon: '🕐' }
+};
+
+function buildMobileWidgetContent(widgetType, container) {
+  if (widgetType === 'shortcuts') {
+    const inner = el('div', 'sc-inner');
+    inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
+    container.appendChild(inner);
+    renderShortcutsWidget(inner);
+  } else if (widgetType === 'news') {
+    const inner = el('div', 'mobile-news-inner');
+    container.appendChild(inner);
+    renderMobileNews(inner);
+  } else if (widgetType === 'clock') {
+    const body = el('div', 'clock-body');
+    body.style.cssText = 'height:180px;flex-shrink:0;';
+    container.appendChild(body);
+    const c = new SimpleClock(body);
+    c.tick();
+    setInterval(() => c.tick(), 1000);
+  }
+}
+
+function renderMobileNews(container) {
+  container.innerHTML = '';
+  container.className = 'mobile-news-inner';
+
+  // News header
+  const head = el('div', 'news-head');
+  const ttl  = el('div', 'w-title', S.news.title || '即時新聞');
+  const acts = el('div', 'w-actions');
+  const refBtn = el('button', 'w-btn', `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`);
+  refBtn.addEventListener('click', () => { S.news.fetchedAt = 0; fetchNews(); });
+  acts.appendChild(refBtn);
+  head.appendChild(ttl); head.appendChild(acts);
+  container.appendChild(head);
+
+  // Keywords
+  const kws = el('div', 'news-kws');
+  S.news.keywords.forEach(kw => {
+    kws.appendChild(el('span', 'kw-tag', esc(kw)));
+  });
+  container.appendChild(kws);
+
+  // News list
+  const list = el('div', 'news-list');
+  list.style.cssText = 'overflow-y:auto;flex:1;padding:0 14px 12px;';
+  container.appendChild(list);
+
+  // Render items into this list
+  if (!S.news.items.length) {
+    list.innerHTML = '<div class="news-empty"><p>尚無新聞<br>點擊 ↻ 載入</p></div>';
+  } else {
+    S.news.items.forEach(item => {
+      const card = el('div', 'news-card');
+      card.innerHTML = `
+        <div class="nc-kw">${esc(item.kw||'')}</div>
+        <div class="nc-title">${esc(item.title||'')}</div>
+        <div class="nc-foot">
+          <span class="nc-meta">${esc(item.source||'')}${item.date?' · '+item.date:''}</span>
+          ${item.link?`<a class="nc-link" href="${esc(item.link)}" target="_blank" rel="noopener">閱讀 →</a>`:''}
+        </div>`;
+      list.appendChild(card);
+    });
+  }
+}
+
 function initMobileLayout() {
   const container = $('mobile-layout');
   if (!container) return;
+  container.innerHTML = '';
 
-  // Always build mobile layout, CSS handles show/hide
-  const panel = el('div', 'mobile-sc-panel');
-  const inner = el('div', 'sc-inner');
-  inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;';
-  panel.appendChild(inner);
-  container.appendChild(panel);
-  renderShortcutsWidget(inner);
+  // Ensure first page is always shortcuts
+  if (!S.mobilePages.length || S.mobilePages[0].widget !== 'shortcuts') {
+    S.mobilePages = [{ id: 'shortcuts', widget: 'shortcuts' }, ...S.mobilePages.filter(p => p.widget !== 'shortcuts')];
+  }
+
+  // ── Fixed clock at top ──
+  const clockWrap = el('div', 'mobile-clock-wrap');
+  const clockBody = el('div', 'clock-body');
+  clockWrap.appendChild(clockBody);
+  container.appendChild(clockWrap);
+  const mClock = new SimpleClock(clockBody);
+  mClock.tick();
+  setInterval(() => mClock.tick(), 1000);
+
+  // ── Swipe area ──
+  const swipeArea = el('div', 'mobile-swipe-area');
+  container.appendChild(swipeArea);
+
+  // ── Dots + add button ──
+  const dotsBar = el('div', 'mobile-dots-bar');
+  container.appendChild(dotsBar);
+
+  // Render pages and dots
+  function renderPages() {
+    swipeArea.innerHTML = '';
+    dotsBar.innerHTML   = '';
+
+    S.mobilePages.forEach((page, idx) => {
+      // Page panel
+      const panel = el('div', 'mobile-page-panel');
+      if (idx === S.mobilePageIdx) panel.classList.add('active');
+
+      // Widget content
+      buildMobileWidgetContent(page.widget, panel);
+
+      // Replace widget button (shown at top right of panel)
+      const replaceBtn = el('button', 'mobile-page-replace-btn', '換');
+      replaceBtn.title = '更換小工具';
+      replaceBtn.addEventListener('click', () => openMobileWidgetPicker(idx));
+      panel.appendChild(replaceBtn);
+
+      swipeArea.appendChild(panel);
+
+      // Dot
+      const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
+      dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
+
+      // Long press to delete (not first page)
+      if (idx > 0) {
+        let lpTimer = null;
+        dot.addEventListener('touchstart', () => {
+          lpTimer = setTimeout(() => {
+            if (confirm(`刪除第 ${idx+1} 頁？`)) {
+              S.mobilePages.splice(idx, 1);
+              if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1;
+              lsSave();
+              renderPages();
+            }
+          }, 600);
+        }, { passive: true });
+        dot.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
+        dot.addEventListener('mousedown', () => {
+          lpTimer = setTimeout(() => {
+            if (confirm(`刪除第 ${idx+1} 頁？`)) {
+              S.mobilePages.splice(idx, 1);
+              if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1;
+              lsSave();
+              renderPages();
+            }
+          }, 600);
+        });
+        dot.addEventListener('mouseup', () => clearTimeout(lpTimer));
+      }
+
+      dot.addEventListener('click', () => {
+        S.mobilePageIdx = idx;
+        renderPages();
+      });
+
+      dotsBar.appendChild(dot);
+    });
+
+    // Add page button
+    const addBtn = el('button', 'mobile-add-page-btn', '＋');
+    addBtn.title = '新增頁面';
+    addBtn.addEventListener('click', () => {
+      const newPage = { id: uid(), widget: null };
+      S.mobilePages.push(newPage);
+      S.mobilePageIdx = S.mobilePages.length - 1;
+      lsSave();
+      renderPages();
+      // Open picker for new empty page
+      openMobileWidgetPicker(S.mobilePageIdx);
+    });
+    dotsBar.appendChild(addBtn);
+
+    // Scroll active page into view
+    const activePanels = swipeArea.querySelectorAll('.mobile-page-panel');
+    if (activePanels[S.mobilePageIdx]) {
+      activePanels[S.mobilePageIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+    }
+  }
+
+  // Touch swipe
+  let touchStartX = 0;
+  swipeArea.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  swipeArea.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0 && S.mobilePageIdx < S.mobilePages.length - 1) S.mobilePageIdx++;
+    else if (dx > 0 && S.mobilePageIdx > 0) S.mobilePageIdx--;
+    renderPages();
+  }, { passive: true });
+
+  renderPages();
+
+  // Expose rerenderPages globally for news refresh
+  window._mobileRenderPages = renderPages;
+}
+
+/* Mobile widget picker modal */
+function openMobileWidgetPicker(pageIdx) {
+  const existing = S.mobilePages.map(p => p.widget);
+  const choices  = Object.entries(MOBILE_WIDGET_TYPES).filter(([key]) => {
+    if (key === 'shortcuts') return false; // shortcuts固定在第1頁
+    return true; // 允許重複（同類型不同設定）
+  });
+
+  // Simple modal-style picker
+  const overlay = el('div', 'mobile-picker-overlay');
+  overlay.innerHTML = `
+    <div class="mobile-picker-box glass">
+      <div class="mobile-picker-title">選擇小工具</div>
+      <div class="mobile-picker-list"></div>
+      <button class="bcx mobile-picker-cancel">取消</button>
+    </div>`;
+
+  const list = overlay.querySelector('.mobile-picker-list');
+  choices.forEach(([key, meta]) => {
+    const item = el('div', 'mobile-picker-item');
+    item.innerHTML = `<span class="awp-icon">${meta.icon}</span><span>${meta.label}</span>`;
+    item.addEventListener('click', () => {
+      S.mobilePages[pageIdx].widget = key;
+      lsSave();
+      document.body.removeChild(overlay);
+      if (window._mobileRenderPages) window._mobileRenderPages();
+    });
+    list.appendChild(item);
+  });
+
+  overlay.querySelector('.mobile-picker-cancel').addEventListener('click', () => {
+    // If new empty page, remove it
+    if (!S.mobilePages[pageIdx].widget) {
+      S.mobilePages.splice(pageIdx, 1);
+      if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1;
+      lsSave();
+      if (window._mobileRenderPages) window._mobileRenderPages();
+    }
+    document.body.removeChild(overlay);
+  });
+
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.querySelector('.mobile-picker-cancel').click(); });
+  document.body.appendChild(overlay);
 }
 
 /* ─────────────────────────────────────
