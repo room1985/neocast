@@ -1,21 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="100" fill="#070b14"/>
-  <rect x="60" y="180" width="392" height="152" rx="20" fill="none" stroke="rgba(56,189,248,0.8)" stroke-width="6"/>
-  <rect x="80" y="200" width="80" height="112" rx="10" fill="rgba(56,189,248,0.15)" stroke="rgba(56,189,248,0.4)" stroke-width="2"/>
-  <rect x="176" y="200" width="80" height="112" rx="10" fill="rgba(56,189,248,0.15)" stroke="rgba(56,189,248,0.4)" stroke-width="2"/>
-  <rect x="272" y="200" width="80" height="112" rx="10" fill="rgba(56,189,248,0.15)" stroke="rgba(56,189,248,0.4)" stroke-width="2"/>
-  <rect x="368" y="200" width="64" height="112" rx="10" fill="rgba(56,189,248,0.15)" stroke="rgba(56,189,248,0.4)" stroke-width="2"/>
-  <line x1="80" y1="256" x2="160" y2="256" stroke="rgba(0,0,0,0.5)" stroke-width="3"/>
-  <line x1="176" y1="256" x2="256" y2="256" stroke="rgba(0,0,0,0.5)" stroke-width="3"/>
-  <line x1="272" y1="256" x2="352" y2="256" stroke="rgba(0,0,0,0.5)" stroke-width="3"/>
-  <text x="120" y="248" text-anchor="middle" font-family="monospace" font-size="52" font-weight="bold" fill="rgba(56,189,248,0.9)">1</text>
-  <text x="120" y="300" text-anchor="middle" font-family="monospace" font-size="52" font-weight="bold" fill="rgba(56,189,248,0.7)">2</text>
-  <text x="216" y="248" text-anchor="middle" font-family="monospace" font-size="52" font-weight="bold" fill="rgba(56,189,248,0.9)">4</text>
-  <text x="216" y="300" text-anchor="middle" font-family="monospace" font-size="52" font-weight="bold" fill="rgba(56,189,248,0.7)">5</text>
-  <text x="312" y="248" text-anchor="middle" font-family="monospace" font-size="52" font-weight="bold" fill="rgba(56,189,248,0.9)">3</text>
-  <text x="312" y="300" text-anchor="middle" font-family="monospace" font-size="52" font-weight="bold" fill="rgba(56,189,248,0.7)">0</text>
-  <circle cx="164" cy="236" r="6" fill="rgba(56,189,248,0.8)"/>
-  <circle cx="164" cy="276" r="6" fill="rgba(56,189,248,0.8)"/>
-  <circle cx="260" cy="236" r="6" fill="rgba(56,189,248,0.8)"/>
-  <circle cx="260" cy="276" r="6" fill="rgba(56,189,248,0.8)"/>
+  <!-- Six-pointed star snowflake, transparent background -->
+  <g transform="translate(256,256)" stroke="#38bdf8" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <line x1="0" y1="-170" x2="0" y2="170" stroke-width="18"/>
+    <line x1="-147" y1="-85" x2="147" y2="85" stroke-width="18"/>
+    <line x1="147" y1="-85" x2="-147" y2="85" stroke-width="18"/>
+    <line x1="-45" y1="-105" x2="0" y2="-140" stroke-width="12"/>
+    <line x1="45" y1="-105" x2="0" y2="-140" stroke-width="12"/>
+    <line x1="-45" y1="105" x2="0" y2="140" stroke-width="12"/>
+    <line x1="45" y1="105" x2="0" y2="140" stroke-width="12"/>
+    <line x1="56" y1="-140" x2="91" y2="-110" stroke-width="12"/>
+    <line x1="35" y1="-156" x2="91" y2="-110" stroke-width="12"/>
+    <line x1="-56" y1="140" x2="-91" y2="110" stroke-width="12"/>
+    <line x1="-35" y1="156" x2="-91" y2="110" stroke-width="12"/>
+    <line x1="-56" y1="-140" x2="-91" y2="-110" stroke-width="12"/>
+    <line x1="-35" y1="-156" x2="-91" y2="-110" stroke-width="12"/>
+    <line x1="56" y1="140" x2="91" y2="110" stroke-width="12"/>
+    <line x1="35" y1="156" x2="91" y2="110" stroke-width="12"/>
+    <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19"
+             stroke-width="10" fill="rgba(56,189,248,0.15)"/>
+    <circle cx="0" cy="0" r="14" fill="#38bdf8" stroke="none"/>
+  </g>
 </svg>

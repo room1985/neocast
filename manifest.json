@@ -1,7 +1,7 @@
 {
-  "name": "NeoCast — 個人化新分頁",
-  "short_name": "NeoCast",
-  "description": "玻璃風格個人化儀表板 · 無限捷徑 · Flip Clock · AI新聞",
+  "name": "玻璃書籤",
+  "short_name": "玻璃書籤",
+  "description": "玻璃風格個人化儀表板 · 無限捷徑 · 時鐘 · AI新聞",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#070b14",

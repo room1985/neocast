@@ -667,9 +667,8 @@ function renderShortcutsWidget(container) {
   bar.appendChild(makeGrpTab('all', '全部'));
   S.groups.forEach(g => bar.appendChild(makeGrpTab(g.id, g.name, true)));
 
-  // Show private group tab only when unlocked
   if (S.privateUnlocked) {
-    bar.appendChild(makeGrpTab(PRIVATE_GROUP_ID, '🔓 私人', false));
+    bar.appendChild(makeGrpTab(PRIVATE_GROUP_ID, '私人', false));
   }
 
   const addGrpBtn = el('button', 'grp-tab add', '＋ 群組');
