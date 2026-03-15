@@ -157,6 +157,7 @@ function idbDel(key) {
 const gistData = () => ({
   shortcuts: S.shortcuts,
   groups:    S.groups,
+  stickies:  S.stickies,
   widgets:   S.widgets,
   newsKeywords: S.news.keywords,
   newsLang:  S.news.lang
@@ -212,6 +213,7 @@ async function gistPull() {
     const d = JSON.parse(raw);
     if (d.shortcuts)    S.shortcuts = d.shortcuts;
     if (d.groups)       S.groups    = d.groups;
+    if (d.stickies)     S.stickies  = d.stickies;
     if (d.widgets)      Object.assign(S.widgets, d.widgets);
     if (d.newsKeywords) S.news.keywords = d.newsKeywords;
     if (d.newsLang)     S.news.lang     = d.newsLang;
@@ -1288,20 +1290,18 @@ function renderStickiesWidget(container) {
 
 function makeStickyCard(sticky, container) {
   const c    = STICKY_COLORS[sticky.color] || STICKY_COLORS.none;
-  const card = el('div', 'sticky-card' + (sticky.pinned ? ' pinned' : ''));
+  const card = el('div', 'sticky-card' + (sticky.pinned ? ' pinned' : '') + (sticky.done ? ' done' : ''));
   card.dataset.id = sticky.id;
   card.style.background  = c.bg;
   card.style.borderColor = c.border;
 
-  // Drag handle
-  const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
-  drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>`;
-
-  // Square checkbox
-  const chk = el('button', 'sticky-chk');
-  chk.title = '完成並刪除';
-  chk.addEventListener('click', () => {
-    if (!confirm('確認完成並刪除？')) return;
+  // iOS-style delete button (hidden by default, shown on long press)
+  const delBtn = el('button', 'sticky-del-btn hidden');
+  delBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+  delBtn.title = '刪除';
+  delBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    if (!confirm('確認刪除？')) return;
     card.style.transition = 'transform .32s ease, opacity .32s ease';
     card.style.transform  = 'translateX(110%)';
     card.style.opacity    = '0';
@@ -1312,19 +1312,51 @@ function makeStickyCard(sticky, container) {
     }, 340);
   });
 
-  // Text area
-  const textEl = el('div', 'sticky-text', esc(sticky.text));
-  let editTimer = null;
-  textEl.addEventListener('mousedown', () => {
-    editTimer = setTimeout(() => startEdit(sticky, textEl, card, container), 500);
-  });
-  textEl.addEventListener('mouseup', () => clearTimeout(editTimer));
-  textEl.addEventListener('touchstart', () => {
-    editTimer = setTimeout(() => startEdit(sticky, textEl, card, container), 500);
-  }, { passive: true });
-  textEl.addEventListener('touchend', () => clearTimeout(editTimer), { passive: true });
+  // Drag handle
+  const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
+  drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>`;
 
-  // Pin button only on right
+  // Square checkbox — toggle done state
+  const chk = el('button', 'sticky-chk' + (sticky.done ? ' checked' : ''));
+  chk.title = sticky.done ? '取消完成' : '標記完成';
+  if (sticky.done) {
+    chk.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="11" height="11"><polyline points="20 6 9 17 4 12"/></svg>`;
+  }
+  chk.addEventListener('click', e => {
+    e.stopPropagation();
+    const st = S.stickies.find(s => s.id === sticky.id);
+    if (st) st.done = !st.done;
+    lsSave();
+    renderStickiesWidget(container);
+  });
+
+  // Text area
+  const textEl = el('div', 'sticky-text' + (sticky.done ? ' strikethrough' : ''), esc(sticky.text));
+
+  // Long press on card body → show del btn + enter edit mode
+  let longPressTimer = null;
+  let isLongPress    = false;
+
+  const onLongPress = () => {
+    isLongPress = true;
+    delBtn.classList.remove('hidden');
+    card.classList.add('editing');
+    startEdit(sticky, textEl, card, container);
+  };
+
+  textEl.addEventListener('mousedown', () => {
+    longPressTimer = setTimeout(onLongPress, 500);
+  });
+  textEl.addEventListener('mouseup', () => {
+    clearTimeout(longPressTimer);
+  });
+  textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
+  textEl.addEventListener('touchstart', () => {
+    longPressTimer = setTimeout(onLongPress, 500);
+  }, { passive: true });
+  textEl.addEventListener('touchend', () => clearTimeout(longPressTimer), { passive: true });
+
+  // Pin button
   const pinBtn = el('button', 'sticky-pin' + (sticky.pinned ? ' on' : ''));
   pinBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="${sticky.pinned?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
   pinBtn.title = sticky.pinned ? '取消置頂' : '置頂';
@@ -1336,13 +1368,25 @@ function makeStickyCard(sticky, container) {
     renderStickiesWidget(container);
   });
 
+  card.appendChild(delBtn);
   card.appendChild(drag);
   card.appendChild(chk);
   card.appendChild(textEl);
   card.appendChild(pinBtn);
 
+  // Click outside to hide del btn
+  document.addEventListener('click', function hideDelBtn(e) {
+    if (!card.contains(e.target)) {
+      delBtn.classList.add('hidden');
+      card.classList.remove('editing');
+      document.removeEventListener('click', hideDelBtn);
+    }
+  });
+
   card.addEventListener('contextmenu', e => {
     e.preventDefault();
+    delBtn.classList.remove('hidden');
+    card.classList.add('editing');
     startEdit(sticky, textEl, card, container);
   });
 

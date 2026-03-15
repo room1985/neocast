@@ -28,7 +28,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag">v1.0.33</span>
+      <span id="version-tag">v1.0.35</span>
       <button id="lock-btn" title="私人群組" aria-label="解鎖私人群組">
         <svg id="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </button>
@@ -137,7 +137,7 @@
         <div class="cfg-sec-title">🔄 GitHub Gist 同步</div>
         <label>
           Personal Access Token
-          <input id="cfg-tok" type="password" autocomplete="new-password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+          <input id="cfg-tok" type="text" autocomplete="new-password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" spellcheck="false">
           <span class="hint">Tokens (classic) → 只勾 gist · 僅存於本機</span>
         </label>
         <label>
@@ -223,6 +223,9 @@
   </div>
 
   <div id="toast-container"></div>
+  <!-- Honeypot: prevent browser password save prompts -->
+  <input type="text" style="display:none" autocomplete="username">
+  <input type="password" style="display:none" autocomplete="new-password">
   <script src="app.js"></script>
 </body>
 </html>
