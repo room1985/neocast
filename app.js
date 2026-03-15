@@ -33,10 +33,13 @@ let S = {
     news:      { col:0, row:2, w:6, h:5, visible:true }
   },
   news: {
-    items:    [],
-    fetchedAt: 0,
-    keywords: ['AI人工智慧','台灣科技','國際新聞'],
-    lang:     'zh-TW'
+    items:      [],
+    fetchedAt:  0,
+    keywords:   ['AI人工智慧','台灣科技','國際新聞'],
+    lang:       'zh-TW',
+    title:      '即時新聞',
+    perKeyword: 2,
+    cacheMin:   25
   },
   cfg: {
     token:  '',
@@ -71,7 +74,7 @@ function lsSave() {
       shortcuts: S.shortcuts,
       groups:    S.groups,
       widgets:   S.widgets,
-      news:      { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang },
+      news:      { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:       S.cfg
     }));
   } catch(_) {}
@@ -731,10 +734,11 @@ function makeScItem(sc) {
   // iOS-style icon wrapper
   const wrap = el('div', 'sc-icon-wrap');
 
-  const fav = getFav(sc.url);
-  if (fav) {
+  // Use custom icon > Google Favicon > fallback
+  const iconUrl = sc.icon || getFav(sc.url);
+  if (iconUrl) {
     const img    = el('img', 'sc-fav');
-    img.src      = fav;
+    img.src      = iconUrl;
     img.alt      = '';
     img.loading  = 'lazy';
     img.onerror  = () => { img.remove(); wrap.appendChild(makeFb(sc.name)); };
@@ -931,7 +935,8 @@ function buildNewsWidget() {
 
   // Header
   const head = el('div', 'news-head');
-  const ttl  = el('div', 'w-title', 'AI 新聞快訊');
+  const ttl  = el('div', 'w-title', S.news.title || '即時新聞');
+  ttl.id = 'news-widget-title';
   const acts = el('div', 'w-actions');
 
   const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
@@ -1019,7 +1024,8 @@ function parseDate(raw) {
 }
 
 async function fetchNews() {
-  if (Date.now() - S.news.fetchedAt < NEWS_CACHE_MS && S.news.items.length) {
+  const cacheMs = (S.news.cacheMin || 25) * 60 * 1000;
+  if (Date.now() - S.news.fetchedAt < cacheMs && S.news.items.length) {
     renderNewsItems(); return;
   }
 
@@ -1031,6 +1037,7 @@ async function fetchNews() {
   const hl   = isZh ? 'zh-TW' : 'en-US';
   const gl   = isZh ? 'TW'    : 'US';
   const ceid = isZh ? 'TW:zh-Hant' : 'US:en';
+  const perKw = S.news.perKeyword || 2;
 
   const allItems = [];
 
@@ -1043,8 +1050,7 @@ async function fetchNews() {
       const data    = await res.json();
       if (data.status !== 'ok' || !Array.isArray(data.items)) continue;
 
-      data.items.slice(0, 2).forEach(item => {
-        // Google News title: "Headline - Source"
+      data.items.slice(0, perKw).forEach(item => {
         const raw     = item.title || '';
         const dashIdx = raw.lastIndexOf(' - ');
         const title   = dashIdx > 0 ? raw.slice(0, dashIdx) : raw;
@@ -1114,9 +1120,16 @@ function openScModal(editId = null) {
 
   if (editId) {
     const sc = S.shortcuts.find(s => s.id === editId);
-    if (sc) { $('sc-name').value = sc.name; $('sc-url').value = sc.url; grpSel.value = sc.groupId||''; }
+    if (sc) {
+      $('sc-name').value = sc.name;
+      $('sc-url').value  = sc.url;
+      $('sc-icon').value = sc.icon || '';
+      grpSel.value       = sc.groupId || '';
+    }
   } else {
-    $('sc-name').value = ''; $('sc-url').value = '';
+    $('sc-name').value = '';
+    $('sc-url').value  = '';
+    $('sc-icon').value = '';
     grpSel.value = S.activeGroup !== 'all' ? S.activeGroup : '';
   }
   openModal('m-sc');
@@ -1126,15 +1139,16 @@ function openScModal(editId = null) {
 function saveScModal() {
   let name = $('sc-name').value.trim();
   let url  = $('sc-url').value.trim();
-  const gid = $('sc-grp').value;
+  const gid  = $('sc-grp').value;
+  const icon = $('sc-icon').value.trim();
   if (!name || !url) { toast('請填寫名稱和網址','warn'); return; }
   if (!/^https?:\/\//.test(url)) url = 'https://' + url;
 
   if (S.scEditing) {
     const sc = S.shortcuts.find(s => s.id === S.scEditing);
-    if (sc) { sc.name = name; sc.url = url; sc.groupId = gid; }
+    if (sc) { sc.name = name; sc.url = url; sc.groupId = gid; sc.icon = icon || ''; }
   } else {
-    S.shortcuts.push({ id: uid(), name, url, groupId: gid });
+    S.shortcuts.push({ id: uid(), name, url, groupId: gid, icon: icon || '' });
   }
   lsSave(); closeModal('m-sc'); rerenderSc();
 }
@@ -1167,24 +1181,37 @@ function doMove(scId, gid) {
 }
 
 function openSettingsModal() {
-  $('cfg-tok').value  = S.cfg.token;
-  $('cfg-gid').value  = S.cfg.gistId;
-  $('cfg-kw').value   = S.news.keywords.join(', ');
-  $('cfg-lang').value = S.news.lang;
+  $('cfg-tok').value        = S.cfg.token;
+  $('cfg-gid').value        = S.cfg.gistId;
+  $('cfg-kw').value         = S.news.keywords.join(', ');
+  $('cfg-lang').value       = S.news.lang;
+  $('cfg-news-title').value = S.news.title || '即時新聞';
+  $('cfg-per-kw').value     = String(S.news.perKeyword || 2);
+  $('cfg-cache-min').value  = String(S.news.cacheMin || 25);
   openModal('m-cfg');
 }
 
 async function saveSettings() {
-  const token  = $('cfg-tok').value.trim();
-  const gistId = $('cfg-gid').value.trim();
-  const kwRaw  = $('cfg-kw').value;
-  const lang   = $('cfg-lang').value;
-  const kws    = kwRaw.split(',').map(k=>k.trim()).filter(Boolean);
+  const token      = $('cfg-tok').value.trim();
+  const gistId     = $('cfg-gid').value.trim();
+  const kwRaw      = $('cfg-kw').value;
+  const lang       = $('cfg-lang').value;
+  const kws        = kwRaw.split(',').map(k=>k.trim()).filter(Boolean);
+  const newsTitle  = $('cfg-news-title').value.trim() || '即時新聞';
+  const perKeyword = parseInt($('cfg-per-kw').value) || 2;
+  const cacheMin   = parseInt($('cfg-cache-min').value) || 25;
 
-  S.cfg.token    = token;
-  S.cfg.gistId   = gistId;
-  S.news.lang    = lang;
-  S.news.keywords= kws.length ? kws : ['最新新聞'];
+  S.cfg.token        = token;
+  S.cfg.gistId       = gistId;
+  S.news.lang        = lang;
+  S.news.keywords    = kws.length ? kws : ['最新新聞'];
+  S.news.title       = newsTitle;
+  S.news.perKeyword  = perKeyword;
+  S.news.cacheMin    = cacheMin;
+
+  // Update news widget title live
+  const titleEl = $('news-widget-title');
+  if (titleEl) titleEl.textContent = newsTitle;
 
   // Handle video file
   const vidFile = $('cfg-vid').files[0];
