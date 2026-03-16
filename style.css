@@ -1888,11 +1888,9 @@ a { color:inherit; text-decoration:none; }
 
 /* Info section */
 .anime-sheet-info {
-  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding-right: 72px; /* 2×30px + gap + margin */
+  gap: 8px;
 }
 
 .anime-sheet-title {
@@ -1900,13 +1898,26 @@ a { color:inherit; text-decoration:none; }
   font-weight: 800;
   color: var(--tx);
   line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta + buttons on same row */
+.anime-sheet-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .anime-sheet-meta-wrap {
   display: flex;
   gap: 6px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  flex: 1;
+  min-width: 0;
 }
 
 .anime-sheet-badge {
@@ -1917,6 +1928,7 @@ a { color:inherit; text-decoration:none; }
   font-size: .78rem;
   font-weight: 700;
   line-height: 1;
+  white-space: nowrap;
 }
 
 .badge-score {
@@ -1931,13 +1943,11 @@ a { color:inherit; text-decoration:none; }
   color: var(--ac);
 }
 
-/* Fixed top-right button group — 2×2 grid */
+/* Button group — single row */
 .anime-sheet-btn-group {
-  position: absolute;
-  top: 0; right: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 5px;
+  flex-shrink: 0;
 }
 
 .anime-sheet-icon-btn {
@@ -1945,7 +1955,7 @@ a { color:inherit; text-decoration:none; }
   border: 1px solid var(--bd);
   color: var(--txm);
   border-radius: 8px;
-  width: 30px; height: 30px;
+  width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   flex-shrink: 0;

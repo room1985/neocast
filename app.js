@@ -1880,6 +1880,7 @@ function renderAnimeWidget(container) {
   function makeAnimeCard(anime, bgmWd) {
     const isTracked = (S.animeState.tracked || []).includes(anime.id);
     const card = el('div', 'anime-card' + (isTracked ? ' pinned' : ''));
+    card.dataset.id = anime.id;
 
     const img = el('img', 'anime-cover');
     img.src = anime.images?.large || anime.images?.common || '';
@@ -2080,13 +2081,27 @@ async function showAnimeSheet(anime) {
   coverWrap.appendChild(cover);
   sheet.appendChild(coverWrap);
 
-  // Info row: title + 2x2 buttons fixed top-right
+  // Info: title (max 2 lines) + meta+buttons row
   const infoWrap = el('div', 'anime-sheet-info');
 
   const sheetTitle = el('div', 'anime-sheet-title',
     S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name);
 
-  // Button group fixed top-right
+  // Meta + buttons row
+  const metaRow = el('div', 'anime-sheet-meta-row');
+
+  // Badges (left side)
+  const metaWrap = el('div', 'anime-sheet-meta-wrap');
+  if (anime.rating?.score) {
+    const scoreBadge = el('span', 'anime-sheet-badge badge-score', `★ ${anime.rating.score.toFixed(1)}`);
+    metaWrap.appendChild(scoreBadge);
+  }
+  // eps badge — will be updated after API fetch
+  const epsBadge = el('span', 'anime-sheet-badge badge-eps');
+  epsBadge.style.display = 'none';
+  metaWrap.appendChild(epsBadge);
+
+  // Button group (right side) — [編輯][複製][收藏][關閉]
   const btnGroup = el('div', 'anime-sheet-btn-group');
 
   // Edit / rename button
@@ -2095,7 +2110,6 @@ async function showAnimeSheet(anime) {
   editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
   editBtn.addEventListener('click', e => {
     e.stopPropagation();
-    // Replace title div with input
     const inp = document.createElement('input');
     inp.className = 'anime-sheet-title-input';
     inp.value = sheetTitle.textContent;
@@ -2104,19 +2118,22 @@ async function showAnimeSheet(anime) {
     inp.focus();
     inp.select();
 
+    let saved = false;
     const saveEdit = () => {
+      if (saved) return;
+      saved = true;
       const val = inp.value.trim();
       if (val && val !== (anime.name_cn || anime.name)) {
         S.animeState.customNames[anime.id] = val;
-      } else if (!val || val === (anime.name_cn || anime.name)) {
+      } else {
         delete S.animeState.customNames[anime.id];
       }
       lsSave();
-      sheetTitle.textContent = S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name;
+      const newName = S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name;
+      sheetTitle.textContent = newName;
       inp.replaceWith(sheetTitle);
-      inp.blur();
-      // Update link URLs with new name
-      const q = encodeURIComponent(sheetTitle.textContent);
+      // Update link URLs
+      const q = encodeURIComponent(newName);
       linkWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
         switch(a.dataset.label) {
           case '動畫瘋': a.href = `https://ani.gamer.com.tw/search.php?keyword=${q}`; break;
@@ -2124,23 +2141,32 @@ async function showAnimeSheet(anime) {
           case '劇迷':   a.href = `https://gimyai.tw/find/-------------.html?wd=${q}`; break;
         }
       });
-      // Re-render list cards
-      const containers = document.querySelectorAll('.anime-grid');
-      containers.forEach(g => {
-        g.querySelectorAll('.anime-card').forEach(card => {
-          // We can't easily target by id here, so just reload the tab
-        });
+      // Update all list cards with this anime id
+      document.querySelectorAll(`.anime-card[data-id="${anime.id}"] .anime-title`).forEach(el => {
+        el.textContent = newName;
       });
     };
-
-    inp.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); saveEdit(); }
-      if (e.key === 'Escape') { inp.replaceWith(sheetTitle); }
+    inp.addEventListener('keydown', ev => {
+      if (ev.key === 'Enter') { ev.preventDefault(); inp.blur(); }
+      if (ev.key === 'Escape') { saved = true; inp.replaceWith(sheetTitle); }
     });
     inp.addEventListener('blur', saveEdit);
   });
 
-  // Star / favorite button
+  // Copy button
+  const copyBtn = el('button', 'anime-sheet-icon-btn');
+  copyBtn.title = '複製名稱';
+  copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+  copyBtn.addEventListener('click', async e => {
+    e.stopPropagation();
+    await navigator.clipboard.writeText(sheetTitle.textContent).catch(() => {});
+    copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>`;
+    setTimeout(() => {
+      copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+    }, 1500);
+  });
+
+  // Favorite button
   const isTracked = (S.animeState.tracked || []).includes(anime.id);
   const favBtn = el('button', 'anime-sheet-icon-btn' + (isTracked ? ' on' : ''));
   favBtn.title = '收藏';
@@ -2176,45 +2202,22 @@ async function showAnimeSheet(anime) {
     lsSave();
   });
 
-  // Copy button
-  const copyBtn = el('button', 'anime-sheet-icon-btn');
-  copyBtn.title = '複製名稱';
-  copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
-  copyBtn.addEventListener('click', async e => {
-    e.stopPropagation();
-    await navigator.clipboard.writeText(sheetTitle.textContent).catch(() => {});
-    copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>`;
-    setTimeout(() => {
-      copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
-    }, 1500);
-  });
-
   // Close button
   const closeBtn = el('button', 'anime-sheet-icon-btn');
   closeBtn.title = '關閉';
   closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
   closeBtn.addEventListener('click', closeSheet);
 
-  // 2×2 grid: [收藏][關閉] / [複製][編輯]
+  btnGroup.appendChild(editBtn);
+  btnGroup.appendChild(copyBtn);
   btnGroup.appendChild(favBtn);
   btnGroup.appendChild(closeBtn);
-  btnGroup.appendChild(copyBtn);
-  btnGroup.appendChild(editBtn);
 
-  // Meta badges
-  const metaWrap = el('div', 'anime-sheet-meta-wrap');
-  if (anime.rating?.score) {
-    const scoreBadge = el('span', 'anime-sheet-badge badge-score', `★ ${anime.rating.score.toFixed(1)}`);
-    metaWrap.appendChild(scoreBadge);
-  }
-  if (anime.eps) {
-    const epsBadge = el('span', 'anime-sheet-badge badge-eps', `共 ${anime.eps} 集`);
-    metaWrap.appendChild(epsBadge);
-  }
+  metaRow.appendChild(metaWrap);
+  metaRow.appendChild(btnGroup);
 
   infoWrap.appendChild(sheetTitle);
-  infoWrap.appendChild(metaWrap);
-  infoWrap.appendChild(btnGroup);
+  infoWrap.appendChild(metaRow);
   sheet.appendChild(infoWrap);
 
   // 4 link buttons (placed BEFORE summary so visible immediately)
@@ -2264,9 +2267,22 @@ async function showAnimeSheet(anime) {
     const rawTitle   = data.name_cn || anime.name_cn || anime.name;
     const twTitle    = await toTW(rawTitle);
     summaryEl.textContent = twSummary;
-    sheetTitle.textContent = twTitle;
 
-    const q = encodeURIComponent(twTitle);
+    // Only update title if no custom name set
+    if (!S.animeState.customNames?.[anime.id]) {
+      sheetTitle.textContent = twTitle;
+    }
+
+    // Update eps badge from API (eps_count is more accurate)
+    const epsCount = data.eps_count || data.eps || 0;
+    if (epsCount) {
+      epsBadge.textContent = `共 ${epsCount} 集`;
+      epsBadge.style.display = '';
+    }
+
+    // Update link URLs
+    const displayName = S.animeState.customNames?.[anime.id] || twTitle;
+    const q = encodeURIComponent(displayName);
     linkWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
       switch(a.dataset.label) {
         case '動畫瘋': a.href = `https://ani.gamer.com.tw/search.php?keyword=${q}`; break;
