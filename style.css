@@ -741,33 +741,23 @@ a { color:inherit; text-decoration:none; }
 .anime-head {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  justify-content: space-between;
   padding: 8px 12px 4px;
   flex-shrink: 0;
 }
 
-.anime-nav-btn {
-  background: none;
-  border: 1px solid var(--bd);
-  color: var(--txm);
-  border-radius: 50%;
-  width: 24px; height: 24px;
-  font-size: 1rem;
-  line-height: 1;
+.anime-today-btn {
+  background: rgba(56,189,248,.12);
+  border: 1px solid var(--ac);
+  color: var(--ac);
+  border-radius: 50px;
+  padding: 3px 10px;
+  font-size: .72rem;
+  font-weight: 700;
   cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
   transition: all .15s;
 }
-.anime-nav-btn:hover { border-color: var(--ac); color: var(--ac); }
-
-.anime-season-label {
-  font-size: .78rem;
-  font-weight: 700;
-  color: var(--tx);
-  min-width: 60px;
-  text-align: center;
-}
+.anime-today-btn:hover { background: rgba(56,189,248,.22); }
 
 .anime-tabs {
   display: flex;

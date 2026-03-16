@@ -1739,61 +1739,17 @@ function onResize() {
 /* ─────────────────────────────────────
    ANIME WIDGET
 ───────────────────────────────────── */
-const ANIME_GENRES = ['全部','動作','戀愛','奇幻','科幻','喜劇','懸疑','恐怖','運動'];
-const ANIME_GENRE_MAP = {
-  '動作':'Action','戀愛':'Romance','奇幻':'Fantasy',
-  '科幻':'Sci-Fi','喜劇':'Comedy','懸疑':'Mystery',
-  '恐怖':'Horror','運動':'Sports'
-};
+/* ─────────────────────────────────────
+   ANIME WIDGET — Bangumi.tv API
+───────────────────────────────────── */
+const BGM_WEEKDAY = ['週日','週一','週二','週三','週四','週五','週六'];
 
-// Get current season info
-function getCurrentSeason() {
-  const now = new Date();
-  const m = now.getMonth() + 1;
-  const y = now.getFullYear();
-  let season;
-  if (m >= 1 && m <= 3)  season = 'WINTER';
-  else if (m >= 4 && m <= 6) season = 'SPRING';
-  else if (m >= 7 && m <= 9) season = 'SUMMER';
-  else season = 'FALL';
-  return { season, year: y };
-}
-
-function shiftSeason(base, delta) {
-  const order = ['WINTER','SPRING','SUMMER','FALL'];
-  let i = order.indexOf(base.season) + delta;
-  let y = base.year;
-  while (i < 0) { i += 4; y--; }
-  while (i >= 4) { i -= 4; y++; }
-  const seasonNames = { WINTER:'冬', SPRING:'春', SUMMER:'夏', FALL:'秋' };
-  return { season: order[i], year: y, label: `${y} ${seasonNames[order[i]]}` };
-}
-
-async function fetchAnime(season, year, genre) {
-  const genreFilter = (genre && genre !== '全部') ? `, genre: "${ANIME_GENRE_MAP[genre]}"` : '';
-  const query = `{
-    Page(page:1,perPage:30) {
-      media(season:${season},seasonYear:${year},type:ANIME,sort:POPULARITY_DESC${genreFilter}) {
-        id title{romaji english native}
-        synonyms
-        coverImage{large} averageScore episodes status
-        genres siteUrl
-      }
-    }
-  }`;
-  const res = await fetch('https://graphql.anilist.co', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query })
+async function fetchBangumiCalendar() {
+  const res = await fetch('https://api.bgm.tv/calendar', {
+    headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
   });
-  const data = await res.json();
-  return data?.data?.Page?.media || [];
-}
-
-function getAnimeTitle(title, synonyms) {
-  // Find Chinese synonym (Traditional or Simplified)
-  const zh = (synonyms || []).find(s => /[\u4e00-\u9fff]/.test(s));
-  return zh || title.english || title.romaji || title.native || '未知標題';
+  if (!res.ok) throw new Error('API error');
+  return await res.json();
 }
 
 function buildAnimeWidget() {
@@ -1807,110 +1763,112 @@ function buildAnimeWidget() {
 
 function renderAnimeWidget(container) {
   container.innerHTML = '';
+  if (!S.animeState) S.animeState = { weekday: -1, tracked: [] };
 
-  const base = getCurrentSeason();
-  let curOffset = 0;
-  let curGenre = '全部';
-  if (!S.animeState) S.animeState = { offset: 0, genre: '全部', tracked: [] };
-  curOffset = S.animeState.offset || 0;
-  curGenre  = S.animeState.genre  || '全部';
+  const todayWd = new Date().getDay(); // 0=Sun
+  let curWd = S.animeState.weekday >= 0 ? S.animeState.weekday : todayWd;
 
-  // Header
+  // Header: title + 今日 button
   const head = el('div', 'anime-head');
-
-  // Season nav
-  const prevBtn = el('button', 'anime-nav-btn', '‹');
-  const seasonLabel = el('div', 'anime-season-label');
-  const nextBtn = el('button', 'anime-nav-btn', '›');
-
-  const updateSeasonLabel = () => {
-    const s = shiftSeason(base, curOffset);
-    seasonLabel.textContent = s.label;
-  };
-  updateSeasonLabel();
-
-  prevBtn.addEventListener('click', () => { curOffset--; S.animeState.offset = curOffset; updateSeasonLabel(); loadAnime(); });
-  nextBtn.addEventListener('click', () => { curOffset++; S.animeState.offset = curOffset; updateSeasonLabel(); loadAnime(); });
-
-  head.appendChild(prevBtn);
-  head.appendChild(seasonLabel);
-  head.appendChild(nextBtn);
+  const title = el('div', 'w-title', '本季動畫');
+  const todayBtn = el('button', 'anime-today-btn', '今日');
+  todayBtn.addEventListener('click', () => {
+    curWd = todayWd;
+    S.animeState.weekday = curWd;
+    renderAnimeWidget(container);
+  });
+  head.appendChild(title);
+  head.appendChild(todayBtn);
   container.appendChild(head);
 
-  // Genre tabs
+  // Weekday tabs
   const tabs = el('div', 'anime-tabs');
-  ANIME_GENRES.forEach(g => {
-    const t = el('button', 'anime-tab' + (curGenre === g ? ' on' : ''), g);
+  BGM_WEEKDAY.forEach((name, i) => {
+    const t = el('button', 'anime-tab' + (curWd === i ? ' on' : ''), name);
+    if (i === todayWd) t.style.fontWeight = '900';
     t.addEventListener('click', () => {
-      curGenre = g;
-      S.animeState.genre = g;
+      curWd = i;
+      S.animeState.weekday = i;
       tabs.querySelectorAll('.anime-tab').forEach(tb => tb.classList.remove('on'));
       t.classList.add('on');
-      loadAnime();
+      renderDay(curWd);
     });
     tabs.appendChild(t);
   });
   container.appendChild(tabs);
 
-  // Card grid
+  // Grid
   const grid = el('div', 'anime-grid');
   container.appendChild(grid);
 
-  // Load anime
-  async function loadAnime() {
+  let calendarCache = null;
+
+  async function loadCalendar() {
     grid.innerHTML = '<div class="anime-loading">載入中…</div>';
-    const s = shiftSeason(base, curOffset);
     try {
-      const list = await fetchAnime(s.season, s.year, curGenre);
-      grid.innerHTML = '';
-      if (!list.length) {
-        grid.innerHTML = '<div class="anime-empty">沒有找到動畫</div>';
-        return;
-      }
-      list.forEach(anime => {
-        const isTracked = (S.animeState.tracked || []).includes(anime.id);
-        const card = el('div', 'anime-card');
-
-        const img = el('img', 'anime-cover');
-        img.src = anime.coverImage?.large || '';
-        img.alt = getAnimeTitle(anime.title);
-        img.loading = 'lazy';
-
-        const info = el('div', 'anime-info');
-        const title = el('div', 'anime-title', getAnimeTitle(anime.title, anime.synonyms));
-        const meta  = el('div', 'anime-meta');
-        const score = anime.averageScore ? `⭐ ${(anime.averageScore/10).toFixed(1)}` : '';
-        const eps   = anime.episodes ? `${anime.episodes}集` : '連載中';
-        meta.textContent = [score, eps].filter(Boolean).join(' · ');
-
-        const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
-        star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
-        star.addEventListener('click', e => {
-          e.stopPropagation();
-          if (!S.animeState.tracked) S.animeState.tracked = [];
-          const idx = S.animeState.tracked.indexOf(anime.id);
-          if (idx >= 0) S.animeState.tracked.splice(idx, 1);
-          else S.animeState.tracked.unshift(anime.id);
-          lsSave();
-          star.classList.toggle('on');
-          star.querySelector('svg').setAttribute('fill', S.animeState.tracked.includes(anime.id) ? 'currentColor' : 'none');
-        });
-
-        info.appendChild(title);
-        info.appendChild(meta);
-        card.appendChild(img);
-        card.appendChild(info);
-        card.appendChild(star);
-
-        card.addEventListener('click', () => window.open(anime.siteUrl, '_blank'));
-        grid.appendChild(card);
-      });
+      calendarCache = await fetchBangumiCalendar();
+      renderDay(curWd);
     } catch(e) {
       grid.innerHTML = '<div class="anime-empty">載入失敗，請稍後再試</div>';
     }
   }
 
-  loadAnime();
+  function renderDay(wd) {
+    grid.innerHTML = '';
+    if (!calendarCache) return;
+    // Bangumi weekday: 1=Mon...7=Sun, we need to map
+    // bgm weekday_id: 1=Mon,2=Tue,3=Wed,4=Thu,5=Fri,6=Sat,7=Sun
+    // JS getDay: 0=Sun,1=Mon...6=Sat
+    const bgmId = wd === 0 ? 7 : wd; // convert JS Sun(0)->bgm(7)
+    const dayData = calendarCache.find(d => d.weekday?.id === bgmId);
+    const items = dayData?.items || [];
+
+    if (!items.length) {
+      grid.innerHTML = '<div class="anime-empty">今天沒有更新的番組</div>';
+      return;
+    }
+
+    items.forEach(anime => {
+      const isTracked = (S.animeState.tracked || []).includes(anime.id);
+      const card = el('div', 'anime-card');
+
+      const img = el('img', 'anime-cover');
+      img.src = anime.images?.large || anime.images?.common || '';
+      img.alt = anime.name_cn || anime.name;
+      img.loading = 'lazy';
+
+      const info = el('div', 'anime-info');
+      const titleEl = el('div', 'anime-title', anime.name_cn || anime.name);
+      const meta = el('div', 'anime-meta');
+      const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
+      const eps = anime.eps ? `${anime.eps}集` : '';
+      meta.textContent = [score, eps].filter(Boolean).join(' · ');
+
+      const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
+      star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+      star.addEventListener('click', e => {
+        e.stopPropagation();
+        if (!S.animeState.tracked) S.animeState.tracked = [];
+        const idx = S.animeState.tracked.indexOf(anime.id);
+        if (idx >= 0) S.animeState.tracked.splice(idx, 1);
+        else S.animeState.tracked.unshift(anime.id);
+        lsSave();
+        star.classList.toggle('on');
+        star.querySelector('svg').setAttribute('fill', S.animeState.tracked.includes(anime.id) ? 'currentColor' : 'none');
+      });
+
+      info.appendChild(titleEl);
+      info.appendChild(meta);
+      card.appendChild(img);
+      card.appendChild(info);
+      card.appendChild(star);
+
+      card.addEventListener('click', () => window.open(`https://bgm.tv/subject/${anime.id}`, '_blank'));
+      grid.appendChild(card);
+    });
+  }
+
+  loadCalendar();
 }
 
 /* ─────────────────────────────────────
