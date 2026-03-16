@@ -1892,9 +1892,14 @@ function renderAnimeWidget(container) {
     const titleEl = el('div', 'anime-title', displayTitle);
     toTW(displayTitle).then(tw => { if (tw !== displayTitle) titleEl.textContent = tw; });
     const meta = el('div', 'anime-meta');
-    const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
-    const eps = anime.eps ? `${anime.eps}集` : '';
-    meta.textContent = [score, eps].filter(Boolean).join(' · ');
+    if (anime.rating?.score) {
+      const sb = el('span', 'anime-card-badge badge-score', `★ ${anime.rating.score.toFixed(1)}`);
+      meta.appendChild(sb);
+    }
+    if (anime.eps) {
+      const eb = el('span', 'anime-card-badge badge-eps', `共 ${anime.eps} 集`);
+      meta.appendChild(eb);
+    }
 
     const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
     star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
