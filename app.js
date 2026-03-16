@@ -1875,14 +1875,21 @@ function renderAnimeWidget(container) {
         if (wd === -1 && anime.air_weekday) {
           wd = anime.air_weekday === 7 ? 0 : anime.air_weekday;
         }
-        // If still unknown, fetch full subject detail for air_weekday
+        // If still unknown, fetch full subject detail for air_weekday / date
         if (wd === -1) {
           try {
-            const r = await fetch(`https://api.bgm.tv/v0/subjects/${anime.id}`, {
+            // Try legacy API first (has air_weekday field)
+            const r = await fetch(`https://api.bgm.tv/subject/${anime.id}`, {
               headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
             });
             const d = await r.json();
-            if (d.air_weekday) wd = d.air_weekday === 7 ? 0 : d.air_weekday;
+            if (d.air_weekday) {
+              // Legacy API: 1=Mon,2=Tue,...,7=Sun → JS: 1=Mon,...,6=Sat,0=Sun
+              wd = d.air_weekday === 7 ? 0 : d.air_weekday;
+            } else if (d.date) {
+              // Fallback: calculate weekday from air date string
+              wd = new Date(d.date).getDay();
+            }
           } catch(_) {}
         }
         S.animeState.trackedData[anime.id] = {
