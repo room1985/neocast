@@ -1858,7 +1858,7 @@ function renderAnimeWidget(container) {
     const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
     star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
 
-    star.addEventListener('click', e => {
+    star.addEventListener('click', async e => {
       e.stopPropagation();
       if (!S.animeState.tracked) S.animeState.tracked = [];
       const idx = S.animeState.tracked.indexOf(anime.id);
@@ -1870,8 +1870,21 @@ function renderAnimeWidget(container) {
         card.classList.remove('pinned');
       } else {
         S.animeState.tracked.unshift(anime.id);
-        const wd = bgmWd !== undefined ? bgmWd :
-                   (anime.air_weekday ? (anime.air_weekday === 7 ? 0 : anime.air_weekday) : -1);
+        // Try to get air_weekday from bgmWd param first, else fetch full subject
+        let wd = bgmWd !== undefined ? bgmWd : -1;
+        if (wd === -1 && anime.air_weekday) {
+          wd = anime.air_weekday === 7 ? 0 : anime.air_weekday;
+        }
+        // If still unknown, fetch full subject detail for air_weekday
+        if (wd === -1) {
+          try {
+            const r = await fetch(`https://api.bgm.tv/v0/subjects/${anime.id}`, {
+              headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
+            });
+            const d = await r.json();
+            if (d.air_weekday) wd = d.air_weekday === 7 ? 0 : d.air_weekday;
+          } catch(_) {}
+        }
         S.animeState.trackedData[anime.id] = {
           id: anime.id, name: anime.name, name_cn: anime.name_cn,
           images: anime.images, rating: anime.rating, eps: anime.eps,
