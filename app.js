@@ -10,7 +10,7 @@
 /* ─────────────────────────────────────
    CONSTANTS
 ───────────────────────────────────── */
-const ROW_H   = 78;   // px, must match CSS --row
+const ROW_H   = 78;
 const COLS    = 24;
 const GAP     = 10;
 const IDB_DB  = 'neocast';
@@ -18,6 +18,22 @@ const IDB_VER = 1;
 const IDB_ST  = 'blobs';
 const VID_KEY = 'bg_video';
 const LS_KEY  = 'neocast_v2';
+
+/* ─────────────────────────────────────
+   OPENCC — 簡體→繁體轉換
+───────────────────────────────────── */
+let _ccConverter = null;
+async function toTW(text) {
+  if (!text) return text;
+  try {
+    if (!_ccConverter) {
+      _ccConverter = OpenCC.Converter({ from: 'cn', to: 'twp' });
+    }
+    return await _ccConverter(text);
+  } catch(_) {
+    return text; // fallback if OpenCC not loaded
+  }
+}
 const NEWS_CACHE_MS = 25 * 60 * 1000;  // 25 min
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
 
@@ -1871,7 +1887,10 @@ function renderAnimeWidget(container) {
     img.loading = 'lazy';
 
     const info = el('div', 'anime-info');
-    const titleEl = el('div', 'anime-title', anime.name_cn || anime.name);
+    const displayTitle = anime.name_cn || anime.name;
+    const titleEl = el('div', 'anime-title', displayTitle);
+    // Convert to Traditional Chinese async
+    toTW(displayTitle).then(tw => { if (tw !== displayTitle) titleEl.textContent = tw; });
     const meta = el('div', 'anime-meta');
     const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
     const eps = anime.eps ? `${anime.eps}集` : '';
@@ -1932,7 +1951,10 @@ function renderAnimeWidget(container) {
     card.appendChild(img);
     card.appendChild(info);
     card.appendChild(star);
-    card.addEventListener('click', () => window.open(`https://bgm.tv/subject/${anime.id}`, '_blank'));
+    card.addEventListener('click', e => {
+      if (e.target.closest('.anime-star')) return;
+      showAnimeSheet(anime);
+    });
     return card;
   }
 
@@ -2014,6 +2036,87 @@ function renderAnimeWidget(container) {
   }
 
   loadTab();
+}
+
+/* ─────────────────────────────────────
+   ANIME BOTTOM SHEET
+───────────────────────────────────── */
+async function showAnimeSheet(anime) {
+  // Remove existing sheet
+  document.querySelector('.anime-sheet-overlay')?.remove();
+
+  const overlay = el('div', 'anime-sheet-overlay');
+  const sheet   = el('div', 'anime-sheet');
+
+  // Header: cover + title + close
+  const header = el('div', 'anime-sheet-header');
+  const cover  = el('img', 'anime-sheet-cover');
+  cover.src = anime.images?.large || anime.images?.common || '';
+  cover.alt = anime.name_cn || anime.name;
+
+  const headerInfo = el('div', 'anime-sheet-header-info');
+  const sheetTitle = el('div', 'anime-sheet-title', anime.name_cn || anime.name);
+  const sheetMeta  = el('div', 'anime-sheet-meta');
+  const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
+  const eps   = anime.eps ? `${anime.eps}集` : '';
+  sheetMeta.textContent = [score, eps].filter(Boolean).join(' · ');
+
+  headerInfo.appendChild(sheetTitle);
+  headerInfo.appendChild(sheetMeta);
+  header.appendChild(cover);
+  header.appendChild(headerInfo);
+
+  const closeBtn = el('button', 'anime-sheet-close');
+  closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  closeBtn.addEventListener('click', () => {
+    sheet.classList.remove('open');
+    setTimeout(() => overlay.remove(), 300);
+  });
+  header.appendChild(closeBtn);
+  sheet.appendChild(header);
+
+  // Summary section
+  const summaryEl = el('div', 'anime-sheet-summary', '載入中…');
+  sheet.appendChild(summaryEl);
+
+  // Action button
+  const goBtn = el('a', 'anime-sheet-go-btn', '前往 Bangumi 頁面 →');
+  goBtn.href = `https://bgm.tv/subject/${anime.id}`;
+  goBtn.target = '_blank';
+  goBtn.rel = 'noopener';
+  sheet.appendChild(goBtn);
+
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+
+  // Animate in
+  requestAnimationFrame(() => {
+    overlay.classList.add('open');
+    sheet.classList.add('open');
+  });
+
+  // Close on overlay click
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      sheet.classList.remove('open');
+      setTimeout(() => overlay.remove(), 300);
+    }
+  });
+
+  // Fetch summary from legacy API (has summary field)
+  try {
+    const res = await fetch(`https://api.bgm.tv/subject/${anime.id}`, {
+      headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
+    });
+    const data = await res.json();
+    const rawSummary = data.summary || '（暫無故事大綱）';
+    const twSummary = await toTW(rawSummary);
+    const twTitle = data.name_cn ? await toTW(data.name_cn) : (anime.name_cn || anime.name);
+    summaryEl.textContent = twSummary;
+    sheetTitle.textContent = twTitle;
+  } catch(_) {
+    summaryEl.textContent = '無法載入故事大綱';
+  }
 }
 
 /* ─────────────────────────────────────
