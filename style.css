@@ -1891,64 +1891,83 @@ a { color:inherit; text-decoration:none; }
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding-right: 36px;
-}
-
-.anime-sheet-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 5px;
+  padding-right: 90px; /* space for 3 icon buttons */
 }
 
 .anime-sheet-title {
   font-size: 1rem;
   font-weight: 800;
   color: var(--tx);
-  line-height: 1.3;
-  flex: 1;
+  line-height: 1.35;
 }
-
-.anime-sheet-copy-btn {
-  background: rgba(255,255,255,.08);
-  border: 1px solid var(--bd);
-  color: var(--txm);
-  border-radius: 6px;
-  width: 28px; height: 28px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: all .15s;
-}
-.anime-sheet-copy-btn:hover { border-color: var(--ac); color: var(--ac); }
 
 .anime-sheet-meta {
   font-size: .78rem;
   color: var(--txd);
 }
 
-.anime-sheet-close {
+/* Fixed top-right button group */
+.anime-sheet-btn-group {
   position: absolute;
   top: 0; right: 0;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.anime-sheet-icon-btn {
   background: rgba(255,255,255,.08);
   border: 1px solid var(--bd);
   color: var(--txm);
-  border-radius: 50%;
-  width: 30px; height: 30px;
+  border-radius: 8px;
+  width: 28px; height: 28px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
+  flex-shrink: 0;
   transition: all .15s;
 }
-.anime-sheet-close:hover { background: rgba(255,255,255,.18); color: var(--tx); }
+.anime-sheet-icon-btn:hover { border-color: var(--ac); color: var(--ac); }
+.anime-sheet-icon-btn.on { color: #fbbf24; border-color: rgba(251,191,36,.4); background: rgba(251,191,36,.1); }
+.anime-sheet-icon-btn.on svg { fill: #fbbf24; stroke: #fbbf24; }
+
+/* Summary collapsed to 5 lines */
+.anime-sheet-summary-wrap {
+  border-top: 1px solid var(--bd);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
 .anime-sheet-summary {
   font-size: .84rem;
   color: var(--txm);
   line-height: 1.75;
   white-space: pre-wrap;
-  border-top: 1px solid var(--bd);
-  padding-top: 14px;
+  overflow: hidden;
+  transition: max-height .3s ease;
 }
+.anime-sheet-summary.collapsed {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+}
+
+.anime-sheet-more-btn {
+  background: none;
+  border: none;
+  color: var(--ac);
+  font-size: .78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: opacity .15s;
+}
+.anime-sheet-more-btn:hover { opacity: .75; }
 
 /* 4 link buttons grid */
 .anime-sheet-btns {

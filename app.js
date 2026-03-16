@@ -2064,7 +2064,6 @@ async function showAnimeSheet(anime) {
   const overlay = el('div', 'anime-sheet-overlay');
   const sheet   = el('div', 'anime-sheet');
 
-  // Close helper
   const closeSheet = () => {
     sheet.classList.remove('open');
     setTimeout(() => overlay.remove(), 300);
@@ -2082,66 +2081,116 @@ async function showAnimeSheet(anime) {
   coverWrap.appendChild(cover);
   sheet.appendChild(coverWrap);
 
-  // Title row: name + copy button
-  const titleRow = el('div', 'anime-sheet-title-row');
+  // Info row: title + [star][copy][close] fixed top-right
+  const infoWrap = el('div', 'anime-sheet-info');
+
   const sheetTitle = el('div', 'anime-sheet-title', anime.name_cn || anime.name);
-  const copyBtn = el('button', 'anime-sheet-copy-btn');
+  const sheetMeta  = el('div', 'anime-sheet-meta');
+  const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
+  const eps   = anime.eps ? `${anime.eps}集` : '';
+  sheetMeta.textContent = [score, eps].filter(Boolean).join(' · ');
+
+  // Button group fixed top-right
+  const btnGroup = el('div', 'anime-sheet-btn-group');
+
+  // Star / favorite button
+  const isTracked = (S.animeState.tracked || []).includes(anime.id);
+  const favBtn = el('button', 'anime-sheet-icon-btn' + (isTracked ? ' on' : ''));
+  favBtn.title = '收藏';
+  favBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+  favBtn.addEventListener('click', async e => {
+    e.stopPropagation();
+    if (!S.animeState.tracked) S.animeState.tracked = [];
+    const idx = S.animeState.tracked.indexOf(anime.id);
+    if (idx >= 0) {
+      S.animeState.tracked.splice(idx, 1);
+      delete S.animeState.trackedData[anime.id];
+      favBtn.classList.remove('on');
+      favBtn.querySelector('svg').setAttribute('fill', 'none');
+    } else {
+      S.animeState.tracked.unshift(anime.id);
+      let wd = -1;
+      try {
+        const r = await fetch(`https://api.bgm.tv/subject/${anime.id}`, {
+          headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
+        });
+        const d = await r.json();
+        if (d.air_weekday) wd = d.air_weekday === 7 ? 0 : d.air_weekday;
+        else if (d.date) wd = new Date(d.date).getDay();
+      } catch(_) {}
+      S.animeState.trackedData[anime.id] = {
+        id: anime.id, name: anime.name, name_cn: anime.name_cn,
+        images: anime.images, rating: anime.rating, eps: anime.eps,
+        air_weekday: wd
+      };
+      favBtn.classList.add('on');
+      favBtn.querySelector('svg').setAttribute('fill', 'currentColor');
+    }
+    lsSave();
+  });
+
+  // Copy button
+  const copyBtn = el('button', 'anime-sheet-icon-btn');
   copyBtn.title = '複製名稱';
   copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
   copyBtn.addEventListener('click', async e => {
     e.stopPropagation();
-    const name = sheetTitle.textContent;
-    await navigator.clipboard.writeText(name).catch(() => {});
+    await navigator.clipboard.writeText(sheetTitle.textContent).catch(() => {});
     copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>`;
     setTimeout(() => {
       copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
     }, 1500);
   });
-  titleRow.appendChild(sheetTitle);
-  titleRow.appendChild(copyBtn);
-
-  // Meta
-  const sheetMeta = el('div', 'anime-sheet-meta');
-  const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
-  const eps   = anime.eps ? `${anime.eps}集` : '';
-  sheetMeta.textContent = [score, eps].filter(Boolean).join(' · ');
 
   // Close button
-  const closeBtn = el('button', 'anime-sheet-close');
-  closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  const closeBtn = el('button', 'anime-sheet-icon-btn');
+  closeBtn.title = '關閉';
+  closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
   closeBtn.addEventListener('click', closeSheet);
 
-  const infoWrap = el('div', 'anime-sheet-info');
-  infoWrap.appendChild(titleRow);
+  btnGroup.appendChild(favBtn);
+  btnGroup.appendChild(copyBtn);
+  btnGroup.appendChild(closeBtn);
+
+  infoWrap.appendChild(sheetTitle);
   infoWrap.appendChild(sheetMeta);
-  infoWrap.appendChild(closeBtn);
+  infoWrap.appendChild(btnGroup);
   sheet.appendChild(infoWrap);
 
-  // Summary
-  const summaryEl = el('div', 'anime-sheet-summary', '載入中…');
-  sheet.appendChild(summaryEl);
-
-  // 4 link buttons
-  const btnWrap = el('div', 'anime-sheet-btns');
-  const links = [
+  // 4 link buttons (placed BEFORE summary so visible immediately)
+  const linkWrap = el('div', 'anime-sheet-btns');
+  const linkDefs = [
     { label: 'Bangumi', url: `https://bgm.tv/subject/${anime.id}` },
     { label: '動畫瘋', url: '' },
     { label: 'YouTube', url: '' },
-    { label: '劇迷', url: '' },
+    { label: '劇迷',   url: '' },
   ];
-  links.forEach(({ label, url }) => {
+  linkDefs.forEach(({ label, url }) => {
     const a = el('a', 'anime-sheet-link-btn', label);
     a.href = url || '#';
     a.target = '_blank'; a.rel = 'noopener';
     a.dataset.label = label;
-    btnWrap.appendChild(a);
+    linkWrap.appendChild(a);
   });
-  sheet.appendChild(btnWrap);
+  sheet.appendChild(linkWrap);
+
+  // Summary — 5 lines collapsed, More to expand
+  const summaryWrap = el('div', 'anime-sheet-summary-wrap');
+  const summaryEl = el('div', 'anime-sheet-summary collapsed', '載入中…');
+  const moreBtn = el('button', 'anime-sheet-more-btn', 'More ▾');
+  let expanded = false;
+  moreBtn.addEventListener('click', () => {
+    expanded = !expanded;
+    summaryEl.classList.toggle('collapsed', !expanded);
+    moreBtn.textContent = expanded ? 'Less ▴' : 'More ▾';
+  });
+  summaryWrap.appendChild(summaryEl);
+  summaryWrap.appendChild(moreBtn);
+  sheet.appendChild(summaryWrap);
 
   overlay.appendChild(sheet);
   document.body.appendChild(overlay);
   requestAnimationFrame(() => { overlay.classList.add('open'); sheet.classList.add('open'); });
-
   overlay.addEventListener('click', e => { if (e.target === overlay) closeSheet(); });
 
   // Fetch full data
@@ -2151,19 +2200,18 @@ async function showAnimeSheet(anime) {
     });
     const data = await res.json();
     const rawSummary = data.summary || '（暫無故事大綱）';
-    const twSummary = await toTW(rawSummary);
-    const rawTitle = data.name_cn || anime.name_cn || anime.name;
-    const twTitle = await toTW(rawTitle);
+    const twSummary  = await toTW(rawSummary);
+    const rawTitle   = data.name_cn || anime.name_cn || anime.name;
+    const twTitle    = await toTW(rawTitle);
     summaryEl.textContent = twSummary;
     sheetTitle.textContent = twTitle;
 
-    // Update link URLs with title
     const q = encodeURIComponent(twTitle);
-    btnWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
+    linkWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
       switch(a.dataset.label) {
-        case '動畫瘋': a.href = `https://ani.gamer.com.tw/animeList.php?c=all&wd=${q}`; break;
+        case '動畫瘋': a.href = `https://ani.gamer.com.tw/search.php?keyword=${q}`; break;
         case 'YouTube': a.href = `https://www.youtube.com/results?search_query=${q}`; break;
-        case '劇迷': a.href = `https://gimyai.tw/search?keyword=${q}`; break;
+        case '劇迷':   a.href = `https://gimyai.tw/find/-------------.html?wd=${q}`; break;
       }
     });
   } catch(_) {
