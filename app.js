@@ -1773,7 +1773,8 @@ async function fetchAnime(season, year, genre) {
   const query = `{
     Page(page:1,perPage:30) {
       media(season:${season},seasonYear:${year},type:ANIME,sort:POPULARITY_DESC${genreFilter}) {
-        id title{romaji english native chinese:title(language:CHINESE)} 
+        id title{romaji english native}
+        synonyms
         coverImage{large} averageScore episodes status
         genres siteUrl
       }
@@ -1788,8 +1789,10 @@ async function fetchAnime(season, year, genre) {
   return data?.data?.Page?.media || [];
 }
 
-function getAnimeTitle(title) {
-  return title.chinese || title.english || title.romaji || title.native || '未知標題';
+function getAnimeTitle(title, synonyms) {
+  // Find Chinese synonym (Traditional or Simplified)
+  const zh = (synonyms || []).find(s => /[\u4e00-\u9fff]/.test(s));
+  return zh || title.english || title.romaji || title.native || '未知標題';
 }
 
 function buildAnimeWidget() {
@@ -1873,7 +1876,7 @@ function renderAnimeWidget(container) {
         img.loading = 'lazy';
 
         const info = el('div', 'anime-info');
-        const title = el('div', 'anime-title', getAnimeTitle(anime.title));
+        const title = el('div', 'anime-title', getAnimeTitle(anime.title, anime.synonyms));
         const meta  = el('div', 'anime-meta');
         const score = anime.averageScore ? `⭐ ${(anime.averageScore/10).toFixed(1)}` : '';
         const eps   = anime.episodes ? `${anime.episodes}集` : '連載中';
