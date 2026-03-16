@@ -2219,6 +2219,11 @@ async function showAnimeSheet(anime) {
       delete S.animeState.trackedData[anime.id];
       favBtn.classList.remove('on');
       favBtn.querySelector('svg').setAttribute('fill', 'none');
+      // Sync list card star
+      document.querySelectorAll(`.anime-card[data-id="${anime.id}"] .anime-star`).forEach(s => {
+        s.classList.remove('on');
+        s.querySelector('svg')?.setAttribute('fill', 'none');
+      });
     } else {
       S.animeState.tracked.unshift(anime.id);
       let wd = -1;
@@ -2237,6 +2242,11 @@ async function showAnimeSheet(anime) {
       };
       favBtn.classList.add('on');
       favBtn.querySelector('svg').setAttribute('fill', 'currentColor');
+      // Sync list card star
+      document.querySelectorAll(`.anime-card[data-id="${anime.id}"] .anime-star`).forEach(s => {
+        s.classList.add('on');
+        s.querySelector('svg')?.setAttribute('fill', 'currentColor');
+      });
     }
     lsSave();
   });
