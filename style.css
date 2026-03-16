@@ -759,7 +759,31 @@ a { color:inherit; text-decoration:none; }
 }
 .anime-today-btn:hover { background: rgba(56,189,248,.22); }
 
-.anime-tabs {
+.anime-main-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 4px 10px 2px;
+  flex-shrink: 0;
+}
+
+.anime-main-tab {
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--bd);
+  color: var(--txm);
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: .73rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s;
+}
+.anime-main-tab:hover { border-color: var(--ac); color: var(--ac); }
+.anime-main-tab.on { background: rgba(56,189,248,.15); border-color: var(--ac); color: var(--ac); }
+
+.anime-card.pinned {
+  border-color: rgba(250,204,21,0.4) !important;
+  background: rgba(250,204,21,0.06) !important;
+}
   display: flex;
   gap: 5px;
   padding: 4px 10px 6px;
