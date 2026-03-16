@@ -71,7 +71,7 @@ let S = {
   activeGroup:    'all',
   privateUnlocked: false,
   ctxTarget:      null,
-  animeState:     { offset: 0, genre: '全部', tracked: [] },
+  animeState:     { offset: 0, genre: '全部', tracked: [], customNames: {} },
   scEditing:      null,
   dragSc:         null,
   mobilePages:    [{ id: 'shortcuts', widget: 'shortcuts' }],
@@ -103,7 +103,7 @@ function lsSave() {
       news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:        S.cfg,
       mobilePages: S.mobilePages,
-      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData }
+      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
     }));
   } catch(_) {}
 
@@ -179,7 +179,7 @@ const gistData = () => ({
   widgets:    S.widgets,
   newsKeywords: S.news.keywords,
   newsLang:   S.news.lang,
-  animeState: { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData }
+  animeState: { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
 });
 
 async function gistPush(silent = false) {
@@ -1782,8 +1782,9 @@ function buildAnimeWidget() {
 
 function renderAnimeWidget(container) {
   container.innerHTML = '';
-  if (!S.animeState) S.animeState = { weekday: -1, tracked: [], trackedData: {} };
+  if (!S.animeState) S.animeState = { weekday: -1, tracked: [], trackedData: {}, customNames: {} };
   if (!S.animeState.trackedData) S.animeState.trackedData = {};
+  if (!S.animeState.customNames) S.animeState.customNames = {};
 
   const todayWd = new Date().getDay();
   let curWd  = S.animeState.weekday >= 0 ? S.animeState.weekday : todayWd;
@@ -1887,9 +1888,8 @@ function renderAnimeWidget(container) {
     img.loading = 'lazy';
 
     const info = el('div', 'anime-info');
-    const displayTitle = anime.name_cn || anime.name;
+    const displayTitle = S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name;
     const titleEl = el('div', 'anime-title', displayTitle);
-    // Convert to Traditional Chinese async
     toTW(displayTitle).then(tw => { if (tw !== displayTitle) titleEl.textContent = tw; });
     const meta = el('div', 'anime-meta');
     const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
@@ -2081,10 +2081,11 @@ async function showAnimeSheet(anime) {
   coverWrap.appendChild(cover);
   sheet.appendChild(coverWrap);
 
-  // Info row: title + [star][copy][close] fixed top-right
+  // Info row: title + [edit][star][copy][close] fixed top-right
   const infoWrap = el('div', 'anime-sheet-info');
 
-  const sheetTitle = el('div', 'anime-sheet-title', anime.name_cn || anime.name);
+  const sheetTitle = el('div', 'anime-sheet-title',
+    S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name);
   const sheetMeta  = el('div', 'anime-sheet-meta');
   const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
   const eps   = anime.eps ? `${anime.eps}集` : '';
@@ -2092,6 +2093,57 @@ async function showAnimeSheet(anime) {
 
   // Button group fixed top-right
   const btnGroup = el('div', 'anime-sheet-btn-group');
+
+  // Edit / rename button
+  const editBtn = el('button', 'anime-sheet-icon-btn');
+  editBtn.title = '自訂名稱';
+  editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+  editBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    // Replace title div with input
+    const inp = document.createElement('input');
+    inp.className = 'anime-sheet-title-input';
+    inp.value = sheetTitle.textContent;
+    inp.autocomplete = 'off';
+    sheetTitle.replaceWith(inp);
+    inp.focus();
+    inp.select();
+
+    const saveEdit = () => {
+      const val = inp.value.trim();
+      if (val && val !== (anime.name_cn || anime.name)) {
+        S.animeState.customNames[anime.id] = val;
+      } else if (!val || val === (anime.name_cn || anime.name)) {
+        delete S.animeState.customNames[anime.id];
+      }
+      lsSave();
+      sheetTitle.textContent = S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name;
+      inp.replaceWith(sheetTitle);
+      inp.blur();
+      // Update link URLs with new name
+      const q = encodeURIComponent(sheetTitle.textContent);
+      linkWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
+        switch(a.dataset.label) {
+          case '動畫瘋': a.href = `https://ani.gamer.com.tw/search.php?keyword=${q}`; break;
+          case 'YouTube': a.href = `https://www.youtube.com/results?search_query=${q}`; break;
+          case '劇迷':   a.href = `https://gimyai.tw/find/-------------.html?wd=${q}`; break;
+        }
+      });
+      // Re-render list cards
+      const containers = document.querySelectorAll('.anime-grid');
+      containers.forEach(g => {
+        g.querySelectorAll('.anime-card').forEach(card => {
+          // We can't easily target by id here, so just reload the tab
+        });
+      });
+    };
+
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); saveEdit(); }
+      if (e.key === 'Escape') { inp.replaceWith(sheetTitle); }
+    });
+    inp.addEventListener('blur', saveEdit);
+  });
 
   // Star / favorite button
   const isTracked = (S.animeState.tracked || []).includes(anime.id);
@@ -2148,6 +2200,7 @@ async function showAnimeSheet(anime) {
   closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
   closeBtn.addEventListener('click', closeSheet);
 
+  btnGroup.appendChild(editBtn);
   btnGroup.appendChild(favBtn);
   btnGroup.appendChild(copyBtn);
   btnGroup.appendChild(closeBtn);

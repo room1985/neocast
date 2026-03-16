@@ -1992,3 +1992,16 @@ a { color:inherit; text-decoration:none; }
   transition: background .15s;
 }
 .anime-sheet-link-btn:hover { background: rgba(56,189,248,.22); }
+
+.anime-sheet-title-input {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--tx);
+  background: rgba(255,255,255,.06);
+  border: 1px solid var(--ac);
+  border-radius: 8px;
+  padding: 4px 8px;
+  width: 100%;
+  outline: none;
+  line-height: 1.35;
+}
