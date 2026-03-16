@@ -2042,6 +2042,39 @@ function renderAnimeWidget(container) {
       }
     } else if (curTab === 'fav') {
       renderFav();
+      // Batch fetch eps for tracked items missing it (max 3 concurrent)
+      const missing = (S.animeState.tracked || [])
+        .map(id => S.animeState.trackedData?.[id])
+        .filter(a => a && !(a.eps_count || a.eps));
+      if (missing.length) {
+        const fetchOne = async (anime) => {
+          try {
+            const r = await fetch(`https://api.bgm.tv/subject/${anime.id}`, {
+              headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
+            });
+            const d = await r.json();
+            const epsCount = d.eps_count || d.eps || 0;
+            if (epsCount) {
+              S.animeState.trackedData[anime.id].eps_count = epsCount;
+              lsSave();
+              // Update card in fav grid
+              document.querySelectorAll(`.anime-card[data-id="${anime.id}"] .anime-meta`).forEach(metaEl => {
+                let eb = metaEl.querySelector('.badge-eps');
+                if (!eb) {
+                  eb = el('span', 'anime-card-badge badge-eps', `共 ${epsCount} 集`);
+                  metaEl.appendChild(eb);
+                } else {
+                  eb.textContent = `共 ${epsCount} 集`;
+                }
+              });
+            }
+          } catch(_) {}
+        };
+        // Process in batches of 3
+        for (let i = 0; i < missing.length; i += 3) {
+          await Promise.all(missing.slice(i, i + 3).map(fetchOne));
+        }
+      }
     } else if (curTab === 'search') {
       grid.innerHTML = '<div class="anime-empty">輸入番名開始搜尋</div>';
     }
@@ -2284,6 +2317,18 @@ async function showAnimeSheet(anime) {
     if (epsCount) {
       epsBadge.textContent = `共 ${epsCount} 集`;
       epsBadge.style.display = '';
+    }
+    // Also update list card eps badge if it was missing
+    if (epsCount) {
+      document.querySelectorAll(`.anime-card[data-id="${anime.id}"] .anime-meta`).forEach(metaEl => {
+        let epsBadgeCard = metaEl.querySelector('.badge-eps');
+        if (!epsBadgeCard) {
+          epsBadgeCard = el('span', 'anime-card-badge badge-eps', `共 ${epsCount} 集`);
+          metaEl.appendChild(epsBadgeCard);
+        } else {
+          epsBadgeCard.textContent = `共 ${epsCount} 集`;
+        }
+      });
     }
 
     // Update link URLs
