@@ -55,6 +55,7 @@ let S = {
   activeGroup:    'all',
   privateUnlocked: false,
   ctxTarget:      null,
+  animeState:     { offset: 0, genre: '全部', tracked: [] },
   scEditing:      null,
   dragSc:         null,
   mobilePages:    [{ id: 'shortcuts', widget: 'shortcuts' }],
@@ -440,15 +441,17 @@ const WIDGET_META = {
   clock:     { label: '時鐘',    icon: '🕐' },
   shortcuts: { label: '捷徑',    icon: '⭐' },
   news:      { label: 'AI新聞',  icon: '📰' },
-  stickies:  { label: '便利貼',  icon: '📝' }
+  stickies:  { label: '便利貼',  icon: '📝' },
+  anime:     { label: '動畫追蹤', icon: '🎌' }
 };
 
 /* Default positions for when a widget is re-added */
 const WIDGET_DEFAULT = {
-  clock:     { col:0,  row:0, w:6, h:2, visible:true },
-  shortcuts: { col:6,  row:2, w:6, h:5, visible:true },
-  news:      { col:0,  row:2, w:6, h:5, visible:true },
-  stickies:  { col:12, row:0, w:6, h:6, visible:true }
+  clock:     { col:0,  row:0, w:6,  h:2, visible:true },
+  shortcuts: { col:6,  row:2, w:6,  h:5, visible:true },
+  news:      { col:0,  row:2, w:6,  h:5, visible:true },
+  stickies:  { col:12, row:0, w:6,  h:6, visible:true },
+  anime:     { col:18, row:0, w:6,  h:8, visible:true }
 };
 
 function renderAddWidgetPanel() {
@@ -497,6 +500,7 @@ function buildWidgetById(wid) {
   if (wid === 'shortcuts') buildShortcutsWidget();
   if (wid === 'news')      buildNewsWidget();
   if (wid === 'stickies')  buildStickiesWidget();
+  if (wid === 'anime')     buildAnimeWidget();
 }
 
 /* ─────────────────────────────────────
@@ -1732,6 +1736,180 @@ function onResize() {
 ───────────────────────────────────── */
 
 /* ─────────────────────────────────────
+   ANIME WIDGET
+───────────────────────────────────── */
+const ANIME_GENRES = ['全部','動作','戀愛','奇幻','科幻','喜劇','懸疑','恐怖','運動'];
+const ANIME_GENRE_MAP = {
+  '動作':'Action','戀愛':'Romance','奇幻':'Fantasy',
+  '科幻':'Sci-Fi','喜劇':'Comedy','懸疑':'Mystery',
+  '恐怖':'Horror','運動':'Sports'
+};
+
+// Get current season info
+function getCurrentSeason() {
+  const now = new Date();
+  const m = now.getMonth() + 1;
+  const y = now.getFullYear();
+  let season;
+  if (m >= 1 && m <= 3)  season = 'WINTER';
+  else if (m >= 4 && m <= 6) season = 'SPRING';
+  else if (m >= 7 && m <= 9) season = 'SUMMER';
+  else season = 'FALL';
+  return { season, year: y };
+}
+
+function shiftSeason(base, delta) {
+  const order = ['WINTER','SPRING','SUMMER','FALL'];
+  let i = order.indexOf(base.season) + delta;
+  let y = base.year;
+  while (i < 0) { i += 4; y--; }
+  while (i >= 4) { i -= 4; y++; }
+  const seasonNames = { WINTER:'冬', SPRING:'春', SUMMER:'夏', FALL:'秋' };
+  return { season: order[i], year: y, label: `${y} ${seasonNames[order[i]]}` };
+}
+
+async function fetchAnime(season, year, genre) {
+  const genreFilter = (genre && genre !== '全部') ? `, genre: "${ANIME_GENRE_MAP[genre]}"` : '';
+  const query = `{
+    Page(page:1,perPage:30) {
+      media(season:${season},seasonYear:${year},type:ANIME,sort:POPULARITY_DESC${genreFilter}) {
+        id title{romaji english native chinese:title(language:CHINESE)} 
+        coverImage{large} averageScore episodes status
+        genres siteUrl
+      }
+    }
+  }`;
+  const res = await fetch('https://graphql.anilist.co', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ query })
+  });
+  const data = await res.json();
+  return data?.data?.Page?.media || [];
+}
+
+function getAnimeTitle(title) {
+  return title.chinese || title.english || title.romaji || title.native || '未知標題';
+}
+
+function buildAnimeWidget() {
+  const body = el('div', 'anime-inner');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+  const w = makeWidget('anime', '', body, '');
+  w.querySelector('.w-body')?.remove();
+  w.insertBefore(body, w.querySelector('.resize-handle'));
+  renderAnimeWidget(body);
+}
+
+function renderAnimeWidget(container) {
+  container.innerHTML = '';
+
+  const base = getCurrentSeason();
+  let curOffset = 0;
+  let curGenre = '全部';
+  if (!S.animeState) S.animeState = { offset: 0, genre: '全部', tracked: [] };
+  curOffset = S.animeState.offset || 0;
+  curGenre  = S.animeState.genre  || '全部';
+
+  // Header
+  const head = el('div', 'anime-head');
+
+  // Season nav
+  const prevBtn = el('button', 'anime-nav-btn', '‹');
+  const seasonLabel = el('div', 'anime-season-label');
+  const nextBtn = el('button', 'anime-nav-btn', '›');
+
+  const updateSeasonLabel = () => {
+    const s = shiftSeason(base, curOffset);
+    seasonLabel.textContent = s.label;
+  };
+  updateSeasonLabel();
+
+  prevBtn.addEventListener('click', () => { curOffset--; S.animeState.offset = curOffset; updateSeasonLabel(); loadAnime(); });
+  nextBtn.addEventListener('click', () => { curOffset++; S.animeState.offset = curOffset; updateSeasonLabel(); loadAnime(); });
+
+  head.appendChild(prevBtn);
+  head.appendChild(seasonLabel);
+  head.appendChild(nextBtn);
+  container.appendChild(head);
+
+  // Genre tabs
+  const tabs = el('div', 'anime-tabs');
+  ANIME_GENRES.forEach(g => {
+    const t = el('button', 'anime-tab' + (curGenre === g ? ' on' : ''), g);
+    t.addEventListener('click', () => {
+      curGenre = g;
+      S.animeState.genre = g;
+      tabs.querySelectorAll('.anime-tab').forEach(tb => tb.classList.remove('on'));
+      t.classList.add('on');
+      loadAnime();
+    });
+    tabs.appendChild(t);
+  });
+  container.appendChild(tabs);
+
+  // Card grid
+  const grid = el('div', 'anime-grid');
+  container.appendChild(grid);
+
+  // Load anime
+  async function loadAnime() {
+    grid.innerHTML = '<div class="anime-loading">載入中…</div>';
+    const s = shiftSeason(base, curOffset);
+    try {
+      const list = await fetchAnime(s.season, s.year, curGenre);
+      grid.innerHTML = '';
+      if (!list.length) {
+        grid.innerHTML = '<div class="anime-empty">沒有找到動畫</div>';
+        return;
+      }
+      list.forEach(anime => {
+        const isTracked = (S.animeState.tracked || []).includes(anime.id);
+        const card = el('div', 'anime-card');
+
+        const img = el('img', 'anime-cover');
+        img.src = anime.coverImage?.large || '';
+        img.alt = getAnimeTitle(anime.title);
+        img.loading = 'lazy';
+
+        const info = el('div', 'anime-info');
+        const title = el('div', 'anime-title', getAnimeTitle(anime.title));
+        const meta  = el('div', 'anime-meta');
+        const score = anime.averageScore ? `⭐ ${(anime.averageScore/10).toFixed(1)}` : '';
+        const eps   = anime.episodes ? `${anime.episodes}集` : '連載中';
+        meta.textContent = [score, eps].filter(Boolean).join(' · ');
+
+        const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
+        star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+        star.addEventListener('click', e => {
+          e.stopPropagation();
+          if (!S.animeState.tracked) S.animeState.tracked = [];
+          const idx = S.animeState.tracked.indexOf(anime.id);
+          if (idx >= 0) S.animeState.tracked.splice(idx, 1);
+          else S.animeState.tracked.unshift(anime.id);
+          lsSave();
+          star.classList.toggle('on');
+          star.querySelector('svg').setAttribute('fill', S.animeState.tracked.includes(anime.id) ? 'currentColor' : 'none');
+        });
+
+        info.appendChild(title);
+        info.appendChild(meta);
+        card.appendChild(img);
+        card.appendChild(info);
+        card.appendChild(star);
+
+        card.addEventListener('click', () => window.open(anime.siteUrl, '_blank'));
+        grid.appendChild(card);
+      });
+    } catch(e) {
+      grid.innerHTML = '<div class="anime-empty">載入失敗，請稍後再試</div>';
+    }
+  }
+
+  loadAnime();
+}
+
+/* ─────────────────────────────────────
    MOBILE LAYOUT — Paged System
 ───────────────────────────────────── */
 
@@ -1740,7 +1918,8 @@ const MOBILE_WIDGET_TYPES = {
   shortcuts: { label: '捷徑',   icon: '⭐' },
   news:      { label: '即時新聞', icon: '📰' },
   clock:     { label: '時鐘',   icon: '🕐' },
-  stickies:  { label: '便利貼', icon: '📝' }
+  stickies:  { label: '便利貼', icon: '📝' },
+  anime:     { label: '動畫追蹤', icon: '🎌' }
 };
 
 function buildMobileWidgetContent(widgetType, container) {
@@ -1767,6 +1946,11 @@ function buildMobileWidgetContent(widgetType, container) {
     inner.style.cssText = 'position:relative;flex:1;min-height:0;overflow:hidden;';
     container.appendChild(inner);
     renderStickiesWidget(inner);
+  } else if (widgetType === 'anime') {
+    const inner = el('div', 'anime-inner');
+    inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+    container.appendChild(inner);
+    renderAnimeWidget(inner);
   }
 }
 
