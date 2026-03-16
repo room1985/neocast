@@ -1768,27 +1768,15 @@ function renderAnimeWidget(container) {
 
   const todayWd = new Date().getDay();
   let curWd  = S.animeState.weekday >= 0 ? S.animeState.weekday : todayWd;
-  let curTab = 'week'; // 'week' | 'hot' | 'fav'
+  let curTab = 'week'; // 'week' | 'search' | 'fav'
 
-  // Header
+  // Header: title + [本季新番][搜尋][收藏] + [今日]
   const head = el('div', 'anime-head');
   const title = el('div', 'w-title', '動畫追蹤');
-  const todayBtn = el('button', 'anime-today-btn', '今日');
-  todayBtn.addEventListener('click', () => {
-    curWd = todayWd;
-    curTab = 'week';
-    S.animeState.weekday = curWd;
-    updateWeekTabs();
-    loadTab();
-  });
-  head.appendChild(title);
-  head.appendChild(todayBtn);
-  container.appendChild(head);
 
-  // Main tabs: 週播 / 熱門 / 收藏
   const mainTabs = el('div', 'anime-main-tabs');
-  ['週播','熱門','收藏'].forEach((name, i) => {
-    const key = ['week','hot','fav'][i];
+  const tabDefs = [['本季新番','week'],['搜尋','search'],['收藏','fav']];
+  tabDefs.forEach(([name, key]) => {
     const t = el('button', 'anime-main-tab' + (curTab === key ? ' on' : ''), name);
     t.addEventListener('click', () => {
       curTab = key;
@@ -1796,25 +1784,40 @@ function renderAnimeWidget(container) {
       t.classList.add('on');
       weekTabsWrap.style.display = curTab === 'week' ? 'flex' : 'none';
       todayBtn.style.display = curTab === 'week' ? '' : 'none';
+      searchBar.style.display = curTab === 'search' ? 'flex' : 'none';
       loadTab();
     });
     mainTabs.appendChild(t);
   });
-  container.appendChild(mainTabs);
 
-  // Weekday tabs (only show for 週播)
+  const todayBtn = el('button', 'anime-today-btn', '今日');
+  todayBtn.addEventListener('click', () => {
+    curWd = todayWd;
+    curTab = 'week';
+    S.animeState.weekday = curWd;
+    mainTabs.querySelectorAll('.anime-main-tab').forEach((t,i) => t.classList.toggle('on', i===0));
+    weekTabsWrap.style.display = 'flex';
+    todayBtn.style.display = '';
+    searchBar.style.display = 'none';
+    updateWeekTabs();
+    loadTab();
+  });
+
+  head.appendChild(title);
+  head.appendChild(mainTabs);
+  head.appendChild(todayBtn);
+  container.appendChild(head);
+
+  // Weekday tabs
   const weekTabsWrap = el('div', 'anime-tabs');
   const updateWeekTabs = () => {
-    weekTabsWrap.querySelectorAll('.anime-tab').forEach((t, i) => {
-      t.classList.toggle('on', i === curWd);
-    });
+    weekTabsWrap.querySelectorAll('.anime-tab').forEach((t, i) => t.classList.toggle('on', i === curWd));
   };
   BGM_WEEKDAY.forEach((name, i) => {
     const t = el('button', 'anime-tab' + (curWd === i ? ' on' : ''), name);
     if (i === todayWd) t.style.fontWeight = '900';
     t.addEventListener('click', () => {
-      curWd = i;
-      S.animeState.weekday = i;
+      curWd = i; S.animeState.weekday = i;
       updateWeekTabs();
       loadTab();
     });
@@ -1822,21 +1825,79 @@ function renderAnimeWidget(container) {
   });
   container.appendChild(weekTabsWrap);
 
+  // Search bar (hidden by default)
+  const searchBar = el('div', 'anime-search-bar');
+  searchBar.style.display = 'none';
+  const searchInp = el('input', 'anime-search-inp');
+  searchInp.type = 'text';
+  searchInp.placeholder = '輸入番名搜尋…';
+  searchInp.autocomplete = 'off';
+  const searchBtn = el('button', 'anime-search-btn');
+  searchBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+  searchBar.appendChild(searchInp);
+  searchBar.appendChild(searchBtn);
+  container.appendChild(searchBar);
+
   // Grid
   const grid = el('div', 'anime-grid');
   container.appendChild(grid);
 
   let calendarCache = null;
 
-  // Render a list of anime items into grid
-  function renderItems(items) {
-    grid.innerHTML = '';
-    if (!items.length) {
-      grid.innerHTML = '<div class="anime-empty">沒有找到動畫</div>';
-      return;
-    }
+  // Make a card
+  function makeAnimeCard(anime, bgmWd) {
+    const isTracked = (S.animeState.tracked || []).includes(anime.id);
+    const card = el('div', 'anime-card' + (isTracked ? ' pinned' : ''));
 
-    // Sort by score descending, pinned (tracked) first
+    const img = el('img', 'anime-cover');
+    img.src = anime.images?.large || anime.images?.common || '';
+    img.alt = anime.name_cn || anime.name;
+    img.loading = 'lazy';
+
+    const info = el('div', 'anime-info');
+    const titleEl = el('div', 'anime-title', anime.name_cn || anime.name);
+    const meta = el('div', 'anime-meta');
+    const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
+    const eps = anime.eps ? `${anime.eps}集` : '';
+    meta.textContent = [score, eps].filter(Boolean).join(' · ');
+
+    const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
+    star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+    star.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!S.animeState.tracked) S.animeState.tracked = [];
+      const idx = S.animeState.tracked.indexOf(anime.id);
+      if (idx >= 0) {
+        S.animeState.tracked.splice(idx, 1);
+        delete S.animeState.trackedData[anime.id];
+      } else {
+        S.animeState.tracked.unshift(anime.id);
+        // Determine weekday: from param, or from anime data, or unknown
+        const wd = bgmWd !== undefined ? bgmWd :
+                   (anime.air_weekday ? (anime.air_weekday === 7 ? 0 : anime.air_weekday) : -1);
+        S.animeState.trackedData[anime.id] = {
+          id: anime.id, name: anime.name, name_cn: anime.name_cn,
+          images: anime.images, rating: anime.rating, eps: anime.eps,
+          air_weekday: wd // JS weekday (0=Sun)
+        };
+      }
+      lsSave();
+      loadTab();
+    });
+
+    info.appendChild(titleEl);
+    info.appendChild(meta);
+    card.appendChild(img);
+    card.appendChild(info);
+    card.appendChild(star);
+    card.addEventListener('click', () => window.open(`https://bgm.tv/subject/${anime.id}`, '_blank'));
+    return card;
+  }
+
+  // Render flat list (week/search)
+  function renderItems(items, bgmWd) {
+    grid.innerHTML = '';
+    if (!items.length) { grid.innerHTML = '<div class="anime-empty">沒有找到動畫</div>'; return; }
     const tracked = S.animeState.tracked || [];
     const sorted = [...items].sort((a, b) => {
       const aPin = tracked.includes(a.id) ? 1 : 0;
@@ -1844,91 +1905,73 @@ function renderAnimeWidget(container) {
       if (bPin !== aPin) return bPin - aPin;
       return (b.rating?.score || 0) - (a.rating?.score || 0);
     });
+    sorted.forEach(anime => grid.appendChild(makeAnimeCard(anime, bgmWd)));
+  }
 
-    sorted.forEach(anime => {
-      const isTracked = tracked.includes(anime.id);
-      const card = el('div', 'anime-card' + (isTracked ? ' pinned' : ''));
+  // Render favorites grouped by weekday
+  function renderFav() {
+    grid.innerHTML = '';
+    const tracked = S.animeState.tracked || [];
+    if (!tracked.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
 
-      const img = el('img', 'anime-cover');
-      img.src = anime.images?.large || anime.images?.common || '';
-      img.alt = anime.name_cn || anime.name;
-      img.loading = 'lazy';
+    // Group by weekday (0-6, -1=unknown)
+    const groups = {};
+    tracked.forEach(id => {
+      const a = S.animeState.trackedData?.[id];
+      if (!a) return;
+      const wd = a.air_weekday !== undefined ? a.air_weekday : -1;
+      if (!groups[wd]) groups[wd] = [];
+      groups[wd].push(a);
+    });
 
-      const info = el('div', 'anime-info');
-      const titleEl = el('div', 'anime-title', anime.name_cn || anime.name);
-      const meta = el('div', 'anime-meta');
-      const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
-      const eps = anime.eps ? `${anime.eps}集` : '';
-      meta.textContent = [score, eps].filter(Boolean).join(' · ');
-
-      const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
-      star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
-      star.addEventListener('click', e => {
-        e.stopPropagation();
-        if (!S.animeState.tracked) S.animeState.tracked = [];
-        const idx = S.animeState.tracked.indexOf(anime.id);
-        if (idx >= 0) {
-          S.animeState.tracked.splice(idx, 1);
-          delete S.animeState.trackedData[anime.id];
-        } else {
-          S.animeState.tracked.unshift(anime.id);
-          // Save anime data for favorites tab
-          S.animeState.trackedData[anime.id] = {
-            id: anime.id,
-            name: anime.name,
-            name_cn: anime.name_cn,
-            images: anime.images,
-            rating: anime.rating,
-            eps: anime.eps
-          };
-        }
-        lsSave();
-        // Re-render current tab to update pin order
-        loadTab();
-      });
-
-      info.appendChild(titleEl);
-      info.appendChild(meta);
-      card.appendChild(img);
-      card.appendChild(info);
-      card.appendChild(star);
-      card.addEventListener('click', () => window.open(`https://bgm.tv/subject/${anime.id}`, '_blank'));
-      grid.appendChild(card);
+    // Sort groups: Mon-Sun (1-6,0), then unknown
+    const order = [1,2,3,4,5,6,0,-1];
+    order.forEach(wd => {
+      if (!groups[wd]?.length) return;
+      const label = wd === -1 ? '不明' : BGM_WEEKDAY[wd];
+      const groupHead = el('div', 'anime-group-head', label + (wd === todayWd ? ' 📍' : ''));
+      grid.appendChild(groupHead);
+      groups[wd].forEach(anime => grid.appendChild(makeAnimeCard(anime, wd)));
     });
   }
+
+  // Search
+  const doSearch = async () => {
+    const q = searchInp.value.trim();
+    if (!q) return;
+    grid.innerHTML = '<div class="anime-loading">搜尋中…</div>';
+    try {
+      const res = await fetch(`https://api.bgm.tv/v0/search/subjects?limit=20`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)'
+        },
+        body: JSON.stringify({ keyword: q, filter: { type: [2] } })
+      });
+      const data = await res.json();
+      renderItems(data.data || []);
+    } catch(e) {
+      grid.innerHTML = '<div class="anime-empty">搜尋失敗，請稍後再試</div>';
+    }
+  };
+  searchBtn.addEventListener('click', doSearch);
+  searchInp.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 
   async function loadTab() {
     if (curTab === 'week') {
       if (!calendarCache) {
         grid.innerHTML = '<div class="anime-loading">載入中…</div>';
-        try {
-          calendarCache = await fetchBangumiCalendar();
-        } catch(e) {
-          grid.innerHTML = '<div class="anime-empty">載入失敗，請稍後再試</div>';
-          return;
-        }
+        try { calendarCache = await fetchBangumiCalendar(); }
+        catch(e) { grid.innerHTML = '<div class="anime-empty">載入失敗</div>'; return; }
       }
       const bgmId = curWd === 0 ? 7 : curWd;
       const dayData = calendarCache.find(d => d.weekday?.id === bgmId);
-      renderItems(dayData?.items || []);
-
-    } else if (curTab === 'hot') {
-      grid.innerHTML = '<div class="anime-loading">載入中…</div>';
-      try {
-        const res = await fetch('https://api.bgm.tv/v0/subjects?type=2&sort=rank&limit=25', {
-          headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
-        });
-        const data = await res.json();
-        renderItems(data.data || []);
-      } catch(e) {
-        grid.innerHTML = '<div class="anime-empty">載入失敗，請稍後再試</div>';
-      }
-
+      renderItems(dayData?.items || [], curWd);
+    } else if (curTab === 'search') {
+      if (!searchInp.value.trim()) grid.innerHTML = '<div class="anime-empty">輸入番名開始搜尋</div>';
     } else if (curTab === 'fav') {
-      const favItems = (S.animeState.tracked || [])
-        .map(id => S.animeState.trackedData?.[id])
-        .filter(Boolean);
-      renderItems(favItems);
+      renderFav();
     }
   }
 
