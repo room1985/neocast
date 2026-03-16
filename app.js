@@ -80,21 +80,21 @@ let _autoSyncTimer = null;
 function lsSave() {
   try {
     localStorage.setItem(LS_KEY, JSON.stringify({
-      shortcuts: S.shortcuts,
-      groups:    S.groups,
-      stickies:  S.stickies,
-      widgets:   S.widgets,
-      news:      { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
-      cfg:       S.cfg,
-      mobilePages: S.mobilePages
+      shortcuts:  S.shortcuts,
+      groups:     S.groups,
+      stickies:   S.stickies,
+      widgets:    S.widgets,
+      news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
+      cfg:        S.cfg,
+      mobilePages: S.mobilePages,
+      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked }
     }));
   } catch(_) {}
 
-  // Auto-push to Gist 2 seconds after last change
   if (S.cfg.token && S.cfg.gistId) {
     clearTimeout(_autoSyncTimer);
     _autoSyncTimer = setTimeout(() => {
-      gistPush(true); // silent push
+      gistPush(true);
     }, 10000);
   }
 }
@@ -109,6 +109,7 @@ function lsLoad() {
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
     if (d.mobilePages) S.mobilePages = d.mobilePages;
+    if (d.animeState)  Object.assign(S.animeState, { ...d.animeState, offset: 0 }); // always start at current season
   } catch(_) {}
 }
 
@@ -2258,6 +2259,7 @@ async function init() {
   if (S.widgets.shortcuts?.visible !== false) buildShortcutsWidget();
   if (S.widgets.news?.visible      !== false) buildNewsWidget();
   if (S.widgets.stickies?.visible  === true)  buildStickiesWidget();
+  if (S.widgets.anime?.visible     === true)  buildAnimeWidget();
   initMobileLayout();
 
   // Search + voice
