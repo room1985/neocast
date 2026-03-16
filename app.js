@@ -2080,15 +2080,11 @@ async function showAnimeSheet(anime) {
   coverWrap.appendChild(cover);
   sheet.appendChild(coverWrap);
 
-  // Info row: title + [edit][star][copy][close] fixed top-right
+  // Info row: title + 2x2 buttons fixed top-right
   const infoWrap = el('div', 'anime-sheet-info');
 
   const sheetTitle = el('div', 'anime-sheet-title',
     S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name);
-  const sheetMeta  = el('div', 'anime-sheet-meta');
-  const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
-  const eps   = anime.eps ? `${anime.eps}集` : '';
-  sheetMeta.textContent = [score, eps].filter(Boolean).join(' · ');
 
   // Button group fixed top-right
   const btnGroup = el('div', 'anime-sheet-btn-group');
