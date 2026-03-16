@@ -244,7 +244,6 @@ async function gistPull() {
     if (d.newsKeywords) S.news.keywords = d.newsKeywords;
     if (d.newsLang)     S.news.lang     = d.newsLang;
     if (d.animeState)   Object.assign(S.animeState, d.animeState);
-    toast(`DEBUG: animeState tracked=${JSON.stringify(d.animeState?.tracked?.length)} hasData=${!!d.animeState}`, 'warn');
     lsSave();
     renderAll();
     toast('已從 Gist 拉取最新設定 ✓');
@@ -2200,13 +2199,25 @@ async function showAnimeSheet(anime) {
   closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
   closeBtn.addEventListener('click', closeSheet);
 
-  btnGroup.appendChild(editBtn);
+  // 2×2 grid: [收藏][關閉] / [複製][編輯]
   btnGroup.appendChild(favBtn);
-  btnGroup.appendChild(copyBtn);
   btnGroup.appendChild(closeBtn);
+  btnGroup.appendChild(copyBtn);
+  btnGroup.appendChild(editBtn);
+
+  // Meta badges
+  const metaWrap = el('div', 'anime-sheet-meta-wrap');
+  if (anime.rating?.score) {
+    const scoreBadge = el('span', 'anime-sheet-badge badge-score', `★ ${anime.rating.score.toFixed(1)}`);
+    metaWrap.appendChild(scoreBadge);
+  }
+  if (anime.eps) {
+    const epsBadge = el('span', 'anime-sheet-badge badge-eps', `共 ${anime.eps} 集`);
+    metaWrap.appendChild(epsBadge);
+  }
 
   infoWrap.appendChild(sheetTitle);
-  infoWrap.appendChild(sheetMeta);
+  infoWrap.appendChild(metaWrap);
   infoWrap.appendChild(btnGroup);
   sheet.appendChild(infoWrap);
 
