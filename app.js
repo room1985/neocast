@@ -157,12 +157,13 @@ function idbDel(key) {
    GITHUB GIST SYNC
 ───────────────────────────────────── */
 const gistData = () => ({
-  shortcuts: S.shortcuts,
-  groups:    S.groups,
-  stickies:  S.stickies,
-  widgets:   S.widgets,
+  shortcuts:  S.shortcuts,
+  groups:     S.groups,
+  stickies:   S.stickies,
+  widgets:    S.widgets,
   newsKeywords: S.news.keywords,
-  newsLang:  S.news.lang
+  newsLang:   S.news.lang,
+  animeState: { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData }
 });
 
 async function gistPush(silent = false) {
@@ -226,6 +227,7 @@ async function gistPull() {
     if (d.widgets)      Object.assign(S.widgets, d.widgets);
     if (d.newsKeywords) S.news.keywords = d.newsKeywords;
     if (d.newsLang)     S.news.lang     = d.newsLang;
+    if (d.animeState)   Object.assign(S.animeState, d.animeState);
     lsSave();
     renderAll();
     toast('已從 Gist 拉取最新設定 ✓');
@@ -2297,11 +2299,14 @@ function renderAll() {
   rerenderSc();
   renderNewsKws();
   renderNewsItems();
-  // Re-render stickies if widget exists
   const stickyBody = document.querySelector('.widget[data-wid="stickies"] .stickies-inner');
   if (stickyBody) renderStickiesWidget(stickyBody);
   const mobileStickyBody = document.querySelector('#mobile-layout .stickies-inner');
   if (mobileStickyBody) renderStickiesWidget(mobileStickyBody);
+  const animeBody = document.querySelector('.widget[data-wid="anime"] .anime-inner');
+  if (animeBody) renderAnimeWidget(animeBody);
+  const mobileAnimeBody = document.querySelector('#mobile-layout .anime-inner');
+  if (mobileAnimeBody) renderAnimeWidget(mobileAnimeBody);
 }
 
 /* ─────────────────────────────────────
