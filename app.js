@@ -1896,8 +1896,9 @@ function renderAnimeWidget(container) {
       const sb = el('span', 'anime-card-badge badge-score', `★ ${anime.rating.score.toFixed(1)}`);
       meta.appendChild(sb);
     }
-    if (anime.eps) {
-      const eb = el('span', 'anime-card-badge badge-eps', `共 ${anime.eps} 集`);
+    const epsNum = anime.eps_count || anime.eps;
+    if (epsNum) {
+      const eb = el('span', 'anime-card-badge badge-eps', `共 ${epsNum} 集`);
       meta.appendChild(eb);
     }
 
