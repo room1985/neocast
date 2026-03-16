@@ -1768,23 +1768,24 @@ function renderAnimeWidget(container) {
 
   const todayWd = new Date().getDay();
   let curWd  = S.animeState.weekday >= 0 ? S.animeState.weekday : todayWd;
-  let curTab = 'week'; // 'week' | 'search' | 'fav'
+  let curTab = 'week';
 
-  // Header: title + [本季新番][搜尋][收藏] + [今日]
+  // Header: title + [本季新番][收藏][搜尋] + [今日]
   const head = el('div', 'anime-head');
   const title = el('div', 'w-title', '動畫追蹤');
 
   const mainTabs = el('div', 'anime-main-tabs');
-  const tabDefs = [['本季新番','week'],['搜尋','search'],['收藏','fav']];
+  const tabDefs = [['本季新番','week'],['收藏','fav'],['搜尋','search']];
   tabDefs.forEach(([name, key]) => {
     const t = el('button', 'anime-main-tab' + (curTab === key ? ' on' : ''), name);
     t.addEventListener('click', () => {
       curTab = key;
       mainTabs.querySelectorAll('.anime-main-tab').forEach(tb => tb.classList.remove('on'));
       t.classList.add('on');
-      weekTabsWrap.style.display = curTab === 'week' ? 'flex' : 'none';
-      todayBtn.style.display = curTab === 'week' ? '' : 'none';
-      searchBar.style.display = curTab === 'search' ? 'flex' : 'none';
+      const isSearch = curTab === 'search';
+      weekTabsWrap.style.display = isSearch ? 'none' : 'flex';
+      todayBtn.style.display     = isSearch ? 'none' : '';
+      searchBar.style.display    = isSearch ? 'flex' : 'none';
       loadTab();
     });
     mainTabs.appendChild(t);
@@ -1793,12 +1794,7 @@ function renderAnimeWidget(container) {
   const todayBtn = el('button', 'anime-today-btn', '今日');
   todayBtn.addEventListener('click', () => {
     curWd = todayWd;
-    curTab = 'week';
     S.animeState.weekday = curWd;
-    mainTabs.querySelectorAll('.anime-main-tab').forEach((t,i) => t.classList.toggle('on', i===0));
-    weekTabsWrap.style.display = 'flex';
-    todayBtn.style.display = '';
-    searchBar.style.display = 'none';
     updateWeekTabs();
     loadTab();
   });
@@ -1808,7 +1804,7 @@ function renderAnimeWidget(container) {
   head.appendChild(todayBtn);
   container.appendChild(head);
 
-  // Weekday tabs
+  // Shared weekday tabs (week + fav)
   const weekTabsWrap = el('div', 'anime-tabs');
   const updateWeekTabs = () => {
     weekTabsWrap.querySelectorAll('.anime-tab').forEach((t, i) => t.classList.toggle('on', i === curWd));
@@ -1838,13 +1834,11 @@ function renderAnimeWidget(container) {
   searchBar.appendChild(searchBtn);
   container.appendChild(searchBar);
 
-  // Grid
   const grid = el('div', 'anime-grid');
   container.appendChild(grid);
 
   let calendarCache = null;
 
-  // Make a card
   function makeAnimeCard(anime, bgmWd) {
     const isTracked = (S.animeState.tracked || []).includes(anime.id);
     const card = el('div', 'anime-card' + (isTracked ? ' pinned' : ''));
@@ -1863,6 +1857,7 @@ function renderAnimeWidget(container) {
 
     const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
     star.innerHTML = `<svg viewBox="0 0 24 24" fill="${isTracked?'currentColor':'none'}" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`;
+
     star.addEventListener('click', e => {
       e.stopPropagation();
       if (!S.animeState.tracked) S.animeState.tracked = [];
@@ -1870,19 +1865,24 @@ function renderAnimeWidget(container) {
       if (idx >= 0) {
         S.animeState.tracked.splice(idx, 1);
         delete S.animeState.trackedData[anime.id];
+        star.classList.remove('on');
+        star.querySelector('svg').setAttribute('fill', 'none');
+        card.classList.remove('pinned');
       } else {
         S.animeState.tracked.unshift(anime.id);
-        // Determine weekday: from param, or from anime data, or unknown
         const wd = bgmWd !== undefined ? bgmWd :
                    (anime.air_weekday ? (anime.air_weekday === 7 ? 0 : anime.air_weekday) : -1);
         S.animeState.trackedData[anime.id] = {
           id: anime.id, name: anime.name, name_cn: anime.name_cn,
           images: anime.images, rating: anime.rating, eps: anime.eps,
-          air_weekday: wd // JS weekday (0=Sun)
+          air_weekday: wd
         };
+        star.classList.add('on');
+        star.querySelector('svg').setAttribute('fill', 'currentColor');
+        card.classList.add('pinned');
       }
       lsSave();
-      loadTab();
+      if (curTab !== 'search') loadTab();
     });
 
     info.appendChild(titleEl);
@@ -1894,7 +1894,6 @@ function renderAnimeWidget(container) {
     return card;
   }
 
-  // Render flat list (week/search)
   function renderItems(items, bgmWd) {
     grid.innerHTML = '';
     if (!items.length) { grid.innerHTML = '<div class="anime-empty">沒有找到動畫</div>'; return; }
@@ -1908,40 +1907,25 @@ function renderAnimeWidget(container) {
     sorted.forEach(anime => grid.appendChild(makeAnimeCard(anime, bgmWd)));
   }
 
-  // Render favorites grouped by weekday
   function renderFav() {
     grid.innerHTML = '';
     const tracked = S.animeState.tracked || [];
-    if (!tracked.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
-
-    // Group by weekday (0-6, -1=unknown)
-    const groups = {};
-    tracked.forEach(id => {
-      const a = S.animeState.trackedData?.[id];
-      if (!a) return;
-      const wd = a.air_weekday !== undefined ? a.air_weekday : -1;
-      if (!groups[wd]) groups[wd] = [];
-      groups[wd].push(a);
-    });
-
-    // Sort groups: Mon-Sun (1-6,0), then unknown
-    const order = [1,2,3,4,5,6,0,-1];
-    order.forEach(wd => {
-      if (!groups[wd]?.length) return;
-      const label = wd === -1 ? '不明' : BGM_WEEKDAY[wd];
-      const groupHead = el('div', 'anime-group-head', label + (wd === todayWd ? ' 📍' : ''));
-      grid.appendChild(groupHead);
-      groups[wd].forEach(anime => grid.appendChild(makeAnimeCard(anime, wd)));
-    });
+    const items = tracked
+      .map(id => S.animeState.trackedData?.[id])
+      .filter(a => a && a.air_weekday === curWd);
+    if (!items.length) {
+      grid.innerHTML = '<div class="anime-empty">這天沒有收藏的番組</div>';
+      return;
+    }
+    items.forEach(anime => grid.appendChild(makeAnimeCard(anime, anime.air_weekday)));
   }
 
-  // Search
   const doSearch = async () => {
     const q = searchInp.value.trim();
     if (!q) return;
     grid.innerHTML = '<div class="anime-loading">搜尋中…</div>';
     try {
-      const res = await fetch(`https://api.bgm.tv/v0/search/subjects?limit=20`, {
+      const res = await fetch('https://api.bgm.tv/v0/search/subjects?limit=20', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -1968,10 +1952,10 @@ function renderAnimeWidget(container) {
       const bgmId = curWd === 0 ? 7 : curWd;
       const dayData = calendarCache.find(d => d.weekday?.id === bgmId);
       renderItems(dayData?.items || [], curWd);
-    } else if (curTab === 'search') {
-      if (!searchInp.value.trim()) grid.innerHTML = '<div class="anime-empty">輸入番名開始搜尋</div>';
     } else if (curTab === 'fav') {
       renderFav();
+    } else if (curTab === 'search') {
+      grid.innerHTML = '<div class="anime-empty">輸入番名開始搜尋</div>';
     }
   }
 
