@@ -228,6 +228,7 @@ async function gistPull() {
     if (d.newsKeywords) S.news.keywords = d.newsKeywords;
     if (d.newsLang)     S.news.lang     = d.newsLang;
     if (d.animeState)   Object.assign(S.animeState, d.animeState);
+    toast(`DEBUG: animeState tracked=${JSON.stringify(d.animeState?.tracked?.length)} hasData=${!!d.animeState}`, 'warn');
     lsSave();
     renderAll();
     toast('已從 Gist 拉取最新設定 ✓');
