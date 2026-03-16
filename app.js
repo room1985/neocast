@@ -1946,13 +1946,19 @@ function renderAnimeWidget(container) {
       if (curTab !== 'search') loadTab();
     });
 
+    img.style.cursor = 'zoom-in';
+    img.addEventListener('click', e => {
+      e.stopPropagation();
+      showImageViewer(img.src, img.alt);
+    });
+
     info.appendChild(titleEl);
     info.appendChild(meta);
     card.appendChild(img);
     card.appendChild(info);
     card.appendChild(star);
     card.addEventListener('click', e => {
-      if (e.target.closest('.anime-star')) return;
+      if (e.target.closest('.anime-star') || e.target.closest('img')) return;
       showAnimeSheet(anime);
     });
     return card;
@@ -2041,69 +2047,104 @@ function renderAnimeWidget(container) {
 /* ─────────────────────────────────────
    ANIME BOTTOM SHEET
 ───────────────────────────────────── */
+function showImageViewer(src, alt) {
+  document.querySelector('.anime-img-viewer')?.remove();
+  const viewer = el('div', 'anime-img-viewer');
+  const img = el('img', 'anime-img-viewer-img');
+  img.src = src; img.alt = alt;
+  viewer.appendChild(img);
+  viewer.addEventListener('click', () => viewer.remove());
+  document.body.appendChild(viewer);
+  requestAnimationFrame(() => viewer.classList.add('open'));
+}
+
 async function showAnimeSheet(anime) {
-  // Remove existing sheet
   document.querySelector('.anime-sheet-overlay')?.remove();
 
   const overlay = el('div', 'anime-sheet-overlay');
   const sheet   = el('div', 'anime-sheet');
 
-  // Header: cover + title + close
-  const header = el('div', 'anime-sheet-header');
-  const cover  = el('img', 'anime-sheet-cover');
+  // Close helper
+  const closeSheet = () => {
+    sheet.classList.remove('open');
+    setTimeout(() => overlay.remove(), 300);
+  };
+
+  // Large centered cover
+  const coverWrap = el('div', 'anime-sheet-cover-wrap');
+  const cover = el('img', 'anime-sheet-cover');
   cover.src = anime.images?.large || anime.images?.common || '';
   cover.alt = anime.name_cn || anime.name;
+  cover.addEventListener('click', e => {
+    e.stopPropagation();
+    showImageViewer(cover.src, cover.alt);
+  });
+  coverWrap.appendChild(cover);
+  sheet.appendChild(coverWrap);
 
-  const headerInfo = el('div', 'anime-sheet-header-info');
+  // Title row: name + copy button
+  const titleRow = el('div', 'anime-sheet-title-row');
   const sheetTitle = el('div', 'anime-sheet-title', anime.name_cn || anime.name);
-  const sheetMeta  = el('div', 'anime-sheet-meta');
+  const copyBtn = el('button', 'anime-sheet-copy-btn');
+  copyBtn.title = '複製名稱';
+  copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+  copyBtn.addEventListener('click', async e => {
+    e.stopPropagation();
+    const name = sheetTitle.textContent;
+    await navigator.clipboard.writeText(name).catch(() => {});
+    copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>`;
+    setTimeout(() => {
+      copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+    }, 1500);
+  });
+  titleRow.appendChild(sheetTitle);
+  titleRow.appendChild(copyBtn);
+
+  // Meta
+  const sheetMeta = el('div', 'anime-sheet-meta');
   const score = anime.rating?.score ? `⭐ ${anime.rating.score.toFixed(1)}` : '';
   const eps   = anime.eps ? `${anime.eps}集` : '';
   sheetMeta.textContent = [score, eps].filter(Boolean).join(' · ');
 
-  headerInfo.appendChild(sheetTitle);
-  headerInfo.appendChild(sheetMeta);
-  header.appendChild(cover);
-  header.appendChild(headerInfo);
-
+  // Close button
   const closeBtn = el('button', 'anime-sheet-close');
   closeBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
-  closeBtn.addEventListener('click', () => {
-    sheet.classList.remove('open');
-    setTimeout(() => overlay.remove(), 300);
-  });
-  header.appendChild(closeBtn);
-  sheet.appendChild(header);
+  closeBtn.addEventListener('click', closeSheet);
 
-  // Summary section
+  const infoWrap = el('div', 'anime-sheet-info');
+  infoWrap.appendChild(titleRow);
+  infoWrap.appendChild(sheetMeta);
+  infoWrap.appendChild(closeBtn);
+  sheet.appendChild(infoWrap);
+
+  // Summary
   const summaryEl = el('div', 'anime-sheet-summary', '載入中…');
   sheet.appendChild(summaryEl);
 
-  // Action button
-  const goBtn = el('a', 'anime-sheet-go-btn', '前往 Bangumi 頁面 →');
-  goBtn.href = `https://bgm.tv/subject/${anime.id}`;
-  goBtn.target = '_blank';
-  goBtn.rel = 'noopener';
-  sheet.appendChild(goBtn);
+  // 4 link buttons
+  const btnWrap = el('div', 'anime-sheet-btns');
+  const links = [
+    { label: 'Bangumi', url: `https://bgm.tv/subject/${anime.id}` },
+    { label: '動畫瘋', url: '' },
+    { label: 'YouTube', url: '' },
+    { label: '劇迷', url: '' },
+  ];
+  links.forEach(({ label, url }) => {
+    const a = el('a', 'anime-sheet-link-btn', label);
+    a.href = url || '#';
+    a.target = '_blank'; a.rel = 'noopener';
+    a.dataset.label = label;
+    btnWrap.appendChild(a);
+  });
+  sheet.appendChild(btnWrap);
 
   overlay.appendChild(sheet);
   document.body.appendChild(overlay);
+  requestAnimationFrame(() => { overlay.classList.add('open'); sheet.classList.add('open'); });
 
-  // Animate in
-  requestAnimationFrame(() => {
-    overlay.classList.add('open');
-    sheet.classList.add('open');
-  });
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeSheet(); });
 
-  // Close on overlay click
-  overlay.addEventListener('click', e => {
-    if (e.target === overlay) {
-      sheet.classList.remove('open');
-      setTimeout(() => overlay.remove(), 300);
-    }
-  });
-
-  // Fetch summary from legacy API (has summary field)
+  // Fetch full data
   try {
     const res = await fetch(`https://api.bgm.tv/subject/${anime.id}`, {
       headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
@@ -2111,9 +2152,20 @@ async function showAnimeSheet(anime) {
     const data = await res.json();
     const rawSummary = data.summary || '（暫無故事大綱）';
     const twSummary = await toTW(rawSummary);
-    const twTitle = data.name_cn ? await toTW(data.name_cn) : (anime.name_cn || anime.name);
+    const rawTitle = data.name_cn || anime.name_cn || anime.name;
+    const twTitle = await toTW(rawTitle);
     summaryEl.textContent = twSummary;
     sheetTitle.textContent = twTitle;
+
+    // Update link URLs with title
+    const q = encodeURIComponent(twTitle);
+    btnWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
+      switch(a.dataset.label) {
+        case '動畫瘋': a.href = `https://ani.gamer.com.tw/animeList.php?c=all&wd=${q}`; break;
+        case 'YouTube': a.href = `https://www.youtube.com/results?search_query=${q}`; break;
+        case '劇迷': a.href = `https://gimyai.tw/search?keyword=${q}`; break;
+      }
+    });
   } catch(_) {
     summaryEl.textContent = '無法載入故事大綱';
   }
