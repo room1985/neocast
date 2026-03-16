@@ -1806,13 +1806,32 @@ function renderAnimeWidget(container) {
   head.appendChild(todayBtn);
   container.appendChild(head);
 
-  // Shared weekday tabs (week + fav)
+  // Shared weekday tabs (week + fav) — 全部 + 週日~週六
   const weekTabsWrap = el('div', 'anime-tabs');
+  // Use -2 as sentinel for "全部"
+  const ALL_WD = -2;
+  if (curWd === undefined || curWd === -1) curWd = todayWd;
+
   const updateWeekTabs = () => {
-    weekTabsWrap.querySelectorAll('.anime-tab').forEach((t, i) => t.classList.toggle('on', i === curWd));
+    weekTabsWrap.querySelectorAll('.anime-tab').forEach(t => {
+      const wd = parseInt(t.dataset.wd);
+      t.classList.toggle('on', wd === curWd);
+    });
   };
+
+  // 全部 tab
+  const allTab = el('button', 'anime-tab' + (curWd === ALL_WD ? ' on' : ''), '全部');
+  allTab.dataset.wd = ALL_WD;
+  allTab.addEventListener('click', () => {
+    curWd = ALL_WD; S.animeState.weekday = ALL_WD;
+    updateWeekTabs();
+    loadTab();
+  });
+  weekTabsWrap.appendChild(allTab);
+
   BGM_WEEKDAY.forEach((name, i) => {
     const t = el('button', 'anime-tab' + (curWd === i ? ' on' : ''), name);
+    t.dataset.wd = i;
     if (i === todayWd) t.style.fontWeight = '900';
     t.addEventListener('click', () => {
       curWd = i; S.animeState.weekday = i;
@@ -1932,14 +1951,20 @@ function renderAnimeWidget(container) {
   function renderFav() {
     grid.innerHTML = '';
     const tracked = S.animeState.tracked || [];
-    const items = tracked
-      .map(id => S.animeState.trackedData?.[id])
-      .filter(a => a && a.air_weekday === curWd);
-    if (!items.length) {
-      grid.innerHTML = '<div class="anime-empty">這天沒有收藏的番組</div>';
-      return;
+    if (!tracked.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
+
+    if (curWd === ALL_WD) {
+      // Show all tracked items
+      const items = tracked.map(id => S.animeState.trackedData?.[id]).filter(Boolean);
+      if (!items.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
+      items.forEach(anime => grid.appendChild(makeAnimeCard(anime, anime.air_weekday)));
+    } else {
+      const items = tracked
+        .map(id => S.animeState.trackedData?.[id])
+        .filter(a => a && a.air_weekday === curWd);
+      if (!items.length) { grid.innerHTML = '<div class="anime-empty">這天沒有收藏的番組</div>'; return; }
+      items.forEach(anime => grid.appendChild(makeAnimeCard(anime, anime.air_weekday)));
     }
-    items.forEach(anime => grid.appendChild(makeAnimeCard(anime, anime.air_weekday)));
   }
 
   const doSearch = async () => {
@@ -1971,9 +1996,15 @@ function renderAnimeWidget(container) {
         try { calendarCache = await fetchBangumiCalendar(); }
         catch(e) { grid.innerHTML = '<div class="anime-empty">載入失敗</div>'; return; }
       }
-      const bgmId = curWd === 0 ? 7 : curWd;
-      const dayData = calendarCache.find(d => d.weekday?.id === bgmId);
-      renderItems(dayData?.items || [], curWd);
+      if (curWd === ALL_WD) {
+        // Merge all days
+        const all = calendarCache.flatMap(d => d.items || []);
+        renderItems(all, undefined);
+      } else {
+        const bgmId = curWd === 0 ? 7 : curWd;
+        const dayData = calendarCache.find(d => d.weekday?.id === bgmId);
+        renderItems(dayData?.items || [], curWd);
+      }
     } else if (curTab === 'fav') {
       renderFav();
     } else if (curTab === 'search') {
