@@ -446,8 +446,9 @@ function setEditMode(on) {
   document.querySelectorAll('.widget').forEach(w => w.classList.toggle('editable', on));
   document.querySelectorAll('.w-delete-btn').forEach(b => b.classList.toggle('hidden', !on));
   const addPanel = $('add-widget-panel');
-  if (addPanel) addPanel.classList.toggle('hidden', !on);
-  if (on) renderAddWidgetPanel();
+  const isMobile = window.innerWidth < 768;
+  if (addPanel) addPanel.classList.toggle('hidden', !on || isMobile);
+  if (on && !isMobile) renderAddWidgetPanel();
 
   // Mobile: show/hide replace buttons and add-page button
   document.querySelectorAll('.mobile-page-replace-btn').forEach(b => b.classList.toggle('hidden', !on));
