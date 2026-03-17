@@ -1869,9 +1869,6 @@ function doMove(scId, gid) {
 function openSettingsModal() {
   $('cfg-tok').value        = S.cfg.token;
   $('cfg-gid').value        = S.cfg.gistId;
-  $('cfg-lang').value       = S.news.lang;
-  $('cfg-per-kw').value     = String(S.news.perKeyword || 2);
-  $('cfg-cache-min').value  = String(S.news.cacheMin || 25);
   $('cfg-nickname').value   = S.cfg.nickname || '';
   $('cfg-city').value       = S.cfg.weatherCity || '';
   $('cfg-ytkey').value      = S.cfg.ytApiKey || '';
@@ -1882,9 +1879,6 @@ function openSettingsModal() {
 async function saveSettings() {
   const token      = $('cfg-tok').value.trim();
   const gistId     = $('cfg-gid').value.trim();
-  const lang       = $('cfg-lang').value;
-  const perKeyword = parseInt($('cfg-per-kw').value) || 2;
-  const cacheMin   = parseInt($('cfg-cache-min').value) || 25;
   const nickname   = $('cfg-nickname').value.trim();
   const city       = $('cfg-city').value.trim();
 
@@ -1893,9 +1887,6 @@ async function saveSettings() {
   S.cfg.nickname     = nickname;
   S.cfg.weatherCity  = city;
   S.cfg.ytApiKey     = $('cfg-ytkey').value.trim();
-  S.news.lang        = lang;
-  S.news.perKeyword  = perKeyword;
-  S.news.cacheMin    = cacheMin;
 
   // Handle video file
   const vidFile = $('cfg-vid').files[0];
