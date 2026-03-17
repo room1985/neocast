@@ -131,6 +131,11 @@ function lsLoad() {
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
     if (d.yt)            Object.assign(S.yt, d.yt);
+    // Migrate ch.group (string) → ch.groups (array)
+    if (S.yt.channels) S.yt.channels.forEach(ch => {
+      if (ch.group && !ch.groups) { ch.groups = [ch.group]; delete ch.group; }
+      if (!ch.groups) ch.groups = [];
+    });
     if (d.widgetTitles)  Object.assign(S.widgetTitles, d.widgetTitles);
     if (d.mobilePages)   S.mobilePages = d.mobilePages;
     if (d.animeState)  Object.assign(S.animeState, { ...d.animeState, offset: 0 }); // always start at current season
@@ -2577,7 +2582,7 @@ async function fetchChannelVideos(channelId, key) {
   if (!uploadsId) return [];
 
   // Step 2: get latest 5 videos from uploads playlist
-  const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=5&playlistId=${uploadsId}&key=${key}`);
+  const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=${uploadsId}&key=${key}`);
   const pd = await pr.json();
   return (pd.items || []).map(item => ({
     videoId:     item.snippet.resourceId.videoId,
@@ -2623,60 +2628,58 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   container.innerHTML = '';
 
   let activeChannelId = null;
-  let activeGroup = 'all';
+  let activeGroups = new Set(); // empty = show all
   let singlePage = 0;
   const PER_CHANNEL_ALL = 3;
   const PER_CHANNEL_SINGLE = 10;
 
-  // ── Mobile head (desktop uses w-head) ──
+  // Ensure all channels have groups array
+  (S.yt.channels || []).forEach(ch => {
+    if (!ch.groups) ch.groups = ch.group ? [ch.group] : [];
+    delete ch.group;
+  });
+
+  // ── Mobile head ──
   let addBtn = addBtnRef;
   let refBtn = refBtnRef;
   if (!addBtn) {
     const mHead = el('div', 'yt-mobile-head');
     const mTitle = el('span', 'yt-head-title', '訂閱更新');
     const mRight = el('div', 'yt-head-right');
-    addBtn = el('button', 'yt-icon-btn', '+');
+    addBtn = el('button', 'yt-icon-btn');
     addBtn.title = '管理頻道';
+    addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
     refBtn = el('button', 'yt-icon-btn', '↻');
     refBtn.title = '重新整理';
     mRight.appendChild(addBtn); mRight.appendChild(refBtn);
     mHead.appendChild(mTitle); mHead.appendChild(mRight);
     container.appendChild(mHead);
+  } else {
+    // Desktop: update addBtn icon to settings gear
+    addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+    addBtn.title = '管理頻道';
   }
 
-  // ── Group filter tabs ──
+  // ── Group filter bar (multi-select) ──
   const groupBar = el('div', 'yt-group-bar');
   container.appendChild(groupBar);
 
   const renderGroupBar = () => {
     groupBar.innerHTML = '';
-    ['all', ...(S.yt.groups || [])].forEach(g => {
-      const t = el('button', 'yt-group-tab' + (activeGroup === g ? ' on' : ''), g === 'all' ? '全部' : g);
-      t.addEventListener('click', () => { activeGroup = g; renderGroupBar(); renderFeed(); });
+    const allBtn = el('button', 'yt-group-tab' + (activeGroups.size === 0 ? ' on' : ''), '全部');
+    allBtn.addEventListener('click', () => { activeGroups.clear(); renderGroupBar(); renderFeed(); });
+    groupBar.appendChild(allBtn);
+
+    (S.yt.groups || []).forEach(g => {
+      const on = activeGroups.has(g);
+      const t = el('button', 'yt-group-tab' + (on ? ' on' : ''), g);
+      t.addEventListener('click', () => {
+        if (activeGroups.has(g)) activeGroups.delete(g);
+        else activeGroups.add(g);
+        renderGroupBar(); renderFeed();
+      });
       groupBar.appendChild(t);
     });
-    // Add group button
-    const addGrpBtn = el('button', 'yt-group-tab yt-group-add', '＋');
-    addGrpBtn.title = '新增分組';
-    addGrpBtn.addEventListener('click', () => {
-      addGrpBtn.replaceWith((() => {
-        const inp = document.createElement('input');
-        inp.className = 'yt-group-input'; inp.placeholder = '分組名稱'; inp.autocomplete = 'off';
-        setTimeout(() => inp.focus(), 0);
-        const save = () => {
-          const val = inp.value.trim();
-          if (val && !(S.yt.groups||[]).includes(val)) {
-            if (!S.yt.groups) S.yt.groups = [];
-            S.yt.groups.push(val); lsSave();
-          }
-          renderGroupBar();
-        };
-        inp.addEventListener('blur', save);
-        inp.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();inp.blur();} if(e.key==='Escape'){inp.value='';inp.blur();} });
-        return inp;
-      })());
-    });
-    groupBar.appendChild(addGrpBtn);
   };
   renderGroupBar();
 
@@ -2684,6 +2687,8 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   const managerPanel = el('div', 'yt-manager');
   managerPanel.style.display = 'none';
 
+  // Add channel section
+  const addSection = el('div', 'yt-mgr-section');
   const inputRow = el('div', 'yt-input-row');
   const inp = el('input', 'yt-ch-input');
   inp.type = 'text'; inp.autocomplete = 'off';
@@ -2691,10 +2696,78 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   const addConfirmBtn = el('button', 'yt-add-confirm-btn', '新增');
   const addStatus = el('div', 'yt-add-status');
   inputRow.appendChild(inp); inputRow.appendChild(addConfirmBtn);
-  managerPanel.appendChild(inputRow); managerPanel.appendChild(addStatus);
+  addSection.appendChild(inputRow); addSection.appendChild(addStatus);
+  managerPanel.appendChild(addSection);
 
+  // Channel list section
+  const chListSection = el('div', 'yt-mgr-section');
+  const chListTitle = el('div', 'yt-mgr-title', '頻道');
   const chList = el('div', 'yt-ch-list');
-  managerPanel.appendChild(chList);
+  chListSection.appendChild(chListTitle); chListSection.appendChild(chList);
+  managerPanel.appendChild(chListSection);
+
+  // Group management section
+  const grpSection = el('div', 'yt-mgr-section');
+  const grpTitle = el('div', 'yt-mgr-title', '分組管理');
+  const grpList = el('div', 'yt-grp-list');
+  grpSection.appendChild(grpTitle); grpSection.appendChild(grpList);
+  managerPanel.appendChild(grpSection);
+
+  let selectedTagId = null; // "chId:tagName" for channel tags
+  let selectedGrp = null;   // group name for group management
+
+  const renderGrpList = () => {
+    grpList.innerHTML = '';
+    (S.yt.groups || []).forEach(g => {
+      const row = el('div', 'yt-grp-row' + (selectedGrp === g ? ' selected' : ''));
+      row.textContent = g;
+      const delBtn = el('button', 'yt-ch-del' + (selectedGrp === g ? ' visible' : ''), '✕');
+      delBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        S.yt.groups = (S.yt.groups || []).filter(x => x !== g);
+        // Remove from all channels
+        S.yt.channels.forEach(ch => { ch.groups = (ch.groups||[]).filter(x => x !== g); });
+        activeGroups.delete(g);
+        selectedGrp = null;
+        lsSave(); renderGrpList(); renderGroupBar(); renderChList(); renderFeed();
+      });
+      row.appendChild(delBtn);
+      row.addEventListener('click', () => {
+        selectedGrp = selectedGrp === g ? null : g;
+        renderGrpList();
+      });
+      grpList.appendChild(row);
+    });
+    // Add group input
+    const addGrpWrap = el('div', 'yt-grp-add-wrap');
+    const addGrpBtn = el('button', 'kw-add-btn', '＋');
+    addGrpBtn.title = '新增分組';
+    addGrpBtn.addEventListener('click', () => {
+      addGrpWrap.innerHTML = '';
+      const gi = document.createElement('input');
+      gi.className = 'kw-add-input'; gi.placeholder = '分組名稱'; gi.autocomplete = 'off';
+      addGrpWrap.appendChild(gi); gi.focus();
+      const save = () => {
+        const val = gi.value.trim();
+        if (val && !(S.yt.groups||[]).includes(val)) {
+          if (!S.yt.groups) S.yt.groups = [];
+          S.yt.groups.push(val); lsSave();
+        }
+        renderGrpList(); renderGroupBar();
+      };
+      gi.addEventListener('blur', save);
+      gi.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();gi.blur();} if(e.key==='Escape'){gi.value='';gi.blur();} });
+    });
+    addGrpWrap.appendChild(addGrpBtn);
+    grpList.appendChild(addGrpWrap);
+  };
+
+  // Click outside to deselect group/tag
+  document.addEventListener('click', function deselectAll(e) {
+    if (!container.isConnected) { document.removeEventListener('click', deselectAll); return; }
+    if (!grpList.contains(e.target) && selectedGrp) { selectedGrp = null; renderGrpList(); }
+    if (!chList.contains(e.target) && selectedTagId) { selectedTagId = null; renderChList(); }
+  });
 
   const renderChList = () => {
     chList.innerHTML = '';
@@ -2702,36 +2775,63 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       chList.innerHTML = '<div class="yt-ch-empty">尚未新增頻道</div>'; return;
     }
     S.yt.channels.forEach(ch => {
+      if (!ch.groups) ch.groups = [];
       const row = el('div', 'yt-ch-row');
+
       const left = el('div', 'yt-ch-row-left');
       if (ch.thumb) { const av = el('img','yt-ch-avatar'); av.src=ch.thumb; av.alt=ch.name; left.appendChild(av); }
       left.appendChild(el('span', 'yt-ch-name', ch.name));
       row.appendChild(left);
 
-      const actions = el('div', 'yt-ch-actions');
-
-      // Group selector
-      const grpSel = document.createElement('select');
-      grpSel.className = 'yt-ch-grp-sel';
-      grpSel.title = '設定分組';
-      const noneOpt = document.createElement('option');
-      noneOpt.value = ''; noneOpt.textContent = '分組';
-      grpSel.appendChild(noneOpt);
-      (S.yt.groups || []).forEach(g => {
-        const o = document.createElement('option');
-        o.value = g; o.textContent = g;
-        if (ch.group === g) o.selected = true;
-        grpSel.appendChild(o);
+      // Tags area
+      const tagsArea = el('div', 'yt-ch-tags');
+      ch.groups.forEach(g => {
+        const tagKey = ch.id + ':' + g;
+        const tag = el('span', 'yt-ch-tag' + (selectedTagId === tagKey ? ' selected' : ''), g);
+        tag.addEventListener('click', e => {
+          e.stopPropagation();
+          selectedTagId = selectedTagId === tagKey ? null : tagKey;
+          renderChList();
+        });
+        const delBtn = el('button', 'yt-tag-del' + (selectedTagId === tagKey ? ' visible' : ''), '✕');
+        delBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          ch.groups = ch.groups.filter(x => x !== g);
+          selectedTagId = null;
+          lsSave(); renderChList();
+        });
+        tag.appendChild(delBtn);
+        tagsArea.appendChild(tag);
       });
-      grpSel.addEventListener('change', e => {
-        ch.group = e.target.value || undefined;
-        lsSave();
-      });
-      actions.appendChild(grpSel);
 
-      // Delete button
+      // Add tag button
+      const addTagBtn = el('button', 'yt-tag-add', '＋');
+      addTagBtn.title = '新增分組標籤';
+      addTagBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        // Show group picker popover
+        const picker = el('div', 'yt-tag-picker');
+        const available = (S.yt.groups || []).filter(g => !ch.groups.includes(g));
+        if (!available.length) { picker.textContent = '無可用分組'; }
+        available.forEach(g => {
+          const opt = el('button', 'yt-tag-picker-opt', g);
+          opt.addEventListener('click', ev => {
+            ev.stopPropagation();
+            ch.groups.push(g); lsSave();
+            picker.remove(); renderChList();
+          });
+          picker.appendChild(opt);
+        });
+        addTagBtn.appendChild(picker);
+        const close = ev => { if (!picker.contains(ev.target)) { picker.remove(); document.removeEventListener('click', close); } };
+        setTimeout(() => document.addEventListener('click', close), 0);
+      });
+      tagsArea.appendChild(addTagBtn);
+      row.appendChild(tagsArea);
+
+      // Delete channel button
       const delBtn = el('button', 'yt-ch-del visible', '✕');
-      delBtn.title = '移除';
+      delBtn.title = '移除頻道';
       delBtn.addEventListener('click', e => {
         e.stopPropagation();
         S.yt.channels = S.yt.channels.filter(c => c.id !== ch.id);
@@ -2739,17 +2839,10 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
         S.yt.fetchedAt = 0;
         lsSave(); renderChList(); renderFeed();
       });
-      actions.appendChild(delBtn);
-      row.appendChild(actions);
+      row.appendChild(delBtn);
       chList.appendChild(row);
     });
   };
-
-  // Keyboard delete (legacy support)
-  const kbDel = e => {
-    if (!container.isConnected) { document.removeEventListener('keydown', kbDel); return; }
-  };
-  document.addEventListener('keydown', kbDel);
 
   // Add channel
   const doAdd = async () => {
@@ -2761,6 +2854,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     try {
       const ch = await resolveChannelId(val);
       if (S.yt.channels.find(c => c.id === ch.id)) { addStatus.textContent = '此頻道已在清單中'; addStatus.className = 'yt-add-status error'; return; }
+      ch.groups = [];
       S.yt.channels.push(ch); S.yt.fetchedAt = 0; lsSave();
       inp.value = ''; addStatus.textContent = `已新增「${ch.name}」`; addStatus.className = 'yt-add-status ok';
       renderChList(); fetchYoutubeFeed(true).then(() => renderFeed());
@@ -2776,7 +2870,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     managerOpen = !managerOpen;
     managerPanel.style.display = managerOpen ? '' : 'none';
     addBtn.classList.toggle('active', managerOpen);
-    if (managerOpen) { renderChList(); inp.focus(); }
+    if (managerOpen) { renderChList(); renderGrpList(); inp.focus(); }
   });
   container.appendChild(managerPanel);
 
@@ -2794,17 +2888,16 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     breadcrumb.innerHTML = ''; breadcrumb.style.display = 'none';
 
     if (!S.cfg.ytApiKey?.trim()) { feed.innerHTML = '<div class="yt-empty">請在設定中填入 YouTube API Key</div>'; return; }
-    if (!S.yt.channels?.length) { feed.innerHTML = '<div class="yt-empty">點右上角 ＋ 新增頻道</div>'; return; }
+    if (!S.yt.channels?.length) { feed.innerHTML = '<div class="yt-empty">點右上角 ⚙ 新增頻道</div>'; return; }
 
-    // Filter channels by active group
-    const visibleChannels = activeGroup === 'all'
+    // Filter channels by active groups (empty = all)
+    const visibleChannels = activeGroups.size === 0
       ? S.yt.channels
-      : S.yt.channels.filter(c => c.group === activeGroup);
+      : S.yt.channels.filter(c => (c.groups||[]).some(g => activeGroups.has(g)));
 
     const allItems = (S.yt.items || []).filter(v => visibleChannels.find(c => c.id === v.channelId));
 
     if (activeChannelId) {
-      // ── Single channel view ──
       const ch = S.yt.channels.find(c => c.id === activeChannelId);
       breadcrumb.style.display = '';
       const backBtn = el('button', 'yt-nav-btn');
@@ -2826,7 +2919,6 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
         feed.appendChild(el('div', 'yt-end-note', '已載入所有快取影片'));
       }
     } else {
-      // ── All channels view ──
       if (!allItems.length) { feed.innerHTML = '<div class="yt-empty yt-loading"><span class="yt-spin">↻</span> 載入中...</div>'; return; }
       const seen = new Set(); const order = [];
       allItems.forEach(v => { if (!seen.has(v.channelId)) { seen.add(v.channelId); order.push(v.channelId); } });
@@ -2856,10 +2948,9 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     thumbWrap.appendChild(img);
     thumbWrap.addEventListener('click', e => {
       e.stopPropagation();
-      const videoId = video.videoId;
-      const maxRes = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
-      const hqRes  = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-      // Try maxres first, fallback to hq
+      const vid = video.videoId;
+      const maxRes = `https://i.ytimg.com/vi/${vid}/maxresdefault.jpg`;
+      const hqRes  = `https://i.ytimg.com/vi/${vid}/hqdefault.jpg`;
       const testImg = new Image();
       testImg.onload = () => showYtImageViewer(testImg.naturalWidth > 120 ? maxRes : hqRes);
       testImg.onerror = () => showYtImageViewer(hqRes);
