@@ -3064,3 +3064,31 @@ a { color:inherit; text-decoration:none; }
   outline: 2px solid var(--ac);
   outline-offset: 1px;
 }
+
+/* ── Mobile panel expand button ── */
+.mobile-panel-expand-btn {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.07);
+  color: var(--txm);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.mobile-panel-expand-btn:hover { background: rgba(255,255,255,.14); color: var(--tx); }
+
+/* ── Fullscreen panel ── */
+.mobile-panel-fullscreen {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100dvh !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  z-index: 8000 !important;
+  flex: none !important;
+  overflow: hidden;
+}

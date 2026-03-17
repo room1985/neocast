@@ -3522,6 +3522,19 @@ function initMobileLayout() {
       panelTitle.textContent = icon + getWidgetTitle(wid, meta?.label || wid);
       panelHead.appendChild(panelTitle);
 
+      // ── Expand/collapse button (always visible) ──
+      const expandBtn = el('button', 'mobile-panel-expand-btn');
+      expandBtn.title = '展開全屏';
+      const iconExpand = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
+      const iconCollapse = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/><line x1="10" y1="14" x2="3" y2="21"/><line x1="21" y1="3" x2="14" y2="10"/></svg>`;
+      expandBtn.innerHTML = iconExpand;
+      expandBtn.addEventListener('click', () => {
+        const isExpanded = panel.classList.toggle('mobile-panel-fullscreen');
+        expandBtn.innerHTML = isExpanded ? iconCollapse : iconExpand;
+        expandBtn.title = isExpanded ? '還原' : '展開全屏';
+      });
+      panelHead.appendChild(expandBtn);
+
       const panelBtns = el('div', 'mobile-panel-btns hidden');
 
       // Pencil button
@@ -3636,6 +3649,8 @@ function initMobileLayout() {
     touchStartY = e.touches[0].clientY;
   }, { passive: true });
   swipeArea.addEventListener('touchend', e => {
+    // Disable swipe if any panel is fullscreen
+    if (swipeArea.querySelector('.mobile-panel-fullscreen')) return;
     const dx = e.changedTouches[0].clientX - touchStartX;
     const dy = e.changedTouches[0].clientY - touchStartY;
     // Only switch page if horizontal movement is dominant and significant
