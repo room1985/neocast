@@ -2993,10 +2993,12 @@ function showYtPlayer(videoId, onClose) {
 
   const buildPlayer = (portrait) => {
     const overlay = el('div', 'yt-player-overlay');
+    overlay.style.pointerEvents = 'none'; // let clicks through to sheet below
     const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
+    modal.style.pointerEvents = 'all'; // modal itself is interactive
 
     const closePlayer = () => {
-      overlay.style.pointerEvents = 'none'; // block ghost clicks while fading
+      overlay.style.pointerEvents = 'none';
       overlay.classList.remove('open');
       setTimeout(() => { overlay.remove(); onClose?.(); }, 260);
     };
@@ -3016,15 +3018,10 @@ function showYtPlayer(videoId, onClose) {
     iframe.allowFullscreen = true;
     playerBox.appendChild(iframe);
 
+    modal.addEventListener('click', e => e.stopPropagation());
     modal.appendChild(bar);
     modal.appendChild(playerBox);
-    // Block all clicks inside modal from reaching overlay
-    modal.addEventListener('click', e => e.stopPropagation());
     overlay.appendChild(modal);
-
-    overlay.addEventListener('click', e => {
-      if (e.target === overlay) closePlayer();
-    });
 
     document.body.appendChild(overlay);
     requestAnimationFrame(() => overlay.classList.add('open'));
