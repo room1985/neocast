@@ -2415,19 +2415,12 @@ async function fetchYoutube(force = false) {
 }
 
 function buildYoutubeWidget() {
-  const w = S.widgets.youtube;
-  if (!w) return;
-  const existing = document.getElementById('w-youtube');
-  if (existing) existing.remove();
-
-  const wrap = el('div', 'widget-wrap');
-  wrap.id = 'w-youtube';
-  wrap.style.cssText = `grid-column:${w.col+1}/span ${w.cols};grid-row:${w.row+1}/span ${w.rows};`;
-  if (!w.visible) wrap.style.display = 'none';
-  wrap.dataset.wid = 'youtube';
-
-  renderYoutubeWidget(wrap);
-  document.getElementById('widget-grid').appendChild(wrap);
+  const body = el('div', 'yt-inner');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+  const w = makeWidget('youtube', '', body, '');
+  w.querySelector('.w-body')?.remove();
+  w.insertBefore(body, w.querySelector('.resize-handle'));
+  renderYoutubeWidget(body);
 }
 
 function renderYoutubeWidget(container) {
@@ -2715,7 +2708,7 @@ function buildMobileWidgetContent(widgetType, container) {
     const inner = el('div', 'yt-inner');
     inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
     container.appendChild(inner);
-    renderYoutubeWidget(container);
+    renderYoutubeWidget(inner);
   }
 }
 
@@ -2997,9 +2990,9 @@ function renderAll() {
   if (animeBody) renderAnimeWidget(animeBody);
   const mobileAnimeBody = document.querySelector('#mobile-layout .anime-inner');
   if (mobileAnimeBody) renderAnimeWidget(mobileAnimeBody);
-  const ytWrap = document.getElementById('w-youtube');
-  if (ytWrap) renderYoutubeWidget(ytWrap);
-  const mobileYtBody = document.querySelector('#mobile-layout .yt-inner')?.parentElement;
+  const ytBody = document.querySelector('.widget[data-wid="youtube"] .yt-inner');
+  if (ytBody) renderYoutubeWidget(ytBody);
+  const mobileYtBody = document.querySelector('#mobile-layout .yt-inner');
   if (mobileYtBody) renderYoutubeWidget(mobileYtBody);
 }
 
