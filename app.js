@@ -2899,7 +2899,12 @@ function showYtSheet(video) {
 
   const overlay = el('div', 'anime-sheet-overlay');
   const sheet   = el('div', 'anime-sheet');
-  const closeSheet = () => { sheet.classList.remove('open'); setTimeout(() => overlay.remove(), 300); };
+  let playerActive = false;
+  const closeSheet = () => {
+    if (playerActive) return; // don't close while player is open
+    sheet.classList.remove('open');
+    setTimeout(() => overlay.remove(), 300);
+  };
 
   // ── Player area ──
   const playerWrap = el('div', 'yt-sheet-player');
@@ -2910,9 +2915,10 @@ function showYtSheet(video) {
 
   playerWrap.addEventListener('click', e => {
     e.stopPropagation();
+    playerActive = true;
     playerWrap.style.display = 'none';
     showYtPlayer(video.videoId, () => {
-      // On player close: restore thumb in sheet
+      playerActive = false;
       playerWrap.innerHTML = '';
       playerWrap.appendChild(thumbImg);
       playerWrap.appendChild(playIcon);
@@ -2932,13 +2938,13 @@ function showYtSheet(video) {
   // Description
   const descWrap = el('div', 'yt-desc-wrap');
   const descEl = el('div', 'yt-desc', '');
-  descEl.style.webkitLineClamp = '3';
+  descEl.style.webkitLineClamp = '1';
   descWrap.appendChild(descEl);
   const moreBtn = el('button', 'yt-desc-more', '更多 ▾');
   let descExpanded = false;
   moreBtn.addEventListener('click', () => {
     descExpanded = !descExpanded;
-    descEl.style.webkitLineClamp = descExpanded ? 'unset' : '3';
+    descEl.style.webkitLineClamp = descExpanded ? 'unset' : '1';
     moreBtn.textContent = descExpanded ? '收起 ▴' : '更多 ▾';
   });
   moreBtn.style.display = 'none';
