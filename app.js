@@ -1231,12 +1231,60 @@ function renderNewsKws() {
   allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderNewsKws(); renderNewsItems(); });
   kws.appendChild(allTab);
 
-  // Keyword tabs
+  // Keyword tabs with delete
   S.news.keywords.forEach(kw => {
-    const t = el('span', 'kw-tag' + (S.news.activeKw === kw ? ' on' : ''), esc(kw));
-    t.addEventListener('click', () => { S.news.activeKw = kw; renderNewsKws(); renderNewsItems(); });
-    kws.appendChild(t);
+    const wrap = el('span', 'kw-tag-wrap' + (S.news.activeKw === kw ? ' on' : ''));
+    const label = el('span', 'kw-label', esc(kw));
+    label.addEventListener('click', () => { S.news.activeKw = kw; renderNewsKws(); renderNewsItems(); });
+    const del = el('button', 'kw-del', '✕');
+    del.title = '刪除關鍵字';
+    del.addEventListener('click', e => {
+      e.stopPropagation();
+      S.news.keywords = S.news.keywords.filter(k => k !== kw);
+      if (S.news.activeKw === kw) S.news.activeKw = 'all';
+      lsSave();
+      S.news.fetchedAt = 0;
+      renderNewsKws();
+      renderNewsItems();
+      fetchNews(true);
+    });
+    wrap.appendChild(label);
+    wrap.appendChild(del);
+    kws.appendChild(wrap);
   });
+
+  // Add keyword button
+  const addWrap = el('span', 'kw-add-wrap');
+  const addBtn = el('button', 'kw-add-btn', '＋');
+  addBtn.title = '新增關鍵字';
+  addBtn.addEventListener('click', () => {
+    addWrap.innerHTML = '';
+    const inp = document.createElement('input');
+    inp.className = 'kw-add-input';
+    inp.placeholder = '關鍵字';
+    inp.autocomplete = 'off';
+    addWrap.appendChild(inp);
+    inp.focus();
+    const confirm = () => {
+      const val = inp.value.trim();
+      if (val && !S.news.keywords.includes(val)) {
+        S.news.keywords.push(val);
+        lsSave();
+        S.news.fetchedAt = 0;
+        renderNewsKws();
+        fetchNews(true);
+      } else {
+        renderNewsKws();
+      }
+    };
+    inp.addEventListener('blur', confirm);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
+      if (e.key === 'Escape') { inp.value = ''; inp.blur(); }
+    });
+  });
+  addWrap.appendChild(addBtn);
+  kws.appendChild(addWrap);
 }
 
 function renderNewsItems() {
@@ -1774,9 +1822,7 @@ function doMove(scId, gid) {
 function openSettingsModal() {
   $('cfg-tok').value        = S.cfg.token;
   $('cfg-gid').value        = S.cfg.gistId;
-  $('cfg-kw').value         = S.news.keywords.join(', ');
   $('cfg-lang').value       = S.news.lang;
-  $('cfg-news-title').value = S.news.title || '即時新聞';
   $('cfg-per-kw').value     = String(S.news.perKeyword || 2);
   $('cfg-cache-min').value  = String(S.news.cacheMin || 25);
   $('cfg-nickname').value   = S.cfg.nickname || '';
@@ -1789,10 +1835,7 @@ function openSettingsModal() {
 async function saveSettings() {
   const token      = $('cfg-tok').value.trim();
   const gistId     = $('cfg-gid').value.trim();
-  const kwRaw      = $('cfg-kw').value;
   const lang       = $('cfg-lang').value;
-  const kws        = kwRaw.split(',').map(k=>k.trim()).filter(Boolean);
-  const newsTitle  = $('cfg-news-title').value.trim() || '即時新聞';
   const perKeyword = parseInt($('cfg-per-kw').value) || 2;
   const cacheMin   = parseInt($('cfg-cache-min').value) || 25;
   const nickname   = $('cfg-nickname').value.trim();
@@ -1804,14 +1847,8 @@ async function saveSettings() {
   S.cfg.weatherCity  = city;
   S.cfg.ytApiKey     = $('cfg-ytkey').value.trim();
   S.news.lang        = lang;
-  S.news.keywords    = kws.length ? kws : ['最新新聞'];
-  S.news.title       = newsTitle;
   S.news.perKeyword  = perKeyword;
   S.news.cacheMin    = cacheMin;
-
-  // Update news widget title live
-  const titleEl = $('news-widget-title');
-  if (titleEl) titleEl.textContent = newsTitle;
 
   // Handle video file
   const vidFile = $('cfg-vid').files[0];
@@ -2541,25 +2578,7 @@ function buildYoutubeWidget() {
   const w = makeWidget('youtube', '訂閱更新', body, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
-
-  // Add controls to w-head
-  const wHead = w.querySelector('.w-head');
-  const acts = el('div', 'w-actions');
-
-  const addBtn = el('button', 'w-btn yt-add-btn');
-  addBtn.title = '管理頻道';
-  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
-
-  const refBtn = el('button', 'w-btn');
-  refBtn.title = '重新整理';
-  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
-
-  acts.appendChild(addBtn);
-  acts.appendChild(refBtn);
-  const delBtn = wHead.querySelector('.w-delete-btn');
-  wHead.insertBefore(acts, delBtn);
-
-  renderYoutubeWidget(body, addBtn, refBtn);
+  renderYoutubeWidget(body, null, null);
 }
 
 function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
@@ -2977,20 +2996,50 @@ function renderMobileNews(container) {
   const kws = el('div', 'news-kws');
 
   const allTab = el('span', 'kw-tag' + (S.news.activeKw === 'all' ? ' on' : ''), '全部');
-  allTab.addEventListener('click', () => {
-    S.news.activeKw = 'all';
-    renderMobileNews(container);
-  });
+  allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderMobileNews(container); });
   kws.appendChild(allTab);
 
   S.news.keywords.forEach(kw => {
-    const t = el('span', 'kw-tag' + (S.news.activeKw === kw ? ' on' : ''), esc(kw));
-    t.addEventListener('click', () => {
-      S.news.activeKw = kw;
+    const wrap = el('span', 'kw-tag-wrap' + (S.news.activeKw === kw ? ' on' : ''));
+    const label = el('span', 'kw-label', esc(kw));
+    label.addEventListener('click', () => { S.news.activeKw = kw; renderMobileNews(container); });
+    const del = el('button', 'kw-del', '✕');
+    del.title = '刪除關鍵字';
+    del.addEventListener('click', e => {
+      e.stopPropagation();
+      S.news.keywords = S.news.keywords.filter(k => k !== kw);
+      if (S.news.activeKw === kw) S.news.activeKw = 'all';
+      lsSave(); S.news.fetchedAt = 0;
       renderMobileNews(container);
+      fetchNews(true);
     });
-    kws.appendChild(t);
+    wrap.appendChild(label); wrap.appendChild(del);
+    kws.appendChild(wrap);
   });
+
+  const addWrap = el('span', 'kw-add-wrap');
+  const addBtn = el('button', 'kw-add-btn', '＋');
+  addBtn.title = '新增關鍵字';
+  addBtn.addEventListener('click', () => {
+    addWrap.innerHTML = '';
+    const inp = document.createElement('input');
+    inp.className = 'kw-add-input'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off';
+    addWrap.appendChild(inp); inp.focus();
+    const confirm = () => {
+      const val = inp.value.trim();
+      if (val && !S.news.keywords.includes(val)) {
+        S.news.keywords.push(val); lsSave(); S.news.fetchedAt = 0;
+        renderMobileNews(container); fetchNews(true);
+      } else { renderMobileNews(container); }
+    };
+    inp.addEventListener('blur', confirm);
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
+      if (e.key === 'Escape') { inp.value = ''; inp.blur(); }
+    });
+  });
+  addWrap.appendChild(addBtn);
+  kws.appendChild(addWrap);
   container.appendChild(kws);
 
   // News list filtered
