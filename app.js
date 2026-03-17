@@ -69,7 +69,7 @@ let S = {
     weatherLon:  null,
     ytApiKey:    ''
   },
-  yt: { region: 'TW', shortsMode: 'all', shortsMaxSec: 60 },
+  yt: { channels: [], fetchedAt: 0, items: [] },
   editMode:       false,
   activeGroup:    'all',
   privateUnlocked: false,
@@ -105,7 +105,7 @@ function lsSave() {
       widgets:    S.widgets,
       news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:        S.cfg,
-      yt:         S.yt,
+      yt:         { channels: S.yt.channels },
       mobilePages: S.mobilePages,
       animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
     }));
@@ -470,7 +470,7 @@ const WIDGET_META = {
   news:      { label: 'AI新聞',  icon: '📰' },
   stickies:  { label: '便利貼',  icon: '📝' },
   anime:     { label: '動畫追蹤', icon: '🎌' },
-  youtube:   { label: 'YouTube 熱門', icon: '▶️' }
+  youtube:   { label: 'YouTube 訂閱', icon: '▶️' }
 };
 
 /* Default positions for when a widget is re-added */
@@ -2370,7 +2370,7 @@ async function showAnimeSheet(anime) {
 }
 
 /* ─────────────────────────────────────
-   YOUTUBE TRENDING WIDGET
+   YOUTUBE SUBSCRIPTION FEED WIDGET
 ───────────────────────────────────── */
 
 function fmtNum(n) {
@@ -2380,38 +2380,88 @@ function fmtNum(n) {
   return n.toLocaleString();
 }
 
-function parseDuration(iso) {
-  if (!iso) return 0;
-  const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
-  if (!m) return 0;
-  return (parseInt(m[1] || 0) * 3600) + (parseInt(m[2] || 0) * 60) + parseInt(m[3] || 0);
+function fmtRelTime(iso) {
+  if (!iso) return '';
+  const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+  if (diff < 60)   return '剛剛';
+  if (diff < 3600) return `${Math.floor(diff/60)} 分鐘前`;
+  if (diff < 86400) return `${Math.floor(diff/3600)} 小時前`;
+  if (diff < 86400*30) return `${Math.floor(diff/86400)} 天前`;
+  if (diff < 86400*365) return `${Math.floor(diff/86400/30)} 個月前`;
+  return `${Math.floor(diff/86400/365)} 年前`;
 }
 
-async function fetchYoutube(force = false) {
-  const CACHE_KEY = 'neocast_yt';
-  const CACHE_MIN = 30;
-  if (!force) {
-    try {
-      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
-      if (cached && (Date.now() - cached.fetchedAt) < CACHE_MIN * 60000) {
-        return cached;
-      }
-    } catch (_) {}
-  }
-
+// Resolve channel ID from URL or handle or raw ID
+async function resolveChannelId(input) {
   const key = S.cfg.ytApiKey?.trim();
-  if (!key) return null;
+  if (!key) throw new Error('請先填入 API Key');
+  input = input.trim();
 
-  const regionParam = S.yt.region ? `&regionCode=${S.yt.region}` : '';
-  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=50${regionParam}&key=${key}`;
+  // Extract from URL patterns
+  let handle = null, rawId = null;
+  const urlMatch = input.match(/youtube\.com\/@([\w.-]+)/);
+  const idMatch  = input.match(/youtube\.com\/channel\/(UC[\w-]+)/);
+  if (urlMatch)      handle = urlMatch[1];
+  else if (idMatch)  rawId  = idMatch[1];
+  else if (input.startsWith('@')) handle = input.slice(1);
+  else if (input.startsWith('UC')) rawId = input;
+  else handle = input; // treat as handle
 
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`YouTube API ${res.status}`);
-  const data = await res.json();
+  if (rawId) {
+    // Verify and get name
+    const r = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${rawId}&key=${key}`);
+    const d = await r.json();
+    const ch = d.items?.[0];
+    if (!ch) throw new Error('找不到頻道');
+    return { id: ch.id, name: ch.snippet.title, thumb: ch.snippet.thumbnails?.default?.url || '' };
+  } else {
+    const r = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=snippet&forHandle=${encodeURIComponent(handle)}&key=${key}`);
+    const d = await r.json();
+    const ch = d.items?.[0];
+    if (!ch) throw new Error('找不到頻道，請確認 handle 或網址');
+    return { id: ch.id, name: ch.snippet.title, thumb: ch.snippet.thumbnails?.default?.url || '' };
+  }
+}
 
-  const result = { fetchedAt: Date.now(), items: data.items || [] };
-  localStorage.setItem(CACHE_KEY, JSON.stringify(result));
-  return result;
+async function fetchChannelVideos(channelId, key) {
+  // Step 1: get uploads playlist ID
+  const cr = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${key}`);
+  const cd = await cr.json();
+  const uploadsId = cd.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+  if (!uploadsId) return [];
+
+  // Step 2: get latest 5 videos from uploads playlist
+  const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=5&playlistId=${uploadsId}&key=${key}`);
+  const pd = await pr.json();
+  return (pd.items || []).map(item => ({
+    videoId:     item.snippet.resourceId.videoId,
+    title:       item.snippet.title,
+    thumb:       item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || '',
+    publishedAt: item.snippet.publishedAt,
+    channelId:   channelId,
+    channelName: item.snippet.channelTitle
+  }));
+}
+
+async function fetchYoutubeFeed(force = false) {
+  const CACHE_MIN = 30;
+  if (!force && S.yt.fetchedAt && (Date.now() - S.yt.fetchedAt) < CACHE_MIN * 60000) {
+    return S.yt.items;
+  }
+  const key = S.cfg.ytApiKey?.trim();
+  if (!key || !S.yt.channels?.length) return [];
+
+  const results = await Promise.allSettled(
+    S.yt.channels.map(ch => fetchChannelVideos(ch.id, key))
+  );
+  const items = results
+    .filter(r => r.status === 'fulfilled')
+    .flatMap(r => r.value)
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+  S.yt.fetchedAt = Date.now();
+  S.yt.items = items;
+  return items;
 }
 
 function buildYoutubeWidget() {
@@ -2425,207 +2475,258 @@ function buildYoutubeWidget() {
 
 function renderYoutubeWidget(container) {
   container.innerHTML = '';
-  const inner = el('div', 'yt-inner');
 
   // ── Header ──
   const head = el('div', 'yt-head');
-  const title = el('span', 'yt-head-title', 'YouTube 熱門');
-  head.appendChild(title);
+  const titleEl = el('span', 'yt-head-title', '訂閱更新');
+  head.appendChild(titleEl);
 
-  // Region dropdown
-  const regionSel = el('select', 'yt-sel');
-  regionSel.title = '地區';
-  [['TW','🌏 TW'],['US','🌎 US'],['JP','🌏 JP'],['','🌐 全球']].forEach(([v,t]) => {
-    const o = document.createElement('option');
-    o.value = v; o.textContent = t;
-    if (S.yt.region === v) o.selected = true;
-    regionSel.appendChild(o);
-  });
-  regionSel.addEventListener('change', () => {
-    S.yt.region = regionSel.value;
-    lsSave();
-    fetchYoutube(true).then(() => renderYoutubeWidget(container)).catch(e => showYtError(listEl, e));
-  });
-  head.appendChild(regionSel);
+  const headRight = el('div', 'yt-head-right');
 
-  // Shorts mode dropdown
-  const shortsSel = el('select', 'yt-sel');
-  shortsSel.title = 'Shorts 過濾';
-  [['all','⚡ 全部'],['only','⚡ 只 Shorts'],['hide','⚡ 隱藏 Shorts']].forEach(([v,t]) => {
-    const o = document.createElement('option');
-    o.value = v; o.textContent = t;
-    if (S.yt.shortsMode === v) o.selected = true;
-    shortsSel.appendChild(o);
-  });
-
-  // Max sec dropdown
-  const secSel = el('select', 'yt-sel yt-sec-sel');
-  secSel.title = 'Shorts 最長秒數';
-  [60,90,120,150,180].forEach(s => {
-    const o = document.createElement('option');
-    o.value = s; o.textContent = `≤${s}s`;
-    if (S.yt.shortsMaxSec === s) o.selected = true;
-    secSel.appendChild(o);
-  });
-  secSel.style.display = S.yt.shortsMode === 'only' ? '' : 'none';
-  secSel.addEventListener('change', () => {
-    S.yt.shortsMaxSec = parseInt(secSel.value);
-    lsSave();
-    renderYoutubeWidget(container);
-  });
-
-  shortsSel.addEventListener('change', () => {
-    S.yt.shortsMode = shortsSel.value;
-    secSel.style.display = shortsSel.value === 'only' ? '' : 'none';
-    // Update color
-    shortsSel.className = 'yt-sel' + (shortsSel.value === 'only' ? ' yt-sel-blue' : shortsSel.value === 'hide' ? ' yt-sel-red' : '');
-    lsSave();
-    renderYoutubeWidget(container);
-  });
-  shortsSel.className = 'yt-sel' + (S.yt.shortsMode === 'only' ? ' yt-sel-blue' : S.yt.shortsMode === 'hide' ? ' yt-sel-red' : '');
-  head.appendChild(shortsSel);
-  head.appendChild(secSel);
+  // Add channel button
+  const addBtn = el('button', 'yt-icon-btn', '+');
+  addBtn.title = '新增頻道';
+  headRight.appendChild(addBtn);
 
   // Refresh button
-  const refreshBtn = el('button', 'anime-head-btn', '↻');
+  const refreshBtn = el('button', 'yt-icon-btn', '↻');
   refreshBtn.title = '重新載入';
+  headRight.appendChild(refreshBtn);
+
+  head.appendChild(headRight);
+  container.appendChild(head);
+
+  // ── Channel manager panel (hidden by default) ──
+  const managerPanel = el('div', 'yt-manager');
+  managerPanel.style.display = 'none';
+
+  const inputRow = el('div', 'yt-input-row');
+  const inp = el('input', 'yt-ch-input');
+  inp.type = 'text';
+  inp.autocomplete = 'off';
+  inp.placeholder = '@頻道名稱 或貼上頻道網址';
+  inp.spellcheck = false;
+
+  const addConfirmBtn = el('button', 'yt-add-confirm-btn', '新增');
+  const addStatus = el('div', 'yt-add-status');
+  inputRow.appendChild(inp);
+  inputRow.appendChild(addConfirmBtn);
+  managerPanel.appendChild(inputRow);
+  managerPanel.appendChild(addStatus);
+
+  const chList = el('div', 'yt-ch-list');
+  managerPanel.appendChild(chList);
+  container.appendChild(managerPanel);
+
+  let selectedChId = null;
+
+  const renderChList = () => {
+    chList.innerHTML = '';
+    if (!S.yt.channels?.length) {
+      chList.innerHTML = '<div class="yt-ch-empty">尚未新增頻道</div>';
+      return;
+    }
+    S.yt.channels.forEach(ch => {
+      const row = el('div', 'yt-ch-row' + (selectedChId === ch.id ? ' selected' : ''));
+      row.dataset.id = ch.id;
+
+      const left = el('div', 'yt-ch-row-left');
+      if (ch.thumb) {
+        const avatar = el('img', 'yt-ch-avatar');
+        avatar.src = ch.thumb;
+        avatar.alt = ch.name;
+        left.appendChild(avatar);
+      }
+      const name = el('span', 'yt-ch-name', ch.name);
+      left.appendChild(name);
+      row.appendChild(left);
+
+      const delBtn = el('button', 'yt-ch-del' + (selectedChId === ch.id ? ' visible' : ''), '✕');
+      delBtn.title = '移除頻道';
+      delBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        S.yt.channels = S.yt.channels.filter(c => c.id !== ch.id);
+        S.yt.items = S.yt.items.filter(v => v.channelId !== ch.id);
+        S.yt.fetchedAt = 0;
+        selectedChId = null;
+        lsSave();
+        renderChList();
+        renderFeed();
+      });
+      row.appendChild(delBtn);
+
+      row.addEventListener('click', () => {
+        selectedChId = selectedChId === ch.id ? null : ch.id;
+        renderChList();
+      });
+      chList.appendChild(row);
+    });
+  };
+
+  // Click outside to deselect
+  document.addEventListener('click', function deselect(e) {
+    if (!chList.contains(e.target)) {
+      if (selectedChId) { selectedChId = null; renderChList(); }
+    }
+    if (!container.contains(e.target)) {
+      document.removeEventListener('click', deselect);
+    }
+  });
+
+  // Keyboard delete
+  document.addEventListener('keydown', function kbDel(e) {
+    if ((e.key === 'Delete' || e.key === 'Backspace') && selectedChId && managerPanel.style.display !== 'none') {
+      e.preventDefault();
+      S.yt.channels = S.yt.channels.filter(c => c.id !== selectedChId);
+      S.yt.items = S.yt.items.filter(v => v.channelId !== selectedChId);
+      S.yt.fetchedAt = 0;
+      selectedChId = null;
+      lsSave();
+      renderChList();
+      renderFeed();
+    }
+    if (!container.isConnected) document.removeEventListener('keydown', kbDel);
+  });
+
+  // Add channel logic
+  const doAdd = async () => {
+    const val = inp.value.trim();
+    if (!val) return;
+    if (!S.cfg.ytApiKey?.trim()) {
+      addStatus.textContent = '請先在設定中填入 API Key';
+      addStatus.className = 'yt-add-status error';
+      return;
+    }
+    addStatus.textContent = '搜尋中...';
+    addStatus.className = 'yt-add-status';
+    addConfirmBtn.disabled = true;
+    try {
+      const ch = await resolveChannelId(val);
+      if (S.yt.channels.find(c => c.id === ch.id)) {
+        addStatus.textContent = '此頻道已在清單中';
+        addStatus.className = 'yt-add-status error';
+        return;
+      }
+      S.yt.channels.push(ch);
+      S.yt.fetchedAt = 0;
+      lsSave();
+      inp.value = '';
+      addStatus.textContent = `已新增「${ch.name}」`;
+      addStatus.className = 'yt-add-status ok';
+      renderChList();
+      fetchYoutubeFeed(true).then(() => renderFeed());
+    } catch(e) {
+      addStatus.textContent = e.message;
+      addStatus.className = 'yt-add-status error';
+    } finally {
+      addConfirmBtn.disabled = false;
+    }
+  };
+  addConfirmBtn.addEventListener('click', doAdd);
+  inp.addEventListener('keydown', e => e.key === 'Enter' && doAdd());
+
+  // Toggle manager panel
+  let managerOpen = false;
+  addBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    managerOpen = !managerOpen;
+    managerPanel.style.display = managerOpen ? '' : 'none';
+    addBtn.classList.toggle('active', managerOpen);
+    if (managerOpen) { renderChList(); inp.focus(); }
+  });
+
+  // ── Feed ──
+  const feed = el('div', 'yt-feed');
+  container.appendChild(feed);
+
+  const renderFeed = () => {
+    feed.innerHTML = '';
+    if (!S.cfg.ytApiKey?.trim()) {
+      feed.innerHTML = '<div class="yt-empty">請在設定中填入 YouTube API Key</div>';
+      return;
+    }
+    if (!S.yt.channels?.length) {
+      feed.innerHTML = '<div class="yt-empty">點右上角 ＋ 新增頻道</div>';
+      return;
+    }
+    if (!S.yt.items?.length) {
+      feed.innerHTML = '<div class="yt-empty yt-loading"><span class="yt-spin">↻</span> 載入中...</div>';
+      return;
+    }
+    S.yt.items.forEach(video => {
+      const card = el('div', 'yt-card');
+
+      const thumbWrap = el('div', 'yt-thumb');
+      const img = el('img');
+      img.src = video.thumb;
+      img.alt = video.title;
+      img.loading = 'lazy';
+      thumbWrap.appendChild(img);
+      card.appendChild(thumbWrap);
+
+      const info = el('div', 'yt-info');
+      const t = el('div', 'yt-title', video.title);
+      const meta = el('div', 'yt-meta');
+      const chSpan = el('span', 'yt-channel', video.channelName);
+      const timeSpan = el('span', 'yt-time', fmtRelTime(video.publishedAt));
+      meta.appendChild(chSpan);
+      meta.appendChild(timeSpan);
+      info.appendChild(t);
+      info.appendChild(meta);
+      card.appendChild(info);
+
+      card.addEventListener('click', () => showYtSheet(video));
+      feed.appendChild(card);
+    });
+  };
+
+  // Refresh
   let spinning = false;
   refreshBtn.addEventListener('click', async () => {
     if (spinning) return;
     spinning = true;
     refreshBtn.classList.add('spin');
     try {
-      await fetchYoutube(true);
-      renderYoutubeWidget(container);
-    } catch (e) {
-      showYtError(listEl, e);
+      await fetchYoutubeFeed(true);
+      renderFeed();
+    } catch(e) {
+      feed.innerHTML = `<div class="yt-empty" style="color:#f66">${e.message}</div>`;
     } finally {
       spinning = false;
       refreshBtn.classList.remove('spin');
     }
   });
-  head.appendChild(refreshBtn);
-  inner.appendChild(head);
 
-  // ── Card List ──
-  const listEl = el('div', 'yt-grid');
-  inner.appendChild(listEl);
-  container.appendChild(inner);
-
-  // Load data
-  const cached = (() => {
-    try { return JSON.parse(localStorage.getItem('neocast_yt') || 'null'); } catch(_) { return null; }
-  })();
-
-  if (!S.cfg.ytApiKey?.trim()) {
-    listEl.innerHTML = '<div class="yt-empty">請在設定中填入 YouTube API Key</div>';
-    return;
+  // Initial render
+  renderFeed();
+  if (S.yt.channels?.length && (!S.yt.items?.length || !S.yt.fetchedAt)) {
+    fetchYoutubeFeed(false).then(() => renderFeed());
   }
-
-  const renderList = (data) => {
-    if (!data?.items?.length) {
-      listEl.innerHTML = '<div class="yt-empty">無資料</div>';
-      return;
-    }
-    let items = data.items;
-    // Filter shorts
-    if (S.yt.shortsMode === 'only') {
-      items = items.filter(v => parseDuration(v.contentDetails?.duration) <= S.yt.shortsMaxSec);
-    } else if (S.yt.shortsMode === 'hide') {
-      items = items.filter(v => parseDuration(v.contentDetails?.duration) > 60);
-    }
-    listEl.innerHTML = '';
-    items.forEach(video => {
-      const s = video.snippet || {};
-      const st = video.statistics || {};
-      const thumb = s.thumbnails?.medium?.url || s.thumbnails?.default?.url || '';
-      const dur = parseDuration(video.contentDetails?.duration);
-
-      const card = el('div', 'yt-card');
-      card.dataset.id = video.id;
-
-      const thumbWrap = el('div', 'yt-thumb');
-      const img = el('img');
-      img.src = thumb;
-      img.alt = s.title || '';
-      img.loading = 'lazy';
-      img.addEventListener('click', e => { e.stopPropagation(); showYtImageViewer(thumb); });
-      if (dur > 0 && dur <= 180) {
-        const durBadge = el('span', 'yt-dur-badge', dur >= 60 ? `${Math.floor(dur/60)}:${String(dur%60).padStart(2,'0')}` : `${dur}s`);
-        thumbWrap.appendChild(durBadge);
-      }
-      thumbWrap.appendChild(img);
-      card.appendChild(thumbWrap);
-
-      const info = el('div', 'yt-info');
-      const titleEl = el('div', 'yt-title', s.title || '');
-      const channelEl = el('div', 'yt-channel', s.channelTitle || '');
-      const metaEl = el('div', 'yt-meta');
-      [['👁', st.viewCount],['👍', st.likeCount],['💬', st.commentCount]].forEach(([icon, val]) => {
-        const item = el('span', 'yt-meta-item', `${icon} ${fmtNum(parseInt(val))}`);
-        metaEl.appendChild(item);
-      });
-      info.appendChild(titleEl);
-      info.appendChild(channelEl);
-      info.appendChild(metaEl);
-      card.appendChild(info);
-
-      card.addEventListener('click', () => showYtSheet(video));
-      listEl.appendChild(card);
-    });
-  };
-
-  if (cached) {
-    renderList(cached);
-  } else {
-    listEl.innerHTML = '<div class="yt-empty">載入中...</div>';
-  }
-
-  fetchYoutube(false).then(data => {
-    if (data) renderList(data);
-  }).catch(e => showYtError(listEl, e));
-}
-
-function showYtError(container, err) {
-  container.innerHTML = `<div class="yt-empty" style="color:var(--err,#f66)">載入失敗：${err.message || err}</div>`;
-}
-
-function showYtImageViewer(url) {
-  document.querySelector('.anime-image-viewer')?.remove();
-  const viewer = el('div', 'anime-image-viewer');
-  const img = el('img');
-  img.src = url;
-  viewer.appendChild(img);
-  viewer.addEventListener('click', () => viewer.remove());
-  document.body.appendChild(viewer);
-  requestAnimationFrame(() => viewer.classList.add('open'));
 }
 
 function showYtSheet(video) {
   document.querySelector('.anime-sheet-overlay')?.remove();
-  const s = video.snippet || {};
-  const st = video.statistics || {};
-  const thumb = s.thumbnails?.maxres?.url || s.thumbnails?.high?.url || s.thumbnails?.medium?.url || '';
+  const thumb = video.thumb || '';
 
   const overlay = el('div', 'anime-sheet-overlay');
-  const sheet = el('div', 'anime-sheet');
+  const sheet   = el('div', 'anime-sheet');
 
   const closeSheet = () => {
     sheet.classList.remove('open');
     setTimeout(() => overlay.remove(), 300);
   };
 
-  // Player area (thumb → iframe on click)
+  // Player (thumb → iframe)
   const playerWrap = el('div', 'yt-sheet-player');
   const thumbImg = el('img', 'yt-sheet-thumb');
   thumbImg.src = thumb;
-  thumbImg.alt = s.title || '';
+  thumbImg.alt = video.title || '';
   const playIcon = el('div', 'yt-play-icon', '▶');
   playerWrap.appendChild(thumbImg);
   playerWrap.appendChild(playIcon);
   playerWrap.addEventListener('click', () => {
     const iframe = el('iframe', 'yt-sheet-iframe');
-    iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1`;
+    iframe.src = `https://www.youtube.com/embed/${video.videoId}?autoplay=1`;
     iframe.allow = 'autoplay; encrypted-media; fullscreen';
     iframe.allowFullscreen = true;
     playerWrap.innerHTML = '';
@@ -2636,25 +2737,19 @@ function showYtSheet(video) {
 
   // Info
   const infoWrap = el('div', 'yt-sheet-info');
-  const titleEl = el('div', 'yt-sheet-title', s.title || '');
-  const channelEl = el('div', 'yt-channel', s.channelTitle || '');
-  const metaEl = el('div', 'yt-meta');
-  [['👁', st.viewCount],['👍', st.likeCount],['💬', st.commentCount]].forEach(([icon, val]) => {
-    const item = el('span', 'yt-meta-item', `${icon} ${fmtNum(parseInt(val))}`);
-    metaEl.appendChild(item);
-  });
-  infoWrap.appendChild(titleEl);
-  infoWrap.appendChild(channelEl);
-  infoWrap.appendChild(metaEl);
+  infoWrap.appendChild(el('div', 'yt-sheet-title', video.title || ''));
+  const meta = el('div', 'yt-meta');
+  meta.appendChild(el('span', 'yt-channel', video.channelName || ''));
+  meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
+  infoWrap.appendChild(meta);
 
   const openBtn = el('a', 'yt-open-btn', 'YouTube 開啟 ↗');
-  openBtn.href = `https://www.youtube.com/watch?v=${video.id}`;
+  openBtn.href = `https://www.youtube.com/watch?v=${video.videoId}`;
   openBtn.target = '_blank';
   openBtn.rel = 'noopener';
   infoWrap.appendChild(openBtn);
   sheet.appendChild(infoWrap);
 
-  // Close on overlay click
   overlay.addEventListener('click', e => { if (e.target === overlay) closeSheet(); });
   overlay.appendChild(sheet);
   document.body.appendChild(overlay);
@@ -2672,7 +2767,7 @@ const MOBILE_WIDGET_TYPES = {
   clock:     { label: '時鐘',   icon: '🕐' },
   stickies:  { label: '便利貼', icon: '📝' },
   anime:     { label: '動畫追蹤', icon: '🎌' },
-  youtube:   { label: 'YouTube 熱門', icon: '▶️' }
+  youtube:   { label: 'YouTube 訂閱', icon: '▶️' }
 };
 
 function buildMobileWidgetContent(widgetType, container) {
