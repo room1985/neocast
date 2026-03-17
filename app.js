@@ -1169,41 +1169,98 @@ function rerenderSc() {
 ───────────────────────────────────── */
 let newsListEl = null;
 
+// Shared news edit-tags state (true = delete buttons visible)
+let newsEditingTags = false;
+
 function buildNewsWidget() {
   const outer = el('div', 'news-inner');
   outer.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
   const w = makeWidget('news', S.news.title || '即時新聞', outer, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(outer, w.querySelector('.resize-handle'));
+  w.querySelector('.w-title').id = 'news-widget-title';
 
-  // Set title id
-  const wHead = w.querySelector('.w-head');
-  wHead.querySelector('.w-title').id = 'news-widget-title';
-
-  // ── Toolbar row (lang + refresh) ──
+  // ── Toolbar: [✎] [⚙] [中/EN] [↻] ──
   const toolbar = el('div', 'news-toolbar');
 
-  const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
-  langPill.id = 'news-lang-pill';
-  langPill.addEventListener('click', () => {
-    S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
-    langPill.textContent = S.news.lang === 'zh-TW' ? '中文' : 'EN';
-    lsSave();
-    fetchNews(true);
+  // Edit tags button
+  const editTagsBtn = el('button', 'w-btn news-edit-tags-btn');
+  editTagsBtn.title = '編輯標籤';
+  editTagsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+  editTagsBtn.addEventListener('click', () => {
+    newsEditingTags = !newsEditingTags;
+    editTagsBtn.classList.toggle('active', newsEditingTags);
+    renderNewsKws();
   });
 
+  // Settings button
+  const settingsBtn = el('button', 'w-btn news-settings-btn');
+  settingsBtn.title = '新聞設定';
+  settingsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+
+  // Lang button (rounded square, not pill)
+  const langBtn = el('button', 'w-btn news-lang-btn', S.news.lang === 'zh-TW' ? '中' : 'EN');
+  langBtn.id = 'news-lang-pill';
+  langBtn.title = '切換語言';
+  langBtn.addEventListener('click', () => {
+    S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
+    langBtn.textContent = S.news.lang === 'zh-TW' ? '中' : 'EN';
+    lsSave(); fetchNews(true);
+  });
+
+  // Refresh button
   const refBtn = el('button', 'w-btn');
   refBtn.id = 'news-ref-btn';
   refBtn.title = '重新整理';
-  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
   refBtn.addEventListener('click', () => {
     refBtn.classList.add('spin');
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  toolbar.appendChild(langPill);
+  toolbar.appendChild(editTagsBtn);
+  toolbar.appendChild(settingsBtn);
+  toolbar.appendChild(langBtn);
   toolbar.appendChild(refBtn);
   outer.appendChild(toolbar);
+
+  // ── Settings panel (hidden by default) ──
+  const settingsPanel = el('div', 'news-settings-panel');
+  settingsPanel.style.display = 'none';
+  settingsPanel.innerHTML = `
+    <label class="news-cfg-row">
+      <span>每個關鍵字顯示幾則</span>
+      <input id="news-cfg-per-kw" type="number" class="news-cfg-input" min="1" max="20" value="${S.news.perKeyword || 2}" autocomplete="off">
+    </label>
+    <label class="news-cfg-row">
+      <span>快取更新頻率</span>
+      <select id="news-cfg-cache" class="news-cfg-select">
+        <option value="5" ${S.news.cacheMin==5?'selected':''}>5 分鐘</option>
+        <option value="15" ${S.news.cacheMin==15?'selected':''}>15 分鐘</option>
+        <option value="25" ${S.news.cacheMin==25||!S.news.cacheMin?'selected':''}>25 分鐘</option>
+        <option value="60" ${S.news.cacheMin==60?'selected':''}>1 小時</option>
+      </select>
+    </label>
+  `;
+  settingsPanel.querySelector('#news-cfg-per-kw').addEventListener('change', e => {
+    const v = parseInt(e.target.value) || 2;
+    S.news.perKeyword = v; S.news.fetchedAt = 0; lsSave(); fetchNews(true);
+  });
+  settingsPanel.querySelector('#news-cfg-cache').addEventListener('change', e => {
+    S.news.cacheMin = parseInt(e.target.value); lsSave();
+  });
+  outer.appendChild(settingsPanel);
+
+  settingsBtn.addEventListener('click', () => {
+    const open = settingsPanel.style.display !== 'none';
+    settingsPanel.style.display = open ? 'none' : '';
+    settingsBtn.classList.toggle('active', !open);
+    // Sync values
+    if (!open) {
+      settingsPanel.querySelector('#news-cfg-per-kw').value = S.news.perKeyword || 2;
+      settingsPanel.querySelector('#news-cfg-cache').value = S.news.cacheMin || 25;
+    }
+  });
 
   // Keywords
   const kws = el('div', 'news-kws');
@@ -1216,8 +1273,6 @@ function buildNewsWidget() {
   outer.appendChild(newsListEl);
 
   renderNewsItems();
-
-  // Auto-fetch if stale
   if (Date.now() - S.news.fetchedAt > NEWS_CACHE_MS) fetchNews();
 }
 
@@ -1231,22 +1286,22 @@ function renderNewsKws() {
   allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderNewsKws(); renderNewsItems(); });
   kws.appendChild(allTab);
 
-  // Keyword tabs with delete
+  // Keyword tabs
   S.news.keywords.forEach(kw => {
-    const wrap = el('span', 'kw-tag-wrap' + (S.news.activeKw === kw ? ' on' : ''));
+    const wrap = el('span', 'kw-tag-wrap' + (S.news.activeKw === kw ? ' on' : '') + (newsEditingTags ? ' editing' : ''));
     const label = el('span', 'kw-label', esc(kw));
-    label.addEventListener('click', () => { S.news.activeKw = kw; renderNewsKws(); renderNewsItems(); });
+    label.addEventListener('click', () => {
+      if (newsEditingTags) return; // don't switch tab while editing
+      S.news.activeKw = kw; renderNewsKws(); renderNewsItems();
+    });
     const del = el('button', 'kw-del', '✕');
     del.title = '刪除關鍵字';
     del.addEventListener('click', e => {
       e.stopPropagation();
       S.news.keywords = S.news.keywords.filter(k => k !== kw);
       if (S.news.activeKw === kw) S.news.activeKw = 'all';
-      lsSave();
-      S.news.fetchedAt = 0;
-      renderNewsKws();
-      renderNewsItems();
-      fetchNews(true);
+      lsSave(); S.news.fetchedAt = 0;
+      renderNewsKws(); renderNewsItems(); fetchNews(true);
     });
     wrap.appendChild(label);
     wrap.appendChild(del);
@@ -1260,24 +1315,16 @@ function renderNewsKws() {
   addBtn.addEventListener('click', () => {
     addWrap.innerHTML = '';
     const inp = document.createElement('input');
-    inp.className = 'kw-add-input';
-    inp.placeholder = '關鍵字';
-    inp.autocomplete = 'off';
-    addWrap.appendChild(inp);
-    inp.focus();
-    const confirm = () => {
+    inp.className = 'kw-add-input'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off';
+    addWrap.appendChild(inp); inp.focus();
+    const doConfirm = () => {
       const val = inp.value.trim();
       if (val && !S.news.keywords.includes(val)) {
-        S.news.keywords.push(val);
-        lsSave();
-        S.news.fetchedAt = 0;
-        renderNewsKws();
-        fetchNews(true);
-      } else {
-        renderNewsKws();
-      }
+        S.news.keywords.push(val); lsSave(); S.news.fetchedAt = 0;
+        renderNewsKws(); fetchNews(true);
+      } else { renderNewsKws(); }
     };
-    inp.addEventListener('blur', confirm);
+    inp.addEventListener('blur', doConfirm);
     inp.addEventListener('keydown', e => {
       if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
       if (e.key === 'Escape') { inp.value = ''; inp.blur(); }
@@ -2969,104 +3016,136 @@ function renderMobileNews(container) {
   container.innerHTML = '';
   container.className = 'mobile-news-inner';
 
-  // Toolbar: [中文] [↻]
+  // ── Toolbar: [✎] [⚙] [中/EN] [↻] ──
   const toolbar = el('div', 'news-toolbar');
+  let mEditingTags = false;
 
-  const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
-  langPill.addEventListener('click', () => {
+  const editTagsBtn = el('button', 'w-btn news-edit-tags-btn');
+  editTagsBtn.title = '編輯標籤';
+  editTagsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+  editTagsBtn.addEventListener('click', () => {
+    mEditingTags = !mEditingTags;
+    editTagsBtn.classList.toggle('active', mEditingTags);
+    renderKws(mEditingTags);
+  });
+
+  const settingsBtn = el('button', 'w-btn news-settings-btn');
+  settingsBtn.title = '新聞設定';
+  settingsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+
+  const langBtn = el('button', 'w-btn news-lang-btn', S.news.lang === 'zh-TW' ? '中' : 'EN');
+  langBtn.title = '切換語言';
+  langBtn.addEventListener('click', () => {
     S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
-    langPill.textContent = S.news.lang === 'zh-TW' ? '中文' : 'EN';
-    lsSave();
-    fetchNews(true);
+    langBtn.textContent = S.news.lang === 'zh-TW' ? '中' : 'EN';
+    lsSave(); fetchNews(true);
   });
 
   const refBtn = el('button', 'w-btn');
   refBtn.id = 'mobile-news-ref-btn';
-  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  refBtn.title = '重新整理';
+  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
   refBtn.addEventListener('click', () => {
     refBtn.classList.add('spin');
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  toolbar.appendChild(langPill);
+  toolbar.appendChild(editTagsBtn);
+  toolbar.appendChild(settingsBtn);
+  toolbar.appendChild(langBtn);
   toolbar.appendChild(refBtn);
   container.appendChild(toolbar);
 
-  // Keywords with filter tabs
+  // Settings panel
+  const settingsPanel = el('div', 'news-settings-panel');
+  settingsPanel.style.display = 'none';
+  settingsPanel.innerHTML = `
+    <label class="news-cfg-row">
+      <span>每個關鍵字顯示幾則</span>
+      <input id="m-news-cfg-per-kw" type="number" class="news-cfg-input" min="1" max="20" value="${S.news.perKeyword || 2}" autocomplete="off">
+    </label>
+    <label class="news-cfg-row">
+      <span>快取更新頻率</span>
+      <select id="m-news-cfg-cache" class="news-cfg-select">
+        <option value="5" ${S.news.cacheMin==5?'selected':''}>5 分鐘</option>
+        <option value="15" ${S.news.cacheMin==15?'selected':''}>15 分鐘</option>
+        <option value="25" ${!S.news.cacheMin||S.news.cacheMin==25?'selected':''}>25 分鐘</option>
+        <option value="60" ${S.news.cacheMin==60?'selected':''}>1 小時</option>
+      </select>
+    </label>
+  `;
+  settingsPanel.querySelector('#m-news-cfg-per-kw').addEventListener('change', e => {
+    S.news.perKeyword = parseInt(e.target.value) || 2; S.news.fetchedAt = 0; lsSave(); fetchNews(true);
+  });
+  settingsPanel.querySelector('#m-news-cfg-cache').addEventListener('change', e => {
+    S.news.cacheMin = parseInt(e.target.value); lsSave();
+  });
+  container.appendChild(settingsPanel);
+  settingsBtn.addEventListener('click', () => {
+    const open = settingsPanel.style.display !== 'none';
+    settingsPanel.style.display = open ? 'none' : '';
+    settingsBtn.classList.toggle('active', !open);
+  });
+
+  // Keywords
   const kws = el('div', 'news-kws');
-
-  const allTab = el('span', 'kw-tag' + (S.news.activeKw === 'all' ? ' on' : ''), '全部');
-  allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderMobileNews(container); });
-  kws.appendChild(allTab);
-
-  S.news.keywords.forEach(kw => {
-    const wrap = el('span', 'kw-tag-wrap' + (S.news.activeKw === kw ? ' on' : ''));
-    const label = el('span', 'kw-label', esc(kw));
-    label.addEventListener('click', () => { S.news.activeKw = kw; renderMobileNews(container); });
-    const del = el('button', 'kw-del', '✕');
-    del.title = '刪除關鍵字';
-    del.addEventListener('click', e => {
-      e.stopPropagation();
-      S.news.keywords = S.news.keywords.filter(k => k !== kw);
-      if (S.news.activeKw === kw) S.news.activeKw = 'all';
-      lsSave(); S.news.fetchedAt = 0;
-      renderMobileNews(container);
-      fetchNews(true);
-    });
-    wrap.appendChild(label); wrap.appendChild(del);
-    kws.appendChild(wrap);
-  });
-
-  const addWrap = el('span', 'kw-add-wrap');
-  const addBtn = el('button', 'kw-add-btn', '＋');
-  addBtn.title = '新增關鍵字';
-  addBtn.addEventListener('click', () => {
-    addWrap.innerHTML = '';
-    const inp = document.createElement('input');
-    inp.className = 'kw-add-input'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off';
-    addWrap.appendChild(inp); inp.focus();
-    const confirm = () => {
-      const val = inp.value.trim();
-      if (val && !S.news.keywords.includes(val)) {
-        S.news.keywords.push(val); lsSave(); S.news.fetchedAt = 0;
-        renderMobileNews(container); fetchNews(true);
-      } else { renderMobileNews(container); }
-    };
-    inp.addEventListener('blur', confirm);
-    inp.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
-      if (e.key === 'Escape') { inp.value = ''; inp.blur(); }
-    });
-  });
-  addWrap.appendChild(addBtn);
-  kws.appendChild(addWrap);
   container.appendChild(kws);
 
-  // News list filtered
-  const filtered = S.news.activeKw === 'all'
-    ? S.news.items
-    : S.news.items.filter(i => i.kw === S.news.activeKw);
+  const renderKws = (editing) => {
+    kws.innerHTML = '';
+    const allTab = el('span', 'kw-tag' + (S.news.activeKw === 'all' ? ' on' : ''), '全部');
+    allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderMobileNews(container); });
+    kws.appendChild(allTab);
+    S.news.keywords.forEach(kw => {
+      const wrap = el('span', 'kw-tag-wrap' + (S.news.activeKw === kw ? ' on' : '') + (editing ? ' editing' : ''));
+      const label = el('span', 'kw-label', esc(kw));
+      label.addEventListener('click', () => { if (!editing) { S.news.activeKw = kw; renderMobileNews(container); } });
+      const del = el('button', 'kw-del', '✕');
+      del.addEventListener('click', e => {
+        e.stopPropagation();
+        S.news.keywords = S.news.keywords.filter(k => k !== kw);
+        if (S.news.activeKw === kw) S.news.activeKw = 'all';
+        lsSave(); S.news.fetchedAt = 0; renderMobileNews(container); fetchNews(true);
+      });
+      wrap.appendChild(label); wrap.appendChild(del);
+      kws.appendChild(wrap);
+    });
+    const addWrap = el('span', 'kw-add-wrap');
+    const addBtn = el('button', 'kw-add-btn', '＋');
+    addBtn.addEventListener('click', () => {
+      addWrap.innerHTML = '';
+      const inp = document.createElement('input');
+      inp.className = 'kw-add-input'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off';
+      addWrap.appendChild(inp); inp.focus();
+      const doConfirm = () => {
+        const val = inp.value.trim();
+        if (val && !S.news.keywords.includes(val)) { S.news.keywords.push(val); lsSave(); S.news.fetchedAt = 0; renderMobileNews(container); fetchNews(true); }
+        else { renderMobileNews(container); }
+      };
+      inp.addEventListener('blur', doConfirm);
+      inp.addEventListener('keydown', e => { if (e.key==='Enter'){e.preventDefault();inp.blur();} if(e.key==='Escape'){inp.value='';inp.blur();} });
+    });
+    addWrap.appendChild(addBtn);
+    kws.appendChild(addWrap);
+  };
+  renderKws(false);
 
+  // News list
+  const filtered = S.news.activeKw === 'all' ? S.news.items : S.news.items.filter(i => i.kw === S.news.activeKw);
   const list = el('div', 'news-list');
   list.style.cssText = 'overflow-y:auto;flex:1;padding:0 14px 12px;';
   container.appendChild(list);
-
   if (!filtered.length) {
     list.innerHTML = '<div class="news-empty"><p>尚無新聞<br>點擊 ↻ 載入</p></div>';
   } else {
     filtered.forEach(item => {
       const card = el('div', 'news-card');
-      card.innerHTML = `
-        <div class="nc-kw">${esc(item.kw||'')}</div>
-        <div class="nc-title">${esc(item.title||'')}</div>
-        <div class="nc-foot">
-          <span class="nc-meta">${esc(item.source||'')}${item.date?' · '+item.date:''}</span>
-          ${item.link?`<a class="nc-link" href="${esc(item.link)}" target="_blank" rel="noopener">閱讀 →</a>`:''}
-        </div>`;
+      card.innerHTML = `<div class="nc-kw">${esc(item.kw||'')}</div><div class="nc-title">${esc(item.title||'')}</div><div class="nc-foot"><span class="nc-meta">${esc(item.source||'')}${item.date?' · '+item.date:''}</span>${item.link?`<a class="nc-link" href="${esc(item.link)}" target="_blank" rel="noopener">閱讀 →</a>`:''}</div>`;
       list.appendChild(card);
     });
   }
 }
+
 
 function startMobileTitleEdit(titleEl, wid, defaultLabel, icon) {
   if (titleEl.querySelector('input')) return;
