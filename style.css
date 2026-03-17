@@ -1801,7 +1801,7 @@ a { color:inherit; text-decoration:none; }
   .mobile-panel-head {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 6px;
     padding: 8px 10px 6px;
     border-bottom: 1px solid rgba(255,255,255,.07);
     flex-shrink: 0;
@@ -1813,11 +1813,17 @@ a { color:inherit; text-decoration:none; }
     text-transform: uppercase;
     letter-spacing: .07em;
     color: var(--txm);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .mobile-panel-btns {
     display: flex;
     gap: 5px;
     align-items: center;
+    flex-shrink: 0;
   }
   .mobile-panel-btns.hidden { display: none !important; }
   .mobile-panel-btn {
@@ -3076,7 +3082,6 @@ a { color:inherit; text-decoration:none; }
   cursor: pointer;
   transition: background .15s, color .15s;
   flex-shrink: 0;
-  margin-left: auto;
 }
 .mobile-panel-expand-btn:hover { background: rgba(255,255,255,.14); color: var(--tx); }
 
@@ -3091,4 +3096,12 @@ a { color:inherit; text-decoration:none; }
   z-index: 8000 !important;
   flex: none !important;
   overflow: hidden;
+}
+.mobile-panel-fullscreen .mobile-panel-head {
+  padding: 10px 12px 8px;
+}
+.mobile-panel-fullscreen .mobile-panel-expand-btn {
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.2);
+  color: var(--tx);
 }

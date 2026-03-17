@@ -3532,6 +3532,15 @@ function initMobileLayout() {
         const isExpanded = panel.classList.toggle('mobile-panel-fullscreen');
         expandBtn.innerHTML = isExpanded ? iconCollapse : iconExpand;
         expandBtn.title = isExpanded ? '還原' : '展開全屏';
+        // Hide/show header
+        const hdr = document.getElementById('header');
+        if (hdr) hdr.style.display = isExpanded ? 'none' : '';
+        // Hide/show mobile clock
+        const clk = document.querySelector('.mobile-clock-wrap');
+        if (clk) clk.style.display = isExpanded ? 'none' : '';
+        // Hide/show dots bar
+        const dots = document.querySelector('.mobile-dots-bar');
+        if (dots) dots.style.display = isExpanded ? 'none' : '';
       });
       panelHead.appendChild(expandBtn);
 
