@@ -2882,9 +2882,10 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
 }
 
 function showYtImageViewer(url) {
-  document.querySelector('.anime-image-viewer')?.remove();
-  const viewer = el('div', 'anime-image-viewer');
-  const img = el('img'); img.src = url;
+  document.querySelector('.anime-img-viewer')?.remove();
+  const viewer = el('div', 'anime-img-viewer');
+  const img = el('img', 'anime-img-viewer-img');
+  img.src = url;
   viewer.appendChild(img);
   viewer.addEventListener('click', () => viewer.remove());
   document.body.appendChild(viewer);
@@ -2900,25 +2901,24 @@ function showYtSheet(video) {
   const sheet   = el('div', 'anime-sheet');
   const closeSheet = () => { sheet.classList.remove('open'); setTimeout(() => overlay.remove(), 300); };
 
-  // ── Player area (thumb → floating player on click) ──
+  // ── Player area ──
   const playerWrap = el('div', 'yt-sheet-player');
-  playerWrap.dataset.videoId = video.videoId;
   const thumbImg = el('img', 'yt-sheet-thumb');
   thumbImg.src = thumb; thumbImg.alt = video.title || '';
   const playIcon = el('div', 'yt-play-icon', '▶');
   playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
 
-  const launchPlayer = () => {
+  playerWrap.addEventListener('click', e => {
+    e.stopPropagation();
+    playerWrap.style.display = 'none';
     showYtPlayer(video.videoId, () => {
-      // On close: restore thumb
+      // On player close: restore thumb in sheet
       playerWrap.innerHTML = '';
-      playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
+      playerWrap.appendChild(thumbImg);
+      playerWrap.appendChild(playIcon);
       playerWrap.style.display = '';
     });
-    // Hide player area in sheet, keep info
-    playerWrap.style.display = 'none';
-  };
-  playerWrap.addEventListener('click', e => { e.stopPropagation(); launchPlayer(); });
+  });
   sheet.appendChild(playerWrap);
 
   // ── Info ──
@@ -2929,7 +2929,7 @@ function showYtSheet(video) {
   meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
   infoWrap.appendChild(meta);
 
-  // Description (fetch async)
+  // Description
   const descWrap = el('div', 'yt-desc-wrap');
   const descEl = el('div', 'yt-desc', '');
   descEl.style.webkitLineClamp = '3';
@@ -2964,7 +2964,6 @@ function showYtSheet(video) {
         const desc = d.items?.[0]?.snippet?.description?.trim() || '';
         if (!desc) return;
         descEl.textContent = desc;
-        // Check if clamped
         setTimeout(() => {
           if (descEl.scrollHeight > descEl.clientHeight + 4) moreBtn.style.display = '';
         }, 50);
@@ -2979,49 +2978,56 @@ function showYtPlayer(videoId, onClose) {
 
   const buildPlayer = (portrait) => {
     const overlay = el('div', 'yt-player-overlay');
-    overlay.style.pointerEvents = 'none';
-    const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
-    modal.style.pointerEvents = 'all';
 
-    // Default position: center-upper
     const vw = window.innerWidth, vh = window.innerHeight;
-    const mw = portrait ? Math.min(vw * 0.55, 320) : Math.min(vw * 0.88, 680);
-    const mh = portrait ? mw * (16/9) : mw * (9/16);
-    let x = (vw - mw) / 2;
-    let y = vh * 0.15;
+    const mw = portrait ? Math.min(vw * 0.55, 320) : Math.min(vw * 0.88, 660);
+    const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
     modal.style.width = mw + 'px';
-    modal.style.left  = x + 'px';
-    modal.style.top   = y + 'px';
+    modal.style.left  = Math.round((vw - mw) / 2) + 'px';
+    modal.style.top   = Math.round(vh * 0.12) + 'px';
 
-    // Drag
-    let dragging = false, ox = 0, oy = 0;
+    // ── Drag bar ──
     const dragBar = el('div', 'yt-player-drag-bar');
     const closeBtn = el('button', 'yt-player-close', '✕');
-    closeBtn.addEventListener('click', () => { overlay.remove(); onClose?.(); });
+    closeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      overlay.remove();
+      onClose?.();
+    });
     dragBar.appendChild(closeBtn);
+
+    // Drag logic — transparent shield over iframe during drag
+    let dragging = false, ox = 0, oy = 0;
+    let shield = null;
 
     const startDrag = (cx, cy) => {
       dragging = true;
       ox = cx - modal.offsetLeft;
       oy = cy - modal.offsetTop;
+      // Shield to capture events over iframe
+      shield = el('div', 'yt-drag-shield');
+      modal.appendChild(shield);
     };
+    const moveDrag = (cx, cy) => {
+      if (!dragging) return;
+      const nx = Math.max(0, Math.min(vw - modal.offsetWidth, cx - ox));
+      const ny = Math.max(0, Math.min(vh - modal.offsetHeight, cy - oy));
+      modal.style.left = nx + 'px'; modal.style.top = ny + 'px';
+    };
+    const endDrag = () => {
+      if (!dragging) return;
+      dragging = false;
+      shield?.remove(); shield = null;
+    };
+
     dragBar.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
     dragBar.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
-    document.addEventListener('mousemove', e => {
-      if (!dragging) return;
-      const nx = Math.max(0, Math.min(window.innerWidth - modal.offsetWidth, e.clientX - ox));
-      const ny = Math.max(0, Math.min(window.innerHeight - modal.offsetHeight, e.clientY - oy));
-      modal.style.left = nx + 'px'; modal.style.top = ny + 'px';
-    });
-    document.addEventListener('touchmove', e => {
-      if (!dragging) return;
-      const nx = Math.max(0, Math.min(window.innerWidth - modal.offsetWidth, e.touches[0].clientX - ox));
-      const ny = Math.max(0, Math.min(window.innerHeight - modal.offsetHeight, e.touches[0].clientY - oy));
-      modal.style.left = nx + 'px'; modal.style.top = ny + 'px';
-    }, { passive: true });
-    document.addEventListener('mouseup', () => { dragging = false; });
-    document.addEventListener('touchend', () => { dragging = false; });
+    document.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+    document.addEventListener('touchmove', e => moveDrag(e.touches[0].clientX, e.touches[0].clientY), { passive: true });
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('touchend', endDrag);
 
+    // ── Player box ──
     const playerBox = el('div', 'yt-player-box');
     const iframe = el('iframe');
     iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
@@ -3032,17 +3038,23 @@ function showYtPlayer(videoId, onClose) {
     modal.appendChild(dragBar);
     modal.appendChild(playerBox);
     overlay.appendChild(modal);
+
+    // Click outside modal closes player
+    overlay.addEventListener('click', e => {
+      if (!modal.contains(e.target)) { overlay.remove(); onClose?.(); }
+    });
+
     document.body.appendChild(overlay);
     requestAnimationFrame(() => overlay.classList.add('open'));
   };
 
-  // Detect portrait via player embed dimensions
+  // Detect portrait via player API
   if (key) {
     fetch(`https://www.googleapis.com/youtube/v3/videos?part=player&id=${videoId}&key=${key}`)
       .then(r => r.json()).then(d => {
         const p = d.items?.[0]?.player;
         const portrait = p && parseInt(p.embedHeight) > parseInt(p.embedWidth);
-        buildPlayer(portrait);
+        buildPlayer(!!portrait);
       }).catch(() => buildPlayer(false));
   } else {
     buildPlayer(false);
