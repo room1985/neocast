@@ -3108,6 +3108,9 @@ function showYtSheet(video) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   document.querySelector('.anime-sheet-overlay')?.remove();
   const thumb = video.thumb || '';
+  const vid = video.videoId;
+  const maxRes = vid ? `https://i.ytimg.com/vi/${vid}/maxresdefault.jpg` : thumb;
+  const hqRes  = vid ? `https://i.ytimg.com/vi/${vid}/hqdefault.jpg` : thumb;
 
   const overlay = el('div', 'anime-sheet-overlay');
   const sheet   = el('div', 'anime-sheet');
@@ -3121,7 +3124,12 @@ function showYtSheet(video) {
   // ── Player area ──
   const playerWrap = el('div', 'yt-sheet-player');
   const thumbImg = el('img', 'yt-sheet-thumb');
-  thumbImg.src = thumb; thumbImg.alt = video.title || '';
+  thumbImg.alt = video.title || '';
+  // Try maxres, fallback to hq
+  const tryHq = () => { thumbImg.src = hqRes; thumbImg.onerror = () => { thumbImg.src = thumb; }; };
+  thumbImg.onerror = tryHq;
+  thumbImg.onload = () => { if (thumbImg.naturalWidth <= 120) tryHq(); };
+  thumbImg.src = maxRes;
   const playIcon = el('div', 'yt-play-icon', '▶');
   playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
 
@@ -3632,8 +3640,9 @@ function initMobileLayout() {
     const dy = e.changedTouches[0].clientY - touchStartY;
     // Only switch page if horizontal movement is dominant and significant
     if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
-    if (dx < 0 && S.mobilePageIdx < S.mobilePages.length - 1) S.mobilePageIdx++;
-    else if (dx > 0 && S.mobilePageIdx > 0) S.mobilePageIdx--;
+    const n = S.mobilePages.length;
+    if (dx < 0) S.mobilePageIdx = (S.mobilePageIdx + 1) % n;
+    else        S.mobilePageIdx = (S.mobilePageIdx - 1 + n) % n;
     renderPages();
   }, { passive: true });
 
