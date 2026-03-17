@@ -2854,7 +2854,17 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     const img = el('img');
     img.src = video.thumb; img.alt = video.title; img.loading = 'lazy';
     thumbWrap.appendChild(img);
-    thumbWrap.addEventListener('click', e => { e.stopPropagation(); showYtImageViewer(video.thumb); });
+    thumbWrap.addEventListener('click', e => {
+      e.stopPropagation();
+      const videoId = video.videoId;
+      const maxRes = `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`;
+      const hqRes  = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+      // Try maxres first, fallback to hq
+      const testImg = new Image();
+      testImg.onload = () => showYtImageViewer(testImg.naturalWidth > 120 ? maxRes : hqRes);
+      testImg.onerror = () => showYtImageViewer(hqRes);
+      testImg.src = maxRes;
+    });
     card.appendChild(thumbWrap);
     const info = el('div', 'yt-info');
     info.appendChild(el('div', 'yt-title', video.title));
@@ -3008,10 +3018,11 @@ function showYtPlayer(videoId, onClose) {
 
     modal.appendChild(bar);
     modal.appendChild(playerBox);
+    // Block all clicks inside modal from reaching overlay
+    modal.addEventListener('click', e => e.stopPropagation());
     overlay.appendChild(modal);
 
     overlay.addEventListener('click', e => {
-      e.stopPropagation();
       if (e.target === overlay) closePlayer();
     });
 

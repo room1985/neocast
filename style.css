@@ -1997,16 +1997,19 @@ a { color:inherit; text-decoration:none; }
 }
 .anime-img-viewer.open { background: rgba(0,0,0,.88); }
 .anime-img-viewer-img {
+  width: auto; height: auto;
   max-width: 88vw; max-height: 88vh;
+  min-width: min(88vw, 480px);
   border-radius: 12px;
   box-shadow: 0 8px 40px rgba(0,0,0,.6);
   opacity: 0;
   transform: scale(.92);
   transition: opacity .25s, transform .25s;
+  object-fit: contain;
 }
 .anime-img-viewer.open .anime-img-viewer-img { opacity: 1; transform: scale(1); }
 @media (max-width: 767px) {
-  .anime-img-viewer-img { max-width: 96vw; max-height: 82vh; border-radius: 8px; }
+  .anime-img-viewer-img { max-width: 96vw; max-height: 82vh; min-width: 0; border-radius: 8px; }
 }
 
 /* ══════════════════════════════
@@ -2771,9 +2774,7 @@ a { color:inherit; text-decoration:none; }
 /* ── Center player modal ── */
 .yt-player-overlay {
   position: fixed; inset: 0; z-index: 11000;
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background: rgba(0,0,0,.7);
   display: flex; align-items: center; justify-content: center;
   padding-bottom: 32vh;
   opacity: 0; transition: opacity .25s;
