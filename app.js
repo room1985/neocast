@@ -1176,12 +1176,12 @@ function buildNewsWidget() {
   w.querySelector('.w-body')?.remove();
   w.insertBefore(outer, w.querySelector('.resize-handle'));
 
-  // Move actions to w-head (right side, before delete btn)
+  // Set title id
   const wHead = w.querySelector('.w-head');
-  const ttlEl = wHead.querySelector('.w-title');
-  ttlEl.id = 'news-widget-title';
+  wHead.querySelector('.w-title').id = 'news-widget-title';
 
-  const acts = el('div', 'w-actions');
+  // ── Toolbar row (lang + refresh) ──
+  const toolbar = el('div', 'news-toolbar');
 
   const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
   langPill.id = 'news-lang-pill';
@@ -1201,10 +1201,9 @@ function buildNewsWidget() {
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  acts.appendChild(langPill); acts.appendChild(refBtn);
-  // Insert before delete button
-  const delBtn = wHead.querySelector('.w-delete-btn');
-  wHead.insertBefore(acts, delBtn);
+  toolbar.appendChild(langPill);
+  toolbar.appendChild(refBtn);
+  outer.appendChild(toolbar);
 
   // Keywords
   const kws = el('div', 'news-kws');
@@ -2951,12 +2950,10 @@ function renderMobileNews(container) {
   container.innerHTML = '';
   container.className = 'mobile-news-inner';
 
-  // News header: [中文] [↻]
-  const head = el('div', 'news-head');
-  head.style.cssText = 'justify-content:flex-start;gap:6px;padding-right:36px;';
+  // Toolbar: [中文] [↻]
+  const toolbar = el('div', 'news-toolbar');
 
   const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
-  langPill.style.cssText = 'font-size:.65rem;padding:2px 7px;flex-shrink:0;';
   langPill.addEventListener('click', () => {
     S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
     langPill.textContent = S.news.lang === 'zh-TW' ? '中文' : 'EN';
@@ -2972,9 +2969,9 @@ function renderMobileNews(container) {
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  head.appendChild(langPill);
-  head.appendChild(refBtn);
-  container.appendChild(head);
+  toolbar.appendChild(langPill);
+  toolbar.appendChild(refBtn);
+  container.appendChild(toolbar);
 
   // Keywords with filter tabs
   const kws = el('div', 'news-kws');
