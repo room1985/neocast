@@ -2853,8 +2853,8 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     const thumbWrap = el('div', 'yt-thumb');
     const img = el('img');
     img.src = video.thumb; img.alt = video.title; img.loading = 'lazy';
-    img.addEventListener('click', e => { e.stopPropagation(); showYtImageViewer(video.thumb); });
     thumbWrap.appendChild(img);
+    thumbWrap.addEventListener('click', e => { e.stopPropagation(); showYtImageViewer(video.thumb); });
     card.appendChild(thumbWrap);
     const info = el('div', 'yt-info');
     info.appendChild(el('div', 'yt-title', video.title));
@@ -2898,27 +2898,53 @@ function showYtSheet(video) {
 
   const overlay = el('div', 'anime-sheet-overlay');
   const sheet   = el('div', 'anime-sheet');
-
   const closeSheet = () => { sheet.classList.remove('open'); setTimeout(() => overlay.remove(), 300); };
 
-  // Player area — click opens center modal player
+  // ── Player area (thumb → floating player on click) ──
   const playerWrap = el('div', 'yt-sheet-player');
+  playerWrap.dataset.videoId = video.videoId;
   const thumbImg = el('img', 'yt-sheet-thumb');
   thumbImg.src = thumb; thumbImg.alt = video.title || '';
   const playIcon = el('div', 'yt-play-icon', '▶');
   playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
-  playerWrap.addEventListener('click', e => {
-    e.stopPropagation();
-    showYtPlayer(video.videoId);
-  });
+
+  const launchPlayer = () => {
+    showYtPlayer(video.videoId, () => {
+      // On close: restore thumb
+      playerWrap.innerHTML = '';
+      playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
+      playerWrap.style.display = '';
+    });
+    // Hide player area in sheet, keep info
+    playerWrap.style.display = 'none';
+  };
+  playerWrap.addEventListener('click', e => { e.stopPropagation(); launchPlayer(); });
   sheet.appendChild(playerWrap);
 
+  // ── Info ──
   const infoWrap = el('div', 'yt-sheet-info');
   infoWrap.appendChild(el('div', 'yt-sheet-title', video.title || ''));
   const meta = el('div', 'yt-meta');
   meta.appendChild(el('span', 'yt-channel', video.channelName || ''));
   meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
   infoWrap.appendChild(meta);
+
+  // Description (fetch async)
+  const descWrap = el('div', 'yt-desc-wrap');
+  const descEl = el('div', 'yt-desc', '');
+  descEl.style.webkitLineClamp = '3';
+  descWrap.appendChild(descEl);
+  const moreBtn = el('button', 'yt-desc-more', '更多 ▾');
+  let descExpanded = false;
+  moreBtn.addEventListener('click', () => {
+    descExpanded = !descExpanded;
+    descEl.style.webkitLineClamp = descExpanded ? 'unset' : '3';
+    moreBtn.textContent = descExpanded ? '收起 ▴' : '更多 ▾';
+  });
+  moreBtn.style.display = 'none';
+  descWrap.appendChild(moreBtn);
+  infoWrap.appendChild(descWrap);
+
   const openBtn = el('a', 'yt-open-btn', 'YouTube 開啟 ↗');
   openBtn.href = `https://www.youtube.com/watch?v=${video.videoId}`;
   openBtn.target = '_blank'; openBtn.rel = 'noopener';
@@ -2929,29 +2955,98 @@ function showYtSheet(video) {
   overlay.appendChild(sheet);
   document.body.appendChild(overlay);
   requestAnimationFrame(() => sheet.classList.add('open'));
+
+  // Async fetch description
+  const key = S.cfg.ytApiKey?.trim();
+  if (key) {
+    fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${video.videoId}&key=${key}`)
+      .then(r => r.json()).then(d => {
+        const desc = d.items?.[0]?.snippet?.description?.trim() || '';
+        if (!desc) return;
+        descEl.textContent = desc;
+        // Check if clamped
+        setTimeout(() => {
+          if (descEl.scrollHeight > descEl.clientHeight + 4) moreBtn.style.display = '';
+        }, 50);
+      }).catch(() => {});
+  }
 }
 
-function showYtPlayer(videoId) {
+function showYtPlayer(videoId, onClose) {
   document.querySelector('.yt-player-overlay')?.remove();
-  const overlay = el('div', 'yt-player-overlay');
-  const modal = el('div', 'yt-player-modal');
 
-  const closeBtn = el('button', 'yt-player-close', '✕');
-  closeBtn.addEventListener('click', () => overlay.remove());
+  const key = S.cfg.ytApiKey?.trim();
 
-  const playerBox = el('div', 'yt-player-box');
-  const iframe = el('iframe');
-  iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-  iframe.allow = 'autoplay; encrypted-media; fullscreen';
-  iframe.allowFullscreen = true;
-  playerBox.appendChild(iframe);
+  const buildPlayer = (portrait) => {
+    const overlay = el('div', 'yt-player-overlay');
+    overlay.style.pointerEvents = 'none';
+    const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
+    modal.style.pointerEvents = 'all';
 
-  modal.appendChild(closeBtn);
-  modal.appendChild(playerBox);
-  overlay.appendChild(modal);
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  document.body.appendChild(overlay);
-  requestAnimationFrame(() => overlay.classList.add('open'));
+    // Default position: center-upper
+    const vw = window.innerWidth, vh = window.innerHeight;
+    const mw = portrait ? Math.min(vw * 0.55, 320) : Math.min(vw * 0.88, 680);
+    const mh = portrait ? mw * (16/9) : mw * (9/16);
+    let x = (vw - mw) / 2;
+    let y = vh * 0.15;
+    modal.style.width = mw + 'px';
+    modal.style.left  = x + 'px';
+    modal.style.top   = y + 'px';
+
+    // Drag
+    let dragging = false, ox = 0, oy = 0;
+    const dragBar = el('div', 'yt-player-drag-bar');
+    const closeBtn = el('button', 'yt-player-close', '✕');
+    closeBtn.addEventListener('click', () => { overlay.remove(); onClose?.(); });
+    dragBar.appendChild(closeBtn);
+
+    const startDrag = (cx, cy) => {
+      dragging = true;
+      ox = cx - modal.offsetLeft;
+      oy = cy - modal.offsetTop;
+    };
+    dragBar.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
+    dragBar.addEventListener('touchstart', e => { startDrag(e.touches[0].clientX, e.touches[0].clientY); }, { passive: true });
+    document.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      const nx = Math.max(0, Math.min(window.innerWidth - modal.offsetWidth, e.clientX - ox));
+      const ny = Math.max(0, Math.min(window.innerHeight - modal.offsetHeight, e.clientY - oy));
+      modal.style.left = nx + 'px'; modal.style.top = ny + 'px';
+    });
+    document.addEventListener('touchmove', e => {
+      if (!dragging) return;
+      const nx = Math.max(0, Math.min(window.innerWidth - modal.offsetWidth, e.touches[0].clientX - ox));
+      const ny = Math.max(0, Math.min(window.innerHeight - modal.offsetHeight, e.touches[0].clientY - oy));
+      modal.style.left = nx + 'px'; modal.style.top = ny + 'px';
+    }, { passive: true });
+    document.addEventListener('mouseup', () => { dragging = false; });
+    document.addEventListener('touchend', () => { dragging = false; });
+
+    const playerBox = el('div', 'yt-player-box');
+    const iframe = el('iframe');
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    iframe.allow = 'autoplay; encrypted-media; fullscreen';
+    iframe.allowFullscreen = true;
+    playerBox.appendChild(iframe);
+
+    modal.appendChild(dragBar);
+    modal.appendChild(playerBox);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => overlay.classList.add('open'));
+  };
+
+  // Detect portrait via player embed dimensions
+  if (key) {
+    fetch(`https://www.googleapis.com/youtube/v3/videos?part=player&id=${videoId}&key=${key}`)
+      .then(r => r.json()).then(d => {
+        const p = d.items?.[0]?.player;
+        const portrait = p && parseInt(p.embedHeight) > parseInt(p.embedWidth);
+        buildPlayer(portrait);
+      }).catch(() => buildPlayer(false));
+  } else {
+    buildPlayer(false);
+  }
 }
 
 

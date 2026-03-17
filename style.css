@@ -2768,40 +2768,74 @@ a { color:inherit; text-decoration:none; }
 /* ── Center player modal ── */
 .yt-player-overlay {
   position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,.75);
-  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
   opacity: 0; transition: opacity .2s;
 }
 .yt-player-overlay.open { opacity: 1; }
+
 .yt-player-modal {
-  position: relative;
-  width: min(92vw, 700px);
+  position: fixed;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,.7);
+  pointer-events: all;
+  user-select: none;
 }
+
+/* Drag bar */
+.yt-player-drag-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background: rgba(20,20,30,.9);
+  padding: 5px 8px;
+  cursor: grab;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.yt-player-drag-bar:active { cursor: grabbing; }
 .yt-player-close {
-  position: absolute;
-  top: -36px; right: 0;
-  background: rgba(255,255,255,.12);
-  border: 1px solid rgba(255,255,255,.2);
-  border-radius: 8px;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 7px;
   color: #fff;
-  width: 30px; height: 30px;
+  width: 26px; height: 26px;
   display: flex; align-items: center; justify-content: center;
-  font-size: .85rem;
+  font-size: .75rem;
   cursor: pointer;
   transition: background .15s;
 }
-.yt-player-close:hover { background: rgba(255,255,255,.25); }
+.yt-player-close:hover { background: rgba(248,113,113,.4); border-color: #f87171; }
+
 .yt-player-box {
   width: 100%;
   aspect-ratio: 16/9;
-  border-radius: 12px;
-  overflow: hidden;
   background: #000;
+  flex-shrink: 0;
 }
-.yt-player-box iframe {
-  width: 100%; height: 100%;
-  border: none; display: block;
+.yt-player-modal.portrait .yt-player-box { aspect-ratio: 9/16; }
+.yt-player-box iframe { width: 100%; height: 100%; border: none; display: block; }
+
+/* Description */
+.yt-desc-wrap { margin-top: 6px; }
+.yt-desc {
+  font-size: .75rem;
+  color: var(--txm);
+  line-height: 1.55;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: pre-wrap;
 }
+.yt-desc-more {
+  background: none;
+  border: none;
+  color: var(--ac);
+  font-size: .72rem;
+  cursor: pointer;
+  padding: 3px 0 0;
+  display: block;
+}
+.yt-desc-more:hover { opacity: .8; }
