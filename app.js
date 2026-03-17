@@ -2582,7 +2582,7 @@ async function fetchChannelVideos(channelId, key) {
   if (!uploadsId) return [];
 
   // Step 2: get latest 5 videos from uploads playlist
-  const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=15&playlistId=${uploadsId}&key=${key}`);
+  const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsId}&key=${key}`);
   const pd = await pr.json();
   return (pd.items || []).map(item => ({
     videoId:     item.snippet.resourceId.videoId,
@@ -2720,25 +2720,38 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     grpList.innerHTML = '';
     (S.yt.groups || []).forEach(g => {
       const row = el('div', 'yt-grp-row' + (selectedGrp === g ? ' selected' : ''));
-      row.textContent = g;
+      const nameSpan = el('span', 'yt-grp-name', g);
+      row.appendChild(nameSpan);
       const delBtn = el('button', 'yt-ch-del' + (selectedGrp === g ? ' visible' : ''), '✕');
       delBtn.addEventListener('click', e => {
         e.stopPropagation();
-        S.yt.groups = (S.yt.groups || []).filter(x => x !== g);
-        // Remove from all channels
+        S.yt.groups = (S.yt.groups||[]).filter(x => x !== g);
         S.yt.channels.forEach(ch => { ch.groups = (ch.groups||[]).filter(x => x !== g); });
-        activeGroups.delete(g);
-        selectedGrp = null;
+        activeGroups.delete(g); selectedGrp = null;
         lsSave(); renderGrpList(); renderGroupBar(); renderChList(); renderFeed();
       });
       row.appendChild(delBtn);
-      row.addEventListener('click', () => {
-        selectedGrp = selectedGrp === g ? null : g;
-        renderGrpList();
+      row.addEventListener('click', () => { selectedGrp = selectedGrp === g ? null : g; renderGrpList(); });
+      row.addEventListener('dblclick', e => {
+        e.stopPropagation();
+        const inp = document.createElement('input');
+        inp.className = 'yt-grp-rename-input'; inp.value = g; inp.autocomplete = 'off';
+        nameSpan.replaceWith(inp); inp.focus(); inp.select();
+        const save = () => {
+          const val = inp.value.trim();
+          if (val && val !== g && !(S.yt.groups||[]).includes(val)) {
+            const idx = S.yt.groups.indexOf(g);
+            if (idx >= 0) S.yt.groups[idx] = val;
+            S.yt.channels.forEach(ch => { const ti=(ch.groups||[]).indexOf(g); if(ti>=0) ch.groups[ti]=val; });
+            if (activeGroups.has(g)) { activeGroups.delete(g); activeGroups.add(val); }
+            selectedGrp = null; lsSave(); renderGrpList(); renderGroupBar(); renderChList();
+          } else { renderGrpList(); }
+        };
+        inp.addEventListener('blur', save);
+        inp.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();inp.blur();} if(e.key==='Escape'){inp.value=g;inp.blur();} });
       });
       grpList.appendChild(row);
     });
-    // Add group input
     const addGrpWrap = el('div', 'yt-grp-add-wrap');
     const addGrpBtn = el('button', 'kw-add-btn', '＋');
     addGrpBtn.title = '新增分組';
@@ -2749,10 +2762,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       addGrpWrap.appendChild(gi); gi.focus();
       const save = () => {
         const val = gi.value.trim();
-        if (val && !(S.yt.groups||[]).includes(val)) {
-          if (!S.yt.groups) S.yt.groups = [];
-          S.yt.groups.push(val); lsSave();
-        }
+        if (val && !(S.yt.groups||[]).includes(val)) { if(!S.yt.groups) S.yt.groups=[]; S.yt.groups.push(val); lsSave(); }
         renderGrpList(); renderGroupBar();
       };
       gi.addEventListener('blur', save);
@@ -2804,27 +2814,12 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
         tagsArea.appendChild(tag);
       });
 
-      // Add tag button
+      // Add tag button — opens modal
       const addTagBtn = el('button', 'yt-tag-add', '＋');
       addTagBtn.title = '新增分組標籤';
       addTagBtn.addEventListener('click', e => {
         e.stopPropagation();
-        // Show group picker popover
-        const picker = el('div', 'yt-tag-picker');
-        const available = (S.yt.groups || []).filter(g => !ch.groups.includes(g));
-        if (!available.length) { picker.textContent = '無可用分組'; }
-        available.forEach(g => {
-          const opt = el('button', 'yt-tag-picker-opt', g);
-          opt.addEventListener('click', ev => {
-            ev.stopPropagation();
-            ch.groups.push(g); lsSave();
-            picker.remove(); renderChList();
-          });
-          picker.appendChild(opt);
-        });
-        addTagBtn.appendChild(picker);
-        const close = ev => { if (!picker.contains(ev.target)) { picker.remove(); document.removeEventListener('click', close); } };
-        setTimeout(() => document.addEventListener('click', close), 0);
+        showYtGroupPicker(ch, () => renderChList());
       });
       tagsArea.appendChild(addTagBtn);
       row.appendChild(tagsArea);
@@ -2980,6 +2975,50 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   if (S.yt.channels?.length && (!S.yt.items?.length || !S.yt.fetchedAt)) {
     fetchYoutubeFeed(false).then(() => renderFeed());
   }
+}
+
+function showYtGroupPicker(ch, onDone) {
+  document.querySelector('.yt-grp-picker-overlay')?.remove();
+  const overlay = el('div', 'yt-grp-picker-overlay');
+  const modal = el('div', 'yt-grp-picker-modal');
+
+  const title = el('div', 'yt-grp-picker-title', `分組標籤 — ${ch.name}`);
+  modal.appendChild(title);
+
+  const grid = el('div', 'yt-grp-picker-grid');
+  (S.yt.groups || []).forEach(g => {
+    const on = ch.groups.includes(g);
+    const btn = el('button', 'yt-grp-picker-btn' + (on ? ' on' : ''), g);
+    btn.addEventListener('click', () => {
+      if (ch.groups.includes(g)) {
+        ch.groups = ch.groups.filter(x => x !== g);
+        btn.classList.remove('on');
+      } else {
+        ch.groups.push(g);
+        btn.classList.add('on');
+      }
+      lsSave();
+    });
+    grid.appendChild(btn);
+  });
+  if (!S.yt.groups?.length) {
+    grid.innerHTML = '<div style="color:var(--txd);font-size:.78rem;padding:8px 0">請先在分組管理中新增分組</div>';
+  }
+  modal.appendChild(grid);
+
+  const closeBtn = el('button', 'yt-grp-picker-close', '完成');
+  closeBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    overlay.remove();
+    onDone?.();
+  });
+  modal.appendChild(closeBtn);
+
+  modal.addEventListener('click', e => e.stopPropagation());
+  overlay.addEventListener('click', () => { overlay.remove(); onDone?.(); });
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => overlay.classList.add('open'));
 }
 
 function showYtImageViewer(url) {
