@@ -2917,8 +2917,10 @@ function showYtSheet(video) {
     e.stopPropagation();
     playerActive = true;
     playerWrap.style.display = 'none';
+    overlay.style.pointerEvents = 'none'; // let clicks through to player overlay
     showYtPlayer(video.videoId, () => {
       playerActive = false;
+      overlay.style.pointerEvents = ''; // restore sheet overlay clicks
       playerWrap.innerHTML = '';
       playerWrap.appendChild(thumbImg);
       playerWrap.appendChild(playIcon);
