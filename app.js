@@ -2917,10 +2917,8 @@ function showYtSheet(video) {
     e.stopPropagation();
     playerActive = true;
     playerWrap.style.display = 'none';
-    overlay.style.pointerEvents = 'none'; // let clicks through to player overlay
     showYtPlayer(video.videoId, () => {
       playerActive = false;
-      overlay.style.pointerEvents = ''; // restore sheet overlay clicks
       playerWrap.innerHTML = '';
       playerWrap.appendChild(thumbImg);
       playerWrap.appendChild(playIcon);
@@ -2959,7 +2957,7 @@ function showYtSheet(video) {
   infoWrap.appendChild(openBtn);
   sheet.appendChild(infoWrap);
 
-  overlay.addEventListener('click', e => { if (e.target === overlay) closeSheet(); });
+  overlay.addEventListener('click', e => { if (e.target === overlay && !playerActive) closeSheet(); });
   overlay.appendChild(sheet);
   document.body.appendChild(overlay);
   requestAnimationFrame(() => sheet.classList.add('open'));
