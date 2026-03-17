@@ -47,7 +47,8 @@ let S = {
   widgets: {
     clock:     { col:0, row:0, w:6, h:2, visible:true },
     shortcuts: { col:6, row:2, w:6, h:5, visible:true },
-    news:      { col:0, row:2, w:6, h:5, visible:true }
+    news:      { col:0, row:2, w:6, h:5, visible:true },
+    youtube:   { col:12, row:6, w:6, h:8, visible:false }
   },
   news: {
     items:      [],
@@ -65,8 +66,10 @@ let S = {
     nickname:    '',
     weatherCity: '',
     weatherLat:  null,
-    weatherLon:  null
+    weatherLon:  null,
+    ytApiKey:    ''
   },
+  yt: { region: 'TW', shortsMode: 'all', shortsMaxSec: 60 },
   editMode:       false,
   activeGroup:    'all',
   privateUnlocked: false,
@@ -102,6 +105,7 @@ function lsSave() {
       widgets:    S.widgets,
       news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:        S.cfg,
+      yt:         S.yt,
       mobilePages: S.mobilePages,
       animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
     }));
@@ -124,6 +128,7 @@ function lsLoad() {
     if (d.widgets)     Object.assign(S.widgets, d.widgets);
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
+    if (d.yt)          Object.assign(S.yt, d.yt);
     if (d.mobilePages) S.mobilePages = d.mobilePages;
     if (d.animeState)  Object.assign(S.animeState, { ...d.animeState, offset: 0 }); // always start at current season
   } catch(_) {}
@@ -179,7 +184,8 @@ const gistData = () => ({
   widgets:    S.widgets,
   newsKeywords: S.news.keywords,
   newsLang:   S.news.lang,
-  animeState: { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
+  animeState: { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames },
+  yt:         S.yt
 });
 
 async function gistPush(silent = false) {
@@ -244,6 +250,7 @@ async function gistPull() {
     if (d.newsKeywords) S.news.keywords = d.newsKeywords;
     if (d.newsLang)     S.news.lang     = d.newsLang;
     if (d.animeState)   Object.assign(S.animeState, d.animeState);
+    if (d.yt)           Object.assign(S.yt, d.yt);
     lsSave();
     renderAll();
     toast('已從 Gist 拉取最新設定 ✓');
@@ -462,7 +469,8 @@ const WIDGET_META = {
   shortcuts: { label: '捷徑',    icon: '⭐' },
   news:      { label: 'AI新聞',  icon: '📰' },
   stickies:  { label: '便利貼',  icon: '📝' },
-  anime:     { label: '動畫追蹤', icon: '🎌' }
+  anime:     { label: '動畫追蹤', icon: '🎌' },
+  youtube:   { label: 'YouTube 熱門', icon: '▶️' }
 };
 
 /* Default positions for when a widget is re-added */
@@ -471,7 +479,8 @@ const WIDGET_DEFAULT = {
   shortcuts: { col:6,  row:2, w:6,  h:5, visible:true },
   news:      { col:0,  row:2, w:6,  h:5, visible:true },
   stickies:  { col:12, row:0, w:6,  h:6, visible:true },
-  anime:     { col:18, row:0, w:6,  h:8, visible:true }
+  anime:     { col:18, row:0, w:6,  h:8, visible:true },
+  youtube:   { col:12, row:6, w:6,  h:8, visible:true }
 };
 
 function renderAddWidgetPanel() {
@@ -521,6 +530,7 @@ function buildWidgetById(wid) {
   if (wid === 'news')      buildNewsWidget();
   if (wid === 'stickies')  buildStickiesWidget();
   if (wid === 'anime')     buildAnimeWidget();
+  if (wid === 'youtube')   buildYoutubeWidget();
 }
 
 /* ─────────────────────────────────────
@@ -1698,6 +1708,7 @@ function openSettingsModal() {
   $('cfg-cache-min').value  = String(S.news.cacheMin || 25);
   $('cfg-nickname').value   = S.cfg.nickname || '';
   $('cfg-city').value       = S.cfg.weatherCity || '';
+  $('cfg-ytkey').value      = S.cfg.ytApiKey || '';
   $('cfg-locate-status').textContent = '';
   openModal('m-cfg');
 }
@@ -1718,6 +1729,7 @@ async function saveSettings() {
   S.cfg.gistId       = gistId;
   S.cfg.nickname     = nickname;
   S.cfg.weatherCity  = city;
+  S.cfg.ytApiKey     = $('cfg-ytkey').value.trim();
   S.news.lang        = lang;
   S.news.keywords    = kws.length ? kws : ['最新新聞'];
   S.news.title       = newsTitle;
@@ -2666,7 +2678,8 @@ const MOBILE_WIDGET_TYPES = {
   news:      { label: '即時新聞', icon: '📰' },
   clock:     { label: '時鐘',   icon: '🕐' },
   stickies:  { label: '便利貼', icon: '📝' },
-  anime:     { label: '動畫追蹤', icon: '🎌' }
+  anime:     { label: '動畫追蹤', icon: '🎌' },
+  youtube:   { label: 'YouTube 熱門', icon: '▶️' }
 };
 
 function buildMobileWidgetContent(widgetType, container) {
@@ -2698,6 +2711,11 @@ function buildMobileWidgetContent(widgetType, container) {
     inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
     container.appendChild(inner);
     renderAnimeWidget(inner);
+  } else if (widgetType === 'youtube') {
+    const inner = el('div', 'yt-inner');
+    inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+    container.appendChild(inner);
+    renderYoutubeWidget(container);
   }
 }
 
@@ -2979,6 +2997,10 @@ function renderAll() {
   if (animeBody) renderAnimeWidget(animeBody);
   const mobileAnimeBody = document.querySelector('#mobile-layout .anime-inner');
   if (mobileAnimeBody) renderAnimeWidget(mobileAnimeBody);
+  const ytWrap = document.getElementById('w-youtube');
+  if (ytWrap) renderYoutubeWidget(ytWrap);
+  const mobileYtBody = document.querySelector('#mobile-layout .yt-inner')?.parentElement;
+  if (mobileYtBody) renderYoutubeWidget(mobileYtBody);
 }
 
 /* ─────────────────────────────────────
@@ -3006,6 +3028,7 @@ async function init() {
   if (S.widgets.news?.visible      !== false) buildNewsWidget();
   if (S.widgets.stickies?.visible  === true)  buildStickiesWidget();
   if (S.widgets.anime?.visible     === true)  buildAnimeWidget();
+  if (S.widgets.youtube?.visible   === true)  buildYoutubeWidget();
   initMobileLayout();
 
   // Search + voice
