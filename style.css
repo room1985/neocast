@@ -364,6 +364,7 @@ a { color:inherit; text-decoration:none; }
   padding: 6px 8px 0;
   flex-shrink: 0;
   min-height: 28px;
+  gap: 4px;
 }
 
 /* Show title only if non-empty */
@@ -1638,8 +1639,8 @@ a { color:inherit; text-decoration:none; }
     width: calc(100% - 28px);
     display: none;
     flex-direction: column;
-    overflow-y: auto;
-    padding: 8px 14px 12px;
+    overflow: hidden;
+    padding: 0;
     position: relative;
     background: var(--sf);
     border: 1px solid var(--bd);
@@ -1653,21 +1654,47 @@ a { color:inherit; text-decoration:none; }
     display: flex;
   }
 
-  /* Replace widget button */
-  .mobile-page-replace-btn {
-    position: absolute;
-    top: 8px; right: 8px;
-    background: var(--sf2);
-    border: 1px solid var(--bd);
+  /* Panel header bar */
+  .mobile-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px 6px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    flex-shrink: 0;
+    min-height: 36px;
+  }
+  .mobile-panel-title {
+    font-size: .75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .07em;
     color: var(--txm);
+  }
+  .mobile-panel-btns {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .mobile-panel-btns.hidden { display: none !important; }
+  .mobile-panel-btn {
     width: 26px; height: 26px;
-    border-radius: 50%;
+    border-radius: 8px;
+    border: 1px solid var(--bd);
+    background: var(--sf2);
+    color: var(--txm);
     display: flex; align-items: center; justify-content: center;
     cursor: pointer;
-    transition: all .2s;
-    z-index: 10;
+    font-size: .75rem;
+    transition: all .15s;
   }
-  .mobile-page-replace-btn:hover { border-color:var(--ac); color:var(--ac); }
+  .mobile-panel-btn:hover { border-color: var(--ac); color: var(--ac); }
+  .mobile-panel-del:hover { border-color: #f87171 !important; color: #f87171 !important; }
+
+  /* Legacy replace btn (keep for compat) */
+  .mobile-page-replace-btn {
+    display: none;
+  }
   .mobile-page-replace-btn.hidden { display: none !important; }
 
   /* Dots bar */
@@ -2399,3 +2426,104 @@ a { color:inherit; text-decoration:none; }
   transition: background .15s;
 }
 .yt-open-btn:hover { background: rgba(255,0,0,.26); }
+
+/* ── YouTube extra components ── */
+.yt-mobile-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 6px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  flex-shrink: 0;
+}
+.yt-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 4px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  flex-shrink: 0;
+}
+.yt-back-btn {
+  background: none;
+  border: none;
+  color: var(--ac);
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 0;
+  white-space: nowrap;
+}
+.yt-back-btn:hover { opacity: .75; }
+.yt-breadcrumb-name {
+  font-size: .78rem;
+  color: var(--txm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.yt-ch-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px 4px;
+  margin-top: 4px;
+}
+.yt-ch-section-header:first-child { margin-top: 0; }
+.yt-ch-section-left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.yt-ch-avatar-sm {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.yt-ch-section-name {
+  font-size: .74rem;
+  font-weight: 700;
+  color: var(--txm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.yt-ch-more-btn {
+  background: none;
+  border: none;
+  color: var(--ac);
+  font-size: .72rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding: 2px 4px;
+}
+.yt-ch-more-btn:hover { opacity: .75; }
+.yt-load-more {
+  width: 100%;
+  padding: 10px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 10px;
+  color: var(--txm);
+  font-size: .78rem;
+  cursor: pointer;
+  margin: 6px 12px;
+  width: calc(100% - 24px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: background .15s, color .15s;
+}
+.yt-load-more:hover { background: rgba(255,255,255,.09); color: var(--tx); }
+.yt-load-more-icon { font-size: .9rem; }
+.yt-end-note {
+  text-align: center;
+  font-size: .7rem;
+  color: var(--txd);
+  padding: 8px 0 12px;
+}
