@@ -830,6 +830,8 @@ a { color:inherit; text-decoration:none; }
   border-color: rgba(250,204,21,0.4) !important;
   background: rgba(250,204,21,0.06) !important;
 }
+
+.anime-tabs {
   display: flex;
   gap: 5px;
   padding: 4px 10px 6px;
