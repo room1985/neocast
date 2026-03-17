@@ -658,7 +658,10 @@ a { color:inherit; text-decoration:none; }
   text-align: center;
   outline: none;
   transition: border-color .15s;
+  -moz-appearance: textfield;
 }
+.news-cfg-input::-webkit-inner-spin-button,
+.news-cfg-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .news-cfg-input:focus { border-color: var(--ac); }
 .news-cfg-select {
   background: rgba(255,255,255,.07);
@@ -670,6 +673,13 @@ a { color:inherit; text-decoration:none; }
   outline: none;
   cursor: pointer;
   transition: border-color .15s;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+.news-cfg-select option {
+  background: #1e2433;
+  color: var(--tx);
 }
 .news-cfg-select:focus { border-color: var(--ac); }
 
