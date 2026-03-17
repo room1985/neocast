@@ -2358,6 +2358,305 @@ async function showAnimeSheet(anime) {
 }
 
 /* ─────────────────────────────────────
+   YOUTUBE TRENDING WIDGET
+───────────────────────────────────── */
+
+function fmtNum(n) {
+  if (n == null) return '—';
+  if (n >= 1e8) return (n / 1e8).toFixed(1) + '億';
+  if (n >= 1e4) return (n / 1e4).toFixed(1) + '萬';
+  return n.toLocaleString();
+}
+
+function parseDuration(iso) {
+  if (!iso) return 0;
+  const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!m) return 0;
+  return (parseInt(m[1] || 0) * 3600) + (parseInt(m[2] || 0) * 60) + parseInt(m[3] || 0);
+}
+
+async function fetchYoutube(force = false) {
+  const CACHE_KEY = 'neocast_yt';
+  const CACHE_MIN = 30;
+  if (!force) {
+    try {
+      const cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+      if (cached && (Date.now() - cached.fetchedAt) < CACHE_MIN * 60000) {
+        return cached;
+      }
+    } catch (_) {}
+  }
+
+  const key = S.cfg.ytApiKey?.trim();
+  if (!key) return null;
+
+  const regionParam = S.yt.region ? `&regionCode=${S.yt.region}` : '';
+  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&chart=mostPopular&maxResults=50${regionParam}&key=${key}`;
+
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`YouTube API ${res.status}`);
+  const data = await res.json();
+
+  const result = { fetchedAt: Date.now(), items: data.items || [] };
+  localStorage.setItem(CACHE_KEY, JSON.stringify(result));
+  return result;
+}
+
+function buildYoutubeWidget() {
+  const w = S.widgets.youtube;
+  if (!w) return;
+  const existing = document.getElementById('w-youtube');
+  if (existing) existing.remove();
+
+  const wrap = el('div', 'widget-wrap');
+  wrap.id = 'w-youtube';
+  wrap.style.cssText = `grid-column:${w.col+1}/span ${w.cols};grid-row:${w.row+1}/span ${w.rows};`;
+  if (!w.visible) wrap.style.display = 'none';
+  wrap.dataset.wid = 'youtube';
+
+  renderYoutubeWidget(wrap);
+  document.getElementById('widget-grid').appendChild(wrap);
+}
+
+function renderYoutubeWidget(container) {
+  container.innerHTML = '';
+  const inner = el('div', 'yt-inner');
+
+  // ── Header ──
+  const head = el('div', 'yt-head');
+  const title = el('span', 'yt-head-title', 'YouTube 熱門');
+  head.appendChild(title);
+
+  // Region dropdown
+  const regionSel = el('select', 'yt-sel');
+  regionSel.title = '地區';
+  [['TW','🌏 TW'],['US','🌎 US'],['JP','🌏 JP'],['','🌐 全球']].forEach(([v,t]) => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = t;
+    if (S.yt.region === v) o.selected = true;
+    regionSel.appendChild(o);
+  });
+  regionSel.addEventListener('change', () => {
+    S.yt.region = regionSel.value;
+    lsSave();
+    fetchYoutube(true).then(() => renderYoutubeWidget(container)).catch(e => showYtError(listEl, e));
+  });
+  head.appendChild(regionSel);
+
+  // Shorts mode dropdown
+  const shortsSel = el('select', 'yt-sel');
+  shortsSel.title = 'Shorts 過濾';
+  [['all','⚡ 全部'],['only','⚡ 只 Shorts'],['hide','⚡ 隱藏 Shorts']].forEach(([v,t]) => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = t;
+    if (S.yt.shortsMode === v) o.selected = true;
+    shortsSel.appendChild(o);
+  });
+
+  // Max sec dropdown
+  const secSel = el('select', 'yt-sel yt-sec-sel');
+  secSel.title = 'Shorts 最長秒數';
+  [60,90,120,150,180].forEach(s => {
+    const o = document.createElement('option');
+    o.value = s; o.textContent = `≤${s}s`;
+    if (S.yt.shortsMaxSec === s) o.selected = true;
+    secSel.appendChild(o);
+  });
+  secSel.style.display = S.yt.shortsMode === 'only' ? '' : 'none';
+  secSel.addEventListener('change', () => {
+    S.yt.shortsMaxSec = parseInt(secSel.value);
+    lsSave();
+    renderYoutubeWidget(container);
+  });
+
+  shortsSel.addEventListener('change', () => {
+    S.yt.shortsMode = shortsSel.value;
+    secSel.style.display = shortsSel.value === 'only' ? '' : 'none';
+    // Update color
+    shortsSel.className = 'yt-sel' + (shortsSel.value === 'only' ? ' yt-sel-blue' : shortsSel.value === 'hide' ? ' yt-sel-red' : '');
+    lsSave();
+    renderYoutubeWidget(container);
+  });
+  shortsSel.className = 'yt-sel' + (S.yt.shortsMode === 'only' ? ' yt-sel-blue' : S.yt.shortsMode === 'hide' ? ' yt-sel-red' : '');
+  head.appendChild(shortsSel);
+  head.appendChild(secSel);
+
+  // Refresh button
+  const refreshBtn = el('button', 'anime-head-btn', '↻');
+  refreshBtn.title = '重新載入';
+  let spinning = false;
+  refreshBtn.addEventListener('click', async () => {
+    if (spinning) return;
+    spinning = true;
+    refreshBtn.classList.add('spin');
+    try {
+      await fetchYoutube(true);
+      renderYoutubeWidget(container);
+    } catch (e) {
+      showYtError(listEl, e);
+    } finally {
+      spinning = false;
+      refreshBtn.classList.remove('spin');
+    }
+  });
+  head.appendChild(refreshBtn);
+  inner.appendChild(head);
+
+  // ── Card List ──
+  const listEl = el('div', 'yt-grid');
+  inner.appendChild(listEl);
+  container.appendChild(inner);
+
+  // Load data
+  const cached = (() => {
+    try { return JSON.parse(localStorage.getItem('neocast_yt') || 'null'); } catch(_) { return null; }
+  })();
+
+  if (!S.cfg.ytApiKey?.trim()) {
+    listEl.innerHTML = '<div class="yt-empty">請在設定中填入 YouTube API Key</div>';
+    return;
+  }
+
+  const renderList = (data) => {
+    if (!data?.items?.length) {
+      listEl.innerHTML = '<div class="yt-empty">無資料</div>';
+      return;
+    }
+    let items = data.items;
+    // Filter shorts
+    if (S.yt.shortsMode === 'only') {
+      items = items.filter(v => parseDuration(v.contentDetails?.duration) <= S.yt.shortsMaxSec);
+    } else if (S.yt.shortsMode === 'hide') {
+      items = items.filter(v => parseDuration(v.contentDetails?.duration) > 60);
+    }
+    listEl.innerHTML = '';
+    items.forEach(video => {
+      const s = video.snippet || {};
+      const st = video.statistics || {};
+      const thumb = s.thumbnails?.medium?.url || s.thumbnails?.default?.url || '';
+      const dur = parseDuration(video.contentDetails?.duration);
+
+      const card = el('div', 'yt-card');
+      card.dataset.id = video.id;
+
+      const thumbWrap = el('div', 'yt-thumb');
+      const img = el('img');
+      img.src = thumb;
+      img.alt = s.title || '';
+      img.loading = 'lazy';
+      img.addEventListener('click', e => { e.stopPropagation(); showYtImageViewer(thumb); });
+      if (dur > 0 && dur <= 180) {
+        const durBadge = el('span', 'yt-dur-badge', dur >= 60 ? `${Math.floor(dur/60)}:${String(dur%60).padStart(2,'0')}` : `${dur}s`);
+        thumbWrap.appendChild(durBadge);
+      }
+      thumbWrap.appendChild(img);
+      card.appendChild(thumbWrap);
+
+      const info = el('div', 'yt-info');
+      const titleEl = el('div', 'yt-title', s.title || '');
+      const channelEl = el('div', 'yt-channel', s.channelTitle || '');
+      const metaEl = el('div', 'yt-meta');
+      [['👁', st.viewCount],['👍', st.likeCount],['💬', st.commentCount]].forEach(([icon, val]) => {
+        const item = el('span', 'yt-meta-item', `${icon} ${fmtNum(parseInt(val))}`);
+        metaEl.appendChild(item);
+      });
+      info.appendChild(titleEl);
+      info.appendChild(channelEl);
+      info.appendChild(metaEl);
+      card.appendChild(info);
+
+      card.addEventListener('click', () => showYtSheet(video));
+      listEl.appendChild(card);
+    });
+  };
+
+  if (cached) {
+    renderList(cached);
+  } else {
+    listEl.innerHTML = '<div class="yt-empty">載入中...</div>';
+  }
+
+  fetchYoutube(false).then(data => {
+    if (data) renderList(data);
+  }).catch(e => showYtError(listEl, e));
+}
+
+function showYtError(container, err) {
+  container.innerHTML = `<div class="yt-empty" style="color:var(--err,#f66)">載入失敗：${err.message || err}</div>`;
+}
+
+function showYtImageViewer(url) {
+  document.querySelector('.anime-image-viewer')?.remove();
+  const viewer = el('div', 'anime-image-viewer');
+  const img = el('img');
+  img.src = url;
+  viewer.appendChild(img);
+  viewer.addEventListener('click', () => viewer.remove());
+  document.body.appendChild(viewer);
+  requestAnimationFrame(() => viewer.classList.add('open'));
+}
+
+function showYtSheet(video) {
+  document.querySelector('.anime-sheet-overlay')?.remove();
+  const s = video.snippet || {};
+  const st = video.statistics || {};
+  const thumb = s.thumbnails?.maxres?.url || s.thumbnails?.high?.url || s.thumbnails?.medium?.url || '';
+
+  const overlay = el('div', 'anime-sheet-overlay');
+  const sheet = el('div', 'anime-sheet');
+
+  const closeSheet = () => {
+    sheet.classList.remove('open');
+    setTimeout(() => overlay.remove(), 300);
+  };
+
+  // Player area (thumb → iframe on click)
+  const playerWrap = el('div', 'yt-sheet-player');
+  const thumbImg = el('img', 'yt-sheet-thumb');
+  thumbImg.src = thumb;
+  thumbImg.alt = s.title || '';
+  const playIcon = el('div', 'yt-play-icon', '▶');
+  playerWrap.appendChild(thumbImg);
+  playerWrap.appendChild(playIcon);
+  playerWrap.addEventListener('click', () => {
+    const iframe = el('iframe', 'yt-sheet-iframe');
+    iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1`;
+    iframe.allow = 'autoplay; encrypted-media; fullscreen';
+    iframe.allowFullscreen = true;
+    playerWrap.innerHTML = '';
+    playerWrap.appendChild(iframe);
+    playerWrap.style.cursor = 'default';
+  });
+  sheet.appendChild(playerWrap);
+
+  // Info
+  const infoWrap = el('div', 'yt-sheet-info');
+  const titleEl = el('div', 'yt-sheet-title', s.title || '');
+  const channelEl = el('div', 'yt-channel', s.channelTitle || '');
+  const metaEl = el('div', 'yt-meta');
+  [['👁', st.viewCount],['👍', st.likeCount],['💬', st.commentCount]].forEach(([icon, val]) => {
+    const item = el('span', 'yt-meta-item', `${icon} ${fmtNum(parseInt(val))}`);
+    metaEl.appendChild(item);
+  });
+  infoWrap.appendChild(titleEl);
+  infoWrap.appendChild(channelEl);
+  infoWrap.appendChild(metaEl);
+
+  const openBtn = el('a', 'yt-open-btn', 'YouTube 開啟 ↗');
+  openBtn.href = `https://www.youtube.com/watch?v=${video.id}`;
+  openBtn.target = '_blank';
+  openBtn.rel = 'noopener';
+  infoWrap.appendChild(openBtn);
+  sheet.appendChild(infoWrap);
+
+  // Close on overlay click
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeSheet(); });
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+  requestAnimationFrame(() => sheet.classList.add('open'));
+}
+
+/* ─────────────────────────────────────
    MOBILE LAYOUT — Paged System
 ───────────────────────────────────── */
 
