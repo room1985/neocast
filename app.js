@@ -2718,8 +2718,11 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
 
   const renderGrpList = () => {
     grpList.innerHTML = '';
+    let dragSrcG = null;
     (S.yt.groups || []).forEach(g => {
       const row = el('div', 'yt-grp-row' + (selectedGrp === g ? ' selected' : ''));
+      row.draggable = true;
+      row.dataset.g = g;
       const nameSpan = el('span', 'yt-grp-name', g);
       row.appendChild(nameSpan);
       const delBtn = el('button', 'yt-ch-del' + (selectedGrp === g ? ' visible' : ''), '✕');
@@ -2732,6 +2735,75 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       });
       row.appendChild(delBtn);
       row.addEventListener('click', e => { e.stopPropagation(); selectedGrp = selectedGrp === g ? null : g; renderGrpList(); });
+
+      // Drag to reorder
+      row.addEventListener('dragstart', e => {
+        dragSrcG = g;
+        e.dataTransfer.effectAllowed = 'move';
+        setTimeout(() => row.classList.add('yt-grp-dragging'), 0);
+      });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('yt-grp-dragging');
+        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
+        dragSrcG = null;
+      });
+      row.addEventListener('dragover', e => {
+        e.preventDefault();
+        if (g === dragSrcG) return;
+        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
+        row.classList.add('yt-grp-drag-over');
+      });
+      row.addEventListener('drop', e => {
+        e.preventDefault();
+        if (!dragSrcG || dragSrcG === g) return;
+        const si = S.yt.groups.indexOf(dragSrcG);
+        const di = S.yt.groups.indexOf(g);
+        if (si < 0 || di < 0) return;
+        const [m] = S.yt.groups.splice(si, 1);
+        S.yt.groups.splice(di, 0, m);
+        lsSave(); renderGrpList(); renderGroupBar();
+      });
+
+      // Touch drag (long press)
+      let tTimer = null, tDragging = false, tGhost = null;
+      row.addEventListener('touchstart', e => {
+        tTimer = setTimeout(() => {
+          tDragging = true;
+          tGhost = row.cloneNode(true);
+          tGhost.style.cssText = `position:fixed;z-index:99999;opacity:.8;pointer-events:none;width:${row.offsetWidth}px;`;
+          document.body.appendChild(tGhost);
+          row.classList.add('yt-grp-dragging');
+        }, 500);
+      }, { passive: true });
+      row.addEventListener('touchmove', e => {
+        clearTimeout(tTimer);
+        if (!tDragging) return;
+        const t = e.touches[0];
+        if (tGhost) { tGhost.style.left = (t.clientX - row.offsetWidth/2) + 'px'; tGhost.style.top = (t.clientY - 16) + 'px'; }
+        const el2 = document.elementFromPoint(t.clientX, t.clientY);
+        const target = el2?.closest('.yt-grp-row');
+        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
+        if (target && target !== row) target.classList.add('yt-grp-drag-over');
+      }, { passive: true });
+      row.addEventListener('touchend', e => {
+        clearTimeout(tTimer);
+        if (tGhost) { tGhost.remove(); tGhost = null; }
+        row.classList.remove('yt-grp-dragging');
+        if (!tDragging) { tDragging = false; return; }
+        tDragging = false;
+        const over = grpList.querySelector('.yt-grp-drag-over');
+        if (over && over !== row) {
+          const si = S.yt.groups.indexOf(g);
+          const di = S.yt.groups.indexOf(over.dataset.g);
+          if (si >= 0 && di >= 0) {
+            const [m] = S.yt.groups.splice(si, 1);
+            S.yt.groups.splice(di, 0, m);
+            lsSave();
+          }
+        }
+        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
+        renderGrpList(); renderGroupBar();
+      }, { passive: true });
       row.addEventListener('dblclick', e => {
         e.stopPropagation();
         const inp = document.createElement('input');
