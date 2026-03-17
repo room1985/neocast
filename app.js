@@ -2731,7 +2731,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
         lsSave(); renderGrpList(); renderGroupBar(); renderChList(); renderFeed();
       });
       row.appendChild(delBtn);
-      row.addEventListener('click', () => { selectedGrp = selectedGrp === g ? null : g; renderGrpList(); });
+      row.addEventListener('click', e => { e.stopPropagation(); selectedGrp = selectedGrp === g ? null : g; renderGrpList(); });
       row.addEventListener('dblclick', e => {
         e.stopPropagation();
         const inp = document.createElement('input');
