@@ -2903,7 +2903,7 @@ function showYtImageViewer(url) {
 }
 
 function showYtSheet(video) {
-  document.querySelector('.yt-player-overlay')?.remove();
+  document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   document.querySelector('.anime-sheet-overlay')?.remove();
   const thumb = video.thumb || '';
 
@@ -2988,19 +2988,21 @@ function showYtSheet(video) {
 }
 
 function showYtPlayer(videoId, onClose) {
-  document.querySelector('.yt-player-overlay')?.remove();
+  document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   const key = S.cfg.ytApiKey?.trim();
 
   const buildPlayer = (portrait) => {
-    const overlay = el('div', 'yt-player-overlay');
-    overlay.style.pointerEvents = 'none'; // let clicks through to sheet below
+    // Dark backdrop — behind sheet (z-index 9500)
+    const backdrop = el('div', 'yt-player-backdrop');
+    backdrop.style.pointerEvents = 'none';
+
+    // Modal — above sheet (z-index 11000)
     const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
-    modal.style.pointerEvents = 'all'; // modal itself is interactive
 
     const closePlayer = () => {
-      overlay.style.pointerEvents = 'none';
-      overlay.classList.remove('open');
-      setTimeout(() => { overlay.remove(); onClose?.(); }, 260);
+      backdrop.classList.remove('open');
+      modal.classList.remove('open');
+      setTimeout(() => { backdrop.remove(); modal.remove(); onClose?.(); }, 260);
     };
 
     const bar = el('div', 'yt-player-drag-bar');
@@ -3021,10 +3023,10 @@ function showYtPlayer(videoId, onClose) {
     modal.addEventListener('click', e => e.stopPropagation());
     modal.appendChild(bar);
     modal.appendChild(playerBox);
-    overlay.appendChild(modal);
 
-    document.body.appendChild(overlay);
-    requestAnimationFrame(() => overlay.classList.add('open'));
+    document.body.appendChild(backdrop);
+    document.body.appendChild(modal);
+    requestAnimationFrame(() => { backdrop.classList.add('open'); modal.classList.add('open'); });
   };
 
   if (key) {
