@@ -3000,6 +3000,7 @@ function showYtPlayer(videoId, onClose) {
     overlay.appendChild(modal);
 
     overlay.addEventListener('click', e => {
+      e.stopPropagation();
       if (e.target === overlay) { overlay.remove(); onClose?.(); }
     });
 
