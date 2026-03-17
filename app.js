@@ -2979,12 +2979,17 @@ function showYtPlayer(videoId, onClose) {
     const overlay = el('div', 'yt-player-overlay');
     const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
 
+    const closePlayer = () => {
+      overlay.style.pointerEvents = 'none'; // block ghost clicks while fading
+      overlay.classList.remove('open');
+      setTimeout(() => { overlay.remove(); onClose?.(); }, 260);
+    };
+
     const bar = el('div', 'yt-player-drag-bar');
     const closeBtn = el('button', 'yt-player-close', '✕');
     closeBtn.addEventListener('click', e => {
       e.stopPropagation();
-      overlay.remove();
-      onClose?.();
+      closePlayer();
     });
     bar.appendChild(closeBtn);
 
@@ -3001,7 +3006,7 @@ function showYtPlayer(videoId, onClose) {
 
     overlay.addEventListener('click', e => {
       e.stopPropagation();
-      if (e.target === overlay) { overlay.remove(); onClose?.(); }
+      if (e.target === overlay) closePlayer();
     });
 
     document.body.appendChild(overlay);
