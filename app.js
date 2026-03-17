@@ -70,6 +70,7 @@ let S = {
     ytApiKey:    ''
   },
   yt: { channels: [], fetchedAt: 0, items: [] },
+  widgetTitles: {},
   editMode:       false,
   activeGroup:    'all',
   privateUnlocked: false,
@@ -106,6 +107,7 @@ function lsSave() {
       news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:        S.cfg,
       yt:         { channels: S.yt.channels },
+      widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
       animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
     }));
@@ -128,8 +130,9 @@ function lsLoad() {
     if (d.widgets)     Object.assign(S.widgets, d.widgets);
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
-    if (d.yt)          Object.assign(S.yt, d.yt);
-    if (d.mobilePages) S.mobilePages = d.mobilePages;
+    if (d.yt)            Object.assign(S.yt, d.yt);
+    if (d.widgetTitles)  Object.assign(S.widgetTitles, d.widgetTitles);
+    if (d.mobilePages)   S.mobilePages = d.mobilePages;
     if (d.animeState)  Object.assign(S.animeState, { ...d.animeState, offset: 0 }); // always start at current season
   } catch(_) {}
 }
@@ -452,6 +455,7 @@ function setEditMode(on) {
 
   document.querySelectorAll('.widget').forEach(w => w.classList.toggle('editable', on));
   document.querySelectorAll('.w-delete-btn').forEach(b => b.classList.toggle('hidden', !on));
+  document.querySelectorAll('.w-pencil-btn').forEach(b => b.classList.toggle('hidden', !on));
   const addPanel = $('add-widget-panel');
   const isMobile = window.innerWidth < 768;
   if (addPanel) addPanel.classList.toggle('hidden', !on || isMobile);
@@ -537,20 +541,46 @@ function buildWidgetById(wid) {
 /* ─────────────────────────────────────
    WIDGET FACTORY
 ───────────────────────────────────── */
-function makeWidget(wid, titleText, bodyEl, extraClass = '') {
+// Default titles for each widget
+const WIDGET_DEFAULT_TITLES = {
+  clock:     '時鐘',
+  shortcuts: '捷徑',
+  news:      '即時新聞',
+  stickies:  '便利貼',
+  anime:     '動畫追蹤',
+  youtube:   '訂閱更新'
+};
+
+function getWidgetTitle(wid, fallback) {
+  return S.widgetTitles?.[wid] || fallback || WIDGET_DEFAULT_TITLES[wid] || wid;
+}
+
+function makeWidget(wid, defaultTitle, bodyEl, extraClass = '') {
   const w   = el('div', 'widget ' + extraClass);
   w.dataset.wid = wid;
 
   const head = el('div', 'w-head');
-  const ttl  = el('div', 'w-title', titleText);
+
+  const ttl = el('div', 'w-title', getWidgetTitle(wid, defaultTitle));
+  ttl.dataset.wid = wid;
   head.appendChild(ttl);
+
+  // Pencil edit button — only visible in edit mode
+  const pencilBtn = el('button', 'w-pencil-btn hidden');
+  pencilBtn.title = '自訂標題';
+  pencilBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+  pencilBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    startTitleEdit(ttl, wid, defaultTitle, pencilBtn);
+  });
+  head.appendChild(pencilBtn);
 
   // Delete button (hidden unless in edit mode)
   const delBtn = el('button', 'w-delete-btn hidden', '✕');
   delBtn.title = '移除 Widget';
   delBtn.addEventListener('click', e => {
     e.stopPropagation();
-    if (confirm(`移除「${WIDGET_META[wid]?.label || wid}」Widget？`)) {
+    if (confirm(`移除「${getWidgetTitle(wid, defaultTitle)}」Widget？`)) {
       removeWidget(wid);
     }
   });
@@ -568,6 +598,47 @@ function makeWidget(wid, titleText, bodyEl, extraClass = '') {
   WC().appendChild(w);
   initWidgetDrag(wid, w);
   return w;
+}
+
+function startTitleEdit(ttlEl, wid, defaultTitle, pencilBtn) {
+  if (ttlEl.querySelector('input')) return; // already editing
+  const current = ttlEl.textContent;
+  ttlEl.textContent = '';
+  const inp = document.createElement('input');
+  inp.className = 'w-title-input';
+  inp.value = current;
+  inp.autocomplete = 'off';
+  ttlEl.appendChild(inp);
+  if (pencilBtn) pencilBtn.style.display = 'none';
+  inp.focus();
+  inp.select();
+
+  const save = () => {
+    const val = inp.value.trim();
+    const def = WIDGET_DEFAULT_TITLES[wid] || defaultTitle;
+    if (val && val !== def) {
+      if (!S.widgetTitles) S.widgetTitles = {};
+      S.widgetTitles[wid] = val;
+    } else {
+      delete S.widgetTitles?.[wid];
+    }
+    lsSave();
+    ttlEl.textContent = getWidgetTitle(wid, defaultTitle);
+    if (pencilBtn) pencilBtn.style.display = '';
+    // Update mobile panel title if exists
+    document.querySelectorAll(`.mobile-panel-title[data-wid="${wid}"]`).forEach(el => {
+      const meta = MOBILE_WIDGET_TYPES[wid];
+      el.textContent = (meta?.icon ? meta.icon + ' ' : '') + getWidgetTitle(wid, defaultTitle);
+    });
+  };
+  inp.addEventListener('blur', save);
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
+    if (e.key === 'Escape') {
+      inp.value = current;
+      inp.blur();
+    }
+  });
 }
 
 /* ─────────────────────────────────────
@@ -830,7 +901,7 @@ function initSearch() {
 function buildShortcutsWidget() {
   const body = el('div', 'sc-inner');
   body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
-  const w = makeWidget('shortcuts', '', body, 'sc-widget');
+  const w = makeWidget('shortcuts', '捷徑', body, 'sc-widget');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
   renderShortcutsWidget(body);
@@ -2880,11 +2951,9 @@ function renderMobileNews(container) {
   container.innerHTML = '';
   container.className = 'mobile-news-inner';
 
-  // News header: [title] [中文] [↻] ............. [replace stays in panel corner]
+  // News header: [中文] [↻]
   const head = el('div', 'news-head');
   head.style.cssText = 'justify-content:flex-start;gap:6px;padding-right:36px;';
-
-  const ttl = el('div', 'w-title', S.news.title || '即時新聞');
 
   const langPill = el('button', 'pill', S.news.lang === 'zh-TW' ? '中文' : 'EN');
   langPill.style.cssText = 'font-size:.65rem;padding:2px 7px;flex-shrink:0;';
@@ -2903,7 +2972,6 @@ function renderMobileNews(container) {
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  head.appendChild(ttl);
   head.appendChild(langPill);
   head.appendChild(refBtn);
   container.appendChild(head);
@@ -2954,6 +3022,42 @@ function renderMobileNews(container) {
   }
 }
 
+function startMobileTitleEdit(titleEl, wid, defaultLabel, icon) {
+  if (titleEl.querySelector('input')) return;
+  const current = titleEl.textContent.replace(icon, '').trim();
+  titleEl.textContent = '';
+  const inp = document.createElement('input');
+  inp.className = 'w-title-input';
+  inp.value = current;
+  inp.autocomplete = 'off';
+  titleEl.appendChild(inp);
+  inp.focus();
+  inp.select();
+
+  const save = () => {
+    const val = inp.value.trim();
+    const def = WIDGET_DEFAULT_TITLES[wid] || defaultLabel;
+    if (val && val !== def) {
+      if (!S.widgetTitles) S.widgetTitles = {};
+      S.widgetTitles[wid] = val;
+    } else {
+      delete S.widgetTitles?.[wid];
+    }
+    lsSave();
+    const newTitle = getWidgetTitle(wid, defaultLabel);
+    titleEl.textContent = icon + newTitle;
+    // Sync desktop w-title if widget exists
+    document.querySelectorAll(`.widget[data-wid="${wid}"] .w-title`).forEach(t => {
+      t.textContent = newTitle;
+    });
+  };
+  inp.addEventListener('blur', save);
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); inp.blur(); }
+    if (e.key === 'Escape') { inp.value = current; inp.blur(); }
+  });
+}
+
 function initMobileLayout() {
   const container = $('mobile-layout');
   if (!container) return;
@@ -2996,10 +3100,21 @@ function initMobileLayout() {
       // ── Panel header bar (title + edit buttons) ──
       const panelHead = el('div', 'mobile-panel-head');
       const meta = MOBILE_WIDGET_TYPES[page.widget];
-      const panelTitle = el('span', 'mobile-panel-title', meta ? `${meta.icon} ${meta.label}` : page.widget);
+      const wid = page.widget;
+      const panelTitle = el('span', 'mobile-panel-title');
+      panelTitle.dataset.wid = wid;
+      const icon = meta?.icon ? meta.icon + ' ' : '';
+      panelTitle.textContent = icon + getWidgetTitle(wid, meta?.label || wid);
       panelHead.appendChild(panelTitle);
 
       const panelBtns = el('div', 'mobile-panel-btns hidden');
+
+      // Pencil button
+      const mPencilBtn = el('button', 'mobile-panel-btn');
+      mPencilBtn.title = '自訂標題';
+      mPencilBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="11" height="11"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
+      mPencilBtn.addEventListener('click', () => startMobileTitleEdit(panelTitle, wid, meta?.label || wid, icon));
+      panelBtns.appendChild(mPencilBtn);
 
       // Replace button
       const replaceBtn = el('button', 'mobile-panel-btn');
