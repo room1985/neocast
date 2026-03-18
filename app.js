@@ -3265,7 +3265,6 @@ function showYtSheet(video, onUpdate) {
   infoWrap.appendChild(el('div', 'yt-sheet-title', video.title || ''));
   const meta = el('div', 'yt-meta');
   meta.appendChild(el('span', 'yt-channel', video.channelName || ''));
-  if (video.viewCount > 0) meta.appendChild(el('span', 'yt-views', `觀看 ${fmtNum(video.viewCount)}`));
   meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
   if (video.duration > 0) meta.appendChild(el('span', 'yt-dur-text', `影片時長 ${fmtDuration(video.duration)}`));
   infoWrap.appendChild(meta);
