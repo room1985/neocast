@@ -2611,11 +2611,18 @@ async function resolveChannelId(input) {
 }
 
 async function fetchChannelVideos(channelId, key) {
-  // Step 1: get uploads playlist ID
-  const cr = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${key}`);
-  const cd = await cr.json();
-  const uploadsId = cd.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
-  if (!uploadsId) return [];
+  const ch = S.yt.channels.find(c => c.id === channelId);
+
+  // Step 1: get uploads playlist ID (cached in ch.uploadsId)
+  let uploadsId = ch?.uploadsId;
+  if (!uploadsId) {
+    const cr = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${key}`);
+    const cd = await cr.json();
+    uploadsId = cd.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
+    if (!uploadsId) return [];
+    // Cache it
+    if (ch) { ch.uploadsId = uploadsId; lsSave(); }
+  }
 
   // Step 2: get latest videos from uploads playlist
   const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsId}&key=${key}`);
