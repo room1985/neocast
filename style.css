@@ -3181,3 +3181,26 @@ a { color:inherit; text-decoration:none; }
   margin-top: 4px;
 }
 .cfg-yt-login-btn:hover { border-color: var(--ac); color: var(--ac); }
+
+/* ── View count & action groups ── */
+.yt-views {
+  font-size: .67rem;
+  color: var(--txd);
+}
+.yt-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: .75rem;
+  color: var(--txm);
+}
+.yt-view-count {
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.05);
+}
+.yt-like-count {
+  font-size: .75rem;
+  color: var(--txm);
+}

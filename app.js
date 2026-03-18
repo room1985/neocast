@@ -2637,14 +2637,25 @@ async function fetchChannelVideos(channelId, key) {
     duration:    0
   }));
 
-  // Step 3: batch fetch duration
+  // Step 3: batch fetch duration + statistics
   if (items.length) {
     const ids = items.map(v => v.videoId).join(',');
-    const dr = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids}&key=${key}`);
+    const dr = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics&id=${ids}&key=${key}`);
     const dd = await dr.json();
-    const durMap = {};
-    (dd.items || []).forEach(v => { durMap[v.id] = parseDuration(v.contentDetails?.duration); });
-    items.forEach(v => { v.duration = durMap[v.videoId] || 0; });
+    const dataMap = {};
+    (dd.items || []).forEach(v => {
+      dataMap[v.id] = {
+        duration:  parseDuration(v.contentDetails?.duration),
+        viewCount: parseInt(v.statistics?.viewCount || 0),
+        likeCount: parseInt(v.statistics?.likeCount || 0)
+      };
+    });
+    items.forEach(v => {
+      const d = dataMap[v.videoId] || {};
+      v.duration  = d.duration  || 0;
+      v.viewCount = d.viewCount || 0;
+      v.likeCount = d.likeCount || 0;
+    });
   }
 
   return items;
@@ -3098,8 +3109,8 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     info.appendChild(el('div', 'yt-title', video.title));
     const meta = el('div', 'yt-meta');
     meta.appendChild(el('span', 'yt-channel', video.channelName));
+    if (video.viewCount > 0) meta.appendChild(el('span', 'yt-views', `觀看 ${fmtNum(video.viewCount)}`));
     meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
-    if (video.duration > 0) meta.appendChild(el('span', 'yt-dur-text', `影片時長 ${fmtDuration(video.duration)}`));
     info.appendChild(meta);
     card.appendChild(info);
     card.addEventListener('click', () => showYtSheet(video, renderFeed));
@@ -3250,40 +3261,38 @@ function showYtSheet(video, onUpdate) {
   });
   sheet.appendChild(playerWrap);
 
-  // ── Info ──
   const infoWrap = el('div', 'yt-sheet-info');
   infoWrap.appendChild(el('div', 'yt-sheet-title', video.title || ''));
   const meta = el('div', 'yt-meta');
   meta.appendChild(el('span', 'yt-channel', video.channelName || ''));
+  if (video.viewCount > 0) meta.appendChild(el('span', 'yt-views', `觀看 ${fmtNum(video.viewCount)}`));
   meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
-  if (video.duration > 0) meta.appendChild(el('span', 'yt-dur-text', fmtDuration(video.duration)));
+  if (video.duration > 0) meta.appendChild(el('span', 'yt-dur-text', `影片時長 ${fmtDuration(video.duration)}`));
   infoWrap.appendChild(meta);
 
-  // ── Action row: Like + Open ──
+  // ── Action row ──
   const actionRow = el('div', 'yt-action-row');
 
-  // Like button
+  // Like button + count
   const likeBtn = el('button', 'yt-like-btn');
-  const isLiked = () => (S.yt.liked||[]).includes(video.videoId);
+  const likeCount = el('span', 'yt-like-count');
   const updateLikeBtn = () => {
-    likeBtn.innerHTML = isLiked()
-      ? `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 已按讚`
-      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 按讚`;
-    likeBtn.classList.toggle('liked', isLiked());
+    const liked = isLiked();
+    likeBtn.innerHTML = liked
+      ? `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 按讚`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 按讚`;
+    likeBtn.classList.toggle('liked', liked);
+    if (video.likeCount > 0) likeCount.textContent = fmtNum(video.likeCount);
   };
+  const isLiked = () => (S.yt.liked||[]).includes(video.videoId);
   updateLikeBtn();
   likeBtn.addEventListener('click', async () => {
     const token = S.yt.oauthToken;
-    if (!token) {
-      ytGoogleLogin(() => { likeBtn.click(); });
-      return;
-    }
+    if (!token) { ytGoogleLogin(() => likeBtn.click()); return; }
     const liked = isLiked();
-    const rating = liked ? 'none' : 'like';
     try {
-      const res = await fetch(`https://www.googleapis.com/youtube/v3/videos/rate?id=${video.videoId}&rating=${rating}`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` }
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/videos/rate?id=${video.videoId}&rating=${liked?'none':'like'}`, {
+        method: 'POST', headers: { Authorization: `Bearer ${token}` }
       });
       if (res.status === 401) { S.yt.oauthToken = null; lsSave(); ytGoogleLogin(() => likeBtn.click()); return; }
       if (liked) S.yt.liked = (S.yt.liked||[]).filter(id => id !== video.videoId);
@@ -3291,7 +3300,20 @@ function showYtSheet(video, onUpdate) {
       lsSave(); updateLikeBtn();
     } catch(e) { console.error('Like error', e); }
   });
-  actionRow.appendChild(likeBtn);
+
+  const likeWrap = el('div', 'yt-action-group');
+  likeWrap.appendChild(likeBtn);
+  if (video.likeCount > 0) likeWrap.appendChild(likeCount);
+  actionRow.appendChild(likeWrap);
+
+  // View count
+  if (video.viewCount > 0) {
+    const viewWrap = el('div', 'yt-action-group');
+    viewWrap.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+    viewWrap.appendChild(el('span', '', ` 觀看 ${fmtNum(video.viewCount)}`));
+    viewWrap.classList.add('yt-view-count');
+    actionRow.appendChild(viewWrap);
+  }
 
   const openBtn = el('a', 'yt-open-btn', 'YouTube 開啟 ↗');
   openBtn.href = `https://www.youtube.com/watch?v=${video.videoId}`;
