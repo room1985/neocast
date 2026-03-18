@@ -3111,7 +3111,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     meta.appendChild(el('span', 'yt-channel', video.channelName));
     if (video.viewCount > 0) {
       const viewSpan = el('span', 'yt-views');
-      viewSpan.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11" style="vertical-align:-1px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> ${fmtNum(video.viewCount)}`;
+      viewSpan.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><span>${fmtNum(video.viewCount)}</span>`;
       meta.appendChild(viewSpan);
     }
     meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
