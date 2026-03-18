@@ -3109,7 +3109,11 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     info.appendChild(el('div', 'yt-title', video.title));
     const meta = el('div', 'yt-meta');
     meta.appendChild(el('span', 'yt-channel', video.channelName));
-    if (video.viewCount > 0) meta.appendChild(el('span', 'yt-views', `觀看 ${fmtNum(video.viewCount)}`));
+    if (video.viewCount > 0) {
+      const viewSpan = el('span', 'yt-views');
+      viewSpan.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11" style="vertical-align:-1px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> ${fmtNum(video.viewCount)}`;
+      meta.appendChild(viewSpan);
+    }
     meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
     info.appendChild(meta);
     card.appendChild(info);

@@ -2514,6 +2514,11 @@ a { color:inherit; text-decoration:none; }
   margin-left: 6px;
   color: var(--txd);
 }
+.yt-meta .yt-views::after {
+  content: '·';
+  margin-left: 6px;
+  color: var(--txd);
+}
 
 /* ── Sheet / Player ── */
 .yt-sheet-player {
