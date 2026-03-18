@@ -1617,9 +1617,11 @@ function startEdit(sticky, textEl, card, container) {
   inp.focus();
   inp.select();
 
-  // Hide pin button during edit
+  // Hide pin and copy buttons during edit
   const pinBtn = card.querySelector('.sticky-pin');
   if (pinBtn) pinBtn.style.display = 'none';
+  const copyBtnEl = card.querySelector('.sticky-copy');
+  if (copyBtnEl) copyBtnEl.style.display = 'none';
 
   // Show color picker + del button inline during edit
   const colorRow = el('div', 'sticky-edit-colors');
@@ -3484,19 +3486,6 @@ function showYtPlayer(videoId, onClose) {
       closePlayer();
     });
     bar.appendChild(closeBtn);
-
-    // Fullscreen button
-    const fsBtn = el('button', 'yt-player-close');
-    fsBtn.style.marginRight = 'auto';
-    fsBtn.title = '全屏播放';
-    fsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
-    fsBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      const el2 = iframe.requestFullscreen || iframe.webkitRequestFullscreen || iframe.mozRequestFullScreen;
-      if (el2) el2.call(iframe).catch(() => {});
-      else if (playerBox.requestFullscreen) playerBox.requestFullscreen().catch(() => {});
-    });
-    bar.insertBefore(fsBtn, closeBtn);
 
     const playerBox = el('div', 'yt-player-box');
     const iframe = el('iframe');
