@@ -2173,10 +2173,82 @@ function renderAnimeWidget(container) {
     if (!tracked.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
 
     if (curWd === ALL_WD) {
-      // Show all tracked items
       const items = tracked.map(id => S.animeState.trackedData?.[id]).filter(Boolean);
       if (!items.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
-      items.forEach(anime => grid.appendChild(makeAnimeCard(anime, anime.air_weekday)));
+
+      let dragSrcFavId = null;
+
+      items.forEach(anime => {
+        const card = makeAnimeCard(anime, anime.air_weekday);
+        card.draggable = true;
+
+        card.addEventListener('dragstart', e => {
+          dragSrcFavId = String(anime.id);
+          e.dataTransfer.effectAllowed = 'move';
+          setTimeout(() => card.classList.add('anime-card-dragging'), 0);
+        });
+        card.addEventListener('dragend', () => {
+          card.classList.remove('anime-card-dragging');
+          grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
+          dragSrcFavId = null;
+        });
+        card.addEventListener('dragover', e => {
+          e.preventDefault();
+          if (String(anime.id) === dragSrcFavId) return;
+          grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
+          card.classList.add('anime-card-drag-over');
+        });
+        card.addEventListener('drop', e => {
+          e.preventDefault();
+          if (!dragSrcFavId || dragSrcFavId === String(anime.id)) return;
+          const si = S.animeState.tracked.indexOf(parseInt(dragSrcFavId));
+          const di = S.animeState.tracked.indexOf(anime.id);
+          if (si < 0 || di < 0) return;
+          const [m] = S.animeState.tracked.splice(si, 1);
+          S.animeState.tracked.splice(di, 0, m);
+          lsSave(); renderFav();
+        });
+
+        // Touch drag (long press)
+        let tTimer = null, tDragging = false, tGhost = null;
+        card.addEventListener('touchstart', e => {
+          tTimer = setTimeout(() => {
+            tDragging = true;
+            tGhost = card.cloneNode(true);
+            tGhost.style.cssText = `position:fixed;z-index:9999;opacity:.75;pointer-events:none;width:${card.offsetWidth}px;transform:scale(1.05);`;
+            document.body.appendChild(tGhost);
+            card.classList.add('anime-card-dragging');
+          }, 500);
+        }, { passive: true });
+        card.addEventListener('touchmove', e => {
+          clearTimeout(tTimer);
+          if (!tDragging) return;
+          const t = e.touches[0];
+          if (tGhost) { tGhost.style.left = (t.clientX - card.offsetWidth/2) + 'px'; tGhost.style.top = (t.clientY - card.offsetHeight/2) + 'px'; }
+          const el2 = document.elementFromPoint(t.clientX, t.clientY);
+          const target = el2?.closest('.anime-card');
+          grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
+          if (target && target !== card) target.classList.add('anime-card-drag-over');
+        }, { passive: true });
+        card.addEventListener('touchend', e => {
+          clearTimeout(tTimer);
+          if (tGhost) { tGhost.remove(); tGhost = null; }
+          card.classList.remove('anime-card-dragging');
+          if (!tDragging) { tDragging = false; return; }
+          tDragging = false;
+          const over = grid.querySelector('.anime-card-drag-over');
+          if (over && over !== card) {
+            const overId = parseInt(over.dataset.id);
+            const si = S.animeState.tracked.indexOf(anime.id);
+            const di = S.animeState.tracked.indexOf(overId);
+            if (si >= 0 && di >= 0) { const [m] = S.animeState.tracked.splice(si, 1); S.animeState.tracked.splice(di, 0, m); lsSave(); }
+          }
+          grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
+          renderFav();
+        }, { passive: true });
+
+        grid.appendChild(card);
+      });
     } else {
       const items = tracked
         .map(id => S.animeState.trackedData?.[id])
@@ -2989,7 +3061,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       const ch = await resolveChannelId(val);
       if (S.yt.channels.find(c => c.id === ch.id)) { addStatus.textContent = '此頻道已在清單中'; addStatus.className = 'yt-add-status error'; return; }
       ch.groups = [];
-      S.yt.channels.push(ch); S.yt.fetchedAt = 0; lsSave();
+      S.yt.channels.unshift(ch); S.yt.fetchedAt = 0; lsSave();
       inp.value = ''; addStatus.textContent = `已新增「${ch.name}」`; addStatus.className = 'yt-add-status ok';
       renderChList(); fetchYoutubeFeed(true).then(() => renderFeed());
     } catch(e) { addStatus.textContent = e.message; addStatus.className = 'yt-add-status error'; }
