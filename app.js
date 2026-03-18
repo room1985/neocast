@@ -3263,10 +3263,10 @@ function showYtSheet(video, onUpdate) {
 
   const infoWrap = el('div', 'yt-sheet-info');
   infoWrap.appendChild(el('div', 'yt-sheet-title', video.title || ''));
-  const meta = el('div', 'yt-meta');
-  meta.appendChild(el('span', 'yt-channel', video.channelName || ''));
-  meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
-  if (video.duration > 0) meta.appendChild(el('span', 'yt-dur-text', `影片時長 ${fmtDuration(video.duration)}`));
+  const metaParts = [video.channelName || ''];
+  metaParts.push(fmtRelTime(video.publishedAt));
+  if (video.duration > 0) metaParts.push(`影片時長 ${fmtDuration(video.duration)}`);
+  const meta = el('span', 'yt-meta-text', metaParts.join('．'));
   infoWrap.appendChild(meta);
 
   // ── Action row ──
