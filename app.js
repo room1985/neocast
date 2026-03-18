@@ -1451,8 +1451,36 @@ function buildStickiesWidget() {
   const w = makeWidget('stickies', '便利貼', body, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
+
+  // Add delete-checked button to w-head (only in edit mode)
+  const head = w.querySelector('.w-head');
+  const delBtn = w.querySelector('.w-delete-btn');
+  const delCheckedBtn = el('button', 'w-pencil-btn hidden sticky-del-checked-btn');
+  delCheckedBtn.title = '刪除已勾選';
+  delCheckedBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
+  delCheckedBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    const checked = S.stickies.filter(s => s.done);
+    if (!checked.length) return;
+    if (!confirm(`確認刪除 ${checked.length} 項已勾選？`)) return;
+    S.stickies = S.stickies.filter(s => !s.done);
+    lsSave();
+    renderStickiesWidget(body);
+  });
+  // Insert before delBtn
+  if (delBtn) head.insertBefore(delCheckedBtn, delBtn);
+  else head.appendChild(delCheckedBtn);
+
+  // Update button state when checked count changes
+  w._updateDelChecked = () => {
+    const count = (S.stickies || []).filter(s => s.done).length;
+    delCheckedBtn.style.opacity = count > 0 ? '1' : '0.35';
+    delCheckedBtn.style.pointerEvents = count > 0 ? 'all' : 'none';
+  };
+
   renderStickiesWidget(body);
-  // Re-calculate list height on widget resize
+  w._updateDelChecked?.();
+
   new ResizeObserver(() => {
     const list = body.querySelector('.sticky-list');
     const bar  = body.querySelector('.sticky-input-bar');
@@ -1556,6 +1584,9 @@ function makeStickyCard(sticky, container) {
     if (st) st.done = !st.done;
     lsSave();
     renderStickiesWidget(container);
+    // Update del-checked button state
+    const w = container.closest('.widget');
+    if (w?._updateDelChecked) w._updateDelChecked();
   });
 
   // Text area
@@ -1632,7 +1663,8 @@ function startEdit(sticky, textEl, card, container) {
   delBtn.title = '刪除';
   delBtn.addEventListener('mousedown', e => {
     e.preventDefault(); // prevent blur
-    if (!confirm('確認刪除？')) return;
+    const isChecked = sticky.done;
+    if (!isChecked && !confirm('確認刪除？')) return;
     card.style.transition = 'transform .32s ease, opacity .32s ease';
     card.style.transform  = 'translateX(110%)';
     card.style.opacity    = '0';
