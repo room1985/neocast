@@ -4176,4 +4176,12 @@ async function init() {
   registerSW();
 }
 
+// ── PWA Android 橫版修正 ──
+// iframe 進入全螢幕時，解除方向鎖定讓系統旋轉接管
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) {
+    screen.orientation?.unlock?.();
+  }
+});
+
 document.addEventListener('DOMContentLoaded', init);
