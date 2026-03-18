@@ -1574,9 +1574,25 @@ function makeStickyCard(sticky, container) {
     renderStickiesWidget(container);
   });
 
+  // Copy button
+  const copyBtn = el('button', 'sticky-copy');
+  copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+  copyBtn.title = '複製內容';
+  copyBtn.addEventListener('click', async e => {
+    e.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(sticky.text);
+      copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="20 6 9 17 4 12"/></svg>`;
+      setTimeout(() => {
+        copyBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+      }, 1200);
+    } catch(_) {}
+  });
+
   card.appendChild(drag);
   card.appendChild(chk);
   card.appendChild(textEl);
+  card.appendChild(copyBtn);
   card.appendChild(pinBtn);
 
   const onLongPress = () => {
@@ -3138,7 +3154,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
         chRow.appendChild(chLeft);
         const moreBtn = el('button', 'yt-nav-btn');
         moreBtn.innerHTML = `更多 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><polyline points="9 18 15 12 9 6"/></svg>`;
-        moreBtn.addEventListener('click', () => { activeChannelId = chId; singlePage = 0; renderFeed(); });
+        moreBtn.addEventListener('click', () => { activeChannelId = chId; singlePage = 0; renderFeed(); feed.scrollTop = 0; container.scrollTop = 0; });
         chRow.appendChild(moreBtn);
         feed.appendChild(chRow);
         items.forEach(v => feed.appendChild(makeVideoCard(v)));
@@ -3468,6 +3484,19 @@ function showYtPlayer(videoId, onClose) {
       closePlayer();
     });
     bar.appendChild(closeBtn);
+
+    // Fullscreen button
+    const fsBtn = el('button', 'yt-player-close');
+    fsBtn.style.marginRight = 'auto';
+    fsBtn.title = '全屏播放';
+    fsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>`;
+    fsBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const el2 = iframe.requestFullscreen || iframe.webkitRequestFullscreen || iframe.mozRequestFullScreen;
+      if (el2) el2.call(iframe).catch(() => {});
+      else if (playerBox.requestFullscreen) playerBox.requestFullscreen().catch(() => {});
+    });
+    bar.insertBefore(fsBtn, closeBtn);
 
     const playerBox = el('div', 'yt-player-box');
     const iframe = el('iframe');
@@ -4110,3 +4139,14 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
+// Prevent accidental back swipe on mobile by pushing a dummy history state
+if (window.innerWidth < 768) {
+  history.pushState({ neocast: true }, '');
+  window.addEventListener('popstate', e => {
+    if (e.state?.neocast) {
+      // Re-push so the next swipe is also caught
+      history.pushState({ neocast: true }, '');
+    }
+  });
+}

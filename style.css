@@ -1256,6 +1256,19 @@ a { color:inherit; text-decoration:none; }
 }
 .sticky-pin:hover, .sticky-pin.on { color: #facc15; }
 
+.sticky-copy {
+  background: none;
+  border: none;
+  color: var(--txd);
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color .15s;
+}
+.sticky-copy:hover { color: var(--ac); }
+
 /* Input bar */
 .sticky-input-bar {
   display: flex;
