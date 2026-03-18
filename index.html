@@ -29,7 +29,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag">v1.1.17</span>
+      <span id="version-tag">v1.1.18</span>
       <button id="lock-btn" title="私人群組" aria-label="解鎖私人群組">
         <svg id="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </button>
@@ -158,6 +158,11 @@
           API Key
           <input id="cfg-ytkey" type="text" autocomplete="new-password" placeholder="AIzaSy..." spellcheck="false">
           <span class="hint">Google Cloud Console 申請，免費額度每天 10,000 units</span>
+        </label>
+        <label>
+          Google 帳號
+          <button id="cfg-yt-login" class="cfg-yt-login-btn" type="button">連結 Google 帳號（按讚功能）</button>
+          <span id="cfg-yt-login-status" class="hint"></span>
         </label>
       </div>
 

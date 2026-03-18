@@ -69,7 +69,7 @@ let S = {
     weatherLon:  null,
     ytApiKey:    ''
   },
-  yt: { channels: [], fetchedAt: 0, items: [], groups: ['AI','財經','故事','遊戲','動漫'] },
+  yt: { channels: [], fetchedAt: 0, items: [], groups: ['AI','財經','故事','遊戲','動漫'], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
   widgetTitles: {},
   editMode:       false,
   activeGroup:    'all',
@@ -106,7 +106,7 @@ function lsSave() {
       widgets:    S.widgets,
       news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:        S.cfg,
-      yt:         { channels: S.yt.channels, groups: S.yt.groups },
+      yt:         { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry },
       widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
       animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
@@ -131,6 +131,8 @@ function lsLoad() {
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
     if (d.yt)            Object.assign(S.yt, d.yt);
+    if (!S.yt.watched) S.yt.watched = [];
+    if (!S.yt.liked)   S.yt.liked   = [];
     // Migrate ch.group (string) → ch.groups (array)
     if (S.yt.channels) S.yt.channels.forEach(ch => {
       if (ch.group && !ch.groups) { ch.groups = [ch.group]; delete ch.group; }
@@ -1877,6 +1879,24 @@ function openSettingsModal() {
   $('cfg-nickname').value   = S.cfg.nickname || '';
   $('cfg-city').value       = S.cfg.weatherCity || '';
   $('cfg-ytkey').value      = S.cfg.ytApiKey || '';
+  // OAuth status
+  const loginStatus = $('cfg-yt-login-status');
+  const loginBtn    = $('cfg-yt-login');
+  if (ytIsLoggedIn()) {
+    loginStatus.textContent = '✓ 已連結 Google 帳號';
+    loginStatus.style.color = '#4ade80';
+    loginBtn.textContent = '重新連結';
+  } else {
+    loginStatus.textContent = '';
+    loginBtn.textContent = '連結 Google 帳號（按讚功能）';
+  }
+  loginBtn.onclick = () => {
+    ytGoogleLogin(() => {
+      loginStatus.textContent = '✓ 已連結 Google 帳號';
+      loginStatus.style.color = '#4ade80';
+      loginBtn.textContent = '重新連結';
+    });
+  };
   $('cfg-locate-status').textContent = '';
   openModal('m-cfg');
 }
@@ -2524,6 +2544,22 @@ async function showAnimeSheet(anime) {
    YOUTUBE SUBSCRIPTION FEED WIDGET
 ───────────────────────────────────── */
 
+function parseDuration(iso) {
+  if (!iso) return 0;
+  const m = iso.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+  if (!m) return 0;
+  return (parseInt(m[1]||0)*3600) + (parseInt(m[2]||0)*60) + parseInt(m[3]||0);
+}
+
+function fmtDuration(sec) {
+  if (!sec) return '';
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+  if (h > 0) return `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
 function fmtNum(n) {
   if (n == null) return '—';
   if (n >= 1e8) return (n / 1e8).toFixed(1) + '億';
@@ -2581,17 +2617,30 @@ async function fetchChannelVideos(channelId, key) {
   const uploadsId = cd.items?.[0]?.contentDetails?.relatedPlaylists?.uploads;
   if (!uploadsId) return [];
 
-  // Step 2: get latest 5 videos from uploads playlist
+  // Step 2: get latest videos from uploads playlist
   const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsId}&key=${key}`);
   const pd = await pr.json();
-  return (pd.items || []).map(item => ({
+  const items = (pd.items || []).map(item => ({
     videoId:     item.snippet.resourceId.videoId,
     title:       item.snippet.title,
     thumb:       item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url || '',
     publishedAt: item.snippet.publishedAt,
     channelId:   channelId,
-    channelName: item.snippet.channelTitle
+    channelName: item.snippet.channelTitle,
+    duration:    0
   }));
+
+  // Step 3: batch fetch duration
+  if (items.length) {
+    const ids = items.map(v => v.videoId).join(',');
+    const dr = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=contentDetails&id=${ids}&key=${key}`);
+    const dd = await dr.json();
+    const durMap = {};
+    (dd.items || []).forEach(v => { durMap[v.id] = parseDuration(v.contentDetails?.duration); });
+    items.forEach(v => { v.duration = durMap[v.videoId] || 0; });
+  }
+
+  return items;
 }
 
 async function fetchYoutubeFeed(force = false) {
@@ -3008,11 +3057,25 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   };
 
   const makeVideoCard = (video) => {
-    const card = el('div', 'yt-card');
+    const watched = (S.yt.watched||[]).includes(video.videoId);
+    const card = el('div', 'yt-card' + (watched ? ' yt-watched' : ''));
     const thumbWrap = el('div', 'yt-thumb');
     const img = el('img');
     img.src = video.thumb; img.alt = video.title; img.loading = 'lazy';
     thumbWrap.appendChild(img);
+
+    // Duration badge
+    if (video.duration > 0) {
+      const dur = el('span', 'yt-dur-badge', fmtDuration(video.duration));
+      thumbWrap.appendChild(dur);
+    }
+
+    // Watched badge
+    if (watched) {
+      const wb = el('span', 'yt-watched-badge', '已觀看');
+      thumbWrap.appendChild(wb);
+    }
+
     thumbWrap.addEventListener('click', e => {
       e.stopPropagation();
       const vid = video.videoId;
@@ -3031,7 +3094,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
     info.appendChild(meta);
     card.appendChild(info);
-    card.addEventListener('click', () => showYtSheet(video));
+    card.addEventListener('click', () => showYtSheet(video, renderFeed));
     return card;
   };
 
@@ -3104,7 +3167,39 @@ function showYtImageViewer(url) {
   requestAnimationFrame(() => viewer.classList.add('open'));
 }
 
-function showYtSheet(video) {
+/* ── YouTube OAuth (Google Identity Services) ── */
+const YT_OAUTH_CLIENT_ID = '300103288937-fmjbmisqcpcu8pft4k3h0aslpiprj38v.apps.googleusercontent.com';
+const YT_OAUTH_SCOPE = 'https://www.googleapis.com/auth/youtube.force-ssl';
+
+function ytGoogleLogin(onSuccess) {
+  if (!window.google?.accounts?.oauth2) {
+    // Load GIS script if not loaded
+    const s = document.createElement('script');
+    s.src = 'https://accounts.google.com/gsi/client';
+    s.onload = () => ytGoogleLogin(onSuccess);
+    document.head.appendChild(s);
+    return;
+  }
+  const client = window.google.accounts.oauth2.initTokenClient({
+    client_id: YT_OAUTH_CLIENT_ID,
+    scope: YT_OAUTH_SCOPE,
+    callback: (resp) => {
+      if (resp.access_token) {
+        S.yt.oauthToken = resp.access_token;
+        S.yt.oauthExpiry = Date.now() + (resp.expires_in - 60) * 1000;
+        lsSave();
+        onSuccess?.();
+      }
+    }
+  });
+  client.requestAccessToken();
+}
+
+function ytIsLoggedIn() {
+  return S.yt.oauthToken && S.yt.oauthExpiry && Date.now() < S.yt.oauthExpiry;
+}
+
+function showYtSheet(video, onUpdate) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   document.querySelector('.anime-sheet-overlay')?.remove();
   const thumb = video.thumb || '';
@@ -3153,7 +3248,48 @@ function showYtSheet(video) {
   const meta = el('div', 'yt-meta');
   meta.appendChild(el('span', 'yt-channel', video.channelName || ''));
   meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
+  if (video.duration > 0) meta.appendChild(el('span', 'yt-dur-text', fmtDuration(video.duration)));
   infoWrap.appendChild(meta);
+
+  // ── Action row: Like + Open ──
+  const actionRow = el('div', 'yt-action-row');
+
+  // Like button
+  const likeBtn = el('button', 'yt-like-btn');
+  const isLiked = () => (S.yt.liked||[]).includes(video.videoId);
+  const updateLikeBtn = () => {
+    likeBtn.innerHTML = isLiked()
+      ? `<svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 已按讚`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 按讚`;
+    likeBtn.classList.toggle('liked', isLiked());
+  };
+  updateLikeBtn();
+  likeBtn.addEventListener('click', async () => {
+    const token = S.yt.oauthToken;
+    if (!token) {
+      ytGoogleLogin(() => { likeBtn.click(); });
+      return;
+    }
+    const liked = isLiked();
+    const rating = liked ? 'none' : 'like';
+    try {
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/videos/rate?id=${video.videoId}&rating=${rating}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.status === 401) { S.yt.oauthToken = null; lsSave(); ytGoogleLogin(() => likeBtn.click()); return; }
+      if (liked) S.yt.liked = (S.yt.liked||[]).filter(id => id !== video.videoId);
+      else { if (!S.yt.liked) S.yt.liked = []; S.yt.liked.push(video.videoId); }
+      lsSave(); updateLikeBtn();
+    } catch(e) { console.error('Like error', e); }
+  });
+  actionRow.appendChild(likeBtn);
+
+  const openBtn = el('a', 'yt-open-btn', 'YouTube 開啟 ↗');
+  openBtn.href = `https://www.youtube.com/watch?v=${video.videoId}`;
+  openBtn.target = '_blank'; openBtn.rel = 'noopener';
+  actionRow.appendChild(openBtn);
+  infoWrap.appendChild(actionRow);
 
   // Description
   const descWrap = el('div', 'yt-desc-wrap');
@@ -3170,12 +3306,15 @@ function showYtSheet(video) {
   moreBtn.style.display = 'none';
   descWrap.appendChild(moreBtn);
   infoWrap.appendChild(descWrap);
-
-  const openBtn = el('a', 'yt-open-btn', 'YouTube 開啟 ↗');
-  openBtn.href = `https://www.youtube.com/watch?v=${video.videoId}`;
-  openBtn.target = '_blank'; openBtn.rel = 'noopener';
-  infoWrap.appendChild(openBtn);
   sheet.appendChild(infoWrap);
+
+  // Mark as watched
+  if (!(S.yt.watched||[]).includes(video.videoId)) {
+    if (!S.yt.watched) S.yt.watched = [];
+    S.yt.watched.push(video.videoId);
+    lsSave();
+    onUpdate?.();
+  }
 
   overlay.addEventListener('click', e => { if (e.target === overlay && !playerActive) closeSheet(); });
   overlay.appendChild(sheet);

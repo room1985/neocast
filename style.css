@@ -3105,3 +3105,78 @@ a { color:inherit; text-decoration:none; }
   border-color: rgba(255,255,255,.2);
   color: var(--tx);
 }
+
+/* ── YouTube card states ── */
+.yt-watched { opacity: .6; }
+.yt-watched .yt-title { color: var(--txm); }
+.yt-watched-badge {
+  position: absolute;
+  top: 4px; left: 4px;
+  background: rgba(0,0,0,.72);
+  color: #aaa;
+  font-size: .58rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+.yt-dur-badge {
+  position: absolute;
+  bottom: 4px; right: 4px;
+  background: rgba(0,0,0,.78);
+  color: #fff;
+  font-size: .62rem;
+  font-weight: 700;
+  padding: 2px 5px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+.yt-dur-text {
+  font-size: .67rem;
+  color: var(--txd);
+}
+
+/* ── Like button ── */
+.yt-action-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+.yt-like-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.07);
+  color: var(--txm);
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+}
+.yt-like-btn:hover { border-color: var(--ac); color: var(--ac); }
+.yt-like-btn.liked {
+  background: rgba(56,189,248,.18);
+  border-color: var(--ac);
+  color: var(--ac);
+}
+
+/* ── Settings login button ── */
+.cfg-yt-login-btn {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 8px;
+  color: var(--txm);
+  font-size: .78rem;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all .15s;
+  width: 100%;
+  text-align: left;
+  margin-top: 4px;
+}
+.cfg-yt-login-btn:hover { border-color: var(--ac); color: var(--ac); }
