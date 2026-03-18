@@ -3204,3 +3204,17 @@ a { color:inherit; text-decoration:none; }
   font-size: .75rem;
   color: var(--txm);
 }
+
+/* ── Stat badge (like count, view count) ── */
+.yt-stat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,.1);
+  background: rgba(255,255,255,.05);
+  color: var(--txm);
+  font-size: .75rem;
+  flex-shrink: 0;
+}
