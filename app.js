@@ -3517,6 +3517,20 @@ function showYtPlayer(videoId, onClose) {
       e.stopPropagation();
       closePlayer();
     });
+
+    // 全螢幕按鈕（僅 PWA standalone 顯示）
+    const isPwa = window.matchMedia('(display-mode: standalone)').matches;
+    if (isPwa) {
+      const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
+      fsBtn.title = '全螢幕';
+      fsBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        iframe.requestFullscreen?.().then(() => {
+          screen.orientation?.lock?.('landscape').catch(() => {});
+        }).catch(() => {});
+      });
+      bar.appendChild(fsBtn);
+    }
     bar.appendChild(closeBtn);
 
     const playerBox = el('div', 'yt-player-box');
@@ -3525,6 +3539,15 @@ function showYtPlayer(videoId, onClose) {
     iframe.allow = 'autoplay; encrypted-media; fullscreen';
     iframe.allowFullscreen = true;
     playerBox.appendChild(iframe);
+
+    // 退出全螢幕時恢復直版
+    const onFsChange = () => {
+      if (!document.fullscreenElement) {
+        screen.orientation?.lock?.('portrait').catch(() => {});
+        document.removeEventListener('fullscreenchange', onFsChange);
+      }
+    };
+    document.addEventListener('fullscreenchange', onFsChange);
 
     modal.addEventListener('click', e => e.stopPropagation());
     modal.appendChild(bar);
