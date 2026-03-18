@@ -4139,14 +4139,3 @@ async function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
-
-// Prevent accidental back swipe on mobile by pushing a dummy history state
-if (window.innerWidth < 768) {
-  history.pushState({ neocast: true }, '');
-  window.addEventListener('popstate', e => {
-    if (e.state?.neocast) {
-      // Re-push so the next swipe is also caught
-      history.pushState({ neocast: true }, '');
-    }
-  });
-}
