@@ -3498,33 +3498,16 @@ function showYtPlayer(videoId, onClose) {
   const key = S.cfg.ytApiKey?.trim();
 
   const buildPlayer = (portrait) => {
-    // 偵測 PWA standalone + portrait → 需要旋轉成橫版
-    const isPwa = window.matchMedia('(display-mode: standalone)').matches;
-    const isPortrait = window.innerHeight > window.innerWidth;
-    const needsRotate = isPwa && isPortrait;
-
-    // Android PWA：嘗試直接鎖定橫版（iOS 會靜默失敗，改用 CSS 旋轉）
-    if (needsRotate && screen.orientation?.lock) {
-      screen.orientation.lock('landscape').catch(() => {});
-    }
-
     // Dark backdrop — behind sheet (z-index 9500)
     const backdrop = el('div', 'yt-player-backdrop');
     backdrop.style.pointerEvents = 'none';
 
     // Modal — above sheet (z-index 11000)
-    let modalClass = 'yt-player-modal';
-    if (portrait) modalClass += ' portrait';
-    if (needsRotate) modalClass += ' pwa-landscape';
-    const modal = el('div', modalClass);
+    const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
 
     const closePlayer = () => {
       backdrop.classList.remove('open');
       modal.classList.remove('open');
-      // 釋放方向鎖定
-      if (needsRotate && screen.orientation?.unlock) {
-        try { screen.orientation.unlock(); } catch(e) {}
-      }
       setTimeout(() => { backdrop.remove(); modal.remove(); onClose?.(); }, 260);
     };
 

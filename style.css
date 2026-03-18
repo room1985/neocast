@@ -2858,24 +2858,6 @@ a { color:inherit; text-decoration:none; }
 .yt-player-modal.portrait .yt-player-box { aspect-ratio: 9/16; }
 .yt-player-box iframe { width: 100%; height: 100%; border: none; display: block; }
 
-/* ── PWA 橫版旋轉（standalone portrait 時強制橫版體驗）── */
-.yt-player-modal.pwa-landscape {
-  width: 100svh !important;
-  height: 100svw !important;
-  max-width: none !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) rotate(90deg) !important;
-  border-radius: 0 !important;
-  display: flex;
-  flex-direction: column;
-}
-.yt-player-modal.pwa-landscape .yt-player-box {
-  aspect-ratio: unset !important;
-  flex: 1 !important;
-  min-height: 0;
-}
-
 /* Description */
 .yt-desc-wrap { margin-top: 6px; }
 .yt-desc {
