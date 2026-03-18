@@ -3092,6 +3092,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     const meta = el('div', 'yt-meta');
     meta.appendChild(el('span', 'yt-channel', video.channelName));
     meta.appendChild(el('span', 'yt-time', fmtRelTime(video.publishedAt)));
+    if (video.duration > 0) meta.appendChild(el('span', 'yt-dur-text', `影片時長 ${fmtDuration(video.duration)}`));
     info.appendChild(meta);
     card.appendChild(info);
     card.addEventListener('click', () => showYtSheet(video, renderFeed));

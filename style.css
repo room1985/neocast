@@ -2465,6 +2465,7 @@ a { color:inherit; text-decoration:none; }
   border-radius: 8px;
   overflow: hidden;
   background: rgba(255,255,255,.06);
+  position: relative;
 }
 .yt-thumb img {
   width: 100%;
