@@ -292,6 +292,19 @@ async function gistPush(silent = false) {
   }
 }
 
+
+// yt 同步只更新設定欄位，保留本地的 fetchedAt 和 items 快取
+function mergeRemoteYt(remoteYt) {
+  if (!remoteYt) return;
+  if (remoteYt.channels)   S.yt.channels   = remoteYt.channels;
+  if (remoteYt.groups)     S.yt.groups     = remoteYt.groups;
+  if (remoteYt.watched)    S.yt.watched    = remoteYt.watched;
+  if (remoteYt.liked)      S.yt.liked      = remoteYt.liked;
+  if (remoteYt.oauthToken !== undefined) S.yt.oauthToken = remoteYt.oauthToken;
+  if (remoteYt.oauthExpiry !== undefined) S.yt.oauthExpiry = remoteYt.oauthExpiry;
+  // 不覆蓋 fetchedAt 和 items，保護本地快取
+}
+
 async function gistPull() {
   const { token, gistId } = S.cfg;
   if (!token || !gistId) return;
@@ -311,7 +324,7 @@ async function gistPull() {
     if (d.newsKeywords) S.news.keywords = d.newsKeywords;
     if (d.newsLang)     S.news.lang     = d.newsLang;
     if (d.animeState)   Object.assign(S.animeState, d.animeState);
-    if (d.yt)           Object.assign(S.yt, d.yt);
+    mergeRemoteYt(d.yt);
     if (d.stickyTags)   S.stickyTags = d.stickyTags;
     if (d.lastModified) S.cfg._lastModified = d.lastModified;
     lsSaveLocal();
@@ -358,7 +371,7 @@ async function gistAutoSync() {
     if (remote.newsKeywords) S.news.keywords = remote.newsKeywords;
     if (remote.newsLang)     S.news.lang     = remote.newsLang;
     if (remote.animeState)   Object.assign(S.animeState, remote.animeState);
-    if (remote.yt)           Object.assign(S.yt, remote.yt);
+    mergeRemoteYt(remote.yt);
     if (remote.stickyTags)   S.stickyTags = remote.stickyTags;
     S.cfg._lastModified = remoteTs;
     lsSaveLocal();
