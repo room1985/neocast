@@ -588,10 +588,10 @@ function setEditMode(on) {
   const addPageBtn = document.querySelector('.mobile-add-page-btn');
   if (addPageBtn) addPageBtn.classList.toggle('hidden', !on);
 
-  // 手機版：發光邊框 + 編輯模式提示列
+  // 手機版：發光邊框加在 active panel，+ 編輯模式提示列
   const mobileLayout = document.getElementById('mobile-layout');
   if (mobileLayout) {
-    mobileLayout.classList.toggle('mobile-editing', on);
+    document.querySelectorAll('.mobile-page-panel').forEach(p => p.classList.toggle('mobile-editing', on));
     let editBar = document.getElementById('mobile-edit-bar');
     if (on) {
       if (!editBar) {
