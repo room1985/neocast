@@ -37,7 +37,7 @@ body {
 }
 
 svg { display:block; }
-button { cursor:pointer; font-family:inherit; }
+button { cursor:pointer; font-family:inherit; outline:none; -webkit-tap-highlight-color:transparent; }
 input,select { font-family:inherit; }
 a { color:inherit; text-decoration:none; }
 
@@ -400,6 +400,8 @@ a { color:inherit; text-decoration:none; }
   flex-shrink: 0;
   transition: background .15s, border-color .15s, color .15s;
   margin-left: 0;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .w-btn         { color: var(--txm); }
 .w-pencil-btn  { color: var(--txm); opacity: 0; transition: opacity .15s, background .15s, border-color .15s, color .15s; }
