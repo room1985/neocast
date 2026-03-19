@@ -99,6 +99,34 @@ const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
 /* ── Auto-sync debounce timer ── */
 let _autoSyncTimer = null;
 
+// 只存 localStorage，不觸發自動推送（供 gistPush/gistAutoSync 內部使用）
+function lsSaveLocal() {
+  try {
+    const MAX_BYTES = 3 * 1024 * 1024;
+    let ytItems = [...(S.yt.items || [])].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+    const buildPayload = () => ({
+      shortcuts:  S.shortcuts,
+      groups:     S.groups,
+      stickies:   S.stickies,
+      stickyTags: S.stickyTags || [],
+      activeStickyTag: S.activeStickyTag || 'all',
+      widgets:    S.widgets,
+      news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
+      cfg:        S.cfg,
+      yt:         { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry, items: ytItems },
+      widgetTitles: S.widgetTitles,
+      mobilePages: S.mobilePages,
+      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
+    });
+    let json = JSON.stringify(buildPayload());
+    while (new Blob([json]).size > MAX_BYTES && ytItems.length > 0) {
+      ytItems.pop();
+      json = JSON.stringify(buildPayload());
+    }
+    localStorage.setItem(LS_KEY, json);
+  } catch(_) {}
+}
+
 function lsSave() {
   try {
     // yt.items 按 publishedAt 新→舊排序，超過 3MB 就截掉最舊的
@@ -211,6 +239,7 @@ const gistData = () => ({
   shortcuts:  S.shortcuts,
   groups:     S.groups,
   stickies:   S.stickies,
+  stickyTags: S.stickyTags || [],
   widgets:    S.widgets,
   newsKeywords: S.news.keywords,
   newsLang:   S.news.lang,
@@ -251,8 +280,8 @@ async function gistPush(silent = false) {
       throw new Error('HTTP ' + res.status);
     }
     const data = await res.json();
-    if (!gistId) { S.cfg.gistId = data.id; lsSave(); $('cfg-gid').value = data.id; }
-    S.cfg._lastModified = Date.now(); lsSave();
+    if (!gistId) { S.cfg.gistId = data.id; lsSaveLocal(); $('cfg-gid').value = data.id; }
+    S.cfg._lastModified = Date.now(); lsSaveLocal();
     if (!silent) toast('已同步到 Gist ✓');
     else toast('已自動同步 ✓');
   } catch(e) {
@@ -283,7 +312,9 @@ async function gistPull() {
     if (d.newsLang)     S.news.lang     = d.newsLang;
     if (d.animeState)   Object.assign(S.animeState, d.animeState);
     if (d.yt)           Object.assign(S.yt, d.yt);
-    lsSave();
+    if (d.stickyTags)   S.stickyTags = d.stickyTags;
+    if (d.lastModified) S.cfg._lastModified = d.lastModified;
+    lsSaveLocal();
     renderAll();
     toast('已從 Gist 拉取最新設定 ✓');
   } catch(_) {}
@@ -318,7 +349,7 @@ async function gistAutoSync() {
     if (remote.yt)           Object.assign(S.yt, remote.yt);
     if (remote.stickyTags)   S.stickyTags = remote.stickyTags;
     S.cfg._lastModified = remoteTs;
-    lsSave();
+    lsSaveLocal(); // 不觸發自動推送
     renderAll();
     toast('已自動同步雲端資料 ✓');
   } catch(_) {}
