@@ -1624,7 +1624,10 @@ async function fetchNews(force = false) {
 
   const allItems = [...(S.news.items || [])];
 
-  for (const kw of kwsToFetch) {
+  for (let i = 0; i < kwsToFetch.length; i++) {
+    const kw = kwsToFetch[i];
+    // GNews 免費方案限制每秒 1 次，每個請求間隔 2 秒（第一個不等）
+    if (apiKey && i > 0) await new Promise(r => setTimeout(r, 2000));
     try {
       let articles = [];
 
@@ -1632,6 +1635,11 @@ async function fetchNews(force = false) {
         // GNews API via Cloudflare Worker
         const url = `${GNEWS_PROXY}?q=${encodeURIComponent(kw)}&lang=${lang}&country=${country}&max=${maxPerKw}&apikey=${apiKey}`;
         const res = await fetch(url, { signal: AbortSignal.timeout(12000) });
+        if (res.status === 429) {
+          // 頻率超限：不更新 kwFetchedAt，下次仍會重試
+          console.warn('[NeoCast] GNews 429 rate limit:', kw);
+          continue;
+        }
         if (!res.ok) continue;
         const data = await res.json();
         if (!Array.isArray(data.articles)) continue;
