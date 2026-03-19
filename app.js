@@ -37,6 +37,7 @@ async function toTW(text) {
 const NEWS_CACHE_MS = 4 * 60 * 60 * 1000; // 4 小時
 const NEWSDATA_PROXY = 'https://autumn-sunset-863b.heineken6may.workers.dev/';
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url='; // fallback
+const NEWS_DEFAULT_IMG = 'https://cnews.com.tw/wp-content/uploads/2023/08/2023-08-30_18-34-44_686542.jpg';
 
 /* ─────────────────────────────────────
    STATE
@@ -1641,18 +1642,60 @@ async function fetchNews(force = false) {
         const data = await res.json();
         if (data.status !== 'success' || !Array.isArray(data.results)) continue;
 
-        articles = data.results.slice(0, maxPerKw).map(a => ({
-          kw,
-          title:   a.title || '',
-          source:  a.source_name || '',
-          link:    a.link || '',
-          image:   a.image_url || a.source_icon || '',
-          rawDate: a.pubDate ? a.pubDate.replace(' ', 'T') + 'Z' : '',
-          date:    a.pubDate ? parseDate(a.pubDate.replace(' ', 'T') + 'Z') : '',
-        }));
+        // 去掉已被其他關鍵字收錄的文章（用 link 去重）
+        const existingLinks = new Set(allItems.map(i => i.link));
+        const newsdataArticles = data.results
+          .filter(a => a.link && !existingLinks.has(a.link))
+          .slice(0, maxPerKw)
+          .map(a => ({
+            kw,
+            title:   a.title || '',
+            source:  a.source_name || '',
+            link:    a.link || '',
+            image:   a.image_url || a.source_icon || '',
+            rawDate: a.pubDate ? a.pubDate.replace(' ', 'T') + 'Z' : '',
+            date:    a.pubDate ? parseDate(a.pubDate.replace(' ', 'T') + 'Z') : '',
+          }));
+        articles.push(...newsdataArticles);
         S.news.kwFetchedAt[kw] = Date.now();
+
+        // 不足 10 篇，用 RSS 補足
+        if (articles.length < maxPerKw) {
+          try {
+            const isZhR = S.news.lang === 'zh-TW';
+            const hlR   = isZhR ? 'zh-TW' : 'en-US';
+            const glR   = isZhR ? 'TW' : 'US';
+            const ceidR = isZhR ? 'TW:zh-Hant' : 'US:en';
+            const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(kw)}&hl=${hlR}&gl=${glR}&ceid=${ceidR}`;
+            const rssRes = await fetch(RSS2JSON + encodeURIComponent(rssUrl), { signal: AbortSignal.timeout(12000) });
+            if (rssRes.ok) {
+              const rssData = await rssRes.json();
+              if (rssData.status === 'ok' && Array.isArray(rssData.items)) {
+                const existingLinks2 = new Set([...allItems.map(i => i.link), ...articles.map(i => i.link)]);
+                const need = maxPerKw - articles.length;
+                const rssArticles = rssData.items
+                  .filter(item => item.link && !existingLinks2.has(item.link))
+                  .slice(0, need)
+                  .map(item => {
+                    const raw = item.title || '';
+                    const dashIdx = raw.lastIndexOf(' - ');
+                    return {
+                      kw,
+                      title:   dashIdx > 0 ? raw.slice(0, dashIdx) : raw,
+                      source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
+                      link:    item.link || item.guid || '',
+                      image:   NEWS_DEFAULT_IMG,
+                      rawDate: item.pubDate || '',
+                      date:    item.pubDate ? parseDate(item.pubDate) : '',
+                    };
+                  });
+                articles.push(...rssArticles);
+              }
+            }
+          } catch(_) {}
+        }
       } else {
-        // Fallback: Google News RSS
+        // 無 API Key：全用 RSS
         const isZh = S.news.lang === 'zh-TW';
         const hl   = isZh ? 'zh-TW' : 'en-US';
         const gl   = isZh ? 'TW' : 'US';
@@ -1664,19 +1707,23 @@ async function fetchNews(force = false) {
         const data = await res.json();
         if (data.status !== 'ok' || !Array.isArray(data.items)) continue;
 
-        articles = data.items.slice(0, 3).map(item => {
-          const raw = item.title || '';
-          const dashIdx = raw.lastIndexOf(' - ');
-          return {
-            kw,
-            title:   dashIdx > 0 ? raw.slice(0, dashIdx) : raw,
-            source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
-            link:    item.link || item.guid || '',
-            image:   '',
-            rawDate: item.pubDate || '',
-            date:    item.pubDate ? parseDate(item.pubDate) : '',
-          };
-        });
+        const existingLinks = new Set(allItems.map(i => i.link));
+        articles = data.items
+          .filter(item => item.link && !existingLinks.has(item.link))
+          .slice(0, maxPerKw)
+          .map(item => {
+            const raw = item.title || '';
+            const dashIdx = raw.lastIndexOf(' - ');
+            return {
+              kw,
+              title:   dashIdx > 0 ? raw.slice(0, dashIdx) : raw,
+              source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
+              link:    item.link || item.guid || '',
+              image:   NEWS_DEFAULT_IMG,
+              rawDate: item.pubDate || '',
+              date:    item.pubDate ? parseDate(item.pubDate) : '',
+            };
+          });
         S.news.kwFetchedAt[kw] = Date.now();
       }
 
