@@ -588,6 +588,24 @@ function setEditMode(on) {
   const addPageBtn = document.querySelector('.mobile-add-page-btn');
   if (addPageBtn) addPageBtn.classList.toggle('hidden', !on);
 
+  // 手機版：發光邊框 + 編輯模式提示列
+  const mobileLayout = document.getElementById('mobile-layout');
+  if (mobileLayout) {
+    mobileLayout.classList.toggle('mobile-editing', on);
+    let editBar = document.getElementById('mobile-edit-bar');
+    if (on) {
+      if (!editBar) {
+        editBar = el('div', '');
+        editBar.id = 'mobile-edit-bar';
+        editBar.className = 'mobile-edit-bar';
+        editBar.textContent = '編輯模式';
+        mobileLayout.appendChild(editBar);
+      }
+    } else {
+      editBar?.remove();
+    }
+  }
+
   // 編輯模式開啟時，更新便利貼垃圾桶按鈕的亮暗狀態
   if (on) {
     document.querySelectorAll('.widget, .mobile-page-panel').forEach(w => {
