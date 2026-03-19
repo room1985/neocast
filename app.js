@@ -1518,13 +1518,32 @@ function renderNewsItems() {
       card.style.cursor = 'pointer';
       card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
     }
-    card.innerHTML = `
-      <div class="nc-kw">${esc(item.kw||'')}</div>
-      <div class="nc-title">${esc(item.title||'')}</div>
-      <div class="nc-foot">
-        <span class="nc-meta">${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}</span>
-      </div>
-    `;
+    const hasImg = !!item.image;
+    card.classList.toggle('nc-has-img', hasImg);
+    const metaStr = `${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}`;
+    if (hasImg) {
+      card.innerHTML = `
+        <div class="nc-body">
+          <div class="nc-kw">${esc(item.kw||'')}</div>
+          <div class="nc-title">${esc(item.title||'')}</div>
+          <div class="nc-foot"><span class="nc-meta">${metaStr}</span></div>
+        </div>
+        <div class="nc-thumb-wrap">
+          <img class="nc-thumb" src="${esc(item.image)}" alt="" loading="lazy">
+        </div>
+      `;
+      // 圖片載入失敗時移除縮圖區
+      card.querySelector('.nc-thumb').onerror = function() {
+        this.closest('.nc-thumb-wrap').remove();
+        card.classList.remove('nc-has-img');
+      };
+    } else {
+      card.innerHTML = `
+        <div class="nc-kw">${esc(item.kw||'')}</div>
+        <div class="nc-title">${esc(item.title||'')}</div>
+        <div class="nc-foot"><span class="nc-meta">${metaStr}</span></div>
+      `;
+    }
     newsListEl.appendChild(card);
   });
 }
