@@ -1405,31 +1405,16 @@ function buildNewsWidget() {
   });
   outer.appendChild(settingsPanel);
 
-  // 設定面板加入「編輯關鍵字」開關
-  const editKwRow = el('div', 'news-cfg-row');
-  const editKwLabel = el('span', '', '編輯關鍵字');
-  const editKwBtn = el('button', 'w-btn' + (newsEditingTags ? ' active' : ''), newsEditingTags ? '完成' : '編輯');
-  editKwBtn.style.cssText = 'width:auto;padding:0 10px;font-size:.72rem;';
-  editKwBtn.addEventListener('click', () => {
-    newsEditingTags = !newsEditingTags;
-    editKwBtn.textContent = newsEditingTags ? '完成' : '編輯';
-    editKwBtn.classList.toggle('active', newsEditingTags);
-    renderNewsKws();
-  });
-  editKwRow.appendChild(editKwLabel);
-  editKwRow.appendChild(editKwBtn);
-  settingsPanel.appendChild(editKwRow);
-
   settingsBtn.addEventListener('click', () => {
     const open = settingsPanel.style.display !== 'none';
     settingsPanel.style.display = open ? 'none' : '';
     settingsBtn.classList.toggle('active', !open);
-    // Sync values
+    // 開啟設定 = 進入編輯模式；關閉設定 = 退出編輯模式
+    newsEditingTags = !open;
+    renderNewsKws();
     if (!open) {
       settingsPanel.querySelector('#news-cfg-per-kw').value = S.news.perKeyword || 2;
       settingsPanel.querySelector('#news-cfg-cache').value = S.news.cacheMin || 25;
-      editKwBtn.textContent = newsEditingTags ? '完成' : '編輯';
-      editKwBtn.classList.toggle('active', newsEditingTags);
     }
   });
 
@@ -4089,25 +4074,13 @@ function renderMobileNews(container) {
     S.news.cacheMin = parseInt(e.target.value); lsSave();
   });
   container.appendChild(settingsPanel);
-  // 設定面板加入「編輯關鍵字」開關
-  const mEditKwRow = el('div', 'news-cfg-row');
-  const mEditKwLabel = el('span', '', '編輯關鍵字');
-  const mEditKwBtn = el('button', 'w-btn', '編輯');
-  mEditKwBtn.style.cssText = 'width:auto;padding:0 10px;font-size:.72rem;';
-  mEditKwBtn.addEventListener('click', () => {
-    mEditingTags = !mEditingTags;
-    mEditKwBtn.textContent = mEditingTags ? '完成' : '編輯';
-    mEditKwBtn.classList.toggle('active', mEditingTags);
-    renderKws(mEditingTags);
-  });
-  mEditKwRow.appendChild(mEditKwLabel);
-  mEditKwRow.appendChild(mEditKwBtn);
-  settingsPanel.appendChild(mEditKwRow);
-
   settingsBtn.addEventListener('click', () => {
     const open = settingsPanel.style.display !== 'none';
     settingsPanel.style.display = open ? 'none' : '';
     settingsBtn.classList.toggle('active', !open);
+    // 開啟設定 = 進入編輯模式；關閉設定 = 退出編輯模式
+    mEditingTags = !open;
+    renderKws(mEditingTags);
   });
 
   // Keywords
