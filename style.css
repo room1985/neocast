@@ -1362,9 +1362,33 @@ a { color:inherit; text-decoration:none; }
 .sticky-card-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 3px;
   width: 100%;
-  padding: 2px 0 0 20px;
+  padding: 3px 0 0 20px;
+}
+/* card 上的標籤：低調小字，不搶焦點 */
+.sticky-card-tags .sticky-tag-chip {
+  font-size: .65rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: rgba(255,255,255,.38);
+  border-color: rgba(255,255,255,.12);
+  background: transparent;
+  pointer-events: none;
+}
+.sticky-card-tags .sticky-tag-chip.on {
+  background: transparent;
+  border-color: rgba(255,255,255,.18);
+  color: rgba(255,255,255,.4);
+}
+
+/* 編輯模式：正在編輯的卡片正常顯示，其他變暗 */
+.sticky-card.sticky-dimmed {
+  opacity: .35;
+  pointer-events: none;
+}
+.sticky-card.sticky-editing {
+  opacity: 1;
 }
 
 .sticky-tag-input {
@@ -1409,6 +1433,7 @@ a { color:inherit; text-decoration:none; }
 .sticky-color-sq.on { border-color: white; }
 
 /* Color classes */
+.sticky-sq-none   { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.3) !important; }
 .sticky-sq-blue   { background: #38bdf8; }
 .sticky-sq-green  { background: #4ade80; }
 .sticky-sq-red    { background: #f87171; }

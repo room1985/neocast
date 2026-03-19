@@ -1759,6 +1759,9 @@ function startEdit(sticky, textEl, card, container) {
   card.draggable = false;
   // 隱藏 card-tags（避免編輯模式重複顯示）
   card.querySelector('.sticky-card-tags')?.style.setProperty('display', 'none');
+  // 其他卡片變灰，凸顯正在編輯的卡片
+  container.querySelectorAll('.sticky-card').forEach(c => { if (c !== card) c.classList.add('sticky-dimmed'); });
+  card.classList.add('sticky-editing');
 
   // Hide pin and copy buttons during edit
   const pinBtn = card.querySelector('.sticky-pin');
@@ -1787,6 +1790,25 @@ function startEdit(sticky, textEl, card, container) {
     }, 340);
   });
   colorRow.appendChild(delBtn);
+
+  // 原色按鈕（無色）
+  const noneSq = el('button', 'sticky-color-sq sticky-sq-none' + (!sticky.color || sticky.color === 'none' ? ' on' : ''));
+  noneSq.title = '原色';
+  noneSq.addEventListener('mousedown', e => {
+    e.preventDefault();
+    const st = S.stickies.find(s => s.id === sticky.id);
+    if (st) {
+      st.color = 'none';
+      const newC = STICKY_COLORS.none;
+      card.style.background  = newC.bg;
+      card.style.borderColor = newC.border;
+    }
+    colorRow.querySelectorAll('.sticky-color-sq').forEach(s => s.classList.remove('on'));
+    noneSq.classList.add('on');
+    lsSave();
+  });
+  colorRow.appendChild(noneSq);
+
   ['blue','green','red','yellow'].forEach(key => {
     const sq = el('button', 'sticky-color-sq sticky-sq-' + key + (sticky.color === key ? ' on' : ''));
     sq.addEventListener('mousedown', e => {
@@ -1799,7 +1821,8 @@ function startEdit(sticky, textEl, card, container) {
         card.style.borderColor = newC.border;
       }
       colorRow.querySelectorAll('.sticky-color-sq').forEach(s => s.classList.remove('on'));
-      if (sticky.color === key) sq.classList.add('on');
+      if (st && st.color === key) sq.classList.add('on');
+      else noneSq.classList.add('on');
       lsSave();
     });
     colorRow.appendChild(sq);
