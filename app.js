@@ -1503,14 +1503,50 @@ function buildStickiesWidget() {
 
   function renderStickyTagBar() {
     tagBar.innerHTML = '';
+
+    // 全部
     const allBtn = el('span', 'sticky-tag-chip' + (S.activeStickyTag === 'all' ? ' on' : ''), '全部');
     allBtn.addEventListener('click', () => { S.activeStickyTag = 'all'; lsSave(); renderStickyTagBar(); renderStickiesWidget(body); });
     tagBar.appendChild(allBtn);
+
+    // 各分類
     (S.stickyTags || []).forEach(tag => {
-      const chip = el('span', 'sticky-tag-chip' + (S.activeStickyTag === tag ? ' on' : ''), '#' + tag);
+      const chip = el('span', 'sticky-tag-chip' + (S.activeStickyTag === tag ? ' on' : ''), tag);
+      // 點選切換
       chip.addEventListener('click', () => { S.activeStickyTag = tag; lsSave(); renderStickyTagBar(); renderStickiesWidget(body); });
+      // 長按刪除分類
+      let delTimer = null;
+      chip.addEventListener('mousedown', () => { delTimer = setTimeout(() => {
+        if (!confirm('刪除分類「' + tag + '」？（便利貼不會刪除，但會移除分類）')) return;
+        S.stickyTags = S.stickyTags.filter(t => t !== tag);
+        S.stickies.forEach(s => { if (s.tag === tag) s.tag = ''; });
+        if (S.activeStickyTag === tag) S.activeStickyTag = 'all';
+        lsSave(); renderStickyTagBar(); renderStickiesWidget(body);
+      }, 600); });
+      chip.addEventListener('mouseup', () => clearTimeout(delTimer));
+      chip.addEventListener('mouseleave', () => clearTimeout(delTimer));
+      chip.addEventListener('touchstart', () => { delTimer = setTimeout(() => {
+        if (!confirm('刪除分類「' + tag + '」？（便利貼不會刪除，但會移除分類）')) return;
+        S.stickyTags = S.stickyTags.filter(t => t !== tag);
+        S.stickies.forEach(s => { if (s.tag === tag) s.tag = ''; });
+        if (S.activeStickyTag === tag) S.activeStickyTag = 'all';
+        lsSave(); renderStickyTagBar(); renderStickiesWidget(body);
+      }, 600); }, { passive: true });
+      chip.addEventListener('touchend', () => clearTimeout(delTimer));
       tagBar.appendChild(chip);
     });
+
+    // ＋ 新增分類
+    const addChip = el('span', 'sticky-tag-chip sticky-tag-add', '＋');
+    addChip.title = '新增分類';
+    addChip.addEventListener('click', () => {
+      const name = prompt('新分類名稱：')?.trim();
+      if (!name) return;
+      if (!S.stickyTags.includes(name)) S.stickyTags.push(name);
+      S.activeStickyTag = name;
+      lsSave(); renderStickyTagBar(); renderStickiesWidget(body);
+    });
+    tagBar.appendChild(addChip);
   }
   body._renderTagBar = renderStickyTagBar;
   renderStickyTagBar();
@@ -1536,10 +1572,10 @@ function renderStickiesWidget(container) {
   const activeTag = S.activeStickyTag || 'all';
   const visibleStickies = activeTag === 'all'
     ? S.stickies
-    : S.stickies.filter(s => (s.tags || []).includes(activeTag));
+    : S.stickies.filter(s => s.tag === activeTag);
 
   if (!visibleStickies.length) {
-    list.innerHTML = '<div class="sticky-empty">' + (activeTag === 'all' ? '輸入新增待辦事項…' : '此標籤沒有便利貼') + '</div>';
+    list.innerHTML = '<div class="sticky-empty">' + (activeTag === 'all' ? '輸入新增待辦事項…' : '此分類還沒有便利貼') + '</div>';
   } else {
     const sorted = [
       ...visibleStickies.filter(s => s.pinned),
@@ -1578,7 +1614,8 @@ function renderStickiesWidget(container) {
   function doAdd() {
     const text = inp.value.trim();
     if (!text) return;
-    S.stickies.unshift({ id: uid(), text, color: selectedColor, pinned: false });
+    const newTag = (S.activeStickyTag && S.activeStickyTag !== 'all') ? S.activeStickyTag : '';
+    S.stickies.unshift({ id: uid(), text, color: selectedColor, pinned: false, tag: newTag });
     inp.value = '';
     lsSave();
     renderStickiesWidget(container);
@@ -1668,12 +1705,10 @@ function makeStickyCard(sticky, container) {
   card.appendChild(copyBtn);
   card.appendChild(pinBtn);
 
-  // 顯示標籤
-  if (sticky.tags && sticky.tags.length) {
+  // 顯示分類
+  if (sticky.tag) {
     const tagWrap = el('div', 'sticky-card-tags');
-    sticky.tags.forEach(tag => {
-      tagWrap.appendChild(el('span', 'sticky-tag-chip on', '#' + tag));
-    });
+    tagWrap.appendChild(el('span', 'sticky-tag-chip on', sticky.tag));
     card.appendChild(tagWrap);
   }
 
@@ -1748,53 +1783,33 @@ function startEdit(sticky, textEl, card, container) {
   });
   inp.after(colorRow);
 
-  // 標籤管理列
-  const tagRow = el('div', 'sticky-edit-tag-row');
+  // 分類選擇器
   const st0 = S.stickies.find(s => s.id === sticky.id);
-  if (!st0.tags) st0.tags = [];
+  if (S.stickyTags.length) {
+    const catRow = el('div', 'sticky-edit-tag-row');
+    const catLabel = el('span', '', '分類：');
+    catLabel.style.cssText = 'font-size:.72rem;color:rgba(255,255,255,.45);flex-shrink:0;';
+    catRow.appendChild(catLabel);
 
-  function renderTagRow() {
-    tagRow.innerHTML = '';
-    st0.tags.forEach(tag => {
-      const chip = el('span', 'sticky-tag-chip on');
-      chip.textContent = '#' + tag;
-      const x = el('span', 'sticky-tag-chip-del', '×');
-      x.addEventListener('mousedown', e => {
-        e.preventDefault();
-        st0.tags = st0.tags.filter(t => t !== tag);
-        lsSave();
-        container._renderTagBar?.();
-        renderTagRow();
-      });
-      chip.appendChild(x);
-      tagRow.appendChild(chip);
+    const sel = el('select', 'sticky-cat-select');
+    const noneOpt = document.createElement('option');
+    noneOpt.value = ''; noneOpt.textContent = '無';
+    sel.appendChild(noneOpt);
+    S.stickyTags.forEach(tag => {
+      const opt = document.createElement('option');
+      opt.value = tag; opt.textContent = tag;
+      if (st0.tag === tag) opt.selected = true;
+      sel.appendChild(opt);
     });
-    // 新增標籤輸入
-    const tagInp = el('input', 'sticky-tag-input');
-    tagInp.placeholder = '+ 新增標籤';
-    tagInp.autocomplete = 'off';
-    const addTag = () => {
-      const v = tagInp.value.trim().replace(/^#/, '');
-      if (!v) return;
-      if (!st0.tags.includes(v)) {
-        st0.tags.push(v);
-        if (!S.stickyTags.includes(v)) S.stickyTags.push(v);
-      }
+    sel.addEventListener('mousedown', e => e.stopPropagation());
+    sel.addEventListener('change', e => {
+      if (st0) st0.tag = sel.value;
       lsSave();
       container._renderTagBar?.();
-      renderTagRow();
-      // 重新 focus 文字輸入
-      setTimeout(() => inp.focus(), 0);
-    };
-    tagInp.addEventListener('keydown', e => {
-      if (e.key === 'Enter') { e.stopPropagation(); addTag(); }
-      if (e.key === 'Escape') { e.stopPropagation(); renderStickiesWidget(container); }
     });
-    tagInp.addEventListener('blur', addTag);
-    tagRow.appendChild(tagInp);
+    catRow.appendChild(sel);
+    colorRow.after(catRow);
   }
-  renderTagRow();
-  colorRow.after(tagRow);
 
   const save = () => {
     const val = inp.value.trim();
@@ -1807,11 +1822,7 @@ function startEdit(sticky, textEl, card, container) {
     if (e.key === 'Enter') save();
     if (e.key === 'Escape') renderStickiesWidget(container);
   });
-  inp.addEventListener('blur', e => {
-    // blur 到 tagRow 內部不 save
-    if (tagRow.contains(e.relatedTarget)) return;
-    save();
-  });
+  inp.addEventListener('blur', save);
 }
 
 function initStickyListDrag(list, container) {
