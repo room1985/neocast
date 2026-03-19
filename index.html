@@ -29,7 +29,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag">v1.1.74</span>
+      <span id="version-tag">v1.1.75</span>
       <button id="lock-btn" title="私人群組" aria-label="解鎖私人群組">
         <svg id="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </button>
@@ -153,6 +153,15 @@
         <span class="hint">只清除小工具位置，不影響捷徑和設定</span>
         <button class="bsm" id="cfg-sync-now" style="margin-top:8px;">從雲端還原設定</button>
       </div>
+      </div>
+
+      <div class="cfg-sec">
+        <div class="cfg-sec-title">📰 新聞設定</div>
+        <label>
+          GNews API Key
+          <input id="cfg-gnewskey" type="text" autocomplete="new-password" placeholder="85a1b958..." spellcheck="false">
+          <span class="hint">gnews.io 申請，免費每天 100 次。未填則使用 Google News RSS</span>
+        </label>
       </div>
 
       <div class="cfg-sec">

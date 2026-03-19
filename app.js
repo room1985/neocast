@@ -34,8 +34,9 @@ async function toTW(text) {
     return text; // fallback if OpenCC not loaded
   }
 }
-const NEWS_CACHE_MS = 25 * 60 * 1000;  // 25 min
-const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url=';
+const NEWS_CACHE_MS = 4 * 60 * 60 * 1000; // 4 小時（GNews 模式）
+const GNEWS_PROXY = 'https://autumn-sunset-863b.heineken6may.workers.dev/';
+const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url='; // fallback
 
 /* ─────────────────────────────────────
    STATE
@@ -69,7 +70,8 @@ let S = {
     weatherCity: '',
     weatherLat:  null,
     weatherLon:  null,
-    ytApiKey:    ''
+    ytApiKey:    '',
+    gnewsApiKey: ''
   },
   yt: { channels: [], fetchedAt: 0, items: [], groups: ['AI','財經','故事','遊戲','動漫'], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
   widgetTitles: {},
@@ -1549,45 +1551,116 @@ function parseDate(raw) {
   } catch(_) { return ''; }
 }
 
+// 記錄各關鍵字上次更新時間
+const _newsKwFetchedAt = {};
+
+function isNewsSilentHour() {
+  // 台灣時間 00:00-06:00 靜默
+  const tw = new Date(Date.now() + 8 * 60 * 60 * 1000);
+  const hour = tw.getUTCHours();
+  return hour >= 0 && hour < 6;
+}
+
 async function fetchNews(force = false) {
-  const cacheMs = (S.news.cacheMin || 25) * 60 * 1000;
-  if (!force && Date.now() - S.news.fetchedAt < cacheMs && S.news.items.length) {
+  const CACHE_MS = 4 * 60 * 60 * 1000; // 4 小時
+
+  // 靜默時段（非強制不更新）
+  if (!force && isNewsSilentHour()) {
+    if (S.news.items.length) { renderNewsItems(); return; }
+  }
+
+  // 全局快取：非強制且整批未過期，直接渲染
+  if (!force && S.news.fetchedAt && (Date.now() - S.news.fetchedAt) < CACHE_MS && S.news.items.length) {
     renderNewsItems(); return;
   }
+
+  const apiKey = S.cfg.gnewsApiKey?.trim();
+  const keywords = S.news.keywords || [];
+  if (!keywords.length) { renderNewsItems(); return; }
 
   const refBtn = $('news-ref-btn');
   const mobileRefBtn = $('mobile-news-ref-btn');
   renderNewsLoading();
 
   const isZh = S.news.lang === 'zh-TW';
-  const hl   = isZh ? 'zh-TW' : 'en-US';
-  const gl   = isZh ? 'TW'    : 'US';
-  const ceid = isZh ? 'TW:zh-Hant' : 'US:en';
-  const perKw = S.news.perKeyword || 2;
+  const lang = isZh ? 'zh' : 'en';
+  const country = isZh ? 'tw' : 'us';
+  const maxPerKw = 10;
 
-  const allItems = [];
+  // 分時輪流更新：每次最多更新 3 個關鍵字
+  // 強制更新時全部重抓
+  let kwsToFetch = keywords;
+  if (!force && apiKey) {
+    const now = Date.now();
+    // 找出最舊的 3 個關鍵字（或從未抓過的）
+    kwsToFetch = [...keywords]
+      .sort((a, b) => (_newsKwFetchedAt[a] || 0) - (_newsKwFetchedAt[b] || 0))
+      .slice(0, 3);
+  }
 
-  for (const kw of S.news.keywords) {
+  const allItems = [...(S.news.items || [])];
+
+  for (const kw of kwsToFetch) {
     try {
-      const rssUrl  = `https://news.google.com/rss/search?q=${encodeURIComponent(kw)}&hl=${hl}&gl=${gl}&ceid=${ceid}`;
-      const apiUrl  = RSS2JSON + encodeURIComponent(rssUrl);
-      const res     = await fetch(apiUrl, { signal: AbortSignal.timeout(12000) });
-      if (!res.ok) continue;
-      const data    = await res.json();
-      if (data.status !== 'ok' || !Array.isArray(data.items)) continue;
+      let articles = [];
 
-      data.items.slice(0, perKw).forEach(item => {
-        const raw     = item.title || '';
-        const dashIdx = raw.lastIndexOf(' - ');
-        const title   = dashIdx > 0 ? raw.slice(0, dashIdx) : raw;
-        const source  = dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || '');
-        const link    = item.link || item.guid || '';
-        const date    = item.pubDate ? parseDate(item.pubDate) : '';
-        const rawDate = item.pubDate || '';
-        allItems.push({ kw, title, source, link, date, rawDate });
-      });
+      if (apiKey) {
+        // GNews API via Cloudflare Worker
+        const url = `${GNEWS_PROXY}?q=${encodeURIComponent(kw)}&lang=${lang}&country=${country}&max=${maxPerKw}&apikey=${apiKey}`;
+        const res = await fetch(url, { signal: AbortSignal.timeout(12000) });
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (!Array.isArray(data.articles)) continue;
+
+        articles = data.articles.map(a => ({
+          kw,
+          title:   a.title || '',
+          source:  a.source?.name || '',
+          link:    a.url || '',
+          image:   a.image || '',
+          rawDate: a.publishedAt || '',
+          date:    a.publishedAt ? parseDate(a.publishedAt) : '',
+        }));
+        _newsKwFetchedAt[kw] = Date.now();
+      } else {
+        // Fallback: Google News RSS
+        const isZh = S.news.lang === 'zh-TW';
+        const hl   = isZh ? 'zh-TW' : 'en-US';
+        const gl   = isZh ? 'TW' : 'US';
+        const ceid = isZh ? 'TW:zh-Hant' : 'US:en';
+        const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(kw)}&hl=${hl}&gl=${gl}&ceid=${ceid}`;
+        const apiUrl = RSS2JSON + encodeURIComponent(rssUrl);
+        const res = await fetch(apiUrl, { signal: AbortSignal.timeout(12000) });
+        if (!res.ok) continue;
+        const data = await res.json();
+        if (data.status !== 'ok' || !Array.isArray(data.items)) continue;
+
+        articles = data.items.slice(0, 3).map(item => {
+          const raw = item.title || '';
+          const dashIdx = raw.lastIndexOf(' - ');
+          return {
+            kw,
+            title:   dashIdx > 0 ? raw.slice(0, dashIdx) : raw,
+            source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
+            link:    item.link || item.guid || '',
+            image:   '',
+            rawDate: item.pubDate || '',
+            date:    item.pubDate ? parseDate(item.pubDate) : '',
+          };
+        });
+      }
+
+      // 替換該關鍵字的舊文章
+      const filtered = allItems.filter(i => i.kw !== kw);
+      filtered.push(...articles);
+      allItems.length = 0;
+      allItems.push(...filtered);
+
     } catch(_) {}
   }
+
+  // 排序：全部按發布時間新→舊
+  allItems.sort((a, b) => new Date(b.rawDate || 0) - new Date(a.rawDate || 0));
 
   S.news.items     = allItems;
   S.news.fetchedAt = Date.now();
@@ -1595,7 +1668,6 @@ async function fetchNews(force = false) {
 
   renderNewsItems();
 
-  // Re-query DOM fresh after async to avoid stale references
   const mobileNews = document.querySelector('#mobile-layout .mobile-news-inner');
   if (mobileNews) renderMobileNews(mobileNews);
 }
@@ -2276,6 +2348,7 @@ function openSettingsModal() {
   $('cfg-gid').value        = S.cfg.gistId;
   $('cfg-nickname').value   = S.cfg.nickname || '';
   $('cfg-city').value       = S.cfg.weatherCity || '';
+  $('cfg-gnewskey').value   = S.cfg.gnewsApiKey || '';
   $('cfg-ytkey').value      = S.cfg.ytApiKey || '';
   // OAuth status
   const loginStatus = $('cfg-yt-login-status');
@@ -2309,6 +2382,7 @@ async function saveSettings() {
   S.cfg.gistId       = gistId;
   S.cfg.nickname     = nickname;
   S.cfg.weatherCity  = city;
+  S.cfg.gnewsApiKey  = $('cfg-gnewskey').value.trim();
   S.cfg.ytApiKey     = $('cfg-ytkey').value.trim();
 
   // Handle video file
