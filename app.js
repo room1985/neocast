@@ -1348,16 +1348,6 @@ function buildNewsWidget() {
   // ── Toolbar: [✎] [⚙] [中/EN] [↻] ──
   const toolbar = el('div', 'news-toolbar');
 
-  // Edit tags button
-  const editTagsBtn = el('button', 'w-btn news-edit-tags-btn');
-  editTagsBtn.title = '編輯標籤';
-  editTagsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
-  editTagsBtn.addEventListener('click', () => {
-    newsEditingTags = !newsEditingTags;
-    editTagsBtn.classList.toggle('active', newsEditingTags);
-    renderNewsKws();
-  });
-
   // Settings button
   const settingsBtn = el('button', 'w-btn news-settings-btn');
   settingsBtn.title = '新聞設定';
@@ -1383,7 +1373,6 @@ function buildNewsWidget() {
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  toolbar.appendChild(editTagsBtn);
   toolbar.appendChild(settingsBtn);
   toolbar.appendChild(langBtn);
   toolbar.appendChild(refBtn);
@@ -1416,6 +1405,21 @@ function buildNewsWidget() {
   });
   outer.appendChild(settingsPanel);
 
+  // 設定面板加入「編輯關鍵字」開關
+  const editKwRow = el('div', 'news-cfg-row');
+  const editKwLabel = el('span', '', '編輯關鍵字');
+  const editKwBtn = el('button', 'w-btn' + (newsEditingTags ? ' active' : ''), newsEditingTags ? '完成' : '編輯');
+  editKwBtn.style.cssText = 'width:auto;padding:0 10px;font-size:.72rem;';
+  editKwBtn.addEventListener('click', () => {
+    newsEditingTags = !newsEditingTags;
+    editKwBtn.textContent = newsEditingTags ? '完成' : '編輯';
+    editKwBtn.classList.toggle('active', newsEditingTags);
+    renderNewsKws();
+  });
+  editKwRow.appendChild(editKwLabel);
+  editKwRow.appendChild(editKwBtn);
+  settingsPanel.appendChild(editKwRow);
+
   settingsBtn.addEventListener('click', () => {
     const open = settingsPanel.style.display !== 'none';
     settingsPanel.style.display = open ? 'none' : '';
@@ -1424,6 +1428,8 @@ function buildNewsWidget() {
     if (!open) {
       settingsPanel.querySelector('#news-cfg-per-kw').value = S.news.perKeyword || 2;
       settingsPanel.querySelector('#news-cfg-cache').value = S.news.cacheMin || 25;
+      editKwBtn.textContent = newsEditingTags ? '完成' : '編輯';
+      editKwBtn.classList.toggle('active', newsEditingTags);
     }
   });
 
@@ -4032,15 +4038,6 @@ function renderMobileNews(container) {
   const toolbar = el('div', 'news-toolbar');
   let mEditingTags = false;
 
-  const editTagsBtn = el('button', 'w-btn news-edit-tags-btn');
-  editTagsBtn.title = '編輯標籤';
-  editTagsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
-  editTagsBtn.addEventListener('click', () => {
-    mEditingTags = !mEditingTags;
-    editTagsBtn.classList.toggle('active', mEditingTags);
-    renderKws(mEditingTags);
-  });
-
   const settingsBtn = el('button', 'w-btn news-settings-btn');
   settingsBtn.title = '新聞設定';
   settingsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
@@ -4062,7 +4059,6 @@ function renderMobileNews(container) {
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  toolbar.appendChild(editTagsBtn);
   toolbar.appendChild(settingsBtn);
   toolbar.appendChild(langBtn);
   toolbar.appendChild(refBtn);
@@ -4093,6 +4089,21 @@ function renderMobileNews(container) {
     S.news.cacheMin = parseInt(e.target.value); lsSave();
   });
   container.appendChild(settingsPanel);
+  // 設定面板加入「編輯關鍵字」開關
+  const mEditKwRow = el('div', 'news-cfg-row');
+  const mEditKwLabel = el('span', '', '編輯關鍵字');
+  const mEditKwBtn = el('button', 'w-btn', '編輯');
+  mEditKwBtn.style.cssText = 'width:auto;padding:0 10px;font-size:.72rem;';
+  mEditKwBtn.addEventListener('click', () => {
+    mEditingTags = !mEditingTags;
+    mEditKwBtn.textContent = mEditingTags ? '完成' : '編輯';
+    mEditKwBtn.classList.toggle('active', mEditingTags);
+    renderKws(mEditingTags);
+  });
+  mEditKwRow.appendChild(mEditKwLabel);
+  mEditKwRow.appendChild(mEditKwBtn);
+  settingsPanel.appendChild(mEditKwRow);
+
   settingsBtn.addEventListener('click', () => {
     const open = settingsPanel.style.display !== 'none';
     settingsPanel.style.display = open ? 'none' : '';
