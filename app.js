@@ -1455,16 +1455,6 @@ function renderNewsKws() {
   kws.appendChild(addWrap);
 }
 
-function showNewsImageViewer(url) {
-  document.querySelector('.anime-img-viewer')?.remove();
-  const viewer = el('div', 'anime-img-viewer');
-  const img = el('img', 'anime-img-viewer-img');
-  img.src = url;
-  viewer.appendChild(img);
-  viewer.addEventListener('click', () => viewer.remove());
-  document.body.appendChild(viewer);
-}
-
 function renderNewsItems() {
   if (!newsListEl) return;
   const filtered = S.news.activeKw === 'all'
@@ -1478,36 +1468,17 @@ function renderNewsItems() {
   newsListEl.innerHTML = '';
   filtered.forEach(item => {
     const card = el('div', 'news-card');
-    const openLink = item.rssLink || item.link;
-    if (openLink) {
+    if (item.link) {
       card.style.cursor = 'pointer';
-      card.addEventListener('click', () => window.open(openLink, '_blank', 'noopener'));
+      card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
     }
-
-    // 縮圖
-    const thumb = newsThumb(item);
-    const body = el('div', 'nc-body');
-    if (thumb) {
-      const imgWrap = el('div', thumb.large ? 'nc-thumb-wrap' : 'nc-favicon-wrap');
-      const img = el('img', thumb.large ? 'nc-thumb' : 'nc-favicon');
-      img.src = thumb.url;
-      img.loading = 'lazy';
-      if (thumb.large) {
-        img.addEventListener('click', e => { e.stopPropagation(); showNewsImageViewer(thumb.url); });
-        img.style.cursor = 'zoom-in';
-      }
-      imgWrap.appendChild(img);
-      card.appendChild(imgWrap);
-    }
-
-    body.innerHTML = `
+    card.innerHTML = `
       <div class="nc-kw">${esc(item.kw||'')}</div>
       <div class="nc-title">${esc(item.title||'')}</div>
       <div class="nc-foot">
         <span class="nc-meta">${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}</span>
       </div>
     `;
-    card.appendChild(body);
     newsListEl.appendChild(card);
   });
 }
@@ -1530,18 +1501,8 @@ function parseDate(raw) {
     const d = new Date(raw);
     const datePart = d.toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' });
     const timePart = d.toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit', hour12: false });
-    return datePart + ' ' + timePart;
+    return datePart + '．發布時間 ' + timePart;
   } catch(_) { return ''; }
-}
-
-function newsThumb(item) {
-  if (item.enclosure) return { url: item.enclosure, large: true };
-  try {
-    // 用 rssLink 或 link 取得來源 domain，排除 news.google.com
-    const urlStr = (item.rssLink && !item.rssLink.includes('news.google.com')) ? item.rssLink : item.link;
-    const domain = new URL(urlStr).hostname.replace(/^www\./, '');
-    return { url: `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${domain}&size=128`, large: false };
-  } catch(_) { return null; }
 }
 
 async function fetchNews(force = false) {
@@ -1577,12 +1538,9 @@ async function fetchNews(force = false) {
         const title   = dashIdx > 0 ? raw.slice(0, dashIdx) : raw;
         const source  = dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || '');
         const link    = item.link || item.guid || '';
-        // rssLink 優先用 guid（通常是 Google News 原始連結），避免深層連結觸發 App
-        const rssLink = (item.guid && item.guid.includes('news.google.com')) ? item.guid : link;
-        const date      = item.pubDate ? parseDate(item.pubDate) : '';
-        const rawDate   = item.pubDate || '';
-        const enclosure = item.enclosure?.link || item.enclosure?.url || '';
-        allItems.push({ kw, title, source, link, rssLink, date, rawDate, enclosure });
+        const date    = item.pubDate ? parseDate(item.pubDate) : '';
+        const rawDate = item.pubDate || '';
+        allItems.push({ kw, title, source, link, date, rawDate });
       });
     } catch(_) {}
   }
@@ -4130,25 +4088,11 @@ function renderMobileNews(container) {
   } else {
     filtered.forEach(item => {
       const card = el('div', 'news-card');
-      const mOpenLink = item.rssLink || item.link;
-      if (mOpenLink) {
+      if (item.link) {
         card.style.cursor = 'pointer';
-        card.addEventListener('click', () => window.open(mOpenLink, '_blank', 'noopener'));
+        card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
       }
-      const mThumb = newsThumb(item);
-      const mBody = el('div', 'nc-body');
-      if (mThumb) {
-        const mImgWrap = el('div', mThumb.large ? 'nc-thumb-wrap' : 'nc-favicon-wrap');
-        const mImg = el('img', mThumb.large ? 'nc-thumb' : 'nc-favicon');
-        mImg.src = mThumb.url; mImg.loading = 'lazy';
-        if (mThumb.large) {
-          mImg.addEventListener('click', e => { e.stopPropagation(); showNewsImageViewer(mThumb.url); });
-          mImg.style.cursor = 'zoom-in';
-        }
-        mImgWrap.appendChild(mImg); card.appendChild(mImgWrap);
-      }
-      mBody.innerHTML = `<div class="nc-kw">${esc(item.kw||'')}</div><div class="nc-title">${esc(item.title||'')}</div><div class="nc-foot"><span class="nc-meta">${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}</span></div>`;
-      card.appendChild(mBody);
+      card.innerHTML = `<div class="nc-kw">${esc(item.kw||'')}</div><div class="nc-title">${esc(item.title||'')}</div><div class="nc-foot"><span class="nc-meta">${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}</span></div>`;
       list.appendChild(card);
     });
   }
