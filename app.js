@@ -1625,7 +1625,8 @@ async function fetchNews(force = false) {
 
   const allItems = [...(S.news.items || [])];
   // 這次抓取過程中已收錄的 link（跨關鍵字去重用）
-  const seenLinks = new Set();
+  const seenLinks = new Set();  // 已收錄的 link
+  const seenTitles = new Set(); // 已收錄的標題前20字（防轉載重複）
 
   for (let i = 0; i < kwsToFetch.length; i++) {
     const kw = kwsToFetch[i];
@@ -1644,11 +1645,15 @@ async function fetchNews(force = false) {
         const data = await res.json();
         if (data.status !== 'success' || !Array.isArray(data.results)) continue;
 
-        // 去掉已被其他關鍵字收錄的文章（用 seenLinks 跨關鍵字去重）
-        const newsdataArticles = data.results
-          .filter(a => a.link && !seenLinks.has(a.link))
-          .slice(0, maxPerKw)
-          .map(a => ({
+        // 去掉重複文章：duplicate:true、已收錄 link、標題前20字相同
+        const newsdataArticles = [];
+        for (const a of data.results) {
+          if (newsdataArticles.length >= maxPerKw) break;
+          if (!a.link || a.duplicate === true) continue;
+          if (seenLinks.has(a.link)) continue;
+          const titleKey = (a.title || '').slice(0, 20);
+          if (titleKey && seenTitles.has(titleKey)) continue;
+          const article = {
             kw,
             title:   a.title || '',
             source:  a.source_name || '',
@@ -1656,9 +1661,12 @@ async function fetchNews(force = false) {
             image:   a.image_url || a.source_icon || '',
             rawDate: a.pubDate ? a.pubDate.replace(' ', 'T') + 'Z' : '',
             date:    a.pubDate ? parseDate(a.pubDate.replace(' ', 'T') + 'Z') : '',
-          }));
+          };
+          newsdataArticles.push(article);
+          seenLinks.add(a.link);
+          if (titleKey) seenTitles.add(titleKey);
+        }
         articles.push(...newsdataArticles);
-        newsdataArticles.forEach(a => seenLinks.add(a.link));
         S.news.kwFetchedAt[kw] = Date.now();
 
         // 不足 10 篇，用 RSS 補足
@@ -1674,24 +1682,29 @@ async function fetchNews(force = false) {
               const rssData = await rssRes.json();
               if (rssData.status === 'ok' && Array.isArray(rssData.items)) {
                 const need = maxPerKw - articles.length;
-                const rssArticles = rssData.items
-                  .filter(item => item.link && !seenLinks.has(item.link))
-                  .slice(0, need)
-                  .map(item => {
-                    const raw = item.title || '';
-                    const dashIdx = raw.lastIndexOf(' - ');
-                    return {
-                      kw,
-                      title:   dashIdx > 0 ? raw.slice(0, dashIdx) : raw,
-                      source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
-                      link:    item.link || item.guid || '',
-                      image:   NEWS_DEFAULT_IMG,
-                      rawDate: item.pubDate || '',
-                      date:    item.pubDate ? parseDate(item.pubDate) : '',
-                    };
-                  });
+                const rssArticles = [];
+                for (const item of rssData.items) {
+                  if (rssArticles.length >= need) break;
+                  if (!item.link || seenLinks.has(item.link)) continue;
+                  const raw = item.title || '';
+                  const dashIdx = raw.lastIndexOf(' - ');
+                  const title = dashIdx > 0 ? raw.slice(0, dashIdx) : raw;
+                  const titleKey = title.slice(0, 20);
+                  if (titleKey && seenTitles.has(titleKey)) continue;
+                  const article = {
+                    kw,
+                    title,
+                    source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
+                    link:    item.link || item.guid || '',
+                    image:   NEWS_DEFAULT_IMG,
+                    rawDate: item.pubDate || '',
+                    date:    item.pubDate ? parseDate(item.pubDate) : '',
+                  };
+                  rssArticles.push(article);
+                  seenLinks.add(item.link);
+                  if (titleKey) seenTitles.add(titleKey);
+                }
                 articles.push(...rssArticles);
-                rssArticles.forEach(a => seenLinks.add(a.link));
               }
             }
           } catch(_) {}
@@ -1709,23 +1722,27 @@ async function fetchNews(force = false) {
         const data = await res.json();
         if (data.status !== 'ok' || !Array.isArray(data.items)) continue;
 
-        articles = data.items
-          .filter(item => item.link && !seenLinks.has(item.link))
-          .slice(0, maxPerKw)
-          .map(item => {
-            const raw = item.title || '';
-            const dashIdx = raw.lastIndexOf(' - ');
-            return {
-              kw,
-              title:   dashIdx > 0 ? raw.slice(0, dashIdx) : raw,
-              source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
-              link:    item.link || item.guid || '',
-              image:   NEWS_DEFAULT_IMG,
-              rawDate: item.pubDate || '',
-              date:    item.pubDate ? parseDate(item.pubDate) : '',
-            };
-          });
-        articles.forEach(a => seenLinks.add(a.link));
+        for (const item of data.items) {
+          if (articles.length >= maxPerKw) break;
+          if (!item.link || seenLinks.has(item.link)) continue;
+          const raw = item.title || '';
+          const dashIdx = raw.lastIndexOf(' - ');
+          const title = dashIdx > 0 ? raw.slice(0, dashIdx) : raw;
+          const titleKey = title.slice(0, 20);
+          if (titleKey && seenTitles.has(titleKey)) continue;
+          const article = {
+            kw,
+            title,
+            source:  dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || ''),
+            link:    item.link || item.guid || '',
+            image:   NEWS_DEFAULT_IMG,
+            rawDate: item.pubDate || '',
+            date:    item.pubDate ? parseDate(item.pubDate) : '',
+          };
+          articles.push(article);
+          seenLinks.add(item.link);
+          if (titleKey) seenTitles.add(titleKey);
+        }
         S.news.kwFetchedAt[kw] = Date.now();
       }
 
