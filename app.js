@@ -54,14 +54,15 @@ let S = {
     youtube:   { col:12, row:6, w:6, h:8, visible:false }
   },
   news: {
-    items:      [],
-    fetchedAt:  0,
-    keywords:   ['AI人工智慧','台灣科技','國際新聞'],
-    lang:       'zh-TW',
-    title:      '即時新聞',
-    perKeyword: 2,
-    cacheMin:   25,
-    activeKw:   'all'
+    items:       [],
+    fetchedAt:   0,
+    kwFetchedAt: {},
+    keywords:    ['AI人工智慧','台灣科技','國際新聞'],
+    lang:        'zh-TW',
+    title:       '即時新聞',
+    perKeyword:  2,
+    cacheMin:    25,
+    activeKw:    'all'
   },
   cfg: {
     token:       '',
@@ -238,16 +239,17 @@ function idbDel(key) {
    GITHUB GIST SYNC
 ───────────────────────────────────── */
 const gistData = () => ({
-  shortcuts:  S.shortcuts,
-  groups:     S.groups,
-  stickies:   S.stickies,
-  stickyTags: S.stickyTags || [],
-  widgets:    S.widgets,
-  newsKeywords: S.news.keywords,
-  newsLang:   S.news.lang,
-  animeState: { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames },
-  yt:         S.yt,
-  lastModified: Date.now()
+  shortcuts:       S.shortcuts,
+  groups:          S.groups,
+  stickies:        S.stickies,
+  stickyTags:      S.stickyTags || [],
+  widgets:         S.widgets,
+  newsKeywords:    S.news.keywords,
+  newsLang:        S.news.lang,
+  newsKwFetchedAt: S.news.kwFetchedAt || {},
+  animeState:      { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames },
+  yt:              S.yt,
+  lastModified:    Date.now()
 });
 
 async function gistPush(silent = false) {
@@ -323,12 +325,13 @@ async function gistPull() {
     if (d.groups)       S.groups    = d.groups;
     if (d.stickies)     S.stickies  = d.stickies;
     if (d.widgets)      Object.assign(S.widgets, d.widgets);
-    if (d.newsKeywords) S.news.keywords = d.newsKeywords;
-    if (d.newsLang)     S.news.lang     = d.newsLang;
-    if (d.animeState)   Object.assign(S.animeState, d.animeState);
+    if (d.newsKeywords)    S.news.keywords    = d.newsKeywords;
+    if (d.newsLang)        S.news.lang        = d.newsLang;
+    if (d.newsKwFetchedAt) S.news.kwFetchedAt = Object.assign(S.news.kwFetchedAt || {}, d.newsKwFetchedAt);
+    if (d.animeState)      Object.assign(S.animeState, d.animeState);
     mergeRemoteYt(d.yt);
-    if (d.stickyTags)   S.stickyTags = d.stickyTags;
-    if (d.lastModified) S.cfg._lastModified = d.lastModified;
+    if (d.stickyTags)      S.stickyTags = d.stickyTags;
+    if (d.lastModified)    S.cfg._lastModified = d.lastModified;
     lsSaveLocal();
     renderAll();
     toast('已從 Gist 拉取最新設定 ✓');
@@ -370,11 +373,12 @@ async function gistAutoSync() {
     if (remote.groups)       S.groups    = remote.groups;
     if (remote.stickies)     S.stickies  = remote.stickies;
     if (remote.widgets)      Object.assign(S.widgets, remote.widgets);
-    if (remote.newsKeywords) S.news.keywords = remote.newsKeywords;
-    if (remote.newsLang)     S.news.lang     = remote.newsLang;
-    if (remote.animeState)   Object.assign(S.animeState, remote.animeState);
+    if (remote.newsKeywords)    S.news.keywords    = remote.newsKeywords;
+    if (remote.newsLang)        S.news.lang        = remote.newsLang;
+    if (remote.newsKwFetchedAt) S.news.kwFetchedAt = Object.assign(S.news.kwFetchedAt || {}, remote.newsKwFetchedAt);
+    if (remote.animeState)      Object.assign(S.animeState, remote.animeState);
     mergeRemoteYt(remote.yt);
-    if (remote.stickyTags)   S.stickyTags = remote.stickyTags;
+    if (remote.stickyTags)      S.stickyTags = remote.stickyTags;
     S.cfg._lastModified = remoteTs;
     lsSaveLocal();
     renderAll();
@@ -1439,8 +1443,7 @@ function buildNewsWidget() {
   newsListEl = el('div', 'news-list');
   outer.appendChild(newsListEl);
 
-  renderNewsItems();
-  if (Date.now() - S.news.fetchedAt > NEWS_CACHE_MS) fetchNews();
+  renderNewsItems(); // 抓取由 DOMContentLoaded 等 Gist 同步後統一觸發
 }
 
 function renderNewsKws() {
@@ -1581,8 +1584,6 @@ function parseDate(raw) {
 }
 
 // 記錄各關鍵字上次更新時間
-const _newsKwFetchedAt = {};
-
 function isNewsSilentHour() {
   // 台灣時間 00:00-06:00 靜默
   const tw = new Date(Date.now() + 8 * 60 * 60 * 1000);
@@ -1598,14 +1599,19 @@ async function fetchNews(force = false) {
     if (S.news.items.length) { renderNewsItems(); return; }
   }
 
-  // 全局快取：非強制且整批未過期，直接渲染
-  if (!force && S.news.fetchedAt && (Date.now() - S.news.fetchedAt) < CACHE_MS && S.news.items.length) {
-    renderNewsItems(); return;
-  }
-
   const apiKey = S.cfg.gnewsApiKey?.trim();
   const keywords = S.news.keywords || [];
   if (!keywords.length) { renderNewsItems(); return; }
+
+  // 每個關鍵字各自判斷快取，找出需要更新的
+  const now = Date.now();
+  if (!S.news.kwFetchedAt) S.news.kwFetchedAt = {};
+  const kwsToFetch = force
+    ? keywords
+    : keywords.filter(kw => !S.news.kwFetchedAt[kw] || (now - S.news.kwFetchedAt[kw]) >= CACHE_MS);
+
+  // 全部都還新鮮，直接渲染
+  if (!kwsToFetch.length) { renderNewsItems(); return; }
 
   const refBtn = $('news-ref-btn');
   const mobileRefBtn = $('mobile-news-ref-btn');
@@ -1615,17 +1621,6 @@ async function fetchNews(force = false) {
   const lang = isZh ? 'zh' : 'en';
   const country = isZh ? 'tw' : 'us';
   const maxPerKw = 10;
-
-  // 分時輪流更新：每次最多更新 3 個關鍵字
-  // 強制更新時全部重抓
-  let kwsToFetch = keywords;
-  if (!force && apiKey) {
-    const now = Date.now();
-    // 找出最舊的 3 個關鍵字（或從未抓過的）
-    kwsToFetch = [...keywords]
-      .sort((a, b) => (_newsKwFetchedAt[a] || 0) - (_newsKwFetchedAt[b] || 0))
-      .slice(0, 3);
-  }
 
   const allItems = [...(S.news.items || [])];
 
@@ -1650,7 +1645,7 @@ async function fetchNews(force = false) {
           rawDate: a.publishedAt || '',
           date:    a.publishedAt ? parseDate(a.publishedAt) : '',
         }));
-        _newsKwFetchedAt[kw] = Date.now();
+        S.news.kwFetchedAt[kw] = Date.now();
       } else {
         // Fallback: Google News RSS
         const isZh = S.news.lang === 'zh-TW';
@@ -1677,6 +1672,7 @@ async function fetchNews(force = false) {
             date:    item.pubDate ? parseDate(item.pubDate) : '',
           };
         });
+        S.news.kwFetchedAt[kw] = Date.now();
       }
 
       // 替換該關鍵字的舊文章
@@ -4728,5 +4724,15 @@ async function initAutoSync() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   await init();
-  initAutoSync();
+  // 先等 Gist 同步拉取完（取得最新 kwFetchedAt），再由 fetchNews 判斷哪些關鍵字需要更新
+  await gistAutoSync();
+  // 定時同步 & visibilitychange（不需要 await）
+  setInterval(gistAutoSync, 5 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') gistAutoSync();
+  });
+  // Gist 拉完後，重新觸發新聞更新判斷
+  if (Date.now() - (S.news.kwFetchedAt ? Math.max(...Object.values(S.news.kwFetchedAt), 0) : 0) > 0) {
+    fetchNews();
+  }
 });
