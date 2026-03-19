@@ -1555,16 +1555,21 @@ function buildStickiesWidget() {
   w._updateDelChecked?.();
 
   new ResizeObserver(() => {
-    const list = body.querySelector('.sticky-list');
-    const bar  = body.querySelector('.sticky-input-bar');
+    const list   = body.querySelector('.sticky-list');
+    const bar    = body.querySelector('.sticky-input-bar');
+    const tagBar = body.querySelector('.sticky-tag-bar');
     if (list && bar) {
-      list.style.height = (body.offsetHeight - bar.offsetHeight) + 'px';
+      const tagBarH = tagBar ? tagBar.offsetHeight : 0;
+      list.style.height = (body.offsetHeight - bar.offsetHeight - tagBarH) + 'px';
     }
   }).observe(body);
 }
 
 function renderStickiesWidget(container) {
-  container.innerHTML = '';
+  // 保留 tagBar，只清掉 list 和 input-bar
+  container.querySelectorAll('.sticky-list, .sticky-input-bar').forEach(e => e.remove());
+  // 若還沒有 tagBar（首次建立），補渲染一次
+  if (!container.querySelector('.sticky-tag-bar')) container._renderTagBar?.();
 
   const list = el('div', 'sticky-list');
   container.appendChild(list);
@@ -1631,10 +1636,12 @@ function renderStickiesWidget(container) {
 
   // JS height — most reliable, bypasses all flex overflow quirks
   requestAnimationFrame(() => {
-    const barH = bar.offsetHeight || 53;
+    const barH    = bar.offsetHeight || 53;
+    const tagBarEl = container.querySelector('.sticky-tag-bar');
+    const tagBarH = tagBarEl ? tagBarEl.offsetHeight : 0;
     const containerH = container.offsetHeight;
     if (containerH > barH) {
-      list.style.height = (containerH - barH) + 'px';
+      list.style.height = (containerH - barH - tagBarH) + 'px';
       list.style.overflowY = 'auto';
     }
   });
