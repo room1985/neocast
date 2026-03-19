@@ -327,17 +327,24 @@ async function gistAutoSync() {
   if (!token || !gistId || _autoSyncBusy) return;
   _autoSyncBusy = true;
   try {
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: { Authorization: `token ${token}` }
+    // 第一步：只抓 metadata（updated_at），不下載檔案內容
+    const metaRes = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
     });
-    if (!res.ok) return;
-    const data = await res.json();
-    const raw  = data.files?.['neocast.json']?.content;
+    if (!metaRes.ok) return;
+    const meta = await metaRes.json();
+
+    // 用 Gist 的 updated_at 做快速比較
+    const remoteUpdated = new Date(meta.updated_at).getTime();
+    const localTs = S.cfg._lastModified || 0;
+    if (remoteUpdated <= localTs) return; // 沒有更新，直接結束
+
+    // 第二步：確認有更新，抓完整檔案內容
+    const raw = meta.files?.['neocast.json']?.content;
     if (!raw) return;
     const remote = JSON.parse(raw);
-    const remoteTs = remote.lastModified || 0;
-    const localTs  = S.cfg._lastModified || 0;
-    if (remoteTs <= localTs) return; // 本地較新或相同，不拉取
+    const remoteTs = remote.lastModified || remoteUpdated;
+
     // 雲端較新，靜默拉取
     if (remote.shortcuts)    S.shortcuts = remote.shortcuts;
     if (remote.groups)       S.groups    = remote.groups;
@@ -349,7 +356,7 @@ async function gistAutoSync() {
     if (remote.yt)           Object.assign(S.yt, remote.yt);
     if (remote.stickyTags)   S.stickyTags = remote.stickyTags;
     S.cfg._lastModified = remoteTs;
-    lsSaveLocal(); // 不觸發自動推送
+    lsSaveLocal();
     renderAll();
     toast('已自動同步雲端資料 ✓');
   } catch(_) {}
