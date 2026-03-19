@@ -1624,6 +1624,8 @@ async function fetchNews(force = false) {
   const maxPerKw = 10;
 
   const allItems = [...(S.news.items || [])];
+  // 這次抓取過程中已收錄的 link（跨關鍵字去重用）
+  const seenLinks = new Set();
 
   for (let i = 0; i < kwsToFetch.length; i++) {
     const kw = kwsToFetch[i];
@@ -1642,10 +1644,9 @@ async function fetchNews(force = false) {
         const data = await res.json();
         if (data.status !== 'success' || !Array.isArray(data.results)) continue;
 
-        // 去掉已被其他關鍵字收錄的文章（用 link 去重）
-        const existingLinks = new Set(allItems.map(i => i.link));
+        // 去掉已被其他關鍵字收錄的文章（用 seenLinks 跨關鍵字去重）
         const newsdataArticles = data.results
-          .filter(a => a.link && !existingLinks.has(a.link))
+          .filter(a => a.link && !seenLinks.has(a.link))
           .slice(0, maxPerKw)
           .map(a => ({
             kw,
@@ -1657,6 +1658,7 @@ async function fetchNews(force = false) {
             date:    a.pubDate ? parseDate(a.pubDate.replace(' ', 'T') + 'Z') : '',
           }));
         articles.push(...newsdataArticles);
+        newsdataArticles.forEach(a => seenLinks.add(a.link));
         S.news.kwFetchedAt[kw] = Date.now();
 
         // 不足 10 篇，用 RSS 補足
@@ -1671,10 +1673,9 @@ async function fetchNews(force = false) {
             if (rssRes.ok) {
               const rssData = await rssRes.json();
               if (rssData.status === 'ok' && Array.isArray(rssData.items)) {
-                const existingLinks2 = new Set([...allItems.map(i => i.link), ...articles.map(i => i.link)]);
                 const need = maxPerKw - articles.length;
                 const rssArticles = rssData.items
-                  .filter(item => item.link && !existingLinks2.has(item.link))
+                  .filter(item => item.link && !seenLinks.has(item.link))
                   .slice(0, need)
                   .map(item => {
                     const raw = item.title || '';
@@ -1690,6 +1691,7 @@ async function fetchNews(force = false) {
                     };
                   });
                 articles.push(...rssArticles);
+                rssArticles.forEach(a => seenLinks.add(a.link));
               }
             }
           } catch(_) {}
@@ -1707,9 +1709,8 @@ async function fetchNews(force = false) {
         const data = await res.json();
         if (data.status !== 'ok' || !Array.isArray(data.items)) continue;
 
-        const existingLinks = new Set(allItems.map(i => i.link));
         articles = data.items
-          .filter(item => item.link && !existingLinks.has(item.link))
+          .filter(item => item.link && !seenLinks.has(item.link))
           .slice(0, maxPerKw)
           .map(item => {
             const raw = item.title || '';
@@ -1724,6 +1725,7 @@ async function fetchNews(force = false) {
               date:    item.pubDate ? parseDate(item.pubDate) : '',
             };
           });
+        articles.forEach(a => seenLinks.add(a.link));
         S.news.kwFetchedAt[kw] = Date.now();
       }
 
