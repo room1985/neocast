@@ -2521,43 +2521,94 @@ function renderAnimeWidget(container) {
           lsSave(); setTimeout(() => renderFav(), 0);
         });
 
-        // Touch drag (long press)
-        let tTimer = null, tDragging = false, tGhost = null;
-        card.addEventListener('touchstart', e => {
-          tTimer = setTimeout(() => {
-            tDragging = true;
-            tGhost = card.cloneNode(true);
-            tGhost.style.cssText = `position:fixed;z-index:9999;opacity:.75;pointer-events:none;width:${card.offsetWidth}px;transform:scale(1.05);`;
-            document.body.appendChild(tGhost);
-            card.classList.add('anime-card-dragging');
-          }, 500);
-        }, { passive: true });
-        card.addEventListener('touchmove', e => {
+        // Touch drag (long press) — 改用動態掛載 passive:false 避免捲動衝突
+        let tTimer = null, tDragging = false, tGhost = null, tScrollTimer = null;
+
+        const tCleanup = () => {
           clearTimeout(tTimer);
-          if (!tDragging) return;
+          clearInterval(tScrollTimer);
+          tScrollTimer = null;
+          if (tGhost) { tGhost.remove(); tGhost = null; }
+          card.classList.remove('anime-card-dragging');
+          grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
+          tDragging = false;
+        };
+
+        const onTouchMove = e => {
+          if (!tDragging) { clearTimeout(tTimer); return; }
+          e.preventDefault(); // 阻止容器捲動
           const t = e.touches[0];
-          if (tGhost) { tGhost.style.left = (t.clientX - card.offsetWidth/2) + 'px'; tGhost.style.top = (t.clientY - card.offsetHeight/2) + 'px'; }
+
+          // 更新 ghost 位置
+          if (tGhost) {
+            tGhost.style.left = (t.clientX - card.offsetWidth / 2) + 'px';
+            tGhost.style.top  = (t.clientY - card.offsetHeight / 2) + 'px';
+          }
+
+          // 邊緣自動捲動
+          clearInterval(tScrollTimer);
+          const gridRect = grid.getBoundingClientRect();
+          const EDGE = 60, SPEED = 6;
+          if (t.clientY < gridRect.top + EDGE) {
+            tScrollTimer = setInterval(() => { grid.scrollTop -= SPEED; }, 16);
+          } else if (t.clientY > gridRect.bottom - EDGE) {
+            tScrollTimer = setInterval(() => { grid.scrollTop += SPEED; }, 16);
+          }
+
+          // 偵測目標卡片
           const el2 = document.elementFromPoint(t.clientX, t.clientY);
           const target = el2?.closest('.anime-card');
           grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
           if (target && target !== card) target.classList.add('anime-card-drag-over');
-        }, { passive: true });
-        card.addEventListener('touchend', e => {
-          clearTimeout(tTimer);
-          if (tGhost) { tGhost.remove(); tGhost = null; }
-          card.classList.remove('anime-card-dragging');
-          if (!tDragging) { tDragging = false; return; }
-          tDragging = false;
+        };
+
+        const onTouchEnd = () => {
+          clearInterval(tScrollTimer);
+          tScrollTimer = null;
+          card.removeEventListener('touchmove', onTouchMove);
+          card.removeEventListener('touchend', onTouchEnd);
+          card.removeEventListener('touchcancel', onTouchEnd);
+          if (!tDragging) { clearTimeout(tTimer); return; }
+          const wasDragging = tDragging;
+          tCleanup();
+          if (!wasDragging) return;
           const over = grid.querySelector('.anime-card-drag-over');
           if (over && over !== card) {
             const overId = parseInt(over.dataset.id);
             const si = S.animeState.tracked.indexOf(anime.id);
             const di = S.animeState.tracked.indexOf(overId);
-            if (si >= 0 && di >= 0) { const [m] = S.animeState.tracked.splice(si, 1); S.animeState.tracked.splice(di, 0, m); lsSave(); }
+            if (si >= 0 && di >= 0) {
+              const [m] = S.animeState.tracked.splice(si, 1);
+              S.animeState.tracked.splice(di, 0, m);
+              lsSave();
+            }
           }
           grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
-          renderFav();
+          setTimeout(() => renderFav(), 0);
+        };
+
+        card.addEventListener('touchstart', e => {
+          const startY = e.touches[0].clientY;
+          tTimer = setTimeout(() => {
+            tDragging = true;
+            tGhost = card.cloneNode(true);
+            tGhost.style.cssText = `position:fixed;z-index:9999;opacity:.75;pointer-events:none;width:${card.offsetWidth}px;transform:scale(1.05);left:${card.getBoundingClientRect().left}px;top:${card.getBoundingClientRect().top}px;`;
+            document.body.appendChild(tGhost);
+            card.classList.add('anime-card-dragging');
+            // 確認進入拖曳後才掛 passive:false 的 touchmove
+            card.addEventListener('touchmove', onTouchMove, { passive: false });
+            card.addEventListener('touchend', onTouchEnd, { passive: true });
+            card.addEventListener('touchcancel', onTouchEnd, { passive: true });
+          }, 500);
         }, { passive: true });
+
+        // touchstart 後輕微垂直移動就取消長按 timer（避免誤觸）
+        card.addEventListener('touchmove', e => {
+          if (tDragging) return; // 已進入拖曳，由 onTouchMove 接管
+          clearTimeout(tTimer);
+        }, { passive: true });
+        card.addEventListener('touchend', () => { if (!tDragging) clearTimeout(tTimer); }, { passive: true });
+        card.addEventListener('touchcancel', () => { if (!tDragging) clearTimeout(tTimer); }, { passive: true });
 
         grid.appendChild(card);
       });
