@@ -1587,14 +1587,27 @@ function mountStickyTagBar(tagBar, bodyEl) {
       tagBar.appendChild(chip);
     });
 
-    // ＋ 新增分類
+    // ＋ 新增分類（inline 輸入）
     const addChip = el('span', 'sticky-tag-chip sticky-tag-add', '＋');
     addChip.addEventListener('click', () => {
-      const name = prompt('新分類名稱：')?.trim();
-      if (!name) return;
-      if (!S.stickyTags.includes(name)) S.stickyTags.push(name);
-      S.activeStickyTag = name;
-      lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+      // 把 ＋ 換成 input
+      const inp = el('input', 'sticky-tag-input');
+      inp.placeholder = '分類名稱…';
+      inp.autocomplete = 'off';
+      addChip.replaceWith(inp);
+      inp.focus();
+
+      const confirm = () => {
+        const name = inp.value.trim();
+        if (name && !S.stickyTags.includes(name)) S.stickyTags.push(name);
+        if (name) S.activeStickyTag = name;
+        lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+      };
+      inp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); confirm(); }
+        if (e.key === 'Escape') { renderStickyTagBar(); }
+      });
+      inp.addEventListener('blur', confirm);
     });
     tagBar.appendChild(addChip);
 
