@@ -591,7 +591,16 @@ function setEditMode(on) {
   // 手機版：發光邊框加在 active panel，+ 編輯模式提示列
   const mobileLayout = document.getElementById('mobile-layout');
   if (mobileLayout) {
-    document.querySelectorAll('.mobile-page-panel').forEach(p => p.classList.toggle('mobile-editing', on));
+    document.querySelectorAll('.mobile-page-panel').forEach(p => {
+      p.classList.toggle('mobile-editing', on);
+      // 移除舊的 overlay
+      p.querySelector('.mobile-edit-overlay')?.remove();
+      if (on) {
+        const overlay = document.createElement('div');
+        overlay.className = 'mobile-edit-overlay';
+        p.appendChild(overlay);
+      }
+    });
     let editBar = document.getElementById('mobile-edit-bar');
     if (on) {
       if (!editBar) {

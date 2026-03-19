@@ -1896,11 +1896,15 @@ a { color:inherit; text-decoration:none; }
     padding-top: 58px;
   }
 
-  /* 手機版編輯模式發光邊框 */
-  .mobile-page-panel.mobile-editing {
-    outline: 2px solid rgba(56,189,248,.5);
-    outline-offset: 0px;
-    border-color: rgba(56,189,248,.4);
+  /* 手機版編輯模式發光邊框 — 用 overlay 避免被裁切 */
+  .mobile-edit-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: var(--r);
+    border: 2px solid rgba(56,189,248,.55);
+    box-shadow: inset 0 0 20px rgba(56,189,248,.06);
+    pointer-events: none;
+    z-index: 999;
   }
 
   /* 手機版編輯模式提示列 */
