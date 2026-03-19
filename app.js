@@ -4317,11 +4317,46 @@ function renderMobileNews(container) {
   } else {
     filtered.forEach(item => {
       const card = el('div', 'news-card');
-      if (item.link) {
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
+      const hasImg = !!item.image;
+      card.classList.toggle('nc-has-img', hasImg);
+      const metaStr = `${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}`;
+      if (hasImg) {
+        card.innerHTML = `
+          <div class="nc-body">
+            <div class="nc-kw">${esc(item.kw||'')}</div>
+            <div class="nc-title">${esc(item.title||'')}</div>
+            <div class="nc-foot"><span class="nc-meta">${metaStr}</span></div>
+          </div>
+          <div class="nc-thumb-wrap">
+            <img class="nc-thumb" src="${esc(item.image)}" alt="${esc(item.title||'')}" loading="lazy">
+          </div>
+        `;
+        const thumb = card.querySelector('.nc-thumb');
+        const thumbWrap = card.querySelector('.nc-thumb-wrap');
+        thumbWrap.style.cursor = 'zoom-in';
+        thumbWrap.addEventListener('click', e => {
+          e.stopPropagation();
+          showImageViewer(item.image, item.title || '');
+        });
+        thumb.onerror = function() {
+          thumbWrap.remove();
+          card.classList.remove('nc-has-img');
+        };
+        if (item.link) {
+          card.style.cursor = 'pointer';
+          card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
+        }
+      } else {
+        card.innerHTML = `
+          <div class="nc-kw">${esc(item.kw||'')}</div>
+          <div class="nc-title">${esc(item.title||'')}</div>
+          <div class="nc-foot"><span class="nc-meta">${metaStr}</span></div>
+        `;
+        if (item.link) {
+          card.style.cursor = 'pointer';
+          card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
+        }
       }
-      card.innerHTML = `<div class="nc-kw">${esc(item.kw||'')}</div><div class="nc-title">${esc(item.title||'')}</div><div class="nc-foot"><span class="nc-meta">${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}</span></div>`;
       list.appendChild(card);
     });
   }
