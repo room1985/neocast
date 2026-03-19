@@ -1464,6 +1464,69 @@ const STICKY_COLORS = {
   yellow: { bg: 'rgba(251,191,36,0.12)',  border: 'rgba(251,191,36,0.3)',   label: '黃' }
 };
 
+function mountStickyTagBar(tagBar, bodyEl) {
+  let tagEditMode = false;
+
+  function renderStickyTagBar() {
+    tagBar.innerHTML = '';
+
+    // 全部
+    const allBtn = el('span', 'sticky-tag-chip' + (S.activeStickyTag === 'all' ? ' on' : ''), '全部');
+    allBtn.addEventListener('click', () => {
+      S.activeStickyTag = 'all'; lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+    });
+    tagBar.appendChild(allBtn);
+
+    // 各分類
+    (S.stickyTags || []).forEach(tag => {
+      const chip = el('span', 'sticky-tag-chip' + (S.activeStickyTag === tag ? ' on' : ''));
+      const label = el('span', '', tag);
+      chip.appendChild(label);
+
+      // 編輯模式才顯示 ✕
+      if (tagEditMode) {
+        const x = el('span', 'sticky-tag-x', '✕');
+        x.addEventListener('click', e => {
+          e.stopPropagation();
+          if (!confirm('刪除分類「' + tag + '」？（便利貼不會刪除，但會移除分類）')) return;
+          S.stickyTags = S.stickyTags.filter(t => t !== tag);
+          S.stickies.forEach(s => { if (s.tag === tag) s.tag = ''; });
+          if (S.activeStickyTag === tag) S.activeStickyTag = 'all';
+          lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+        });
+        chip.appendChild(x);
+      }
+
+      chip.addEventListener('click', () => {
+        if (tagEditMode) return;
+        S.activeStickyTag = tag; lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+      });
+      tagBar.appendChild(chip);
+    });
+
+    // ＋ 新增分類
+    const addChip = el('span', 'sticky-tag-chip sticky-tag-add', '＋');
+    addChip.addEventListener('click', () => {
+      const name = prompt('新分類名稱：')?.trim();
+      if (!name) return;
+      if (!S.stickyTags.includes(name)) S.stickyTags.push(name);
+      S.activeStickyTag = name;
+      lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+    });
+    tagBar.appendChild(addChip);
+
+    // ⚙ 設定按鈕（最右側）
+    const cfgBtn = el('button', 'sticky-tag-cfg-btn' + (tagEditMode ? ' on' : ''));
+    cfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+    cfgBtn.title = tagEditMode ? '完成編輯' : '管理分類';
+    cfgBtn.addEventListener('click', () => { tagEditMode = !tagEditMode; renderStickyTagBar(); });
+    tagBar.appendChild(cfgBtn);
+  }
+
+  bodyEl._renderTagBar = renderStickyTagBar;
+  renderStickyTagBar();
+}
+
 function buildStickiesWidget() {
   const body = el('div', 'stickies-inner');
   body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
@@ -1500,56 +1563,7 @@ function buildStickiesWidget() {
   // 標籤過濾列
   const tagBar = el('div', 'sticky-tag-bar');
   body.insertBefore(tagBar, body.firstChild);
-
-  function renderStickyTagBar() {
-    tagBar.innerHTML = '';
-
-    // 全部
-    const allBtn = el('span', 'sticky-tag-chip' + (S.activeStickyTag === 'all' ? ' on' : ''), '全部');
-    allBtn.addEventListener('click', () => { S.activeStickyTag = 'all'; lsSave(); renderStickyTagBar(); renderStickiesWidget(body); });
-    tagBar.appendChild(allBtn);
-
-    // 各分類
-    (S.stickyTags || []).forEach(tag => {
-      const chip = el('span', 'sticky-tag-chip' + (S.activeStickyTag === tag ? ' on' : ''), tag);
-      // 點選切換
-      chip.addEventListener('click', () => { S.activeStickyTag = tag; lsSave(); renderStickyTagBar(); renderStickiesWidget(body); });
-      // 長按刪除分類
-      let delTimer = null;
-      chip.addEventListener('mousedown', () => { delTimer = setTimeout(() => {
-        if (!confirm('刪除分類「' + tag + '」？（便利貼不會刪除，但會移除分類）')) return;
-        S.stickyTags = S.stickyTags.filter(t => t !== tag);
-        S.stickies.forEach(s => { if (s.tag === tag) s.tag = ''; });
-        if (S.activeStickyTag === tag) S.activeStickyTag = 'all';
-        lsSave(); renderStickyTagBar(); renderStickiesWidget(body);
-      }, 600); });
-      chip.addEventListener('mouseup', () => clearTimeout(delTimer));
-      chip.addEventListener('mouseleave', () => clearTimeout(delTimer));
-      chip.addEventListener('touchstart', () => { delTimer = setTimeout(() => {
-        if (!confirm('刪除分類「' + tag + '」？（便利貼不會刪除，但會移除分類）')) return;
-        S.stickyTags = S.stickyTags.filter(t => t !== tag);
-        S.stickies.forEach(s => { if (s.tag === tag) s.tag = ''; });
-        if (S.activeStickyTag === tag) S.activeStickyTag = 'all';
-        lsSave(); renderStickyTagBar(); renderStickiesWidget(body);
-      }, 600); }, { passive: true });
-      chip.addEventListener('touchend', () => clearTimeout(delTimer));
-      tagBar.appendChild(chip);
-    });
-
-    // ＋ 新增分類
-    const addChip = el('span', 'sticky-tag-chip sticky-tag-add', '＋');
-    addChip.title = '新增分類';
-    addChip.addEventListener('click', () => {
-      const name = prompt('新分類名稱：')?.trim();
-      if (!name) return;
-      if (!S.stickyTags.includes(name)) S.stickyTags.push(name);
-      S.activeStickyTag = name;
-      lsSave(); renderStickyTagBar(); renderStickiesWidget(body);
-    });
-    tagBar.appendChild(addChip);
-  }
-  body._renderTagBar = renderStickyTagBar;
-  renderStickyTagBar();
+  mountStickyTagBar(tagBar, body);
 
   renderStickiesWidget(body);
   w._updateDelChecked?.();
@@ -3731,8 +3745,11 @@ function buildMobileWidgetContent(widgetType, container) {
     if (weatherCache.text) c.updateWeather(weatherCache.text);
   } else if (widgetType === 'stickies') {
     const inner = el('div', 'stickies-inner');
-    inner.style.cssText = 'position:relative;flex:1;min-height:0;overflow:hidden;';
+    inner.style.cssText = 'position:relative;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;';
     container.appendChild(inner);
+    const mTagBar = el('div', 'sticky-tag-bar');
+    inner.appendChild(mTagBar);
+    mountStickyTagBar(mTagBar, inner);
     renderStickiesWidget(inner);
   } else if (widgetType === 'anime') {
     const inner = el('div', 'anime-inner');
