@@ -1503,7 +1503,7 @@ function renderNewsItems() {
       <div class="nc-kw">${esc(item.kw||'')}</div>
       <div class="nc-title">${esc(item.title||'')}</div>
       <div class="nc-foot">
-        <span class="nc-meta">${esc(item.source||'')}${item.date?' · '+item.date:''}</span>
+        <span class="nc-meta">${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}</span>
       </div>
     `;
     card.appendChild(body);
@@ -4141,7 +4141,7 @@ function renderMobileNews(container) {
         }
         mImgWrap.appendChild(mImg); card.appendChild(mImgWrap);
       }
-      mBody.innerHTML = `<div class="nc-kw">${esc(item.kw||'')}</div><div class="nc-title">${esc(item.title||'')}</div><div class="nc-foot"><span class="nc-meta">${esc(item.source||'')}${item.date?' · '+item.date:''}</span></div>`;
+      mBody.innerHTML = `<div class="nc-kw">${esc(item.kw||'')}</div><div class="nc-title">${esc(item.title||'')}</div><div class="nc-foot"><span class="nc-meta">${esc(item.source||'')}${item.rawDate?' · '+parseDate(item.rawDate):item.date?' · '+item.date:''}</span></div>`;
       card.appendChild(mBody);
       list.appendChild(card);
     });
