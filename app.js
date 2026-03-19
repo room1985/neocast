@@ -1646,7 +1646,7 @@ async function fetchNews(force = false) {
           title:   a.title || '',
           source:  a.source_name || '',
           link:    a.link || '',
-          image:   a.image_url || '',
+          image:   a.image_url || a.source_icon || '',
           rawDate: a.pubDate ? a.pubDate.replace(' ', 'T') + 'Z' : '',
           date:    a.pubDate ? parseDate(a.pubDate.replace(' ', 'T') + 'Z') : '',
         }));
