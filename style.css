@@ -1336,17 +1336,7 @@ a { color:inherit; text-decoration:none; }
 }
 .sticky-tag-add:hover { border-color: var(--ac) !important; color: var(--ac); background: rgba(56,189,248,.08); }
 
-/* 私人分類 chip */
-.sticky-tag-private {
-  border-color: rgba(251,191,36,.3) !important;
-  color: rgba(251,191,36,.6);
-}
-.sticky-tag-private.on {
-  background: rgba(251,191,36,.12) !important;
-  border-color: rgba(251,191,36,.6) !important;
-  color: rgba(251,191,36,.9) !important;
-}
-.sticky-tag-private:hover { border-color: rgba(251,191,36,.6) !important; color: rgba(251,191,36,.9); }
+/* 私人分類 chip — 樣式同其他分類 */
 
 /* ⚙ 設定按鈕 — 絕對定位在右側 */
 .sticky-tag-cfg-btn {

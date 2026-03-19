@@ -1885,7 +1885,8 @@ function makeStickyCard(sticky, container) {
   // 顯示分類
   if (sticky.tag) {
     const tagWrap = el('div', 'sticky-card-tags');
-    tagWrap.appendChild(el('span', 'sticky-tag-chip on', sticky.tag));
+    const tagLabel = sticky.tag === PRIVATE_STICKY_TAG ? '私人' : sticky.tag;
+    tagWrap.appendChild(el('span', 'sticky-tag-chip on', tagLabel));
     card.appendChild(tagWrap);
   }
 
