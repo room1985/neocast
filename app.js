@@ -587,6 +587,13 @@ function setEditMode(on) {
   document.querySelectorAll('.mobile-page-replace-btn').forEach(b => b.classList.toggle('hidden', !on));
   const addPageBtn = document.querySelector('.mobile-add-page-btn');
   if (addPageBtn) addPageBtn.classList.toggle('hidden', !on);
+
+  // 編輯模式開啟時，更新便利貼垃圾桶按鈕的亮暗狀態
+  if (on) {
+    document.querySelectorAll('.widget, .mobile-page-panel').forEach(w => {
+      if (w._updateDelChecked) w._updateDelChecked();
+    });
+  }
 }
 
 /* Widget meta registry */
