@@ -148,6 +148,8 @@ function lsLoad() {
     if (d.widgets)     Object.assign(S.widgets, d.widgets);
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
+    // 確保 _lastModified 有被還原
+    if (d.cfg?._lastModified) S.cfg._lastModified = d.cfg._lastModified;
     if (d.yt)            Object.assign(S.yt, d.yt);
     if (!S.yt.watched) S.yt.watched = [];
     if (!S.yt.liked)   S.yt.liked   = [];
@@ -213,7 +215,8 @@ const gistData = () => ({
   newsKeywords: S.news.keywords,
   newsLang:   S.news.lang,
   animeState: { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames },
-  yt:         S.yt
+  yt:         S.yt,
+  lastModified: Date.now()
 });
 
 async function gistPush(silent = false) {
@@ -249,6 +252,7 @@ async function gistPush(silent = false) {
     }
     const data = await res.json();
     if (!gistId) { S.cfg.gistId = data.id; lsSave(); $('cfg-gid').value = data.id; }
+    S.cfg._lastModified = Date.now(); lsSave();
     if (!silent) toast('已同步到 Gist ✓');
     else toast('已自動同步 ✓');
   } catch(e) {
@@ -283,6 +287,42 @@ async function gistPull() {
     renderAll();
     toast('已從 Gist 拉取最新設定 ✓');
   } catch(_) {}
+}
+
+// ── 自動同步：比較 lastModified，雲端較新才拉取 ──
+let _autoSyncBusy = false;
+async function gistAutoSync() {
+  const { token, gistId } = S.cfg;
+  if (!token || !gistId || _autoSyncBusy) return;
+  _autoSyncBusy = true;
+  try {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { Authorization: `token ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    const raw  = data.files?.['neocast.json']?.content;
+    if (!raw) return;
+    const remote = JSON.parse(raw);
+    const remoteTs = remote.lastModified || 0;
+    const localTs  = S.cfg._lastModified || 0;
+    if (remoteTs <= localTs) return; // 本地較新或相同，不拉取
+    // 雲端較新，靜默拉取
+    if (remote.shortcuts)    S.shortcuts = remote.shortcuts;
+    if (remote.groups)       S.groups    = remote.groups;
+    if (remote.stickies)     S.stickies  = remote.stickies;
+    if (remote.widgets)      Object.assign(S.widgets, remote.widgets);
+    if (remote.newsKeywords) S.news.keywords = remote.newsKeywords;
+    if (remote.newsLang)     S.news.lang     = remote.newsLang;
+    if (remote.animeState)   Object.assign(S.animeState, remote.animeState);
+    if (remote.yt)           Object.assign(S.yt, remote.yt);
+    if (remote.stickyTags)   S.stickyTags = remote.stickyTags;
+    S.cfg._lastModified = remoteTs;
+    lsSave();
+    renderAll();
+    toast('已自動同步雲端資料 ✓');
+  } catch(_) {}
+  finally { _autoSyncBusy = false; }
 }
 
 /* ─────────────────────────────────────
@@ -4354,4 +4394,19 @@ async function init() {
   registerSW();
 }
 
-document.addEventListener('DOMContentLoaded', init);
+// ── 自動同步觸發點 ──
+// 1. 開啟時
+async function initAutoSync() {
+  await gistAutoSync();
+  // 2. 每 5 分鐘定時檢查
+  setInterval(gistAutoSync, 5 * 60 * 1000);
+  // 3. 從後台回到前台
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') gistAutoSync();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  await init();
+  initAutoSync();
+});
