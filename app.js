@@ -1767,8 +1767,8 @@ function makeStickyCard(sticky, container) {
     if (st) st.done = !st.done;
     lsSave();
     renderStickiesWidget(container);
-    // Update del-checked button state
-    const w = container.closest('.widget');
+    // Update del-checked button state（桌面版 widget 或手機版 panel）
+    const w = container.closest('.widget') || container.closest('.mobile-page-panel');
     if (w?._updateDelChecked) w._updateDelChecked();
   });
 
@@ -4151,6 +4151,33 @@ function initMobileLayout() {
       }
 
       panelHead.appendChild(panelBtns);
+
+      // 便利貼專用：刪除已勾選按鈕（跟桌面版一樣掛 w-pencil-btn，由 setEditMode 控制顯示）
+      if (page.widget === 'stickies') {
+        const mDelCheckedBtn = el('button', 'w-pencil-btn hidden sticky-del-checked-btn');
+        mDelCheckedBtn.title = '刪除已勾選';
+        mDelCheckedBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
+        mDelCheckedBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          const checked = S.stickies.filter(s => s.done);
+          if (!checked.length) return;
+          if (!confirm('確認刪除 ' + checked.length + ' 項已勾選？')) return;
+          S.stickies = S.stickies.filter(s => !s.done);
+          lsSave();
+          const inner = panel.querySelector('.stickies-inner');
+          if (inner) renderStickiesWidget(inner);
+        });
+        // 有勾選才亮
+        const updateMDelChecked = () => {
+          const count = (S.stickies || []).filter(s => s.done).length;
+          mDelCheckedBtn.style.opacity = count > 0 ? '1' : '0.35';
+          mDelCheckedBtn.style.pointerEvents = count > 0 ? 'all' : 'none';
+        };
+        updateMDelChecked();
+        panel._updateDelChecked = updateMDelChecked;
+        panelHead.insertBefore(mDelCheckedBtn, expandBtn);
+      }
+
       panel.appendChild(panelHead);
 
       // Widget content
