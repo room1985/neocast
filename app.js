@@ -921,7 +921,8 @@ async function reverseGeocode(lat, lon) {
 /* ─────────────────────────────────────
    PRIVATE GROUP — Lock / Unlock
 ───────────────────────────────────── */
-const PRIVATE_GROUP_ID = '__private__';
+const PRIVATE_GROUP_ID   = '__private__';
+const PRIVATE_STICKY_TAG = '__private_sticky__';
 
 function initLockBtn() {
   const btn  = $('lock-btn');
@@ -959,6 +960,11 @@ function initLockBtn() {
     btn.classList.add('unlocked');
     icon.innerHTML = SVG_UNLOCKED;
     rerenderSc();
+    // 更新所有便利貼 tagBar
+    document.querySelectorAll('.sticky-tag-bar').forEach(bar => {
+      const body = bar.closest('.stickies-inner');
+      if (body?._renderTagBar) body._renderTagBar();
+    });
     toast('私人群組已解鎖');
   }
 
@@ -970,7 +976,20 @@ function initLockBtn() {
     if (S.activeGroup === PRIVATE_GROUP_ID) {
       S.activeGroup = 'all';
     }
+    // 鎖定時若正在看私人便利貼，切回全部
+    if (S.activeStickyTag === PRIVATE_STICKY_TAG) {
+      S.activeStickyTag = 'all';
+    }
     rerenderSc();
+    // 更新所有便利貼 tagBar
+    document.querySelectorAll('.sticky-tag-bar').forEach(bar => {
+      const body = bar.closest('.stickies-inner');
+      if (body?._renderTagBar) body._renderTagBar();
+    });
+    // 重新渲染便利貼（隱藏私人項目）
+    document.querySelectorAll('.stickies-inner').forEach(body => {
+      renderStickiesWidget(body);
+    });
   }
 }
 
@@ -1614,6 +1633,16 @@ function mountStickyTagBar(tagBar, bodyEl) {
       tagBar.appendChild(chip);
     });
 
+    // 私人分類（解鎖時才顯示）
+    if (S.privateUnlocked) {
+      const privChip = el('span', 'sticky-tag-chip sticky-tag-private' + (S.activeStickyTag === PRIVATE_STICKY_TAG ? ' on' : ''), '私人');
+      privChip.addEventListener('click', () => {
+        if (tagEditMode) return;
+        S.activeStickyTag = PRIVATE_STICKY_TAG; lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+      });
+      tagBar.appendChild(privChip);
+    }
+
     // ＋ 新增分類（inline 輸入）
     const addChip = el('span', 'sticky-tag-chip sticky-tag-add', '＋');
     addChip.addEventListener('click', () => {
@@ -1712,9 +1741,13 @@ function renderStickiesWidget(container) {
   container.appendChild(list);
 
   const activeTag = S.activeStickyTag || 'all';
-  const visibleStickies = activeTag === 'all'
+  // 鎖定時強制排除私人便利貼
+  const baseStickies = S.privateUnlocked
     ? S.stickies
-    : S.stickies.filter(s => s.tag === activeTag);
+    : S.stickies.filter(s => s.tag !== PRIVATE_STICKY_TAG);
+  const visibleStickies = activeTag === 'all'
+    ? baseStickies
+    : baseStickies.filter(s => s.tag === activeTag);
 
   if (!visibleStickies.length) {
     list.innerHTML = '<div class="sticky-empty">' + (activeTag === 'all' ? '輸入新增待辦事項…' : '此分類還沒有便利貼') + '</div>';
@@ -1973,6 +2006,13 @@ function startEdit(sticky, textEl, card, container) {
         chip.addEventListener('touchend', e => { e.preventDefault(); st0.tag = tag; lsSave(); container._renderTagBar?.(); renderCatChips(); });
         catRow.appendChild(chip);
       });
+      // 私人分類（解鎖時才顯示）
+      if (S.privateUnlocked) {
+        const privChip = el('span', 'sticky-tag-chip sticky-cat-chip sticky-tag-private' + (st0.tag === PRIVATE_STICKY_TAG ? ' on' : ''), '私人');
+        privChip.addEventListener('mousedown', e => { e.preventDefault(); st0.tag = PRIVATE_STICKY_TAG; lsSave(); container._renderTagBar?.(); renderCatChips(); });
+        privChip.addEventListener('touchend', e => { e.preventDefault(); st0.tag = PRIVATE_STICKY_TAG; lsSave(); container._renderTagBar?.(); renderCatChips(); });
+        catRow.appendChild(privChip);
+      }
     };
     renderCatChips();
     colorRow.after(catRow);
