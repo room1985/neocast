@@ -1269,6 +1269,76 @@ a { color:inherit; text-decoration:none; }
 }
 .sticky-copy:hover { color: var(--ac); }
 
+/* 標籤過濾列 */
+.sticky-tag-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 6px 10px 4px;
+  border-bottom: 1px solid var(--bd);
+  flex-shrink: 0;
+}
+
+/* 編輯模式標籤列 */
+.sticky-edit-tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  padding: 4px 0 2px;
+  width: 100%;
+}
+
+.sticky-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: .72rem;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.55);
+  background: transparent;
+  transition: all .15s;
+  user-select: none;
+  white-space: nowrap;
+}
+.sticky-tag-chip:hover { border-color: var(--ac); color: var(--ac); }
+.sticky-tag-chip.on {
+  background: rgba(56,189,248,.15);
+  border-color: var(--ac);
+  color: var(--ac);
+}
+.sticky-tag-chip-del {
+  font-size: .8rem;
+  opacity: .6;
+  cursor: pointer;
+  line-height: 1;
+}
+.sticky-tag-chip-del:hover { opacity: 1; }
+
+.sticky-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+  padding: 2px 0 0 20px;
+}
+
+.sticky-tag-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,.2);
+  color: var(--tx);
+  font-size: .72rem;
+  outline: none;
+  padding: 1px 4px;
+  min-width: 60px;
+  max-width: 100px;
+}
+.sticky-tag-input::placeholder { color: rgba(255,255,255,.3); }
+
 /* Input bar */
 .sticky-input-bar {
   display: flex;

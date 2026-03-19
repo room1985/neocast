@@ -44,6 +44,8 @@ let S = {
   shortcuts:  [],
   groups:     [],
   stickies:   [],
+  stickyTags: [],          // 所有標籤 string[]
+  activeStickyTag: 'all',  // 'all' 或 tag 字串
   widgets: {
     clock:     { col:0, row:0, w:6, h:2, visible:true },
     shortcuts: { col:6, row:2, w:6, h:5, visible:true },
@@ -107,6 +109,8 @@ function lsSave() {
       shortcuts:  S.shortcuts,
       groups:     S.groups,
       stickies:   S.stickies,
+      stickyTags: S.stickyTags || [],
+      activeStickyTag: S.activeStickyTag || 'all',
       widgets:    S.widgets,
       news:       { items: S.news.items, fetchedAt: S.news.fetchedAt, keywords: S.news.keywords, lang: S.news.lang, title: S.news.title, perKeyword: S.news.perKeyword, cacheMin: S.news.cacheMin },
       cfg:        S.cfg,
@@ -139,6 +143,8 @@ function lsLoad() {
     if (d.shortcuts)   S.shortcuts = d.shortcuts;
     if (d.groups)      S.groups    = d.groups;
     if (d.stickies)    S.stickies  = d.stickies;
+    if (d.stickyTags)  S.stickyTags = d.stickyTags;
+    if (d.activeStickyTag) S.activeStickyTag = d.activeStickyTag;
     if (d.widgets)     Object.assign(S.widgets, d.widgets);
     if (d.news)        Object.assign(S.news, d.news);
     if (d.cfg)         Object.assign(S.cfg, d.cfg);
@@ -1356,7 +1362,7 @@ function renderNewsKws() {
 function renderNewsItems() {
   if (!newsListEl) return;
   const filtered = S.news.activeKw === 'all'
-    ? S.news.items
+    ? [...S.news.items].sort((a, b) => new Date(b.rawDate || 0) - new Date(a.rawDate || 0))
     : S.news.items.filter(i => i.kw === S.news.activeKw);
 
   if (!filtered.length) {
@@ -1430,7 +1436,8 @@ async function fetchNews(force = false) {
         const source  = dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || '');
         const link    = item.link || item.guid || '';
         const date    = item.pubDate ? parseDate(item.pubDate) : '';
-        allItems.push({ kw, title, source, link, date });
+        const rawDate = item.pubDate || '';
+        allItems.push({ kw, title, source, link, date, rawDate });
       });
     } catch(_) {}
   }
@@ -1490,6 +1497,24 @@ function buildStickiesWidget() {
     delCheckedBtn.style.pointerEvents = count > 0 ? 'all' : 'none';
   };
 
+  // 標籤過濾列
+  const tagBar = el('div', 'sticky-tag-bar');
+  body.insertBefore(tagBar, body.firstChild);
+
+  function renderStickyTagBar() {
+    tagBar.innerHTML = '';
+    const allBtn = el('span', 'sticky-tag-chip' + (S.activeStickyTag === 'all' ? ' on' : ''), '全部');
+    allBtn.addEventListener('click', () => { S.activeStickyTag = 'all'; lsSave(); renderStickyTagBar(); renderStickiesWidget(body); });
+    tagBar.appendChild(allBtn);
+    (S.stickyTags || []).forEach(tag => {
+      const chip = el('span', 'sticky-tag-chip' + (S.activeStickyTag === tag ? ' on' : ''), '#' + tag);
+      chip.addEventListener('click', () => { S.activeStickyTag = tag; lsSave(); renderStickyTagBar(); renderStickiesWidget(body); });
+      tagBar.appendChild(chip);
+    });
+  }
+  body._renderTagBar = renderStickyTagBar;
+  renderStickyTagBar();
+
   renderStickiesWidget(body);
   w._updateDelChecked?.();
 
@@ -1508,12 +1533,17 @@ function renderStickiesWidget(container) {
   const list = el('div', 'sticky-list');
   container.appendChild(list);
 
-  if (!S.stickies.length) {
-    list.innerHTML = '<div class="sticky-empty">輸入新增待辦事項…</div>';
+  const activeTag = S.activeStickyTag || 'all';
+  const visibleStickies = activeTag === 'all'
+    ? S.stickies
+    : S.stickies.filter(s => (s.tags || []).includes(activeTag));
+
+  if (!visibleStickies.length) {
+    list.innerHTML = '<div class="sticky-empty">' + (activeTag === 'all' ? '輸入新增待辦事項…' : '此標籤沒有便利貼') + '</div>';
   } else {
     const sorted = [
-      ...S.stickies.filter(s => s.pinned),
-      ...S.stickies.filter(s => !s.pinned)
+      ...visibleStickies.filter(s => s.pinned),
+      ...visibleStickies.filter(s => !s.pinned)
     ];
     sorted.forEach(s => list.appendChild(makeStickyCard(s, container)));
     initStickyListDrag(list, container);
@@ -1638,6 +1668,15 @@ function makeStickyCard(sticky, container) {
   card.appendChild(copyBtn);
   card.appendChild(pinBtn);
 
+  // 顯示標籤
+  if (sticky.tags && sticky.tags.length) {
+    const tagWrap = el('div', 'sticky-card-tags');
+    sticky.tags.forEach(tag => {
+      tagWrap.appendChild(el('span', 'sticky-tag-chip on', '#' + tag));
+    });
+    card.appendChild(tagWrap);
+  }
+
   const onLongPress = () => {
     startEdit(sticky, textEl, card, container);
   };
@@ -1659,6 +1698,9 @@ function startEdit(sticky, textEl, card, container) {
   textEl.replaceWith(inp);
   inp.focus();
   inp.select();
+
+  // 停用 draggable，讓文字可以正常選取
+  card.draggable = false;
 
   // Hide pin and copy buttons during edit
   const pinBtn = card.querySelector('.sticky-pin');
@@ -1706,17 +1748,70 @@ function startEdit(sticky, textEl, card, container) {
   });
   inp.after(colorRow);
 
+  // 標籤管理列
+  const tagRow = el('div', 'sticky-edit-tag-row');
+  const st0 = S.stickies.find(s => s.id === sticky.id);
+  if (!st0.tags) st0.tags = [];
+
+  function renderTagRow() {
+    tagRow.innerHTML = '';
+    st0.tags.forEach(tag => {
+      const chip = el('span', 'sticky-tag-chip on');
+      chip.textContent = '#' + tag;
+      const x = el('span', 'sticky-tag-chip-del', '×');
+      x.addEventListener('mousedown', e => {
+        e.preventDefault();
+        st0.tags = st0.tags.filter(t => t !== tag);
+        lsSave();
+        container._renderTagBar?.();
+        renderTagRow();
+      });
+      chip.appendChild(x);
+      tagRow.appendChild(chip);
+    });
+    // 新增標籤輸入
+    const tagInp = el('input', 'sticky-tag-input');
+    tagInp.placeholder = '+ 新增標籤';
+    tagInp.autocomplete = 'off';
+    const addTag = () => {
+      const v = tagInp.value.trim().replace(/^#/, '');
+      if (!v) return;
+      if (!st0.tags.includes(v)) {
+        st0.tags.push(v);
+        if (!S.stickyTags.includes(v)) S.stickyTags.push(v);
+      }
+      lsSave();
+      container._renderTagBar?.();
+      renderTagRow();
+      // 重新 focus 文字輸入
+      setTimeout(() => inp.focus(), 0);
+    };
+    tagInp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.stopPropagation(); addTag(); }
+      if (e.key === 'Escape') { e.stopPropagation(); renderStickiesWidget(container); }
+    });
+    tagInp.addEventListener('blur', addTag);
+    tagRow.appendChild(tagInp);
+  }
+  renderTagRow();
+  colorRow.after(tagRow);
+
   const save = () => {
     const val = inp.value.trim();
     if (val) { const st = S.stickies.find(s => s.id === sticky.id); if (st) st.text = val; }
     lsSave();
     renderStickiesWidget(container);
+    container._renderTagBar?.();
   };
   inp.addEventListener('keydown', e => {
     if (e.key === 'Enter') save();
     if (e.key === 'Escape') renderStickiesWidget(container);
   });
-  inp.addEventListener('blur', save);
+  inp.addEventListener('blur', e => {
+    // blur 到 tagRow 內部不 save
+    if (tagRow.contains(e.relatedTarget)) return;
+    save();
+  });
 }
 
 function initStickyListDrag(list, container) {
@@ -2268,7 +2363,7 @@ function renderAnimeWidget(container) {
           if (si < 0 || di < 0) return;
           const [m] = S.animeState.tracked.splice(si, 1);
           S.animeState.tracked.splice(di, 0, m);
-          lsSave(); renderFav();
+          lsSave(); setTimeout(() => renderFav(), 0);
         });
 
         // Touch drag (long press)
@@ -3753,7 +3848,9 @@ function renderMobileNews(container) {
   renderKws(false);
 
   // News list
-  const filtered = S.news.activeKw === 'all' ? S.news.items : S.news.items.filter(i => i.kw === S.news.activeKw);
+  const filtered = S.news.activeKw === 'all'
+    ? [...S.news.items].sort((a, b) => new Date(b.rawDate || 0) - new Date(a.rawDate || 0))
+    : S.news.items.filter(i => i.kw === S.news.activeKw);
   const list = el('div', 'news-list');
   list.style.cssText = 'overflow-y:auto;flex:1;padding:0 14px 12px;';
   container.appendChild(list);
