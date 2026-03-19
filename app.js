@@ -322,10 +322,15 @@ async function gistPull() {
 
 // ── 自動同步：比較 lastModified，雲端較新才拉取 ──
 let _autoSyncBusy = false;
+let _autoSyncLastRun = 0;
+const AUTO_SYNC_COOLDOWN = 2 * 60 * 1000; // 最短間隔 2 分鐘
+
 async function gistAutoSync() {
   const { token, gistId } = S.cfg;
   if (!token || !gistId || _autoSyncBusy) return;
+  if (Date.now() - _autoSyncLastRun < AUTO_SYNC_COOLDOWN) return;
   _autoSyncBusy = true;
+  _autoSyncLastRun = Date.now();
   try {
     // 第一步：只抓 metadata（updated_at），不下載檔案內容
     const metaRes = await fetch(`https://api.github.com/gists/${gistId}`, {
