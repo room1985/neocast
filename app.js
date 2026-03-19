@@ -34,8 +34,8 @@ async function toTW(text) {
     return text; // fallback if OpenCC not loaded
   }
 }
-const NEWS_CACHE_MS = 4 * 60 * 60 * 1000; // 4 小時（GNews 模式）
-const GNEWS_PROXY = 'https://autumn-sunset-863b.heineken6may.workers.dev/';
+const NEWS_CACHE_MS = 4 * 60 * 60 * 1000; // 4 小時
+const NEWSDATA_PROXY = 'https://autumn-sunset-863b.heineken6may.workers.dev/';
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url='; // fallback
 
 /* ─────────────────────────────────────
@@ -72,7 +72,7 @@ let S = {
     weatherLat:  null,
     weatherLon:  null,
     ytApiKey:    '',
-    gnewsApiKey: ''
+    newsdataApiKey: ''
   },
   yt: { channels: [], fetchedAt: 0, items: [], groups: ['AI','財經','故事','遊戲','動漫'], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
   widgetTitles: {},
@@ -1599,7 +1599,7 @@ async function fetchNews(force = false) {
     if (S.news.items.length) { renderNewsItems(); return; }
   }
 
-  const apiKey = S.cfg.gnewsApiKey?.trim();
+  const apiKey = S.cfg.newsdataApiKey?.trim();
   const keywords = S.news.keywords || [];
   if (!keywords.length) { renderNewsItems(); return; }
 
@@ -1626,32 +1626,29 @@ async function fetchNews(force = false) {
 
   for (let i = 0; i < kwsToFetch.length; i++) {
     const kw = kwsToFetch[i];
-    // GNews 免費方案限制每秒 1 次，每個請求間隔 2 秒（第一個不等）
-    if (apiKey && i > 0) await new Promise(r => setTimeout(r, 2000));
     try {
       let articles = [];
 
       if (apiKey) {
-        // GNews API via Cloudflare Worker
-        const url = `${GNEWS_PROXY}?q=${encodeURIComponent(kw)}&lang=${lang}&country=${country}&max=${maxPerKw}&apikey=${apiKey}`;
+        // Newsdata.io API via Cloudflare Worker
+        const url = `${NEWSDATA_PROXY}?q=${encodeURIComponent(kw)}&language=${lang}&country=${country}&apikey=${apiKey}`;
         const res = await fetch(url, { signal: AbortSignal.timeout(12000) });
         if (res.status === 429) {
-          // 頻率超限：不更新 kwFetchedAt，下次仍會重試
-          console.warn('[NeoCast] GNews 429 rate limit:', kw);
+          console.warn('[NeoCast] Newsdata 429 rate limit:', kw);
           continue;
         }
         if (!res.ok) continue;
         const data = await res.json();
-        if (!Array.isArray(data.articles)) continue;
+        if (data.status !== 'success' || !Array.isArray(data.results)) continue;
 
-        articles = data.articles.map(a => ({
+        articles = data.results.slice(0, maxPerKw).map(a => ({
           kw,
           title:   a.title || '',
-          source:  a.source?.name || '',
-          link:    a.url || '',
-          image:   a.image || '',
-          rawDate: a.publishedAt || '',
-          date:    a.publishedAt ? parseDate(a.publishedAt) : '',
+          source:  a.source_name || '',
+          link:    a.link || '',
+          image:   a.image_url || '',
+          rawDate: a.pubDate ? a.pubDate.replace(' ', 'T') + 'Z' : '',
+          date:    a.pubDate ? parseDate(a.pubDate.replace(' ', 'T') + 'Z') : '',
         }));
         S.news.kwFetchedAt[kw] = Date.now();
       } else {
@@ -2381,7 +2378,7 @@ function openSettingsModal() {
   $('cfg-gid').value        = S.cfg.gistId;
   $('cfg-nickname').value   = S.cfg.nickname || '';
   $('cfg-city').value       = S.cfg.weatherCity || '';
-  $('cfg-gnewskey').value   = S.cfg.gnewsApiKey || '';
+  $('cfg-gnewskey').value   = S.cfg.newsdataApiKey || '';
   $('cfg-ytkey').value      = S.cfg.ytApiKey || '';
   // OAuth status
   const loginStatus = $('cfg-yt-login-status');
@@ -2415,7 +2412,7 @@ async function saveSettings() {
   S.cfg.gistId       = gistId;
   S.cfg.nickname     = nickname;
   S.cfg.weatherCity  = city;
-  S.cfg.gnewsApiKey  = $('cfg-gnewskey').value.trim();
+  S.cfg.newsdataApiKey  = $('cfg-gnewskey').value.trim();
   S.cfg.ytApiKey     = $('cfg-ytkey').value.trim();
 
   // Handle video file
