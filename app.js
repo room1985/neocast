@@ -1757,6 +1757,8 @@ function startEdit(sticky, textEl, card, container) {
 
   // 停用 draggable，讓文字可以正常選取
   card.draggable = false;
+  // 隱藏 card-tags（避免編輯模式重複顯示）
+  card.querySelector('.sticky-card-tags')?.style.setProperty('display', 'none');
 
   // Hide pin and copy buttons during edit
   const pinBtn = card.querySelector('.sticky-pin');
@@ -1804,31 +1806,29 @@ function startEdit(sticky, textEl, card, container) {
   });
   inp.after(colorRow);
 
-  // 分類選擇器
+  // 分類選擇器（chip 點選，避免觸發 inp blur）
   const st0 = S.stickies.find(s => s.id === sticky.id);
   if (S.stickyTags.length) {
     const catRow = el('div', 'sticky-edit-tag-row');
     const catLabel = el('span', '', '分類：');
-    catLabel.style.cssText = 'font-size:.72rem;color:rgba(255,255,255,.45);flex-shrink:0;';
+    catLabel.style.cssText = 'font-size:.72rem;color:rgba(255,255,255,.45);flex-shrink:0;margin-right:2px;';
     catRow.appendChild(catLabel);
 
-    const sel = el('select', 'sticky-cat-select');
-    const noneOpt = document.createElement('option');
-    noneOpt.value = ''; noneOpt.textContent = '無';
-    sel.appendChild(noneOpt);
-    S.stickyTags.forEach(tag => {
-      const opt = document.createElement('option');
-      opt.value = tag; opt.textContent = tag;
-      if (st0.tag === tag) opt.selected = true;
-      sel.appendChild(opt);
-    });
-    sel.addEventListener('mousedown', e => e.stopPropagation());
-    sel.addEventListener('change', e => {
-      if (st0) st0.tag = sel.value;
-      lsSave();
-      container._renderTagBar?.();
-    });
-    catRow.appendChild(sel);
+    // 「無」chip
+    const renderCatChips = () => {
+      catRow.querySelectorAll('.sticky-cat-chip').forEach(c => c.remove());
+      const noneChip = el('span', 'sticky-tag-chip sticky-cat-chip' + (!st0.tag ? ' on' : ''), '無');
+      noneChip.addEventListener('mousedown', e => { e.preventDefault(); st0.tag = ''; lsSave(); container._renderTagBar?.(); renderCatChips(); });
+      noneChip.addEventListener('touchend', e => { e.preventDefault(); st0.tag = ''; lsSave(); container._renderTagBar?.(); renderCatChips(); });
+      catRow.appendChild(noneChip);
+      S.stickyTags.forEach(tag => {
+        const chip = el('span', 'sticky-tag-chip sticky-cat-chip' + (st0.tag === tag ? ' on' : ''), tag);
+        chip.addEventListener('mousedown', e => { e.preventDefault(); st0.tag = tag; lsSave(); container._renderTagBar?.(); renderCatChips(); });
+        chip.addEventListener('touchend', e => { e.preventDefault(); st0.tag = tag; lsSave(); container._renderTagBar?.(); renderCatChips(); });
+        catRow.appendChild(chip);
+      });
+    };
+    renderCatChips();
     colorRow.after(catRow);
   }
 
@@ -1843,7 +1843,11 @@ function startEdit(sticky, textEl, card, container) {
     if (e.key === 'Enter') save();
     if (e.key === 'Escape') renderStickiesWidget(container);
   });
-  inp.addEventListener('blur', save);
+  inp.addEventListener('blur', e => {
+    // blur 到 catRow 內部不 save
+    if (e.relatedTarget && e.relatedTarget.closest?.('.sticky-edit-tag-row')) return;
+    save();
+  });
 }
 
 function initStickyListDrag(list, container) {
