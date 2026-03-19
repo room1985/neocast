@@ -1478,9 +1478,10 @@ function renderNewsItems() {
   newsListEl.innerHTML = '';
   filtered.forEach(item => {
     const card = el('div', 'news-card');
-    if (item.link) {
+    const openLink = item.rssLink || item.link;
+    if (openLink) {
       card.style.cursor = 'pointer';
-      card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
+      card.addEventListener('click', () => window.open(openLink, '_blank', 'noopener'));
     }
 
     // 縮圖
@@ -1536,8 +1537,10 @@ function parseDate(raw) {
 function newsThumb(item) {
   if (item.enclosure) return { url: item.enclosure, large: true };
   try {
-    const domain = new URL(item.link).hostname;
-    return { url: `https://www.google.com/s2/favicons?domain=${domain}&sz=64`, large: false };
+    // 用 rssLink 或 link 取得來源 domain，排除 news.google.com
+    const urlStr = (item.rssLink && !item.rssLink.includes('news.google.com')) ? item.rssLink : item.link;
+    const domain = new URL(urlStr).hostname.replace(/^www\./, '');
+    return { url: `https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://${domain}&size=128`, large: false };
   } catch(_) { return null; }
 }
 
@@ -1574,10 +1577,12 @@ async function fetchNews(force = false) {
         const title   = dashIdx > 0 ? raw.slice(0, dashIdx) : raw;
         const source  = dashIdx > 0 ? raw.slice(dashIdx + 3) : (item.author || '');
         const link    = item.link || item.guid || '';
+        // rssLink 優先用 guid（通常是 Google News 原始連結），避免深層連結觸發 App
+        const rssLink = (item.guid && item.guid.includes('news.google.com')) ? item.guid : link;
         const date      = item.pubDate ? parseDate(item.pubDate) : '';
         const rawDate   = item.pubDate || '';
         const enclosure = item.enclosure?.link || item.enclosure?.url || '';
-        allItems.push({ kw, title, source, link, date, rawDate, enclosure });
+        allItems.push({ kw, title, source, link, rssLink, date, rawDate, enclosure });
       });
     } catch(_) {}
   }
@@ -4125,9 +4130,10 @@ function renderMobileNews(container) {
   } else {
     filtered.forEach(item => {
       const card = el('div', 'news-card');
-      if (item.link) {
+      const mOpenLink = item.rssLink || item.link;
+      if (mOpenLink) {
         card.style.cursor = 'pointer';
-        card.addEventListener('click', () => window.open(item.link, '_blank', 'noopener'));
+        card.addEventListener('click', () => window.open(mOpenLink, '_blank', 'noopener'));
       }
       const mThumb = newsThumb(item);
       const mBody = el('div', 'nc-body');
