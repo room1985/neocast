@@ -3353,12 +3353,26 @@ async function fetchChannelVideos(channelId, key) {
   return items;
 }
 
-let _ytQuotaExceeded = false; // 當天配額超限旗標（記憶體，重開頁面重置）
+// YouTube 配額超限保護：記錄到明天台灣時間 08:00
+function ytQuotaExceededUntil() {
+  const val = localStorage.getItem('yt_quota_exceeded_until');
+  return val ? parseInt(val) : 0;
+}
+function setYtQuotaExceeded() {
+  // 計算明天台灣時間 08:00（UTC+8）
+  const now = new Date();
+  const twNow = new Date(now.getTime() + 8 * 60 * 60 * 1000);
+  const tomorrow = new Date(Date.UTC(twNow.getUTCFullYear(), twNow.getUTCMonth(), twNow.getUTCDate() + 1, 0, 0, 0)); // UTC 00:00 = 台灣 08:00
+  localStorage.setItem('yt_quota_exceeded_until', tomorrow.getTime());
+}
+function clearYtQuotaExceeded() {
+  localStorage.removeItem('yt_quota_exceeded_until');
+}
 
 async function fetchYoutubeFeed(force = false) {
   const CACHE_MIN = 30;
-  // 配額超限時不再嘗試（直到頁面重開或手動強制）
-  if (_ytQuotaExceeded && !force) return S.yt.items || [];
+  // 配額超限時不再嘗試（直到明天台灣時間 08:00）
+  if (!force && Date.now() < ytQuotaExceededUntil()) return S.yt.items || [];
   if (!force && S.yt.fetchedAt && (Date.now() - S.yt.fetchedAt) < CACHE_MIN * 60000) {
     return S.yt.items;
   }
@@ -3372,8 +3386,8 @@ async function fetchYoutubeFeed(force = false) {
   // 檢查是否有 403 配額超限
   const has403 = results.some(r => r.status === 'rejected' && r.reason?.message?.includes('403'));
   if (has403) {
-    _ytQuotaExceeded = true;
-    console.warn('[NeoCast] YouTube API 配額超限，停止自動重試');
+    setYtQuotaExceeded();
+    console.warn('[NeoCast] YouTube API 配額超限，停止自動重試直到明天 08:00');
     toast('YouTube API 配額已用完，台灣時間 08:00 後重置', 'warn');
     return S.yt.items || [];
   }
@@ -3383,7 +3397,7 @@ async function fetchYoutubeFeed(force = false) {
     .flatMap(r => r.value)
     .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
-  _ytQuotaExceeded = false;
+  clearYtQuotaExceeded();
   S.yt.fetchedAt = Date.now();
   S.yt.items = items;
   lsSave();
