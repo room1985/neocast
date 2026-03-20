@@ -2364,25 +2364,12 @@ function makeStickyCard(sticky, container) {
     textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
     card.addEventListener('contextmenu', e => { e.preventDefault(); onLongPress(); });
 
-    // 手機長按：只有移動超過 8px 才取消，手指放開不取消讓 timer 跑完
-    let lpStartX = 0, lpStartY = 0, lpMoved = false;
-    textEl.addEventListener('touchstart', e => {
-      lpStartX = e.touches[0].clientX;
-      lpStartY = e.touches[0].clientY;
-      lpMoved = false;
-      longPressTimer = setTimeout(() => {
-        if (!lpMoved) onLongPress();
-      }, 500);
-    }, { passive: true });
-    textEl.addEventListener('touchmove', e => {
-      const dx = e.touches[0].clientX - lpStartX;
-      const dy = e.touches[0].clientY - lpStartY;
-      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) {
-        lpMoved = true;
-        clearTimeout(longPressTimer);
-      }
-    }, { passive: true });
-    // touchend 不清除 timer，讓 500ms 跑完後觸發編輯
+    // 手機：點一下文字直接編輯（拖曳中不觸發）
+    textEl.addEventListener('touchend', e => {
+      if (isDragging) return;
+      e.preventDefault();
+      onLongPress();
+    }, { passive: false });
   }
 
   return card;
@@ -2530,6 +2517,7 @@ function initStickyListDrag(list, container) {
   let ghost     = null;
   let startX    = 0;
   let startY    = 0;
+  let isDragging = false; // 追蹤是否正在拖曳，避免拖曳結束觸發編輯
 
   list.querySelectorAll('.sticky-card:not(.pinned)').forEach(card => {
     const handle = card.querySelector('.sticky-handle');
@@ -2571,6 +2559,7 @@ function initStickyListDrag(list, container) {
       startX = touch.clientX;
       startY = touch.clientY;
       dragSrcId = card.dataset.id;
+      isDragging = true;
 
       setTimeout(() => {
         if (!dragSrcId) return;
@@ -2623,6 +2612,7 @@ function initStickyListDrag(list, container) {
         card.classList.remove('sticky-dragging');
         list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
         dragSrcId = null;
+        isDragging = false;
         renderStickiesWidget(container);
       };
 
@@ -2634,6 +2624,7 @@ function initStickyListDrag(list, container) {
       if (ghost) { ghost.remove(); ghost = null; }
       card.classList.remove('sticky-dragging');
       dragSrcId = null;
+      isDragging = false;
     }, { passive: true });
   });
 }
