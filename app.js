@@ -2367,6 +2367,7 @@ function makeStickyCard(sticky, container) {
     // 手機長按：手指移動超過 8px 才取消，放開時若不是拖曳也觸發編輯
     let lpStartX = 0, lpStartY = 0, lpMoved = false;
     textEl.addEventListener('touchstart', e => {
+      e.stopPropagation();
       lpStartX = e.touches[0].clientX;
       lpStartY = e.touches[0].clientY;
       lpMoved = false;
@@ -2568,6 +2569,7 @@ function initStickyListDrag(list, container) {
 
     // Mobile touch drag via handle — touchmove 動態掛載確保 passive:false 有效
     handle.addEventListener('touchstart', e => {
+      e.stopPropagation(); // 阻止冒泡到 swipeArea
       const touch = e.touches[0];
       startX = touch.clientX;
       startY = touch.clientY;
@@ -2629,7 +2631,7 @@ function initStickyListDrag(list, container) {
 
       document.addEventListener('touchmove', onTouchMove, { passive: false });
       document.addEventListener('touchend', onTouchEnd, { passive: true });
-    }, { passive: true });
+    }, { passive: false });
 
     handle.addEventListener('touchcancel', () => {
       if (ghost) { ghost.remove(); ghost = null; }
