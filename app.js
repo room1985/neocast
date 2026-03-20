@@ -3835,7 +3835,8 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   });
 
   renderFeed();
-  if (S.yt.channels?.length && (!S.yt.items?.length || !S.yt.fetchedAt)) {
+  const YT_CACHE_MS = 30 * 60 * 1000;
+  if (S.yt.channels?.length && (!S.yt.items?.length || !S.yt.fetchedAt || (Date.now() - S.yt.fetchedAt) >= YT_CACHE_MS)) {
     fetchYoutubeFeed(false).then(() => renderFeed());
   }
 }
