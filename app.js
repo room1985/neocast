@@ -4854,8 +4854,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') gistAutoSync();
   });
-  // Gist 拉完後，重新觸發新聞更新判斷
-  if (Date.now() - (S.news.kwFetchedAt ? Math.max(...Object.values(S.news.kwFetchedAt), 0) : 0) > 0) {
-    fetchNews();
-  }
+  // Gist 拉完後，只有當有關鍵字過期時才觸發更新
+  const now = Date.now();
+  const hasExpired = (S.news.keywords || []).some(kw =>
+    !S.news.kwFetchedAt?.[kw] || (now - S.news.kwFetchedAt[kw]) >= NEWS_CACHE_MS
+  );
+  if (hasExpired) fetchNews();
 });
