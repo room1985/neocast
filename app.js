@@ -3317,6 +3317,7 @@ async function fetchChannelVideos(channelId, key) {
 
   // Step 2: get latest videos from uploads playlist
   const pr = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsId}&key=${key}`);
+  if (pr.status === 403) throw new Error('403 YouTube API 配額超限');
   const pd = await pr.json();
   const items = (pd.items || []).map(item => ({
     videoId:     item.snippet.resourceId.videoId,
@@ -3352,8 +3353,12 @@ async function fetchChannelVideos(channelId, key) {
   return items;
 }
 
+let _ytQuotaExceeded = false; // 當天配額超限旗標（記憶體，重開頁面重置）
+
 async function fetchYoutubeFeed(force = false) {
   const CACHE_MIN = 30;
+  // 配額超限時不再嘗試（直到頁面重開或手動強制）
+  if (_ytQuotaExceeded && !force) return S.yt.items || [];
   if (!force && S.yt.fetchedAt && (Date.now() - S.yt.fetchedAt) < CACHE_MIN * 60000) {
     return S.yt.items;
   }
@@ -3363,14 +3368,25 @@ async function fetchYoutubeFeed(force = false) {
   const results = await Promise.allSettled(
     S.yt.channels.map(ch => fetchChannelVideos(ch.id, key))
   );
+
+  // 檢查是否有 403 配額超限
+  const has403 = results.some(r => r.status === 'rejected' && r.reason?.message?.includes('403'));
+  if (has403) {
+    _ytQuotaExceeded = true;
+    console.warn('[NeoCast] YouTube API 配額超限，停止自動重試');
+    toast('YouTube API 配額已用完，台灣時間 08:00 後重置', 'warn');
+    return S.yt.items || [];
+  }
+
   const items = results
     .filter(r => r.status === 'fulfilled')
     .flatMap(r => r.value)
     .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
+  _ytQuotaExceeded = false;
   S.yt.fetchedAt = Date.now();
   S.yt.items = items;
-  lsSave(); // 快取影片到 localStorage
+  lsSave();
   return items;
 }
 
