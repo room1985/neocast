@@ -49,16 +49,16 @@ let S = {
   stickyTags: [],          // 所有標籤 string[]
   activeStickyTag: 'all',  // 'all' 或 tag 字串
   widgets: {
-    clock:     { col:0, row:0, w:6, h:2, visible:true },
-    shortcuts: { col:6, row:2, w:6, h:5, visible:true },
-    news:      { col:0, row:2, w:6, h:5, visible:true },
+    clock:     { col:0, row:0, w:6, h:2, visible:false },
+    shortcuts: { col:6, row:2, w:6, h:5, visible:false },
+    news:      { col:0, row:2, w:6, h:5, visible:false },
     youtube:   { col:12, row:6, w:6, h:8, visible:false }
   },
   news: {
     items:       [],
     fetchedAt:   0,
     kwFetchedAt: {},
-    keywords:    ['AI人工智慧','台灣科技','國際新聞'],
+    keywords:    [],
     lang:        'zh-TW',
     title:       '即時新聞',
     perKeyword:  2,
@@ -75,7 +75,7 @@ let S = {
     ytApiKey:    '',
     newsdataApiKey: ''
   },
-  yt: { channels: [], fetchedAt: 0, items: [], groups: ['AI','財經','故事','遊戲','動漫'], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
+  yt: { channels: [], fetchedAt: 0, items: [], groups: [], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
   widgetTitles: {},
   editMode:       false,
   activeGroup:    'all',
@@ -84,7 +84,7 @@ let S = {
   animeState:     { offset: 0, genre: '全部', tracked: [], customNames: {} },
   scEditing:      null,
   dragSc:         null,
-  mobilePages:    [{ id: 'shortcuts', widget: 'shortcuts' }],
+  mobilePages:    [],
   mobilePageIdx:  0
 };
 
