@@ -1094,6 +1094,29 @@ function buildShortcutsWidget() {
   const w = makeWidget('shortcuts', '捷徑', body, 'sc-widget');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
+
+  // ⚙ 管理分類按鈕放在 w-head
+  const head  = w.querySelector('.w-head');
+  const delBtn = w.querySelector('.w-delete-btn');
+  const svgCfg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+  const cfgBtn = el('button', 'w-btn sc-grp-cfg-btn');
+  cfgBtn.title = '管理分類';
+  cfgBtn.innerHTML = svgCfg;
+  cfgBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    grpEditMode = !grpEditMode;
+    cfgBtn.classList.toggle('on', grpEditMode);
+    cfgBtn.title = grpEditMode ? '完成管理' : '管理分類';
+    // 同步手機版按鈕
+    document.querySelectorAll('.sc-grp-cfg-btn').forEach(b => {
+      b.classList.toggle('on', grpEditMode);
+      b.title = grpEditMode ? '完成管理' : '管理分類';
+    });
+    rerenderShortcuts();
+  });
+  if (delBtn) head.insertBefore(cfgBtn, delBtn);
+  else head.appendChild(cfgBtn);
+
   renderShortcutsWidget(body);
 }
 
@@ -1116,16 +1139,6 @@ function renderShortcutsWidget(container) {
   if (S.privateUnlocked) {
     bar.appendChild(makeGrpTab(PRIVATE_GROUP_ID, '私人', false));
   }
-
-  // ⚙ 管理模式按鈕
-  const cfgBtn = el('button', 'grp-cfg-btn' + (grpEditMode ? ' on' : ''));
-  cfgBtn.title = grpEditMode ? '完成管理' : '管理分類';
-  cfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
-  cfgBtn.addEventListener('click', () => {
-    grpEditMode = !grpEditMode;
-    rerenderShortcuts();
-  });
-  bar.appendChild(cfgBtn);
 
   // 管理模式下才顯示 ＋ 新增按鈕
   if (grpEditMode) {
@@ -4802,6 +4815,24 @@ function initMobileLayout() {
       }
 
       panelHead.appendChild(panelBtns);
+
+      // 捷徑專用：管理分類按鈕
+      if (page.widget === 'shortcuts') {
+        const svgCfg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+        const mCfgBtn = el('button', 'w-btn sc-grp-cfg-btn' + (grpEditMode ? ' on' : ''));
+        mCfgBtn.title = grpEditMode ? '完成管理' : '管理分類';
+        mCfgBtn.innerHTML = svgCfg;
+        mCfgBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          grpEditMode = !grpEditMode;
+          document.querySelectorAll('.sc-grp-cfg-btn').forEach(b => {
+            b.classList.toggle('on', grpEditMode);
+            b.title = grpEditMode ? '完成管理' : '管理分類';
+          });
+          rerenderShortcuts();
+        });
+        panelHead.insertBefore(mCfgBtn, expandBtn);
+      }
 
       // 便利貼專用：刪除已勾選按鈕（跟桌面版一樣掛 w-pencil-btn，由 setEditMode 控制顯示）
       if (page.widget === 'stickies') {

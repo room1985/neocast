@@ -546,22 +546,12 @@ a { color:inherit; text-decoration:none; }
 }
 .grp-tab-x:hover { background: rgba(248,113,113,.5); }
 
-/* ⚙ 管理按鈕 */
-.grp-cfg-btn {
-  width: 26px; height: 26px;
-  border-radius: 8px;
-  border: 1px solid var(--bd);
-  background: transparent;
-  color: var(--txm);
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: all .15s;
+/* ⚙ 分類管理按鈕 active 狀態（共用 w-btn 基礎樣式）*/
+.sc-grp-cfg-btn.on {
+  color: var(--ac);
+  background: rgba(56,189,248,.15);
+  border-color: var(--ac);
 }
-.grp-cfg-btn:hover { border-color: var(--bd2); color: var(--tx); }
-.grp-cfg-btn.on { background: rgba(56,189,248,.15); border-color: var(--ac); color: var(--ac); }
 
 /* inline 改名 input */
 .grp-rename-input {
