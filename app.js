@@ -2364,10 +2364,9 @@ function makeStickyCard(sticky, container) {
     textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
     card.addEventListener('contextmenu', e => { e.preventDefault(); onLongPress(); });
 
-    // 手機長按：手指移動超過 8px 才取消，放開時若不是拖曳也觸發編輯
+    // 手機長按：只有移動超過 8px 才取消，手指放開不取消讓 timer 跑完
     let lpStartX = 0, lpStartY = 0, lpMoved = false;
     textEl.addEventListener('touchstart', e => {
-      e.stopPropagation();
       lpStartX = e.touches[0].clientX;
       lpStartY = e.touches[0].clientY;
       lpMoved = false;
@@ -2383,9 +2382,7 @@ function makeStickyCard(sticky, container) {
         clearTimeout(longPressTimer);
       }
     }, { passive: true });
-    textEl.addEventListener('touchend', () => {
-      clearTimeout(longPressTimer);
-    }, { passive: true });
+    // touchend 不清除 timer，讓 500ms 跑完後觸發編輯
   }
 
   return card;
