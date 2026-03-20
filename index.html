@@ -29,14 +29,14 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag">v1.1.98</span>
+      <span id="version-tag">v1.1.99</span>
       <button id="lock-btn" title="私人群組" aria-label="解鎖私人群組">
         <svg id="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
       </button>
     </div>
     <div id="search-wrap">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input id="search-input" type="text" placeholder="搜尋或輸入網址… （/ 鍵快速聚焦）" autocomplete="off" spellcheck="false">
+      <input id="search-input" type="text" placeholder="搜尋或輸入網址… （/ 鍵快速聚焦）" autocomplete="search" name="neocast-search" spellcheck="false">
       <button id="voice-btn" title="語音輸入" aria-label="語音搜尋">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
       </button>
@@ -94,11 +94,11 @@
   <div id="m-sc" class="modal hidden">
     <div class="mbox glass">
       <h3 id="m-sc-title">新增捷徑</h3>
-      <label>名稱<input id="sc-name" type="text" autocomplete="off" placeholder="例：Google"></label>
-      <label>網址<input id="sc-url" type="url" autocomplete="off"  placeholder="https://google.com"></label>
+      <label>名稱<input id="sc-name" type="text" autocomplete="off" name="neocast-sc-name" spellcheck="false" placeholder="例：Google"></label>
+      <label>網址<input id="sc-url" type="url" autocomplete="off" name="neocast-sc-url" spellcheck="false" placeholder="https://google.com"></label>
       <label>
         自訂圖示網址 <span class="hint">（選填，留空自動抓取）</span>
-        <input id="sc-icon" type="url" autocomplete="off" placeholder="https://example.com/icon.png">
+        <input id="sc-icon" type="url" autocomplete="off" name="neocast-sc-icon" spellcheck="false" placeholder="https://example.com/icon.png">
       </label>
       <label>群組<select id="sc-grp"><option value="">無群組</option></select></label>
       <div class="mactions">
@@ -112,7 +112,7 @@
   <div id="m-grp" class="modal hidden">
     <div class="mbox glass">
       <h3>新增群組</h3>
-      <label>群組名稱<input id="grp-name" type="text" autocomplete="off" placeholder="工作、娛樂、學習…"></label>
+      <label>群組名稱<input id="grp-name" type="text" autocomplete="off" name="neocast-grp-name" spellcheck="false" placeholder="工作、娛樂、學習…"></label>
       <div class="mactions">
         <button class="bcx" data-m="m-grp">取消</button>
         <button class="bco" id="grp-ok">建立</button>
@@ -145,7 +145,7 @@
         </label>
         <label>
           Gist ID <span class="hint">（第一次留空，會自動建立）</span>
-          <input id="cfg-gid" type="text" autocomplete="off" placeholder="首次儲存後自動填入">
+          <input id="cfg-gid" type="text" autocomplete="off" name="neocast-gid" spellcheck="false" placeholder="首次儲存後自動填入">
         </label>
       <div class="cfg-sec">
         <div class="cfg-sec-title">🔧 進階</div>
@@ -183,7 +183,7 @@
         <div class="cfg-sec-title">👤 個人設定</div>
         <label>
           暱稱
-          <input id="cfg-nickname" type="text" autocomplete="off" placeholder="宇">
+          <input id="cfg-nickname" type="text" autocomplete="off" name="neocast-nickname" spellcheck="false" placeholder="宇">
         </label>
       </div>
 
@@ -191,7 +191,7 @@
         <div class="cfg-sec-title">🌤 天氣設定</div>
         <label>
           城市名稱
-          <input id="cfg-city" type="text" autocomplete="off" placeholder="台南">
+          <input id="cfg-city" type="text" autocomplete="off" name="neocast-city" spellcheck="false" placeholder="台南">
           <span class="hint">顯示在時鐘問候語旁邊</span>
         </label>
         <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
