@@ -963,6 +963,9 @@ async function reverseGeocode(lat, lon) {
 ───────────────────────────────────── */
 const PRIVATE_GROUP_ID   = '__private__';
 const PRIVATE_STICKY_TAG = '__private_sticky__';
+const UNCLASSIFIED_ID    = '__unclassified__';
+
+let grpEditMode = false; // 捷徑分類管理模式
 
 function initLockBtn() {
   const btn  = $('lock-btn');
@@ -1099,23 +1102,51 @@ function renderShortcutsWidget(container) {
 
   // Groups bar
   const bar = el('div', 'sc-groups');
-  bar.appendChild(makeGrpTab('all', '全部'));
+
+  // 全部（固定，不可刪/改名）
+  bar.appendChild(makeGrpTab('all', '全部', false));
+
+  // 未分類（固定，不可刪/改名）
+  bar.appendChild(makeGrpTab(UNCLASSIFIED_ID, '未分類', false));
+
+  // 自訂分類
   S.groups.forEach(g => bar.appendChild(makeGrpTab(g.id, g.name, true)));
 
+  // 私人（解鎖時才顯示，不可刪/改名）
   if (S.privateUnlocked) {
     bar.appendChild(makeGrpTab(PRIVATE_GROUP_ID, '私人', false));
   }
 
-  const addGrpBtn = el('button', 'grp-tab add', '＋ 群組');
-  addGrpBtn.addEventListener('click', () => openModal('m-grp'));
-  bar.appendChild(addGrpBtn);
+  // ⚙ 管理模式按鈕
+  const cfgBtn = el('button', 'grp-cfg-btn' + (grpEditMode ? ' on' : ''));
+  cfgBtn.title = grpEditMode ? '完成管理' : '管理分類';
+  cfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+  cfgBtn.addEventListener('click', () => {
+    grpEditMode = !grpEditMode;
+    rerenderShortcuts();
+  });
+  bar.appendChild(cfgBtn);
+
+  // 管理模式下才顯示 ＋ 新增按鈕
+  if (grpEditMode) {
+    const addGrpBtn = el('button', 'grp-tab add');
+    addGrpBtn.textContent = '＋ 新增';
+    addGrpBtn.addEventListener('click', () => openModal('m-grp'));
+    bar.appendChild(addGrpBtn);
+  }
+
+  // 管理模式下啟用拖曳排序
+  if (grpEditMode) initGrpDrag(bar, container);
+
   container.appendChild(bar);
 
-  // Grid — filter out private shortcuts from 'all'
+  // Grid — filter based on activeGroup
   const grid = el('div', 'sc-grid');
   let visible;
   if (S.activeGroup === 'all') {
     visible = S.shortcuts.filter(s => s.groupId !== PRIVATE_GROUP_ID);
+  } else if (S.activeGroup === UNCLASSIFIED_ID) {
+    visible = S.shortcuts.filter(s => !s.groupId || s.groupId === '');
   } else {
     visible = S.shortcuts.filter(s => s.groupId === S.activeGroup);
   }
@@ -1128,24 +1159,166 @@ function renderShortcutsWidget(container) {
   add.addEventListener('click', () => openScModal());
   container.appendChild(add);
 
-  // Re-init drag for shortcuts
   initScDrag(grid);
 }
 
-function makeGrpTab(id, name, deletable = false) {
-  const btn = el('button', 'grp-tab' + (S.activeGroup === id ? ' on' : ''), name);
-  btn.addEventListener('click', () => { S.activeGroup = id; rerenderShortcuts(); });
-  if (deletable) {
-    btn.addEventListener('contextmenu', e => {
-      e.preventDefault();
+function makeGrpTab(id, name, editable = false) {
+  const isFixed = !editable; // 全部、未分類、私人
+  const isOn = S.activeGroup === id;
+  const wrap = el('div', 'grp-tab-wrap' + (grpEditMode && editable ? ' edit-mode' : ''));
+  wrap.dataset.gid = id;
+
+  const btn = el('button', 'grp-tab' + (isOn ? ' on' : ''), name);
+
+  if (grpEditMode && editable) {
+    // 點文字直接 inline 編輯
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      startGrpRename(wrap, btn, id, name);
+    });
+  } else {
+    btn.addEventListener('click', () => {
+      if (grpEditMode) return; // 固定分類在管理模式下不切換
+      S.activeGroup = id; rerenderShortcuts();
+    });
+  }
+
+  wrap.appendChild(btn);
+
+  // 管理模式下可編輯分類才顯示 ✕
+  if (grpEditMode && editable) {
+    const x = el('button', 'grp-tab-x');
+    x.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="8" height="8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    x.title = '刪除分類';
+    x.addEventListener('click', e => {
+      e.stopPropagation();
       if (!confirm(`刪除群組「${name}」？（捷徑不會被刪除）`)) return;
       S.groups    = S.groups.filter(g => g.id !== id);
       S.shortcuts = S.shortcuts.map(s => s.groupId === id ? {...s, groupId:''} : s);
       if (S.activeGroup === id) S.activeGroup = 'all';
       lsSave(); rerenderShortcuts();
     });
+    wrap.appendChild(x);
   }
-  return btn;
+
+  return wrap;
+}
+
+function startGrpRename(wrap, btn, id, oldName) {
+  const inp = el('input', 'grp-rename-input');
+  inp.type = 'search';
+  inp.value = oldName;
+  inp.autocomplete = 'new-password';
+  inp.spellcheck = false;
+  btn.replaceWith(inp);
+  inp.focus(); inp.select();
+
+  const save = () => {
+    const val = inp.value.trim();
+    if (val && val !== oldName) {
+      const g = S.groups.find(g => g.id === id);
+      if (g) g.name = val;
+      lsSave();
+    }
+    rerenderShortcuts();
+  };
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); save(); }
+    if (e.key === 'Escape') rerenderShortcuts();
+  });
+  inp.addEventListener('blur', save);
+}
+
+function initGrpDrag(bar, container) {
+  // 只拖曳可編輯的分類（editable，有 edit-mode class）
+  const editWraps = () => [...bar.querySelectorAll('.grp-tab-wrap.edit-mode')];
+  let dragSrcId = null;
+
+  editWraps().forEach(wrap => {
+    wrap.draggable = true;
+
+    // Desktop
+    wrap.addEventListener('dragstart', e => {
+      dragSrcId = wrap.dataset.gid;
+      setTimeout(() => wrap.classList.add('grp-dragging'), 0);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    wrap.addEventListener('dragend', () => {
+      wrap.classList.remove('grp-dragging');
+      bar.querySelectorAll('.grp-drag-over').forEach(c => c.classList.remove('grp-drag-over'));
+      dragSrcId = null;
+    });
+    wrap.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (wrap.dataset.gid === dragSrcId) return;
+      bar.querySelectorAll('.grp-drag-over').forEach(c => c.classList.remove('grp-drag-over'));
+      wrap.classList.add('grp-drag-over');
+    });
+    wrap.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragSrcId || dragSrcId === wrap.dataset.gid) return;
+      const si = S.groups.findIndex(g => g.id === dragSrcId);
+      const di = S.groups.findIndex(g => g.id === wrap.dataset.gid);
+      if (si < 0 || di < 0) return;
+      const [moved] = S.groups.splice(si, 1);
+      S.groups.splice(di, 0, moved);
+      lsSave(); rerenderShortcuts();
+    });
+
+    // Mobile touch
+    let touchSrcId = null, ghost = null, startY = 0, startX = 0;
+    wrap.addEventListener('touchstart', e => {
+      const touch = e.touches[0];
+      startX = touch.clientX; startY = touch.clientY;
+      touchSrcId = wrap.dataset.gid;
+    }, { passive: true });
+
+    const onTouchMove = e => {
+      if (!touchSrcId) return;
+      const touch = e.touches[0];
+      if (!ghost) {
+        const dx = touch.clientX - startX, dy = touch.clientY - startY;
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        ghost = wrap.cloneNode(true);
+        ghost.className = 'grp-tab-wrap edit-mode grp-ghost';
+        ghost.style.cssText = `position:fixed;pointer-events:none;z-index:9999;opacity:.8;`;
+        document.body.appendChild(ghost);
+        wrap.classList.add('grp-dragging');
+      }
+      ghost.style.left = (touch.clientX - wrap.offsetWidth / 2) + 'px';
+      ghost.style.top  = (touch.clientY - wrap.offsetHeight / 2) + 'px';
+      // 找目標
+      ghost.style.display = 'none';
+      const el2 = document.elementFromPoint(touch.clientX, touch.clientY);
+      ghost.style.display = '';
+      const targetWrap = el2?.closest('.grp-tab-wrap.edit-mode');
+      bar.querySelectorAll('.grp-drag-over').forEach(c => c.classList.remove('grp-drag-over'));
+      if (targetWrap && targetWrap !== wrap) targetWrap.classList.add('grp-drag-over');
+    };
+    const onTouchEnd = e => {
+      if (!touchSrcId) return;
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+      if (ghost) { ghost.remove(); ghost = null; }
+      wrap.classList.remove('grp-dragging');
+      const overEl = bar.querySelector('.grp-drag-over');
+      bar.querySelectorAll('.grp-drag-over').forEach(c => c.classList.remove('grp-drag-over'));
+      if (overEl && overEl !== wrap) {
+        const si = S.groups.findIndex(g => g.id === touchSrcId);
+        const di = S.groups.findIndex(g => g.id === overEl.dataset.gid);
+        if (si >= 0 && di >= 0) {
+          const [moved] = S.groups.splice(si, 1);
+          S.groups.splice(di, 0, moved);
+          lsSave(); rerenderShortcuts();
+        }
+      }
+      touchSrcId = null;
+    };
+    wrap.addEventListener('touchstart', () => {
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd, { passive: true });
+    }, { passive: true });
+  });
 }
 
 function getFav(url) {
