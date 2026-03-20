@@ -3835,10 +3835,6 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   });
 
   renderFeed();
-  const YT_CACHE_MS = 30 * 60 * 1000;
-  if (S.yt.channels?.length && (!S.yt.items?.length || !S.yt.fetchedAt || (Date.now() - S.yt.fetchedAt) >= YT_CACHE_MS)) {
-    fetchYoutubeFeed(false).then(() => renderFeed());
-  }
 }
 
 function showYtGroupPicker(ch, onDone) {
@@ -4708,10 +4704,7 @@ function renderAll() {
   if (animeBody) renderAnimeWidget(animeBody);
   const mobileAnimeBody = document.querySelector('#mobile-layout .anime-inner');
   if (mobileAnimeBody) renderAnimeWidget(mobileAnimeBody);
-  const ytBody = document.querySelector('.widget[data-wid="youtube"] .yt-inner');
-  if (ytBody) renderYoutubeWidget(ytBody);
-  const mobileYtBody = document.querySelector('#mobile-layout .yt-inner');
-  if (mobileYtBody) renderYoutubeWidget(mobileYtBody);
+  // YouTube widget 不在 renderAll 裡重建，由 setInterval 定時控制
 }
 
 /* ─────────────────────────────────────
@@ -4848,17 +4841,30 @@ async function initAutoSync() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   await init();
-  // 先等 Gist 同步拉取完（取得最新 kwFetchedAt），再由 fetchNews 判斷哪些關鍵字需要更新
-  await gistAutoSync();
-  // 定時同步 & visibilitychange（不需要 await）
+  // Gist 同步（只同步設定，不觸發任何 API 抓取）
+  gistAutoSync();
   setInterval(gistAutoSync, 5 * 60 * 1000);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') gistAutoSync();
   });
-  // Gist 拉完後，只有當有關鍵字過期時才觸發更新
-  const now = Date.now();
-  const hasExpired = (S.news.keywords || []).some(kw =>
-    !S.news.kwFetchedAt?.[kw] || (now - S.news.kwFetchedAt[kw]) >= NEWS_CACHE_MS
-  );
-  if (hasExpired) fetchNews();
+  // 新聞定時更新：每 4 小時檢查一次
+  setInterval(() => {
+    const now = Date.now();
+    const hasExpired = (S.news.keywords || []).some(kw =>
+      !S.news.kwFetchedAt?.[kw] || (now - S.news.kwFetchedAt[kw]) >= NEWS_CACHE_MS
+    );
+    if (hasExpired) fetchNews();
+  }, NEWS_CACHE_MS);
+  // YouTube 定時更新：每 30 分鐘檢查一次
+  setInterval(() => {
+    const YT_CACHE_MS = 30 * 60 * 1000;
+    if (S.yt.channels?.length && (!S.yt.fetchedAt || (Date.now() - S.yt.fetchedAt) >= YT_CACHE_MS)) {
+      const ytBody = document.querySelector('.widget[data-wid="youtube"] .yt-inner');
+      const mobileYtBody = document.querySelector('#mobile-layout .yt-inner');
+      fetchYoutubeFeed(false).then(() => {
+        if (ytBody) renderYoutubeWidget(ytBody);
+        if (mobileYtBody) renderYoutubeWidget(mobileYtBody);
+      });
+    }
+  }, 30 * 60 * 1000);
 });
