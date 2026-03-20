@@ -770,6 +770,7 @@ function startTitleEdit(ttlEl, wid, defaultTitle, pencilBtn) {
   ttlEl.textContent = '';
   const inp = document.createElement('input');
   inp.className = 'w-title-input';
+  inp.type = 'search';
   inp.value = current;
   inp.autocomplete = 'off';
   inp.setAttribute('autocomplete', 'off');
@@ -1491,7 +1492,7 @@ function renderNewsKws() {
   addBtn.addEventListener('click', () => {
     addWrap.innerHTML = '';
     const inp = document.createElement('input');
-    inp.className = 'kw-add-input'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off'; inp.name = 'neocast-kw'; inp.spellcheck = false;
+    inp.className = 'kw-add-input'; inp.type = 'search'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off'; inp.name = 'neocast-kw'; inp.spellcheck = false;
     inp.setAttribute('autocomplete', 'off'); inp.name = 'news-keyword'; inp.setAttribute('inputmode', 'text');
     addWrap.appendChild(inp); inp.focus();
     const doConfirm = () => {
@@ -1843,7 +1844,7 @@ function mountStickyTagBar(tagBar, bodyEl) {
     addChip.addEventListener('click', () => {
       // 把 ＋ 換成 input
       const inp = el('input', 'sticky-tag-input');
-      inp.placeholder = '分類名稱…';
+      inp.type = 'search'; inp.placeholder = '分類名稱…';
       inp.autocomplete = 'off'; inp.name = 'neocast-tag'; inp.spellcheck = false;
       inp.setAttribute('autocomplete', 'off'); inp.name = 'sticky-tag'; inp.setAttribute('inputmode', 'text');
       addChip.replaceWith(inp);
@@ -1910,7 +1911,7 @@ function buildStickiesWidget() {
   // ── 搜尋框（置中，插在 w-title 後） ──
   const searchWrap = el('div', 'sticky-search-wrap');
   const searchInp = el('input', 'sticky-search-inp');
-  searchInp.type = 'text';
+  searchInp.type = 'search';
   searchInp.placeholder = '搜尋便利貼…';
   searchInp.autocomplete = 'search'; searchInp.name = 'neocast-sticky-search'; searchInp.spellcheck = false;
   searchInp.setAttribute('autocomplete', 'off');
@@ -2049,7 +2050,7 @@ function renderStickiesWidget(container) {
   });
 
   const inp = el('input', 'sticky-input');
-  inp.type = 'text';
+  inp.type = 'search';
   inp.placeholder = '新增待辦…';
   inp.autocomplete = 'off'; inp.name = 'neocast-sticky'; inp.spellcheck = false;
   inp.setAttribute('autocomplete', 'off');
@@ -2185,6 +2186,7 @@ function makeStickyCard(sticky, container) {
 
 function startEdit(sticky, textEl, card, container) {
   const inp = el('input', 'sticky-edit-input');
+  inp.type = 'search';
   inp.value = sticky.text;
   inp.autocomplete = 'off'; inp.name = 'neocast-sticky-edit'; inp.spellcheck = false;
   inp.setAttribute('autocomplete', 'off');
@@ -3122,7 +3124,7 @@ async function showAnimeSheet(anime) {
     e.stopPropagation();
     const inp = document.createElement('input');
     inp.className = 'anime-sheet-title-input';
-    inp.value = sheetTitle.textContent;
+    inp.type = 'search'; inp.value = sheetTitle.textContent;
     inp.autocomplete = 'off'; inp.name = 'neocast-anime-title'; inp.spellcheck = false;
     sheetTitle.replaceWith(inp);
     inp.focus();
@@ -3577,7 +3579,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   const addSection = el('div', 'yt-mgr-section');
   const inputRow = el('div', 'yt-input-row');
   const inp = el('input', 'yt-ch-input');
-  inp.type = 'text'; inp.autocomplete = 'off'; inp.name = 'neocast-yt-ch';
+  inp.type = 'search'; inp.autocomplete = 'off'; inp.name = 'neocast-yt-ch';
   inp.placeholder = '@頻道名稱 或貼上頻道網址'; inp.spellcheck = false;
   const addConfirmBtn = el('button', 'yt-add-confirm-btn', '新增');
   const addStatus = el('div', 'yt-add-status');
@@ -3693,7 +3695,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       row.addEventListener('dblclick', e => {
         e.stopPropagation();
         const inp = document.createElement('input');
-        inp.className = 'yt-grp-rename-input'; inp.value = g; inp.autocomplete = 'off'; inp.name = 'neocast-yt-grp'; inp.spellcheck = false;
+        inp.className = 'yt-grp-rename-input'; inp.type = 'search'; inp.value = g; inp.autocomplete = 'off'; inp.name = 'neocast-yt-grp'; inp.spellcheck = false;
         nameSpan.replaceWith(inp); inp.focus(); inp.select();
         const save = () => {
           const val = inp.value.trim();
@@ -3716,7 +3718,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     addGrpBtn.addEventListener('click', () => {
       addGrpWrap.innerHTML = '';
       const gi = document.createElement('input');
-      gi.className = 'kw-add-input'; gi.placeholder = '分組名稱'; gi.autocomplete = 'off'; gi.name = 'neocast-yt-grp-add'; gi.spellcheck = false;
+      gi.className = 'kw-add-input'; gi.type = 'search'; gi.placeholder = '分組名稱'; gi.autocomplete = 'off'; gi.name = 'neocast-yt-grp-add'; gi.spellcheck = false;
       addGrpWrap.appendChild(gi); gi.focus();
       const save = () => {
         const val = gi.value.trim();
@@ -4414,7 +4416,7 @@ function renderMobileNews(container) {
     addBtn.addEventListener('click', () => {
       addWrap.innerHTML = '';
       const inp = document.createElement('input');
-      inp.className = 'kw-add-input'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off'; inp.name = 'neocast-kw-m'; inp.spellcheck = false;
+      inp.className = 'kw-add-input'; inp.type = 'search'; inp.placeholder = '關鍵字'; inp.autocomplete = 'off'; inp.name = 'neocast-kw-m'; inp.spellcheck = false;
       addWrap.appendChild(inp); inp.focus();
       const doConfirm = () => {
         const val = inp.value.trim();
@@ -4494,7 +4496,7 @@ function startMobileTitleEdit(titleEl, wid, defaultLabel, icon) {
   const inp = document.createElement('input');
   inp.className = 'w-title-input';
   inp.value = current;
-  inp.autocomplete = 'off'; inp.name = 'neocast-panel-title'; inp.spellcheck = false;
+  inp.type = 'search'; inp.autocomplete = 'off'; inp.name = 'neocast-panel-title'; inp.spellcheck = false;
   titleEl.appendChild(inp);
   inp.focus();
   inp.select();
@@ -4656,7 +4658,7 @@ function initMobileLayout() {
         // ── 手機版搜尋框 ──
         const mSearchWrap = el('div', 'sticky-search-wrap sticky-search-mobile');
         const mSearchInp = el('input', 'sticky-search-inp');
-        mSearchInp.type = 'text';
+        mSearchInp.type = 'search';
         mSearchInp.placeholder = '搜尋…';
         mSearchInp.autocomplete = 'search'; mSearchInp.name = 'neocast-sticky-search-m'; mSearchInp.spellcheck = false;
         mSearchInp.value = S.stickySearch || '';

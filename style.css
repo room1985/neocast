@@ -39,6 +39,12 @@ body {
 svg { display:block; }
 button { cursor:pointer; font-family:inherit; outline:none; -webkit-tap-highlight-color:transparent; }
 input,select { font-family:inherit; }
+/* 移除 type=search 的系統預設樣式和清除鈕 */
+input[type="search"] { -webkit-appearance: none; appearance: none; }
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
 a { color:inherit; text-decoration:none; }
 
 /* ── Scrollbars ── */
