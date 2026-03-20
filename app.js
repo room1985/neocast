@@ -48,6 +48,8 @@ let S = {
   stickies:   [],
   stickyTags: [],          // 所有標籤 string[]
   activeStickyTag: 'all',  // 'all' 或 tag 字串
+  stickyLocked:   false,   // 禁用編輯/拖曳（不寫 Gist，純 UI 狀態）
+  stickySearch:   '',      // 目前搜尋關鍵字
   widgets: {
     clock:     { col:0, row:0, w:6, h:2, visible:false },
     shortcuts: { col:6, row:2, w:6, h:5, visible:false },
@@ -1788,7 +1790,8 @@ function mountStickyTagBar(tagBar, bodyEl) {
     // 全部
     const allBtn = el('span', 'sticky-tag-chip' + (S.activeStickyTag === 'all' ? ' on' : ''), '全部');
     allBtn.addEventListener('click', () => {
-      S.activeStickyTag = 'all'; lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+      S.activeStickyTag = 'all'; S.stickySearch = ''; clearStickySearchUI();
+      lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
     });
     tagBar.appendChild(allBtn);
 
@@ -1814,7 +1817,8 @@ function mountStickyTagBar(tagBar, bodyEl) {
 
       chip.addEventListener('click', () => {
         if (tagEditMode) return;
-        S.activeStickyTag = tag; lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+        S.activeStickyTag = tag; S.stickySearch = ''; clearStickySearchUI();
+        lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
       });
       tagBar.appendChild(chip);
     });
@@ -1824,7 +1828,8 @@ function mountStickyTagBar(tagBar, bodyEl) {
       const privChip = el('span', 'sticky-tag-chip sticky-tag-private' + (S.activeStickyTag === PRIVATE_STICKY_TAG ? ' on' : ''), '私人');
       privChip.addEventListener('click', () => {
         if (tagEditMode) return;
-        S.activeStickyTag = PRIVATE_STICKY_TAG; lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+        S.activeStickyTag = PRIVATE_STICKY_TAG; S.stickySearch = ''; clearStickySearchUI();
+        lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
       });
       tagBar.appendChild(privChip);
     }
@@ -1865,6 +1870,12 @@ function mountStickyTagBar(tagBar, bodyEl) {
   renderStickyTagBar();
 }
 
+// 清空所有搜尋框 UI（切換分類時呼叫）
+function clearStickySearchUI() {
+  document.querySelectorAll('.sticky-search-inp').forEach(inp => { inp.value = ''; });
+  document.querySelectorAll('.sticky-search-clear').forEach(btn => { btn.style.display = 'none'; });
+}
+
 function buildStickiesWidget() {
   const body = el('div', 'stickies-inner');
   body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
@@ -1891,6 +1902,60 @@ function buildStickiesWidget() {
   if (delBtn) head.insertBefore(delCheckedBtn, delBtn);
   else head.appendChild(delCheckedBtn);
 
+  // ── 搜尋框（置中，插在 w-title 後） ──
+  const searchWrap = el('div', 'sticky-search-wrap');
+  const searchInp = el('input', 'sticky-search-inp');
+  searchInp.type = 'text';
+  searchInp.placeholder = '搜尋便利貼…';
+  searchInp.autocomplete = 'off';
+  searchInp.value = S.stickySearch || '';
+  const searchClear = el('button', 'sticky-search-clear');
+  searchClear.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  searchClear.title = '清除搜尋';
+  searchClear.style.display = S.stickySearch ? '' : 'none';
+  searchInp.addEventListener('input', () => {
+    S.stickySearch = searchInp.value;
+    searchClear.style.display = S.stickySearch ? '' : 'none';
+    renderStickiesWidget(body);
+  });
+  searchClear.addEventListener('mousedown', e => {
+    e.preventDefault();
+    S.stickySearch = '';
+    searchInp.value = '';
+    searchClear.style.display = 'none';
+    renderStickiesWidget(body);
+    searchInp.focus();
+  });
+  searchWrap.appendChild(searchInp);
+  searchWrap.appendChild(searchClear);
+  // 插在 w-title 後面（置中效果由 flex 控制）
+  const wTitle = head.querySelector('.w-title');
+  if (wTitle) wTitle.after(searchWrap);
+  else head.insertBefore(searchWrap, head.firstChild);
+
+  // ── 鎖頭按鈕（禁用編輯/拖曳） ──
+  const lockBtn = el('button', 'w-btn sticky-lock-btn' + (S.stickyLocked ? ' on' : ''));
+  lockBtn.title = S.stickyLocked ? '解除鎖定' : '鎖定（禁止編輯）';
+  const svgLocked  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+  const svgUnlocked = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>`;
+  lockBtn.innerHTML = S.stickyLocked ? svgLocked : svgUnlocked;
+  lockBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    S.stickyLocked = !S.stickyLocked;
+    lockBtn.classList.toggle('on', S.stickyLocked);
+    lockBtn.title = S.stickyLocked ? '解除鎖定' : '鎖定（禁止編輯）';
+    lockBtn.innerHTML = S.stickyLocked ? svgLocked : svgUnlocked;
+    // 同步所有便利貼 lock 按鈕（桌面+手機共用 S.stickyLocked）
+    document.querySelectorAll('.sticky-lock-btn').forEach(b => {
+      b.classList.toggle('on', S.stickyLocked);
+      b.title = S.stickyLocked ? '解除鎖定' : '鎖定（禁止編輯）';
+      b.innerHTML = S.stickyLocked ? svgLocked : svgUnlocked;
+    });
+    renderStickiesWidget(body);
+  });
+  // 插在 delCheckedBtn 前（視覺上在 del-checked 左邊）
+  head.insertBefore(lockBtn, delCheckedBtn);
+
   // Update button state when checked count changes
   w._updateDelChecked = () => {
     const count = (S.stickies || []).filter(s => s.done).length;
@@ -1910,15 +1975,18 @@ function buildStickiesWidget() {
     const list   = body.querySelector('.sticky-list');
     const bar    = body.querySelector('.sticky-input-bar');
     const tagBar = body.querySelector('.sticky-tag-bar');
-    if (list && bar) {
+    if (list) {
       const tagBarH = tagBar ? tagBar.offsetHeight : 0;
-      list.style.height = (body.offsetHeight - bar.offsetHeight - tagBarH) + 'px';
+      const barH = (bar && bar.style.display !== 'none') ? bar.offsetHeight : 0;
+      list.style.height = (body.offsetHeight - barH - tagBarH) + 'px';
     }
   }).observe(body);
 }
 
 function renderStickiesWidget(container) {
   // 保留 tagBar，只清掉 list 和 input-bar
+  // 記住目前捲動位置，重建後還原（避免勾選/編輯時跳回頂端）
+  const prevScrollTop = container.querySelector('.sticky-list')?.scrollTop ?? 0;
   container.querySelectorAll('.sticky-list, .sticky-input-bar').forEach(e => e.remove());
   // 若還沒有 tagBar（首次建立），補渲染一次
   if (!container.querySelector('.sticky-tag-bar')) container._renderTagBar?.();
@@ -1935,19 +2003,28 @@ function renderStickiesWidget(container) {
     ? baseStickies
     : baseStickies.filter(s => s.tag === activeTag);
 
-  if (!visibleStickies.length) {
-    list.innerHTML = '<div class="sticky-empty">' + (activeTag === 'all' ? '輸入新增待辦事項…' : '此分類還沒有便利貼') + '</div>';
+  // 搜尋過濾
+  const searchQ = (S.stickySearch || '').trim().toLowerCase();
+  const filteredStickies = searchQ
+    ? visibleStickies.filter(s => s.text.toLowerCase().includes(searchQ))
+    : visibleStickies;
+
+  if (!filteredStickies.length) {
+    list.innerHTML = '<div class="sticky-empty">' + (searchQ ? '找不到符合的便利貼' : activeTag === 'all' ? '輸入新增待辦事項…' : '此分類還沒有便利貼') + '</div>';
   } else {
     const sorted = [
-      ...visibleStickies.filter(s => s.pinned),
-      ...visibleStickies.filter(s => !s.pinned)
+      ...filteredStickies.filter(s => s.pinned),
+      ...filteredStickies.filter(s => !s.pinned)
     ];
     sorted.forEach(s => list.appendChild(makeStickyCard(s, container)));
-    initStickyListDrag(list, container);
+    if (!S.stickyLocked) initStickyListDrag(list, container);
   }
 
-  // Input bar
+  // 搜尋中或鎖定時不顯示新增列
   const bar = el('div', 'sticky-input-bar');
+  if (searchQ || S.stickyLocked) {
+    bar.style.display = 'none';
+  }
 
   // 2×2 color grid
   let selectedColor = 'none';
@@ -1992,14 +2069,16 @@ function renderStickiesWidget(container) {
 
   // JS height — most reliable, bypasses all flex overflow quirks
   requestAnimationFrame(() => {
-    const barH    = bar.offsetHeight || 53;
+    const barH    = (bar.style.display !== 'none') ? (bar.offsetHeight || 53) : 0;
     const tagBarEl = container.querySelector('.sticky-tag-bar');
     const tagBarH = tagBarEl ? tagBarEl.offsetHeight : 0;
     const containerH = container.offsetHeight;
-    if (containerH > barH) {
+    if (containerH > 0) {
       list.style.height = (containerH - barH - tagBarH) + 'px';
       list.style.overflowY = 'auto';
     }
+    // 還原捲動位置（勾選/編輯完後不跳回頂端）
+    if (prevScrollTop > 0) list.scrollTop = prevScrollTop;
   });
 }
 
@@ -2010,9 +2089,10 @@ function makeStickyCard(sticky, container) {
   card.style.background  = c.bg;
   card.style.borderColor = c.border;
 
-  // Drag handle
+  // Drag handle — 鎖定時隱藏
   const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
   drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>`;
+  if (S.stickyLocked) drag.style.display = 'none';
 
   // Square checkbox — toggle done state
   const chk = el('button', 'sticky-chk' + (sticky.done ? ' checked' : ''));
@@ -2080,12 +2160,14 @@ function makeStickyCard(sticky, container) {
     startEdit(sticky, textEl, card, container);
   };
 
-  textEl.addEventListener('mousedown', () => { longPressTimer = setTimeout(onLongPress, 500); });
-  textEl.addEventListener('mouseup', () => clearTimeout(longPressTimer));
-  textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
-  textEl.addEventListener('touchstart', () => { longPressTimer = setTimeout(onLongPress, 500); }, { passive: true });
-  textEl.addEventListener('touchend', () => clearTimeout(longPressTimer), { passive: true });
-  card.addEventListener('contextmenu', e => { e.preventDefault(); onLongPress(); });
+  if (!S.stickyLocked) {
+    textEl.addEventListener('mousedown', () => { longPressTimer = setTimeout(onLongPress, 500); });
+    textEl.addEventListener('mouseup', () => clearTimeout(longPressTimer));
+    textEl.addEventListener('mouseleave', () => clearTimeout(longPressTimer));
+    textEl.addEventListener('touchstart', () => { longPressTimer = setTimeout(onLongPress, 500); }, { passive: true });
+    textEl.addEventListener('touchend', () => clearTimeout(longPressTimer), { passive: true });
+    card.addEventListener('contextmenu', e => { e.preventDefault(); onLongPress(); });
+  }
 
   return card;
 }
@@ -4556,6 +4638,58 @@ function initMobileLayout() {
         updateMDelChecked();
         panel._updateDelChecked = updateMDelChecked;
         panelHead.insertBefore(mDelCheckedBtn, expandBtn);
+
+        // ── 手機版搜尋框 ──
+        const mSearchWrap = el('div', 'sticky-search-wrap sticky-search-mobile');
+        const mSearchInp = el('input', 'sticky-search-inp');
+        mSearchInp.type = 'text';
+        mSearchInp.placeholder = '搜尋…';
+        mSearchInp.autocomplete = 'off';
+        mSearchInp.value = S.stickySearch || '';
+        const mSearchClear = el('button', 'sticky-search-clear');
+        mSearchClear.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="10" height="10"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+        mSearchClear.style.display = S.stickySearch ? '' : 'none';
+        mSearchInp.addEventListener('input', () => {
+          S.stickySearch = mSearchInp.value;
+          mSearchClear.style.display = S.stickySearch ? '' : 'none';
+          // 同步桌面版搜尋框
+          document.querySelectorAll('.sticky-search-inp').forEach(inp => { if (inp !== mSearchInp) inp.value = S.stickySearch; });
+          document.querySelectorAll('.sticky-search-clear').forEach(btn => { btn.style.display = S.stickySearch ? '' : 'none'; });
+          const inner = panel.querySelector('.stickies-inner');
+          if (inner) renderStickiesWidget(inner);
+        });
+        mSearchClear.addEventListener('touchend', e => {
+          e.preventDefault();
+          S.stickySearch = '';
+          mSearchInp.value = '';
+          mSearchClear.style.display = 'none';
+          document.querySelectorAll('.sticky-search-inp').forEach(inp => { inp.value = ''; });
+          document.querySelectorAll('.sticky-search-clear').forEach(btn => { btn.style.display = 'none'; });
+          const inner = panel.querySelector('.stickies-inner');
+          if (inner) renderStickiesWidget(inner);
+        });
+        mSearchWrap.appendChild(mSearchInp);
+        mSearchWrap.appendChild(mSearchClear);
+        panelHead.insertBefore(mSearchWrap, expandBtn);
+
+        // ── 手機版鎖頭按鈕 ──
+        const svgLockedM  = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+        const svgUnlockedM = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>`;
+        const mLockBtn = el('button', 'w-btn sticky-lock-btn' + (S.stickyLocked ? ' on' : ''));
+        mLockBtn.title = S.stickyLocked ? '解除鎖定' : '鎖定（禁止編輯）';
+        mLockBtn.innerHTML = S.stickyLocked ? svgLockedM : svgUnlockedM;
+        mLockBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          S.stickyLocked = !S.stickyLocked;
+          document.querySelectorAll('.sticky-lock-btn').forEach(b => {
+            b.classList.toggle('on', S.stickyLocked);
+            b.title = S.stickyLocked ? '解除鎖定' : '鎖定（禁止編輯）';
+            b.innerHTML = S.stickyLocked ? svgLockedM : svgUnlockedM;
+          });
+          const inner = panel.querySelector('.stickies-inner');
+          if (inner) renderStickiesWidget(inner);
+        });
+        panelHead.insertBefore(mLockBtn, expandBtn);
       }
 
       panel.appendChild(panelHead);
