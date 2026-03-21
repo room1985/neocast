@@ -3215,10 +3215,9 @@ function renderAnimeWidget(container) {
           e.preventDefault(); // 阻止容器捲動
           const t = e.touches[0];
 
-          // 更新 ghost 位置
+          // 更新 ghost 位置（只動 Y，X 固定避免左右飄移）
           if (tGhost) {
-            tGhost.style.left = (t.clientX - card.offsetWidth / 2) + 'px';
-            tGhost.style.top  = (t.clientY - card.offsetHeight / 2) + 'px';
+            tGhost.style.top = (t.clientY - card.offsetHeight / 2) + 'px';
           }
 
           // 邊緣自動捲動
@@ -3278,10 +3277,17 @@ function renderAnimeWidget(container) {
           }, 500);
         }, { passive: true });
 
-        // touchstart 後輕微垂直移動就取消長按 timer（避免誤觸）
+        // touchstart 後移動超過 8px 才取消長按 timer
+        let tStartX = 0, tStartY = 0;
+        card.addEventListener('touchstart', e => {
+          tStartX = e.touches[0].clientX;
+          tStartY = e.touches[0].clientY;
+        }, { passive: true });
         card.addEventListener('touchmove', e => {
           if (tDragging) return; // 已進入拖曳，由 onTouchMove 接管
-          clearTimeout(tTimer);
+          const dx = e.touches[0].clientX - tStartX;
+          const dy = e.touches[0].clientY - tStartY;
+          if (Math.abs(dx) > 8 || Math.abs(dy) > 8) clearTimeout(tTimer);
         }, { passive: true });
         card.addEventListener('touchend', () => { if (!tDragging) clearTimeout(tTimer); }, { passive: true });
         card.addEventListener('touchcancel', () => { if (!tDragging) clearTimeout(tTimer); }, { passive: true });
