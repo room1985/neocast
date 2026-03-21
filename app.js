@@ -2652,14 +2652,14 @@ function initStickyListDrag(list, container) {
     const handle = card.querySelector('.sticky-handle');
     if (!handle) return;
 
-    // Desktop drag — 只能從 handle 啟動
-    card.draggable = true;
-    card.addEventListener('dragstart', e => {
-      if (!e.target.closest('.sticky-handle')) { e.preventDefault(); return; }
+    // Desktop drag — handle 設 draggable，只能從 handle 啟動
+    handle.draggable = true;
+    handle.addEventListener('dragstart', e => {
       dragSrcId = card.dataset.id;
+      e.dataTransfer.effectAllowed = 'move';
       setTimeout(() => card.classList.add('sticky-dragging'), 0);
     });
-    card.addEventListener('dragend', () => {
+    handle.addEventListener('dragend', () => {
       card.classList.remove('sticky-dragging');
       list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
       dragSrcId = null;
