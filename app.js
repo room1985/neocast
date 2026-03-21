@@ -4141,7 +4141,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
           activeGroups.delete(g);
           lsSave(); renderGroupBar(); renderChList(); renderFeed();
         });
-        wrap.appendChild(x);
+        tab.appendChild(x); // ✕ 放在 tab 按鈕內部，跟文字同框
       }
 
       groupBar.appendChild(wrap);
