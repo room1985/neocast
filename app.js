@@ -3210,25 +3210,21 @@ function renderAnimeWidget(container) {
           tDragging = false;
         };
 
-        let tClientY = 0; // 最新手指 Y（rAF 使用）
+        let tClientY = 0;
+        let tScrollDir = 0; // 1=往下, -1=往上, 0=不捲
 
         const tScroll = () => {
-          if (!tDragging) return;
+          if (!tDragging || tScrollDir === 0) {
+            tRafId = null;
+            window._activeRafs = Math.max(0, (window._activeRafs || 1) - 1);
+            return;
+          }
           const gridRect = grid.getBoundingClientRect();
           const EDGE = 60;
-          const ratio = Math.min(1, Math.max(0,
-            tClientY < gridRect.top + EDGE
-              ? (gridRect.top + EDGE - tClientY) / EDGE
-              : tClientY > gridRect.bottom - EDGE
-                ? (tClientY - (gridRect.bottom - EDGE)) / EDGE
-                : 0
-          ));
-          const SPEED = 12;
-          if (tClientY < gridRect.top + EDGE) {
-            grid.scrollTop -= SPEED * ratio;
-          } else if (tClientY > gridRect.bottom - EDGE) {
-            grid.scrollTop += SPEED * ratio;
-          }
+          const ratio = tScrollDir > 0
+            ? (tClientY - (gridRect.bottom - EDGE)) / EDGE
+            : (gridRect.top + EDGE - tClientY) / EDGE;
+          grid.scrollTop += tScrollDir * 12 * Math.min(1, Math.max(0, ratio));
           tRafId = requestAnimationFrame(tScroll);
         };
 
@@ -3241,6 +3237,19 @@ function renderAnimeWidget(container) {
           // 更新 ghost 位置（只動 Y，X 固定）
           if (tGhost) {
             tGhost.style.top = (tClientY - card.offsetHeight / 2) + 'px';
+          }
+
+          // 判斷是否在邊緣，決定啟動或停止 rAF
+          const gridRect = grid.getBoundingClientRect();
+          const EDGE = 60;
+          const newDir = tClientY < gridRect.top + EDGE ? -1
+                       : tClientY > gridRect.bottom - EDGE ? 1 : 0;
+          if (newDir !== tScrollDir) {
+            tScrollDir = newDir;
+            if (tScrollDir !== 0 && !tRafId) {
+              window._activeRafs = (window._activeRafs || 0) + 1;
+              tRafId = requestAnimationFrame(tScroll);
+            }
           }
 
           // 偵測目標卡片（用 ghost 中心 X，不用手指 X）
@@ -3278,15 +3287,14 @@ function renderAnimeWidget(container) {
           tClientY = e.touches[0].clientY;
           tTimer = setTimeout(() => {
             tDragging = true;
+            tScrollDir = 0;
             const rect = card.getBoundingClientRect();
-            tGhostCenterX = rect.left + rect.width / 2; // 記錄 ghost 中心 X
+            tGhostCenterX = rect.left + rect.width / 2;
             tGhost = card.cloneNode(true);
             tGhost.style.cssText = `position:fixed;z-index:9999;opacity:.75;pointer-events:none;width:${card.offsetWidth}px;transform:scale(1.05);left:${rect.left}px;top:${rect.top}px;`;
             document.body.appendChild(tGhost);
             card.classList.add('anime-card-dragging');
-            // 啟動 rAF 自動捲動
-            tRafId = requestAnimationFrame(tScroll);
-            // 確認進入拖曳後才掛 passive:false 的 touchmove
+            // rAF 由 onTouchMove 根據邊緣位置決定是否啟動
             card.addEventListener('touchmove', onTouchMove, { passive: false });
             card.addEventListener('touchend', onTouchEnd, { passive: true });
             card.addEventListener('touchcancel', onTouchEnd, { passive: true });
@@ -5393,4 +5401,58 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
     }
   }, 30 * 60 * 1000);
+
+  // ── 效能監控 ──
+  const perfBtn   = document.getElementById('perf-btn');
+  const perfPanel = document.getElementById('perf-panel');
+  const perfFps   = document.getElementById('perf-fps');
+  const perfMem   = document.getElementById('perf-mem');
+  const perfRaf   = document.getElementById('perf-raf');
+
+  let perfActive = false;
+  let perfRafId  = null;
+  let perfFrames = 0;
+  let perfLast   = performance.now();
+
+  const perfLoop = ts => {
+    if (!perfActive) return;
+    perfFrames++;
+    const elapsed = ts - perfLast;
+    if (elapsed >= 500) { // 每 0.5 秒更新一次
+      const fps = Math.round(perfFrames / (elapsed / 1000));
+      perfFps.textContent = `FPS: ${fps}`;
+      perfFps.style.color = fps >= 55 ? '#4ade80' : fps >= 30 ? '#f59e0b' : '#f87171';
+
+      // Memory（Chrome 限定，其他瀏覽器不支援）
+      if (performance.memory) {
+        const used = (performance.memory.usedJSHeapSize / 1048576).toFixed(1);
+        const total = (performance.memory.totalJSHeapSize / 1048576).toFixed(1);
+        perfMem.textContent = `MEM: ${used}/${total}MB`;
+        const ratio = performance.memory.usedJSHeapSize / performance.memory.totalJSHeapSize;
+        perfMem.style.color = ratio < 0.7 ? '#60a5fa' : ratio < 0.9 ? '#f59e0b' : '#f87171';
+      } else {
+        perfMem.textContent = 'MEM: N/A';
+      }
+
+      // 目前存活的 rAF 數量（偵測是否有未清除的 rAF）
+      perfRaf.textContent = `rAF: ${window._activeRafs || 0}`;
+
+      perfFrames = 0;
+      perfLast   = ts;
+    }
+    perfRafId = requestAnimationFrame(perfLoop);
+  };
+
+  perfBtn.addEventListener('click', () => {
+    perfActive = !perfActive;
+    perfBtn.classList.toggle('on', perfActive);
+    perfPanel.classList.toggle('hidden', !perfActive);
+    if (perfActive) {
+      perfFrames = 0;
+      perfLast   = performance.now();
+      perfRafId  = requestAnimationFrame(perfLoop);
+    } else {
+      if (perfRafId) { cancelAnimationFrame(perfRafId); perfRafId = null; }
+    }
+  });
 });
