@@ -3135,21 +3135,14 @@ a { color:inherit; text-decoration:none; }
   border-color: rgba(255,255,255,.2);
 }
 .yt-grp-tag-x {
-  width: 16px; height: 16px;
-  border-radius: 50%;
-  background: rgba(248,113,113,.25);
-  border: 1px solid rgba(248,113,113,.4);
-  color: #f87171;
-  display: flex; align-items: center; justify-content: center;
+  font-size: .65rem;
+  opacity: .6;
   cursor: pointer;
-  margin-left: -6px;
-  flex-shrink: 0;
-  z-index: 1;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  transition: background .15s;
+  line-height: 1;
+  transition: opacity .15s;
+  margin-left: 2px;
 }
-.yt-grp-tag-x:hover { background: rgba(248,113,113,.5); }
+.yt-grp-tag-x:hover { opacity: 1; }
 .yt-grp-cfg-btn {
   width: 26px; height: 26px;
   border-radius: 8px;

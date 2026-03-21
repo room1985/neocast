@@ -4131,11 +4131,11 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       wrap.appendChild(tab);
 
       if (grpEditMode) {
-        const x = el('button', 'yt-grp-tag-x');
-        x.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="8" height="8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+        const x = el('span', 'yt-grp-tag-x', '✕');
         x.title = '刪除分組';
         x.addEventListener('click', e => {
           e.stopPropagation();
+          if (!confirm(`刪除分組「${g}」？（頻道不會被刪除）`)) return;
           S.yt.groups = (S.yt.groups || []).filter(x => x !== g);
           S.yt.channels.forEach(ch => { ch.groups = (ch.groups || []).filter(x => x !== g); });
           activeGroups.delete(g);
