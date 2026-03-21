@@ -3993,7 +3993,11 @@ function initYtGrpDrag(groupBar) {
       e.preventDefault();
       const t = e.touches[0];
       const prevY = tClientY; tClientY = t.clientY;
-      if (tGhost) tGhost.style.top = (parseFloat(tGhost.style.top) + (tClientY - prevY)) + 'px';
+      // ghost X Y 都跟著手指動（wrap 排列是換行的）
+      if (tGhost) {
+        tGhost.style.top = (parseFloat(tGhost.style.top) + (tClientY - prevY)) + 'px';
+        tGhost.style.left = (t.clientX - tGhost.offsetWidth / 2) + 'px';
+      }
 
       const barRect = groupBar.getBoundingClientRect();
       const EDGE = 50;
@@ -4117,7 +4121,6 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
 
       const tab = el('button', 'yt-group-tab' + (activeGroups.has(g) ? ' on' : ''), g);
       if (grpEditMode) {
-        // 點文字直接改名
         tab.addEventListener('click', e => { e.stopPropagation(); startYtGrpRename(wrap, tab, g); });
       } else {
         tab.addEventListener('click', () => {
@@ -4166,13 +4169,6 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       });
       groupBar.appendChild(addChip);
     }
-
-    // ⚙ 管理按鈕
-    const cfgBtn = el('button', 'yt-grp-cfg-btn' + (grpEditMode ? ' on' : ''));
-    cfgBtn.title = grpEditMode ? '完成管理' : '管理分組';
-    cfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
-    cfgBtn.addEventListener('click', () => { grpEditMode = !grpEditMode; renderGroupBar(); });
-    groupBar.appendChild(cfgBtn);
 
     // 管理模式下啟用拖曳排序
     if (grpEditMode) initYtGrpDrag(groupBar);
@@ -4296,8 +4292,10 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   addBtn.addEventListener('click', e => {
     e.stopPropagation();
     managerOpen = !managerOpen;
+    grpEditMode = managerOpen; // 開管理面板時同步開啟標籤編輯模式
     managerPanel.style.display = managerOpen ? '' : 'none';
     addBtn.classList.toggle('active', managerOpen);
+    renderGroupBar(); // 重繪標籤列（加/移除編輯模式）
     if (managerOpen) { renderChList(); inp.focus(); }
   });
   container.appendChild(managerPanel);
