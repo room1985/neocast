@@ -3250,7 +3250,7 @@ function renderAnimeWidget(container) {
 
         const tCleanup = () => {
           clearTimeout(tTimer);
-          if (tRafId) { cancelAnimationFrame(tRafId); tRafId = null; }
+          if (tRafId) { cancelAnimationFrame(tRafId); window._rafSet?.delete(tRafId); tRafId = null; }
           if (tGhost) { tGhost.remove(); tGhost = null; }
           card.classList.remove('anime-card-dragging');
           grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
@@ -3262,8 +3262,8 @@ function renderAnimeWidget(container) {
 
         const tScroll = () => {
           if (!tDragging || tScrollDir === 0) {
+            if (tRafId) { window._rafSet?.delete(tRafId); }
             tRafId = null;
-            window._activeRafs = Math.max(0, (window._activeRafs || 1) - 1);
             return;
           }
           const gridRect = grid.getBoundingClientRect();
@@ -3294,8 +3294,9 @@ function renderAnimeWidget(container) {
           if (newDir !== tScrollDir) {
             tScrollDir = newDir;
             if (tScrollDir !== 0 && !tRafId) {
-              window._activeRafs = (window._activeRafs || 0) + 1;
+              if (!window._rafSet) window._rafSet = new Set();
               tRafId = requestAnimationFrame(tScroll);
+              window._rafSet.add(tRafId);
             }
           }
 
@@ -5495,7 +5496,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
 
       // 目前存活的 rAF 數量（偵測是否有未清除的 rAF）
-      perfRaf.textContent = `rAF: ${window._activeRafs || 0}`;
+      perfRaf.textContent = `rAF: ${window._rafSet?.size || 0}`;
 
       perfFrames = 0;
       perfLast   = ts;
