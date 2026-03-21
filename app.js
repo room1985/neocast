@@ -3302,7 +3302,7 @@ function renderAnimeWidget(container) {
 
           // 偵測目標卡片（隱藏 ghost 避免自身干擾，用手指實際 X）
           if (tGhost) tGhost.style.display = 'none';
-          const el2 = document.elementFromPoint(touch.clientX, tClientY);
+          const el2 = document.elementFromPoint(t.clientX, tClientY);
           if (tGhost) tGhost.style.display = '';
           const target = el2?.closest('.anime-card');
           grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
