@@ -3307,10 +3307,10 @@ function renderAnimeWidget(container) {
         };
 
         const onTouchEnd = () => {
-          if (tRafId) { cancelAnimationFrame(tRafId); tRafId = null; }
-          card.removeEventListener('touchmove', onTouchMove);
-          card.removeEventListener('touchend', onTouchEnd);
-          card.removeEventListener('touchcancel', onTouchEnd);
+          if (tRafId) { cancelAnimationFrame(tRafId); window._dragScrollActive = false; tRafId = null; }
+          document.removeEventListener('touchmove', onTouchMove);
+          document.removeEventListener('touchend', onTouchEnd);
+          document.removeEventListener('touchcancel', onTouchEnd);
           if (!tDragging) { clearTimeout(tTimer); return; }
           const wasDragging = tDragging;
           tCleanup();
@@ -3342,9 +3342,9 @@ function renderAnimeWidget(container) {
             document.body.appendChild(tGhost);
             card.classList.add('anime-card-dragging');
             // rAF 由 onTouchMove 根據邊緣位置決定是否啟動
-            card.addEventListener('touchmove', onTouchMove, { passive: false });
-            card.addEventListener('touchend', onTouchEnd, { passive: true });
-            card.addEventListener('touchcancel', onTouchEnd, { passive: true });
+            document.addEventListener('touchmove', onTouchMove, { passive: false });
+            document.addEventListener('touchend', onTouchEnd, { passive: true });
+            document.addEventListener('touchcancel', onTouchEnd, { passive: true });
           }, 500);
         }, { passive: true });
 
