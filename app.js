@@ -2682,69 +2682,116 @@ function initStickyListDrag(list, container) {
       renderStickiesWidget(container);
     });
 
-    // Mobile touch drag via handle — touchmove 動態掛載確保 passive:false 有效
-    handle.addEventListener('touchstart', e => {
-      e.stopPropagation(); // 阻止冒泡到 swipeArea
-      const touch = e.touches[0];
-      startX = touch.clientX;
-      startY = touch.clientY;
-      dragSrcId = card.dataset.id;
-      isDragging = true;
+    // Mobile touch drag via handle — 長按 500ms 啟動，8px 移動取消，邊緣自動捲動
+    let tTimer = null, tDragging = false, tRafId = null;
+    let tClientY = 0, tScrollDir = 0;
+    let tStartX = 0, tStartY = 0;
 
-      setTimeout(() => {
-        if (!dragSrcId) return;
-        card.classList.add('sticky-dragging');
+    const tCleanup = () => {
+      clearTimeout(tTimer);
+      if (tRafId) { cancelAnimationFrame(tRafId); tRafId = null; }
+      if (ghost) { ghost.remove(); ghost = null; }
+      card.classList.remove('sticky-dragging');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      tDragging = false;
+      isDragging = false;
+      dragSrcId = null;
+      tScrollDir = 0;
+    };
+
+    const tScroll = () => {
+      if (!tDragging || tScrollDir === 0) { tRafId = null; return; }
+      const listRect = list.getBoundingClientRect();
+      const EDGE = 60;
+      const ratio = tScrollDir > 0
+        ? (tClientY - (listRect.bottom - EDGE)) / EDGE
+        : (listRect.top + EDGE - tClientY) / EDGE;
+      list.scrollTop += tScrollDir * 10 * Math.min(1, Math.max(0, ratio));
+      tRafId = requestAnimationFrame(tScroll);
+    };
+
+    const onTouchMove = e => {
+      if (!tDragging) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      tClientY = touch.clientY;
+
+      // 更新 ghost 位置（只動 Y）
+      if (ghost) {
+        ghost.style.top = (tClientY - ghost.offsetHeight / 2) + 'px';
+      }
+
+      // 邊緣自動捲動
+      const listRect = list.getBoundingClientRect();
+      const EDGE = 60;
+      const newDir = tClientY < listRect.top + EDGE ? -1
+                   : tClientY > listRect.bottom - EDGE ? 1 : 0;
+      if (newDir !== tScrollDir) {
+        tScrollDir = newDir;
+        if (tScrollDir !== 0 && !tRafId) {
+          tRafId = requestAnimationFrame(tScroll);
+        }
+      }
+
+      // 偵測目標卡片
+      ghost.style.display = 'none';
+      const el2 = document.elementFromPoint(touch.clientX, tClientY);
+      ghost.style.display = '';
+      const target = el2?.closest('.sticky-card:not(.pinned)');
+      list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
+      if (target && target.dataset.id !== dragSrcId) target.classList.add('sticky-drag-over');
+    };
+
+    const onTouchEnd = () => {
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+      if (!tDragging) { clearTimeout(tTimer); return; }
+      const over = list.querySelector('.sticky-drag-over');
+      if (over && over.dataset.id !== dragSrcId) {
+        const si = S.stickies.findIndex(s => s.id === dragSrcId);
+        const di = S.stickies.findIndex(s => s.id === over.dataset.id);
+        if (si >= 0 && di >= 0) {
+          const [m] = S.stickies.splice(si, 1);
+          S.stickies.splice(di, 0, m);
+          lsSave();
+        }
+      }
+      tCleanup();
+      renderStickiesWidget(container);
+    };
+
+    handle.addEventListener('touchstart', e => {
+      tStartX = e.touches[0].clientX;
+      tStartY = e.touches[0].clientY;
+      tClientY = tStartY;
+      tTimer = setTimeout(() => {
+        tDragging = true;
+        isDragging = true;
+        dragSrcId = card.dataset.id;
         const rect = card.getBoundingClientRect();
         ghost = card.cloneNode(true);
         ghost.style.cssText = `position:fixed;left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;opacity:.85;z-index:9999;pointer-events:none;`;
         document.body.appendChild(ghost);
-      }, 150);
+        card.classList.add('sticky-dragging');
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd, { passive: true });
+      }, 500);
+    }, { passive: true });
 
-      const onTouchMove = e => {
-        if (!dragSrcId || !ghost) return;
-        const touch = e.touches[0];
-        e.preventDefault();
-        ghost.style.top = (parseFloat(ghost.style.top) + (touch.clientY - startY)) + 'px';
-        startY = touch.clientY;
-        ghost.style.display = 'none';
-        const el2 = document.elementFromPoint(touch.clientX, touch.clientY);
-        ghost.style.display = '';
-        const target = el2?.closest('.sticky-card:not(.pinned)');
-        list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
-        if (target && target.dataset.id !== dragSrcId) target.classList.add('sticky-drag-over');
-      };
+    // 移動超過 8px 取消長按
+    handle.addEventListener('touchmove', e => {
+      if (tDragging) return;
+      const dx = e.touches[0].clientX - tStartX;
+      const dy = e.touches[0].clientY - tStartY;
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) clearTimeout(tTimer);
+    }, { passive: true });
 
-      const onTouchEnd = () => {
-        document.removeEventListener('touchmove', onTouchMove);
-        document.removeEventListener('touchend', onTouchEnd);
-        if (!dragSrcId) return;
-        const over = list.querySelector('.sticky-drag-over');
-        if (over && over.dataset.id !== dragSrcId) {
-          const si = S.stickies.findIndex(s => s.id === dragSrcId);
-          const di = S.stickies.findIndex(s => s.id === over.dataset.id);
-          if (si >= 0 && di >= 0) {
-            const [m] = S.stickies.splice(si, 1);
-            S.stickies.splice(di, 0, m);
-            lsSave();
-          }
-        }
-        if (ghost) { ghost.remove(); ghost = null; }
-        card.classList.remove('sticky-dragging');
-        list.querySelectorAll('.sticky-drag-over').forEach(c => c.classList.remove('sticky-drag-over'));
-        dragSrcId = null;
-        isDragging = false;
-        renderStickiesWidget(container);
-      };
-
-      document.addEventListener('touchmove', onTouchMove, { passive: false });
-      document.addEventListener('touchend', onTouchEnd, { passive: true });
-    }, { passive: false });
+    handle.addEventListener('touchend', () => {
+      if (!tDragging) clearTimeout(tTimer);
+    }, { passive: true });
 
     handle.addEventListener('touchcancel', () => {
-      if (ghost) { ghost.remove(); ghost = null; }
-      card.classList.remove('sticky-dragging');
-      dragSrcId = null;
-      isDragging = false;
+      tCleanup();
     }, { passive: true });
   });
 }
