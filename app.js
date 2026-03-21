@@ -3279,11 +3279,12 @@ function renderAnimeWidget(container) {
           if (!tDragging) { clearTimeout(tTimer); return; }
           e.preventDefault();
           const t = e.touches[0];
+          const prevY = tClientY;
           tClientY = t.clientY;
 
-          // 更新 ghost 位置（只動 Y，X 固定）
+          // 更新 ghost 位置（差值累加，避免每幀 reflow）
           if (tGhost) {
-            tGhost.style.top = (tClientY - card.offsetHeight / 2) + 'px';
+            tGhost.style.top = (parseFloat(tGhost.style.top) + (tClientY - prevY)) + 'px';
           }
 
           // 判斷是否在邊緣，決定啟動或停止 rAF
@@ -3330,12 +3331,15 @@ function renderAnimeWidget(container) {
           setTimeout(() => renderFav(), 0);
         };
 
+        let tCardHalfH = 0; // card 高度一半，啟動時存一次避免每幀 reflow
+
         card.addEventListener('touchstart', e => {
           tClientY = e.touches[0].clientY;
           tTimer = setTimeout(() => {
             tDragging = true;
             tScrollDir = 0;
             const rect = card.getBoundingClientRect();
+            tCardHalfH = rect.height / 2;
             tGhostCenterX = rect.left + rect.width / 2;
             tGhost = card.cloneNode(true);
             tGhost.style.cssText = `position:fixed;z-index:9999;opacity:.75;pointer-events:none;width:${card.offsetWidth}px;transform:scale(1.05);left:${rect.left}px;top:${rect.top}px;`;
