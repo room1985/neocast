@@ -2418,7 +2418,7 @@ function makeStickyCard(sticky, container) {
 
   // Drag handle — 鎖定時隱藏
   const drag = el('div', 'sticky-handle' + (sticky.pinned ? ' disabled' : ''));
-  drag.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12" opacity=".4"><circle cx="9" cy="5" r="1.5" fill="currentColor"/><circle cx="9" cy="12" r="1.5" fill="currentColor"/><circle cx="9" cy="19" r="1.5" fill="currentColor"/><circle cx="15" cy="5" r="1.5" fill="currentColor"/><circle cx="15" cy="12" r="1.5" fill="currentColor"/><circle cx="15" cy="19" r="1.5" fill="currentColor"/></svg>`;
+  drag.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" opacity=".4"><circle cx="8" cy="5" r="1.8"/><circle cx="8" cy="12" r="1.8"/><circle cx="8" cy="19" r="1.8"/><circle cx="14" cy="5" r="1.8"/><circle cx="14" cy="12" r="1.8"/><circle cx="14" cy="19" r="1.8"/><circle cx="20" cy="5" r="1.8"/><circle cx="20" cy="12" r="1.8"/><circle cx="20" cy="19" r="1.8"/></svg>`;
   if (S.stickyLocked) drag.style.display = 'none';
 
   // Square checkbox — toggle done state
