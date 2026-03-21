@@ -3312,10 +3312,11 @@ function renderAnimeWidget(container) {
           document.removeEventListener('touchend', onTouchEnd);
           document.removeEventListener('touchcancel', onTouchEnd);
           if (!tDragging) { clearTimeout(tTimer); return; }
+          // 先找目標，再 cleanup（cleanup 會清掉 drag-over class）
+          const over = grid.querySelector('.anime-card-drag-over');
           const wasDragging = tDragging;
           tCleanup();
           if (!wasDragging) return;
-          const over = grid.querySelector('.anime-card-drag-over');
           if (over && over !== card) {
             const overId = parseInt(over.dataset.id);
             const si = S.animeState.tracked.indexOf(anime.id);
@@ -3326,7 +3327,6 @@ function renderAnimeWidget(container) {
               lsSave();
             }
           }
-          grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
           setTimeout(() => renderFav(), 0);
         };
 
