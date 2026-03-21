@@ -1978,9 +1978,10 @@ function mountStickyTagBar(tagBar, bodyEl) {
   function renderStickyTagBar() {
     tagBar.innerHTML = '';
 
-    // 全部
+    // 全部（固定，不可刪/改名/拖曳）
     const allBtn = el('span', 'sticky-tag-chip' + (S.activeStickyTag === 'all' ? ' on' : ''), '全部');
     allBtn.addEventListener('click', () => {
+      if (tagEditMode) return;
       S.activeStickyTag = 'all'; S.stickySearch = ''; clearStickySearchUI();
       lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
     });
@@ -1988,12 +1989,19 @@ function mountStickyTagBar(tagBar, bodyEl) {
 
     // 各分類
     (S.stickyTags || []).forEach(tag => {
-      const chip = el('span', 'sticky-tag-chip' + (S.activeStickyTag === tag ? ' on' : ''));
-      const label = el('span', '', tag);
-      chip.appendChild(label);
+      const chip = el('span', 'sticky-tag-chip' + (S.activeStickyTag === tag ? ' on' : '') + (tagEditMode ? ' edit-mode' : ''));
+      chip.dataset.tag = tag;
 
-      // 編輯模式才顯示 ✕
       if (tagEditMode) {
+        // 管理模式：點 label 直接 inline 編輯
+        const label = el('span', 'sticky-tag-label', tag);
+        label.addEventListener('click', e => {
+          e.stopPropagation();
+          startStickyTagRename(chip, label, tag);
+        });
+        chip.appendChild(label);
+
+        // ✕ 刪除
         const x = el('span', 'sticky-tag-x', '✕');
         x.addEventListener('click', e => {
           e.stopPropagation();
@@ -2004,17 +2012,18 @@ function mountStickyTagBar(tagBar, bodyEl) {
           lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
         });
         chip.appendChild(x);
+      } else {
+        chip.textContent = tag;
+        chip.addEventListener('click', () => {
+          S.activeStickyTag = tag; S.stickySearch = ''; clearStickySearchUI();
+          lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+        });
       }
 
-      chip.addEventListener('click', () => {
-        if (tagEditMode) return;
-        S.activeStickyTag = tag; S.stickySearch = ''; clearStickySearchUI();
-        lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
-      });
       tagBar.appendChild(chip);
     });
 
-    // 私人分類（解鎖時才顯示）
+    // 私人分類（解鎖時才顯示，不可改名/拖曳）
     if (S.privateUnlocked) {
       const privChip = el('span', 'sticky-tag-chip sticky-tag-private' + (S.activeStickyTag === PRIVATE_STICKY_TAG ? ' on' : ''), '私人');
       privChip.addEventListener('click', () => {
@@ -2025,41 +2034,161 @@ function mountStickyTagBar(tagBar, bodyEl) {
       tagBar.appendChild(privChip);
     }
 
-    // ＋ 新增分類（inline 輸入）
-    const addChip = el('span', 'sticky-tag-chip sticky-tag-add', '＋');
-    addChip.addEventListener('click', () => {
-      // 把 ＋ 換成 input
-      const inp = el('input', 'sticky-tag-input');
-      inp.type = 'search'; inp.placeholder = '分類名稱…';
-      inp.autocomplete = 'off'; inp.name = 'neocast-tag'; inp.spellcheck = false;
-      inp.setAttribute('autocomplete', 'off'); inp.name = 'sticky-tag'; inp.setAttribute('inputmode', 'text');
-      addChip.replaceWith(inp);
-      inp.focus();
-
-      const confirm = () => {
-        const name = inp.value.trim();
-        if (name && !S.stickyTags.includes(name)) S.stickyTags.push(name);
-        if (name) S.activeStickyTag = name;
-        lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
-      };
-      inp.addEventListener('keydown', e => {
-        if (e.key === 'Enter') { e.preventDefault(); confirm(); }
-        if (e.key === 'Escape') { renderStickyTagBar(); }
+    // ＋ 新增分類
+    if (tagEditMode) {
+      const addChip = el('span', 'sticky-tag-chip sticky-tag-add', '＋');
+      addChip.addEventListener('click', () => {
+        const inp = el('input', 'sticky-tag-input');
+        inp.type = 'search'; inp.placeholder = '分類名稱…';
+        inp.autocomplete = 'new-password'; inp.spellcheck = false;
+        addChip.replaceWith(inp);
+        inp.focus();
+        const doConfirm = () => {
+          const name = inp.value.trim();
+          if (name && !S.stickyTags.includes(name)) S.stickyTags.push(name);
+          if (name) S.activeStickyTag = name;
+          lsSave(); renderStickyTagBar(); renderStickiesWidget(bodyEl);
+        };
+        inp.addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); doConfirm(); }
+          if (e.key === 'Escape') renderStickyTagBar();
+        });
+        inp.addEventListener('blur', doConfirm);
       });
-      inp.addEventListener('blur', confirm);
-    });
-    tagBar.appendChild(addChip);
+      tagBar.appendChild(addChip);
+    }
 
-    // ⚙ 設定按鈕（最右側）
+    // ⚙ 設定按鈕
     const cfgBtn = el('button', 'sticky-tag-cfg-btn' + (tagEditMode ? ' on' : ''));
     cfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
     cfgBtn.title = tagEditMode ? '完成編輯' : '管理分類';
     cfgBtn.addEventListener('click', () => { tagEditMode = !tagEditMode; renderStickyTagBar(); });
     tagBar.appendChild(cfgBtn);
+
+    // 管理模式下啟用拖曳排序
+    if (tagEditMode) initStickyTagDrag(tagBar, bodyEl, renderStickyTagBar);
   }
 
   bodyEl._renderTagBar = renderStickyTagBar;
   renderStickyTagBar();
+}
+
+function startStickyTagRename(chip, label, oldTag) {
+  const inp = el('input', 'sticky-tag-input');
+  inp.type = 'search';
+  inp.value = oldTag;
+  inp.autocomplete = 'new-password';
+  inp.spellcheck = false;
+  inp.style.maxWidth = '80px';
+  label.replaceWith(inp);
+  inp.focus(); inp.select();
+
+  const save = () => {
+    const val = inp.value.trim();
+    if (val && val !== oldTag) {
+      const idx = S.stickyTags.indexOf(oldTag);
+      if (idx >= 0) S.stickyTags[idx] = val;
+      S.stickies.forEach(s => { if (s.tag === oldTag) s.tag = val; });
+      if (S.activeStickyTag === oldTag) S.activeStickyTag = val;
+      lsSave();
+    }
+    // 重繪 tagBar
+    const tagBarEl = chip.closest('.sticky-tag-bar');
+    const bodyEl2 = tagBarEl?.closest('.stickies-inner, .mobile-page-panel');
+    bodyEl2?._renderTagBar?.();
+  };
+  inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); save(); }
+    if (e.key === 'Escape') { const tagBarEl = chip.closest('.sticky-tag-bar'); const bodyEl2 = tagBarEl?.closest('.stickies-inner, .mobile-page-panel'); bodyEl2?._renderTagBar?.(); }
+  });
+  inp.addEventListener('blur', save);
+}
+
+function initStickyTagDrag(tagBar, bodyEl, renderStickyTagBar) {
+  const chips = [...tagBar.querySelectorAll('.sticky-tag-chip.edit-mode')];
+  let dragTag = null;
+
+  chips.forEach(chip => {
+    // Desktop
+    chip.draggable = true;
+    chip.addEventListener('dragstart', e => {
+      dragTag = chip.dataset.tag;
+      setTimeout(() => chip.classList.add('sticky-tag-dragging'), 0);
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    chip.addEventListener('dragend', () => {
+      chip.classList.remove('sticky-tag-dragging');
+      tagBar.querySelectorAll('.sticky-tag-drag-over').forEach(c => c.classList.remove('sticky-tag-drag-over'));
+      dragTag = null;
+    });
+    chip.addEventListener('dragover', e => {
+      e.preventDefault();
+      if (chip.dataset.tag === dragTag) return;
+      tagBar.querySelectorAll('.sticky-tag-drag-over').forEach(c => c.classList.remove('sticky-tag-drag-over'));
+      chip.classList.add('sticky-tag-drag-over');
+    });
+    chip.addEventListener('drop', e => {
+      e.preventDefault();
+      if (!dragTag || dragTag === chip.dataset.tag) return;
+      const si = S.stickyTags.indexOf(dragTag);
+      const di = S.stickyTags.indexOf(chip.dataset.tag);
+      if (si < 0 || di < 0) return;
+      const [moved] = S.stickyTags.splice(si, 1);
+      S.stickyTags.splice(di, 0, moved);
+      lsSave(); renderStickyTagBar();
+    });
+
+    // Mobile touch
+    let touchTag = null, ghost = null, startX = 0, startY = 0;
+    chip.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+      touchTag = chip.dataset.tag;
+    }, { passive: true });
+
+    const onTouchMove = e => {
+      if (!touchTag) return;
+      const touch = e.touches[0];
+      if (!ghost) {
+        const dx = touch.clientX - startX, dy = touch.clientY - startY;
+        if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+        ghost = chip.cloneNode(true);
+        ghost.style.cssText = `position:fixed;pointer-events:none;z-index:9999;opacity:.8;`;
+        document.body.appendChild(ghost);
+        chip.classList.add('sticky-tag-dragging');
+      }
+      ghost.style.left = (touch.clientX - chip.offsetWidth / 2) + 'px';
+      ghost.style.top  = (touch.clientY - chip.offsetHeight / 2) + 'px';
+      ghost.style.display = 'none';
+      const el2 = document.elementFromPoint(touch.clientX, touch.clientY);
+      ghost.style.display = '';
+      const target = el2?.closest('.sticky-tag-chip.edit-mode');
+      tagBar.querySelectorAll('.sticky-tag-drag-over').forEach(c => c.classList.remove('sticky-tag-drag-over'));
+      if (target && target !== chip) target.classList.add('sticky-tag-drag-over');
+    };
+    const onTouchEnd = () => {
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+      if (ghost) { ghost.remove(); ghost = null; }
+      chip.classList.remove('sticky-tag-dragging');
+      const over = tagBar.querySelector('.sticky-tag-drag-over');
+      tagBar.querySelectorAll('.sticky-tag-drag-over').forEach(c => c.classList.remove('sticky-tag-drag-over'));
+      if (over && over !== chip) {
+        const si = S.stickyTags.indexOf(touchTag);
+        const di = S.stickyTags.indexOf(over.dataset.tag);
+        if (si >= 0 && di >= 0) {
+          const [moved] = S.stickyTags.splice(si, 1);
+          S.stickyTags.splice(di, 0, moved);
+          lsSave(); renderStickyTagBar();
+        }
+      }
+      touchTag = null;
+    };
+    chip.addEventListener('touchstart', () => {
+      document.addEventListener('touchmove', onTouchMove, { passive: false });
+      document.addEventListener('touchend', onTouchEnd, { passive: true });
+    }, { passive: true });
+  });
 }
 
 // 清空所有搜尋框 UI（切換分類時呼叫）

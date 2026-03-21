@@ -1454,6 +1454,14 @@ a { color:inherit; text-decoration:none; }
 .sticky-tag-cfg-btn:hover,
 .sticky-tag-cfg-btn.on { color: var(--ac); background: rgba(56,189,248,.1); }
 
+/* 管理模式下的分類 chip */
+.sticky-tag-chip.edit-mode { cursor: grab; }
+.sticky-tag-chip.edit-mode:active { cursor: grabbing; }
+.sticky-tag-label { cursor: text; }
+.sticky-tag-label:hover { color: var(--ac); }
+.sticky-tag-dragging { opacity: .35; }
+.sticky-tag-drag-over { border-color: var(--ac) !important; box-shadow: 0 0 0 2px rgba(56,189,248,.3); }
+
 .sticky-cat-select {
   background: rgba(255,255,255,.08);
   border: 1px solid rgba(255,255,255,.2);
