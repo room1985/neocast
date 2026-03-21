@@ -2652,9 +2652,10 @@ function initStickyListDrag(list, container) {
     const handle = card.querySelector('.sticky-handle');
     if (!handle) return;
 
-    // Desktop drag on entire card
+    // Desktop drag — 只能從 handle 啟動
     card.draggable = true;
     card.addEventListener('dragstart', e => {
+      if (!e.target.closest('.sticky-handle')) { e.preventDefault(); return; }
       dragSrcId = card.dataset.id;
       setTimeout(() => card.classList.add('sticky-dragging'), 0);
     });
@@ -2702,16 +2703,6 @@ function initStickyListDrag(list, container) {
       const onTouchMove = e => {
         if (!dragSrcId || !ghost) return;
         const touch = e.touches[0];
-        const dy = touch.clientY - startY;
-        const dx = touch.clientX - startX;
-        if (Math.abs(dx) > Math.abs(dy) + 10) {
-          dragSrcId = null;
-          if (ghost) { ghost.remove(); ghost = null; }
-          card.classList.remove('sticky-dragging');
-          document.removeEventListener('touchmove', onTouchMove);
-          document.removeEventListener('touchend', onTouchEnd);
-          return;
-        }
         e.preventDefault();
         ghost.style.top = (parseFloat(ghost.style.top) + (touch.clientY - startY)) + 'px';
         startY = touch.clientY;
