@@ -4706,6 +4706,19 @@ function buildMobileWidgetContent(widgetType, container) {
     inner.appendChild(mTagBar);
     mountStickyTagBar(mTagBar, inner);
     renderStickiesWidget(inner);
+
+    // 手機版高度動態計算（跟桌面版一樣用 ResizeObserver）
+    new ResizeObserver(() => {
+      const list   = inner.querySelector('.sticky-list');
+      const bar    = inner.querySelector('.sticky-input-bar');
+      const tagBar = inner.querySelector('.sticky-tag-bar');
+      if (list) {
+        const tagBarH = tagBar ? tagBar.offsetHeight : 0;
+        const barH = (bar && bar.style.display !== 'none') ? bar.offsetHeight : 0;
+        list.style.height = (inner.offsetHeight - barH - tagBarH) + 'px';
+        list.style.overflowY = 'auto';
+      }
+    }).observe(inner);
   } else if (widgetType === 'anime') {
     const inner = el('div', 'anime-inner');
     inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
