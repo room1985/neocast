@@ -3907,6 +3907,151 @@ async function fetchYoutubeFeed(force = false) {
   return items;
 }
 
+function startYtGrpRename(wrap, tab, oldName) {
+  const inp = el('input', 'yt-grp-inline-input');
+  inp.type = 'search'; inp.value = oldName;
+  inp.autocomplete = 'new-password'; inp.spellcheck = false;
+  tab.replaceWith(inp); inp.focus(); inp.select();
+  const save = () => {
+    const val = inp.value.trim();
+    if (val && val !== oldName && !(S.yt.groups || []).includes(val)) {
+      const idx = (S.yt.groups || []).indexOf(oldName);
+      if (idx >= 0) S.yt.groups[idx] = val;
+      S.yt.channels.forEach(ch => { const ti = (ch.groups || []).indexOf(oldName); if (ti >= 0) ch.groups[ti] = val; });
+      lsSave();
+    }
+    // 重繪 groupBar
+    const container = wrap.closest('.yt-inner, [data-wid="youtube"]');
+    if (container) {
+      // 找到 renderGroupBar 的方式：觸發 ⚙ 按鈕重繪
+      const bar = wrap.closest('.yt-group-bar');
+      bar?._renderGroupBar?.();
+    }
+  };
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } if (e.key === 'Escape') inp.blur(); });
+  inp.addEventListener('blur', save);
+}
+
+function initYtGrpDrag(groupBar) {
+  const wraps = [...groupBar.querySelectorAll('.yt-grp-tag-wrap.edit')];
+  let dragG = null;
+
+  wraps.forEach(wrap => {
+    const g = wrap.dataset.g;
+
+    // Desktop
+    wrap.draggable = true;
+    wrap.addEventListener('dragstart', e => {
+      dragG = g; e.dataTransfer.effectAllowed = 'move';
+      setTimeout(() => wrap.classList.add('yt-grp-tag-dragging'), 0);
+    });
+    wrap.addEventListener('dragend', () => {
+      wrap.classList.remove('yt-grp-tag-dragging');
+      groupBar.querySelectorAll('.yt-grp-tag-drag-over').forEach(c => c.classList.remove('yt-grp-tag-drag-over'));
+      dragG = null;
+    });
+    wrap.addEventListener('dragover', e => {
+      e.preventDefault(); if (g === dragG) return;
+      groupBar.querySelectorAll('.yt-grp-tag-drag-over').forEach(c => c.classList.remove('yt-grp-tag-drag-over'));
+      wrap.classList.add('yt-grp-tag-drag-over');
+    });
+    wrap.addEventListener('drop', e => {
+      e.preventDefault(); if (!dragG || dragG === g) return;
+      const si = S.yt.groups.indexOf(dragG), di = S.yt.groups.indexOf(g);
+      if (si < 0 || di < 0) return;
+      const [m] = S.yt.groups.splice(si, 1); S.yt.groups.splice(di, 0, m);
+      lsSave(); groupBar._renderGroupBar?.();
+    });
+
+    // Mobile — 標準做法
+    let tTimer = null, tDragging = false, tGhost = null, tRafId = null;
+    let tClientY = 0, tScrollDir = 0, tStartX = 0, tStartY = 0;
+    let tGhostFixedLeft = 0;
+
+    const tCleanup = () => {
+      clearTimeout(tTimer);
+      if (tRafId) { cancelAnimationFrame(tRafId); tRafId = null; }
+      if (tGhost) { tGhost.remove(); tGhost = null; }
+      wrap.classList.remove('yt-grp-tag-dragging');
+      groupBar.querySelectorAll('.yt-grp-tag-drag-over').forEach(c => c.classList.remove('yt-grp-tag-drag-over'));
+      tDragging = false; tScrollDir = 0;
+    };
+
+    const scrollEl = groupBar.closest('.yt-inner, .yt-widget-body') || groupBar.parentElement;
+
+    const tScroll = () => {
+      if (!tDragging || tScrollDir === 0) { tRafId = null; return; }
+      const rect = groupBar.getBoundingClientRect();
+      const EDGE = 50;
+      const ratio = tScrollDir > 0 ? (tClientY - (rect.bottom - EDGE)) / EDGE : (rect.top + EDGE - tClientY) / EDGE;
+      groupBar.scrollLeft += tScrollDir * 8 * Math.min(1, Math.max(0, ratio));
+      tRafId = requestAnimationFrame(tScroll);
+    };
+
+    const onTouchMove = e => {
+      if (!tDragging) return;
+      e.preventDefault();
+      const t = e.touches[0];
+      const prevY = tClientY; tClientY = t.clientY;
+      if (tGhost) tGhost.style.top = (parseFloat(tGhost.style.top) + (tClientY - prevY)) + 'px';
+
+      const barRect = groupBar.getBoundingClientRect();
+      const EDGE = 50;
+      const newDir = t.clientX < barRect.left + EDGE ? -1 : t.clientX > barRect.right - EDGE ? 1 : 0;
+      if (newDir !== tScrollDir) {
+        tScrollDir = newDir;
+        if (tScrollDir !== 0 && !tRafId) tRafId = requestAnimationFrame(tScroll);
+      }
+
+      if (tGhost) tGhost.style.display = 'none';
+      const el2 = document.elementFromPoint(t.clientX, tClientY);
+      if (tGhost) tGhost.style.display = '';
+      const target = el2?.closest('.yt-grp-tag-wrap.edit');
+      groupBar.querySelectorAll('.yt-grp-tag-drag-over').forEach(c => c.classList.remove('yt-grp-tag-drag-over'));
+      if (target && target !== wrap) target.classList.add('yt-grp-tag-drag-over');
+    };
+
+    const onTouchEnd = () => {
+      document.removeEventListener('touchmove', onTouchMove);
+      document.removeEventListener('touchend', onTouchEnd);
+      if (!tDragging) { clearTimeout(tTimer); return; }
+      const over = groupBar.querySelector('.yt-grp-tag-drag-over');
+      tCleanup();
+      if (over && over !== wrap) {
+        const si = S.yt.groups.indexOf(g), di = S.yt.groups.indexOf(over.dataset.g);
+        if (si >= 0 && di >= 0) {
+          const [m] = S.yt.groups.splice(si, 1); S.yt.groups.splice(di, 0, m);
+          lsSave();
+        }
+      }
+      groupBar._renderGroupBar?.();
+    };
+
+    wrap.addEventListener('touchstart', e => {
+      tStartX = e.touches[0].clientX; tStartY = e.touches[0].clientY; tClientY = tStartY;
+      tTimer = setTimeout(() => {
+        tDragging = true;
+        const rect = wrap.getBoundingClientRect();
+        tGhostFixedLeft = rect.left;
+        tGhost = wrap.cloneNode(true);
+        tGhost.style.cssText = `position:fixed;z-index:9999;opacity:.8;pointer-events:none;left:${rect.left}px;top:${rect.top}px;`;
+        document.body.appendChild(tGhost);
+        wrap.classList.add('yt-grp-tag-dragging');
+        document.addEventListener('touchmove', onTouchMove, { passive: false });
+        document.addEventListener('touchend', onTouchEnd, { passive: true });
+      }, 500);
+    }, { passive: true });
+
+    wrap.addEventListener('touchmove', e => {
+      if (tDragging) return;
+      const dx = e.touches[0].clientX - tStartX, dy = e.touches[0].clientY - tStartY;
+      if (Math.abs(dx) > 8 || Math.abs(dy) > 8) clearTimeout(tTimer);
+    }, { passive: true });
+    wrap.addEventListener('touchend', () => { if (!tDragging) clearTimeout(tTimer); }, { passive: true });
+    wrap.addEventListener('touchcancel', () => { tCleanup(); }, { passive: true });
+  });
+}
+
 function buildYoutubeWidget() {
   const body = el('div', 'yt-inner');
   body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
@@ -3956,23 +4101,82 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   // ── Group filter bar (multi-select) ──
   const groupBar = el('div', 'yt-group-bar');
   container.appendChild(groupBar);
+  let grpEditMode = false;
 
   const renderGroupBar = () => {
     groupBar.innerHTML = '';
+
+    // 全部（固定）
     const allBtn = el('button', 'yt-group-tab' + (activeGroups.size === 0 ? ' on' : ''), '全部');
-    allBtn.addEventListener('click', () => { activeGroups.clear(); renderGroupBar(); renderFeed(); });
+    allBtn.addEventListener('click', () => { if (grpEditMode) return; activeGroups.clear(); renderGroupBar(); renderFeed(); });
     groupBar.appendChild(allBtn);
 
     (S.yt.groups || []).forEach(g => {
-      const on = activeGroups.has(g);
-      const t = el('button', 'yt-group-tab' + (on ? ' on' : ''), g);
-      t.addEventListener('click', () => {
-        if (activeGroups.has(g)) activeGroups.delete(g);
-        else activeGroups.add(g);
-        renderGroupBar(); renderFeed();
-      });
-      groupBar.appendChild(t);
+      const wrap = el('div', 'yt-grp-tag-wrap' + (grpEditMode ? ' edit' : ''));
+      wrap.dataset.g = g;
+
+      const tab = el('button', 'yt-group-tab' + (activeGroups.has(g) ? ' on' : ''), g);
+      if (grpEditMode) {
+        // 點文字直接改名
+        tab.addEventListener('click', e => { e.stopPropagation(); startYtGrpRename(wrap, tab, g); });
+      } else {
+        tab.addEventListener('click', () => {
+          if (activeGroups.has(g)) activeGroups.delete(g); else activeGroups.add(g);
+          renderGroupBar(); renderFeed();
+        });
+      }
+      wrap.appendChild(tab);
+
+      if (grpEditMode) {
+        const x = el('button', 'yt-grp-tag-x');
+        x.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="8" height="8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+        x.title = '刪除分組';
+        x.addEventListener('click', e => {
+          e.stopPropagation();
+          S.yt.groups = (S.yt.groups || []).filter(x => x !== g);
+          S.yt.channels.forEach(ch => { ch.groups = (ch.groups || []).filter(x => x !== g); });
+          activeGroups.delete(g);
+          lsSave(); renderGroupBar(); renderChList(); renderFeed();
+        });
+        wrap.appendChild(x);
+      }
+
+      groupBar.appendChild(wrap);
     });
+
+    // 管理模式下顯示 ＋ 新增
+    if (grpEditMode) {
+      const addChip = el('button', 'yt-group-tab yt-grp-add-chip', '＋');
+      addChip.addEventListener('click', () => {
+        const inp = el('input', 'yt-grp-inline-input');
+        inp.type = 'search'; inp.placeholder = '分組名稱';
+        inp.autocomplete = 'new-password'; inp.spellcheck = false;
+        addChip.replaceWith(inp); inp.focus();
+        const save = () => {
+          const val = inp.value.trim();
+          if (val && !(S.yt.groups || []).includes(val)) {
+            if (!S.yt.groups) S.yt.groups = [];
+            S.yt.groups.push(val);
+            lsSave();
+          }
+          renderGroupBar();
+        };
+        inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); save(); } if (e.key === 'Escape') renderGroupBar(); });
+        inp.addEventListener('blur', save);
+      });
+      groupBar.appendChild(addChip);
+    }
+
+    // ⚙ 管理按鈕
+    const cfgBtn = el('button', 'yt-grp-cfg-btn' + (grpEditMode ? ' on' : ''));
+    cfgBtn.title = grpEditMode ? '完成管理' : '管理分組';
+    cfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+    cfgBtn.addEventListener('click', () => { grpEditMode = !grpEditMode; renderGroupBar(); });
+    groupBar.appendChild(cfgBtn);
+
+    // 管理模式下啟用拖曳排序
+    if (grpEditMode) initYtGrpDrag(groupBar);
+    groupBar._renderGroupBar = renderGroupBar;
   };
   renderGroupBar();
 
@@ -4000,147 +4204,11 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   managerPanel.appendChild(chListSection);
 
   // Group management section
-  const grpSection = el('div', 'yt-mgr-section');
-  const grpTitle = el('div', 'yt-mgr-title', '分組管理');
-  const grpList = el('div', 'yt-grp-list');
-  grpSection.appendChild(grpTitle); grpSection.appendChild(grpList);
-  managerPanel.appendChild(grpSection);
-
   let selectedTagId = null; // "chId:tagName" for channel tags
-  let selectedGrp = null;   // group name for group management
 
-  const renderGrpList = () => {
-    grpList.innerHTML = '';
-    let dragSrcG = null;
-    (S.yt.groups || []).forEach(g => {
-      const row = el('div', 'yt-grp-row' + (selectedGrp === g ? ' selected' : ''));
-      row.draggable = true;
-      row.dataset.g = g;
-      const nameSpan = el('span', 'yt-grp-name', g);
-      row.appendChild(nameSpan);
-      const delBtn = el('button', 'yt-ch-del' + (selectedGrp === g ? ' visible' : ''), '✕');
-      delBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        S.yt.groups = (S.yt.groups||[]).filter(x => x !== g);
-        S.yt.channels.forEach(ch => { ch.groups = (ch.groups||[]).filter(x => x !== g); });
-        activeGroups.delete(g); selectedGrp = null;
-        lsSave(); renderGrpList(); renderGroupBar(); renderChList(); renderFeed();
-      });
-      row.appendChild(delBtn);
-      row.addEventListener('click', e => { e.stopPropagation(); selectedGrp = selectedGrp === g ? null : g; renderGrpList(); });
-
-      // Drag to reorder
-      row.addEventListener('dragstart', e => {
-        dragSrcG = g;
-        e.dataTransfer.effectAllowed = 'move';
-        setTimeout(() => row.classList.add('yt-grp-dragging'), 0);
-      });
-      row.addEventListener('dragend', () => {
-        row.classList.remove('yt-grp-dragging');
-        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
-        dragSrcG = null;
-      });
-      row.addEventListener('dragover', e => {
-        e.preventDefault();
-        if (g === dragSrcG) return;
-        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
-        row.classList.add('yt-grp-drag-over');
-      });
-      row.addEventListener('drop', e => {
-        e.preventDefault();
-        if (!dragSrcG || dragSrcG === g) return;
-        const si = S.yt.groups.indexOf(dragSrcG);
-        const di = S.yt.groups.indexOf(g);
-        if (si < 0 || di < 0) return;
-        const [m] = S.yt.groups.splice(si, 1);
-        S.yt.groups.splice(di, 0, m);
-        lsSave(); renderGrpList(); renderGroupBar();
-      });
-
-      // Touch drag (long press)
-      let tTimer = null, tDragging = false, tGhost = null;
-      row.addEventListener('touchstart', e => {
-        tTimer = setTimeout(() => {
-          tDragging = true;
-          tGhost = row.cloneNode(true);
-          tGhost.style.cssText = `position:fixed;z-index:99999;opacity:.8;pointer-events:none;width:${row.offsetWidth}px;`;
-          document.body.appendChild(tGhost);
-          row.classList.add('yt-grp-dragging');
-        }, 500);
-      }, { passive: true });
-      row.addEventListener('touchmove', e => {
-        clearTimeout(tTimer);
-        if (!tDragging) return;
-        const t = e.touches[0];
-        if (tGhost) { tGhost.style.left = (t.clientX - row.offsetWidth/2) + 'px'; tGhost.style.top = (t.clientY - 16) + 'px'; }
-        const el2 = document.elementFromPoint(t.clientX, t.clientY);
-        const target = el2?.closest('.yt-grp-row');
-        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
-        if (target && target !== row) target.classList.add('yt-grp-drag-over');
-      }, { passive: true });
-      row.addEventListener('touchend', e => {
-        clearTimeout(tTimer);
-        if (tGhost) { tGhost.remove(); tGhost = null; }
-        row.classList.remove('yt-grp-dragging');
-        if (!tDragging) { tDragging = false; return; }
-        tDragging = false;
-        const over = grpList.querySelector('.yt-grp-drag-over');
-        if (over && over !== row) {
-          const si = S.yt.groups.indexOf(g);
-          const di = S.yt.groups.indexOf(over.dataset.g);
-          if (si >= 0 && di >= 0) {
-            const [m] = S.yt.groups.splice(si, 1);
-            S.yt.groups.splice(di, 0, m);
-            lsSave();
-          }
-        }
-        grpList.querySelectorAll('.yt-grp-drag-over').forEach(r => r.classList.remove('yt-grp-drag-over'));
-        renderGrpList(); renderGroupBar();
-      }, { passive: true });
-      row.addEventListener('dblclick', e => {
-        e.stopPropagation();
-        const inp = document.createElement('input');
-        inp.className = 'yt-grp-rename-input'; inp.type = 'search'; inp.value = g; inp.autocomplete = 'off'; inp.name = 'neocast-yt-grp'; inp.spellcheck = false;
-        nameSpan.replaceWith(inp); inp.focus(); inp.select();
-        const save = () => {
-          const val = inp.value.trim();
-          if (val && val !== g && !(S.yt.groups||[]).includes(val)) {
-            const idx = S.yt.groups.indexOf(g);
-            if (idx >= 0) S.yt.groups[idx] = val;
-            S.yt.channels.forEach(ch => { const ti=(ch.groups||[]).indexOf(g); if(ti>=0) ch.groups[ti]=val; });
-            if (activeGroups.has(g)) { activeGroups.delete(g); activeGroups.add(val); }
-            selectedGrp = null; lsSave(); renderGrpList(); renderGroupBar(); renderChList();
-          } else { renderGrpList(); }
-        };
-        inp.addEventListener('blur', save);
-        inp.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();inp.blur();} if(e.key==='Escape'){inp.value=g;inp.blur();} });
-      });
-      grpList.appendChild(row);
-    });
-    const addGrpWrap = el('div', 'yt-grp-add-wrap');
-    const addGrpBtn = el('button', 'kw-add-btn', '＋');
-    addGrpBtn.title = '新增分組';
-    addGrpBtn.addEventListener('click', () => {
-      addGrpWrap.innerHTML = '';
-      const gi = document.createElement('input');
-      gi.className = 'kw-add-input'; gi.type = 'search'; gi.placeholder = '分組名稱'; gi.autocomplete = 'off'; gi.name = 'neocast-yt-grp-add'; gi.spellcheck = false;
-      addGrpWrap.appendChild(gi); gi.focus();
-      const save = () => {
-        const val = gi.value.trim();
-        if (val && !(S.yt.groups||[]).includes(val)) { if(!S.yt.groups) S.yt.groups=[]; S.yt.groups.push(val); lsSave(); }
-        renderGrpList(); renderGroupBar();
-      };
-      gi.addEventListener('blur', save);
-      gi.addEventListener('keydown', e => { if(e.key==='Enter'){e.preventDefault();gi.blur();} if(e.key==='Escape'){gi.value='';gi.blur();} });
-    });
-    addGrpWrap.appendChild(addGrpBtn);
-    grpList.appendChild(addGrpWrap);
-  };
-
-  // Click outside to deselect group/tag
+  // Click outside to deselect tag
   document.addEventListener('click', function deselectAll(e) {
     if (!container.isConnected) { document.removeEventListener('click', deselectAll); return; }
-    if (!grpList.contains(e.target) && selectedGrp) { selectedGrp = null; renderGrpList(); }
     if (!chList.contains(e.target) && selectedTagId) { selectedTagId = null; renderChList(); }
   });
 
@@ -4230,7 +4298,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     managerOpen = !managerOpen;
     managerPanel.style.display = managerOpen ? '' : 'none';
     addBtn.classList.toggle('active', managerOpen);
-    if (managerOpen) { renderChList(); renderGrpList(); inp.focus(); }
+    if (managerOpen) { renderChList(); inp.focus(); }
   });
   container.appendChild(managerPanel);
 
