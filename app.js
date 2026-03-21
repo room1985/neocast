@@ -4130,19 +4130,19 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       }
       wrap.appendChild(tab);
 
-      if (grpEditMode) {
-        const x = el('span', 'yt-grp-tag-x', '✕');
-        x.title = '刪除分組';
-        x.addEventListener('click', e => {
-          e.stopPropagation();
-          if (!confirm(`刪除分組「${g}」？（頻道不會被刪除）`)) return;
-          S.yt.groups = (S.yt.groups || []).filter(x => x !== g);
-          S.yt.channels.forEach(ch => { ch.groups = (ch.groups || []).filter(x => x !== g); });
-          activeGroups.delete(g);
-          lsSave(); renderGroupBar(); renderChList(); renderFeed();
-        });
-        tab.appendChild(x); // ✕ 放在 tab 按鈕內部，跟文字同框
-      }
+      // ✕ 刪除按鈕（跟新聞 kw-del 一樣，平時隱藏，編輯模式顯示）
+      const x = el('button', 'yt-grp-tag-x');
+      x.textContent = '✕';
+      x.title = '刪除分組';
+      x.addEventListener('click', e => {
+        e.stopPropagation();
+        if (!confirm(`刪除分組「${g}」？（頻道不會被刪除）`)) return;
+        S.yt.groups = (S.yt.groups || []).filter(v => v !== g);
+        S.yt.channels.forEach(ch => { ch.groups = (ch.groups || []).filter(v => v !== g); });
+        activeGroups.delete(g);
+        lsSave(); renderGroupBar(); renderChList(); renderFeed();
+      });
+      wrap.appendChild(x);
 
       groupBar.appendChild(wrap);
     });
