@@ -1560,26 +1560,27 @@ function buildNewsWidget() {
   w.insertBefore(outer, w.querySelector('.resize-handle'));
   w.querySelector('.w-title').id = 'news-widget-title';
 
-  // ── Toolbar: [✎] [⚙] [中/EN] [↻] ──
-  const toolbar = el('div', 'news-toolbar');
+  // 把 ⚙ 中 ↺ 加到 w-head（標題列），在鉛筆按鈕前
+  const wHead = w.querySelector('.w-head');
+  const pencilBtn = wHead?.querySelector('.w-pencil-btn');
 
-  // Settings button
-  const settingsBtn = el('button', 'w-btn news-settings-btn');
+  const settingsBtn = el('button', 'yt-icon-btn news-settings-btn');
   settingsBtn.title = '新聞設定';
   settingsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
 
-  // Lang button (rounded square, not pill)
-  const langBtn = el('button', 'w-btn news-lang-btn', S.news.lang === 'zh-TW' ? '中' : 'EN');
+  const langBtn = el('button', 'yt-icon-btn news-lang-btn');
   langBtn.id = 'news-lang-pill';
   langBtn.title = '切換語言';
+  langBtn.textContent = S.news.lang === 'zh-TW' ? '中' : 'EN';
+  langBtn.style.fontWeight = '700';
+  langBtn.style.fontSize = '12px';
   langBtn.addEventListener('click', () => {
     S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
     langBtn.textContent = S.news.lang === 'zh-TW' ? '中' : 'EN';
     lsSave(); fetchNews(true);
   });
 
-  // Refresh button
-  const refBtn = el('button', 'w-btn');
+  const refBtn = el('button', 'yt-icon-btn');
   refBtn.id = 'news-ref-btn';
   refBtn.title = '重新整理';
   refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
@@ -1588,9 +1589,15 @@ function buildNewsWidget() {
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  toolbar.appendChild(settingsBtn);
-  toolbar.appendChild(langBtn);
-  toolbar.appendChild(refBtn);
+  if (wHead && pencilBtn) {
+    wHead.insertBefore(refBtn, pencilBtn);
+    wHead.insertBefore(langBtn, refBtn);
+    wHead.insertBefore(settingsBtn, langBtn);
+  }
+
+  // ── toolbar 保留但隱藏（settings panel 需要 settingsBtn 的 click 事件）──
+  const toolbar = el('div', 'news-toolbar');
+  toolbar.style.display = 'none';
   outer.appendChild(toolbar);
 
   // ── Settings panel (hidden by default) ──
