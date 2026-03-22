@@ -4733,6 +4733,37 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
     thumbImg.onerror = () => { thumbImg.src = newHqRes; thumbImg.onerror = null; };
     thumbImg.onload = () => { if (thumbImg.naturalWidth <= 120) thumbImg.src = newHqRes; };
     thumbImg.src = newMaxRes;
+    // 更新按讚數
+    const likeSpan = likeBadge?.querySelector('span');
+    if (likeSpan) likeSpan.textContent = fmtNum(v.likeCount || 0);
+    if (likeBadge) likeBadge.style.display = v.likeCount > 0 ? '' : 'none';
+    // 更新觀看數
+    const viewSpan = viewBadge?.querySelector('span');
+    if (viewSpan) viewSpan.textContent = fmtNum(v.viewCount || 0);
+    if (viewBadge) viewBadge.style.display = v.viewCount > 0 ? '' : 'none';
+    // 更新 YouTube 連結
+    openBtn.href = `https://www.youtube.com/watch?v=${v.videoId}`;
+    // 更新說明
+    descEl.textContent = '';
+    moreBtn.style.display = 'none';
+    descExpanded = false;
+    descEl.style.webkitLineClamp = '1';
+    moreBtn.textContent = '更多 ▾';
+    // 重新抓說明
+    const key = S.cfg.ytApiKey?.trim();
+    if (key) {
+      fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${v.videoId}&key=${key}`)
+        .then(r => r.json()).then(d => {
+          const desc = d.items?.[0]?.snippet?.description?.trim() || '';
+          if (!desc) return;
+          descEl.textContent = desc;
+          setTimeout(() => {
+            if (descEl.scrollHeight > descEl.clientHeight + 4) moreBtn.style.display = '';
+          }, 50);
+        }).catch(() => {});
+    }
+    // 更新按讚按鈕狀態
+    updateLikeBtn(v);
   };
 
   playerWrap.addEventListener('click', e => {
@@ -4757,30 +4788,34 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   // ── Action row ──
   const actionRow = el('div', 'yt-action-row');
 
+  // 用 currentVideo 追蹤當前顯示的影片（切換時更新）
+  let currentVideo = video;
+
   // Like button + count
   const likeBtn = el('button', 'yt-like-btn');
   const likeCount = el('span', 'yt-like-count');
-  const updateLikeBtn = () => {
+  const isLiked = () => (S.yt.liked||[]).includes(currentVideo.videoId);
+  const updateLikeBtn = (v) => {
+    if (v) currentVideo = v;
     const liked = isLiked();
     likeBtn.innerHTML = liked
       ? `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 已按讚`
       : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> 按讚`;
     likeBtn.classList.toggle('liked', liked);
-    if (video.likeCount > 0) likeCount.textContent = fmtNum(video.likeCount);
+    if (currentVideo.likeCount > 0) likeCount.textContent = fmtNum(currentVideo.likeCount);
   };
-  const isLiked = () => (S.yt.liked||[]).includes(video.videoId);
   updateLikeBtn();
   likeBtn.addEventListener('click', async () => {
     const token = S.yt.oauthToken;
     if (!token) { ytGoogleLogin(() => likeBtn.click()); return; }
     const liked = isLiked();
     try {
-      const res = await fetch(`https://www.googleapis.com/youtube/v3/videos/rate?id=${video.videoId}&rating=${liked?'none':'like'}`, {
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/videos/rate?id=${currentVideo.videoId}&rating=${liked?'none':'like'}`, {
         method: 'POST', headers: { Authorization: `Bearer ${token}` }
       });
       if (res.status === 401) { S.yt.oauthToken = null; lsSave(); ytGoogleLogin(() => likeBtn.click()); return; }
-      if (liked) S.yt.liked = (S.yt.liked||[]).filter(id => id !== video.videoId);
-      else { if (!S.yt.liked) S.yt.liked = []; S.yt.liked.push(video.videoId); }
+      if (liked) S.yt.liked = (S.yt.liked||[]).filter(id => id !== currentVideo.videoId);
+      else { if (!S.yt.liked) S.yt.liked = []; S.yt.liked.push(currentVideo.videoId); }
       lsSave(); updateLikeBtn();
     } catch(e) { console.error('Like error', e); }
   });
@@ -4789,21 +4824,19 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   likeWrap.appendChild(likeBtn);
   actionRow.appendChild(likeWrap);
 
-  // Like count badge
-  if (video.likeCount > 0) {
-    const likeBadge = el('div', 'yt-stat-badge');
-    likeBadge.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13" style="color:#f87171"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
-    likeBadge.appendChild(el('span', '', fmtNum(video.likeCount)));
-    actionRow.appendChild(likeBadge);
-  }
+  // Like count badge（永遠建立，無數字時隱藏）
+  const likeBadge = el('div', 'yt-stat-badge');
+  likeBadge.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13" style="color:#f87171"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  likeBadge.appendChild(el('span', '', fmtNum(video.likeCount)));
+  if (!video.likeCount) likeBadge.style.display = 'none';
+  actionRow.appendChild(likeBadge);
 
-  // View count badge
-  if (video.viewCount > 0) {
-    const viewBadge = el('div', 'yt-stat-badge');
-    viewBadge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
-    viewBadge.appendChild(el('span', '', fmtNum(video.viewCount)));
-    actionRow.appendChild(viewBadge);
-  }
+  // View count badge（永遠建立，無數字時隱藏）
+  const viewBadge = el('div', 'yt-stat-badge');
+  viewBadge.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+  viewBadge.appendChild(el('span', '', fmtNum(video.viewCount)));
+  if (!video.viewCount) viewBadge.style.display = 'none';
+  actionRow.appendChild(viewBadge);
 
   const openBtn = el('a', 'yt-open-btn', 'YouTube ↗');
   openBtn.href = `https://www.youtube.com/watch?v=${video.videoId}`;
