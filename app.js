@@ -3237,7 +3237,7 @@ function renderAnimeWidget(container) {
     card.appendChild(info);
     card.appendChild(star);
     card.addEventListener('click', e => {
-      if (e.target.closest('.anime-star') || e.target.closest('img')) return;
+      if (e.target.closest('.anime-star') || e.target.closest('img') || e.target.closest('.anime-watch-ep') || e.target.closest('.anime-watch-ep-input')) return;
       showAnimeSheet(anime);
     });
     return card;
