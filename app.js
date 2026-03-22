@@ -4805,7 +4805,7 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
     actionRow.appendChild(viewBadge);
   }
 
-  const openBtn = el('a', 'yt-open-btn', 'YouTube 開啟 ↗');
+  const openBtn = el('a', 'yt-open-btn', 'YouTube ↗');
   openBtn.href = `https://www.youtube.com/watch?v=${video.videoId}`;
   openBtn.target = '_blank'; openBtn.rel = 'noopener';
   actionRow.appendChild(openBtn);
