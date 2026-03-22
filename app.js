@@ -4670,11 +4670,30 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   const playIcon = el('div', 'yt-play-icon', '▶');
   playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
 
+  const titleEl = el('div', 'yt-sheet-title', video.title || '');
+  const metaParts0 = [video.channelName || ''];
+  metaParts0.push(fmtRelTime(video.publishedAt));
+  if (video.duration > 0) metaParts0.push(`影片時長 ${fmtDuration(video.duration)}`);
+  const meta = el('span', 'yt-meta-text', metaParts0.join('．'));
+
+  // 手動切換影片時同步更新卡片內容
+  const updateSheetContent = (v) => {
+    titleEl.textContent = v.title || '';
+    const parts = [v.channelName || ''];
+    parts.push(fmtRelTime(v.publishedAt));
+    if (v.duration > 0) parts.push(`影片時長 ${fmtDuration(v.duration)}`);
+    meta.textContent = parts.join('．');
+    const newMaxRes = `https://i.ytimg.com/vi/${v.videoId}/maxresdefault.jpg`;
+    const newHqRes  = `https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg`;
+    thumbImg.onerror = () => { thumbImg.src = newHqRes; thumbImg.onerror = null; };
+    thumbImg.onload = () => { if (thumbImg.naturalWidth <= 120) thumbImg.src = newHqRes; };
+    thumbImg.src = newMaxRes;
+  };
+
   playerWrap.addEventListener('click', e => {
     e.stopPropagation();
     playerActive = true;
     playerWrap.style.display = 'none';
-    // 使用外部傳入的 startIdx，若無則用 findIndex 計算
     const playerStartIdx = (startIdx != null && startIdx >= 0) ? startIdx : (playlist ? playlist.findIndex(v => v.videoId === video.videoId) : -1);
     showYtPlayer(video.videoId, () => {
       playerActive = false;
@@ -4682,16 +4701,12 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
       playerWrap.appendChild(thumbImg);
       playerWrap.appendChild(playIcon);
       playerWrap.style.display = '';
-    }, playlist, playerStartIdx);
+    }, playlist, playerStartIdx, updateSheetContent);
   });
   sheet.appendChild(playerWrap);
 
   const infoWrap = el('div', 'yt-sheet-info');
-  infoWrap.appendChild(el('div', 'yt-sheet-title', video.title || ''));
-  const metaParts = [video.channelName || ''];
-  metaParts.push(fmtRelTime(video.publishedAt));
-  if (video.duration > 0) metaParts.push(`影片時長 ${fmtDuration(video.duration)}`);
-  const meta = el('span', 'yt-meta-text', metaParts.join('．'));
+  infoWrap.appendChild(titleEl);
   infoWrap.appendChild(meta);
 
   // ── Action row ──
@@ -4796,7 +4811,7 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   }
 }
 
-function showYtPlayer(videoId, onClose, playlist, startIdx) {
+function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   const key = S.cfg.ytApiKey?.trim();
 
@@ -4845,6 +4860,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       // 更新上一部/下一部按鈕狀態
       if (prevBtn) prevBtn.disabled = curIdx <= 0;
       if (nextBtn) nextBtn.disabled = curIdx >= playlist.length - 1;
+      // 同步更新 sheet 卡片內容
+      if (onVideoChange) onVideoChange(playlist[curIdx]);
     };
 
     const showCountdown = () => {
