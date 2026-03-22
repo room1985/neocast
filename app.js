@@ -3285,14 +3285,12 @@ function renderAnimeWidget(container) {
       if (!items.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
 
       let dragSrcFavId = null;
-      let favIsDragging = false;
 
       items.forEach(anime => {
         const card = makeAnimeCard(anime, anime.air_weekday);
         card.draggable = true;
 
         card.addEventListener('dragstart', e => {
-          favIsDragging = true;
           dragSrcFavId = String(anime.id);
           e.dataTransfer.effectAllowed = 'move';
           setTimeout(() => card.classList.add('anime-card-dragging'), 0);
@@ -3301,7 +3299,6 @@ function renderAnimeWidget(container) {
           card.classList.remove('anime-card-dragging');
           grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
           dragSrcFavId = null;
-          setTimeout(() => { favIsDragging = false; }, 0);
         });
         card.addEventListener('dragover', e => {
           e.preventDefault();
@@ -3319,10 +3316,6 @@ function renderAnimeWidget(container) {
           S.animeState.tracked.splice(di, 0, m);
           lsSave(); setTimeout(() => renderFav(), 0);
         });
-        // 攔截 click，拖曳結束後不觸發 showAnimeSheet
-        card.addEventListener('click', e => {
-          if (favIsDragging) { e.stopImmediatePropagation(); }
-        }, true);
 
         // Touch drag (long press) — 改用動態掛載 passive:false 避免捲動衝突
         let tTimer = null, tDragging = false, tGhost = null, tRafId = null;
