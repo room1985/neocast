@@ -685,7 +685,7 @@ a { color:inherit; text-decoration:none; }
   font-size: .68rem;
   color: var(--txm);
   text-align: center;
-  width: 80px;
+  width: 100%;
   overflow: hidden;
   white-space: normal;
   word-break: break-all;
