@@ -3884,6 +3884,7 @@ function fmtNum(n) {
   if (n == null) return '—';
   if (n >= 1e8) return (n / 1e8).toFixed(1) + '億';
   if (n >= 1e4) return (n / 1e4).toFixed(1) + '萬';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
   return n.toLocaleString();
 }
 
