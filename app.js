@@ -4895,7 +4895,13 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       nextBtn.addEventListener('click', e => { e.stopPropagation(); loadVideo(curIdx + 1); });
 
       bar.appendChild(prevBtn);
+      bar.appendChild(nextBtn);
     }
+
+    // 中間空白撐開
+    const barSpacer = el('div', '');
+    barSpacer.style.flex = '1';
+    bar.appendChild(barSpacer);
 
     if (isPwa) {
       const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
@@ -4910,7 +4916,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       bar.appendChild(fsBtn);
     }
     bar.appendChild(closeBtn);
-    if (nextBtn) bar.appendChild(nextBtn);
 
     // 鍵盤左右鍵
     if (playlist?.length > 1) {
