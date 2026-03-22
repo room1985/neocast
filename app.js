@@ -4915,10 +4915,12 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
         const ids = playlist.slice(startPos, startPos + 20).map(v => v.videoId).join(',');
         src += `&playlist=${ids}`;
       }
-      // 字幕設定
-      const cc = S.cfg.ytCc ?? 1;
-      const ccLang = S.cfg.ytCcLang || 'zh-TW';
-      src += `&cc_load_policy=${cc}&cc_lang_pref=${ccLang}&hl=${ccLang}`;
+      // 只有 CC 開啟時才加字幕參數，關閉時完全不加避免影響 YouTube 預設行為
+      const cc = S.cfg.ytCc ?? 0;
+      if (cc) {
+        const ccLang = S.cfg.ytCcLang || 'zh-TW';
+        src += `&cc_load_policy=1&cc_lang_pref=${ccLang}&hl=${ccLang}`;
+      }
       iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
       iframe.allowFullscreen = true;
