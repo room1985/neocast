@@ -5483,7 +5483,37 @@ function initMobileLayout() {
         panelHead.insertBefore(mLockBtn, expandBtn);
       }
 
-      panel.appendChild(panelHead);
+      // YouTube 專用：在 panelHead 加 ⚙ ↺，renderYoutubeWidget 時隱藏內部的 mHead
+      if (page.widget === 'youtube') {
+        const ytAddBtn = el('button', 'yt-icon-btn');
+        ytAddBtn.title = '管理頻道';
+        ytAddBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+        const ytRefBtn = el('button', 'yt-icon-btn');
+        ytRefBtn.title = '重新整理';
+        ytRefBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+        panelHead.insertBefore(ytAddBtn, expandBtn);
+        panelHead.insertBefore(ytRefBtn, expandBtn);
+        // 建立 widget content 後把 mHead 隱藏，並把按鈕 reference 傳給 renderYoutubeWidget
+        const inner = el('div', 'yt-inner');
+        inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+        panel.appendChild(panelHead);
+        panel.appendChild(inner);
+        renderYoutubeWidget(inner, ytAddBtn, ytRefBtn);
+        // 隱藏 renderYoutubeWidget 建立的 mHead（因為已整合到 panelHead）
+        const mHead = inner.querySelector('.yt-mobile-head');
+        if (mHead) mHead.style.display = 'none';
+        swipeArea.appendChild(panel);
+        const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
+        dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
+        if (idx > 0) {
+          let lpTimer = null;
+          dot.addEventListener('touchstart', () => { lpTimer = setTimeout(() => { if (confirm(`刪除「${meta?.label || page.widget}」頁？`)) { S.mobilePages.splice(idx, 1); if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1; lsSave(); renderPages(); } }, 600); });
+          dot.addEventListener('touchend', () => clearTimeout(lpTimer));
+          dot.addEventListener('touchmove', () => clearTimeout(lpTimer));
+        }
+        dotsBar.appendChild(dot);
+        return; // 跳過後面的 panel.appendChild(panelHead) 和 buildMobileWidgetContent
+      }
 
       // Widget content
       buildMobileWidgetContent(page.widget, panel);
