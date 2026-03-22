@@ -4481,7 +4481,22 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     const meta = el('span', 'yt-meta-text', metaParts.join('．'));
     info.appendChild(meta);
     card.appendChild(info);
-    card.addEventListener('click', () => showYtSheet(video, renderFeed, allItems));
+    card.addEventListener('click', () => {
+      // 輪播排序：各頻道輪流各出最新一部
+      // 頻道A第1新, 頻道B第1新, ... 頻道A第2新, 頻道B第2新...
+      const channelOrder = [];
+      const seen = new Set();
+      allItems.forEach(v => { if (!seen.has(v.channelId)) { seen.add(v.channelId); channelOrder.push(v.channelId); } });
+      const byChannel = {};
+      channelOrder.forEach(id => { byChannel[id] = allItems.filter(v => v.channelId === id); });
+      const roundRobin = [];
+      const maxLen = Math.max(...channelOrder.map(id => byChannel[id].length));
+      for (let i = 0; i < maxLen; i++) {
+        channelOrder.forEach(id => { if (byChannel[id][i]) roundRobin.push(byChannel[id][i]); });
+      }
+      const startIdx = roundRobin.findIndex(v => v.videoId === video.videoId);
+      showYtSheet(video, renderFeed, roundRobin, startIdx >= 0 ? startIdx : 0);
+    });
     return card;
   };
 
@@ -4626,7 +4641,7 @@ function ytIsLoggedIn() {
   return S.yt.oauthToken && S.yt.oauthExpiry && Date.now() < S.yt.oauthExpiry;
 }
 
-function showYtSheet(video, onUpdate, playlist) {
+function showYtSheet(video, onUpdate, playlist, startIdx) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   document.querySelector('.anime-sheet-overlay')?.remove();
   const thumb = video.thumb || '';
@@ -4659,15 +4674,15 @@ function showYtSheet(video, onUpdate, playlist) {
     e.stopPropagation();
     playerActive = true;
     playerWrap.style.display = 'none';
-    // 找當前影片在 playlist 的索引，讓自動播放從這部開始
-    const startIdx = playlist ? playlist.findIndex(v => v.videoId === video.videoId) : -1;
+    // 使用外部傳入的 startIdx，若無則用 findIndex 計算
+    const playerStartIdx = (startIdx != null && startIdx >= 0) ? startIdx : (playlist ? playlist.findIndex(v => v.videoId === video.videoId) : -1);
     showYtPlayer(video.videoId, () => {
       playerActive = false;
       playerWrap.innerHTML = '';
       playerWrap.appendChild(thumbImg);
       playerWrap.appendChild(playIcon);
       playerWrap.style.display = '';
-    }, playlist, startIdx);
+    }, playlist, playerStartIdx);
   });
   sheet.appendChild(playerWrap);
 
