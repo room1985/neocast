@@ -4524,7 +4524,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     const meta = el('span', 'yt-meta-text', metaParts.join('．'));
     info.appendChild(meta);
     card.appendChild(info);
-    card.addEventListener('click', () => showYtSheet(video, renderFeed));
+    card.addEventListener('click', () => showYtSheet(video, renderFeed, allItems));
     return card;
   };
 
@@ -4626,7 +4626,7 @@ function ytIsLoggedIn() {
   return S.yt.oauthToken && S.yt.oauthExpiry && Date.now() < S.yt.oauthExpiry;
 }
 
-function showYtSheet(video, onUpdate) {
+function showYtSheet(video, onUpdate, playlist) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   document.querySelector('.anime-sheet-overlay')?.remove();
   const thumb = video.thumb || '';
@@ -4659,13 +4659,15 @@ function showYtSheet(video, onUpdate) {
     e.stopPropagation();
     playerActive = true;
     playerWrap.style.display = 'none';
+    // 找當前影片在 playlist 的索引，讓自動播放從這部開始
+    const startIdx = playlist ? playlist.findIndex(v => v.videoId === video.videoId) : -1;
     showYtPlayer(video.videoId, () => {
       playerActive = false;
       playerWrap.innerHTML = '';
       playerWrap.appendChild(thumbImg);
       playerWrap.appendChild(playIcon);
       playerWrap.style.display = '';
-    });
+    }, playlist, startIdx);
   });
   sheet.appendChild(playerWrap);
 
@@ -4779,19 +4781,33 @@ function showYtSheet(video, onUpdate) {
   }
 }
 
-function showYtPlayer(videoId, onClose) {
+function showYtPlayer(videoId, onClose, playlist, startIdx) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   const key = S.cfg.ytApiKey?.trim();
 
+  // 確保 YouTube IFrame API 已載入
+  if (!window.YT) {
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  }
+
+  let curIdx = (startIdx >= 0 && playlist?.length) ? startIdx : -1;
+  let countdownTimer = null;
+  let countdownInterval = null;
+
   const buildPlayer = (portrait) => {
-    // Dark backdrop — behind sheet (z-index 9500)
     const backdrop = el('div', 'yt-player-backdrop');
     backdrop.style.pointerEvents = 'none';
-
-    // Modal — above sheet (z-index 11000)
     const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
 
     const closePlayer = () => {
+      clearTimeout(countdownTimer);
+      clearInterval(countdownInterval);
+      if (window._ytPlayerInstance) {
+        try { window._ytPlayerInstance.destroy(); } catch(_) {}
+        window._ytPlayerInstance = null;
+      }
       backdrop.classList.remove('open');
       modal.classList.remove('open');
       setTimeout(() => { backdrop.remove(); modal.remove(); onClose?.(); }, 260);
@@ -4799,34 +4815,100 @@ function showYtPlayer(videoId, onClose) {
 
     const bar = el('div', 'yt-player-drag-bar');
     const closeBtn = el('button', 'yt-player-close', '✕');
-    closeBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      closePlayer();
-    });
+    closeBtn.addEventListener('click', e => { e.stopPropagation(); closePlayer(); });
 
-    // 全螢幕按鈕（僅 PWA standalone 顯示）
     const isPwa = window.matchMedia('(display-mode: standalone)').matches;
-    if (isPwa) {
-      const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
-      fsBtn.title = '全螢幕';
-      fsBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        iframe.requestFullscreen?.().then(() => {
-          screen.orientation?.lock?.('landscape').catch(() => {});
-        }).catch(() => {});
-      });
-      bar.appendChild(fsBtn);
-    }
-    bar.appendChild(closeBtn);
 
     const playerBox = el('div', 'yt-player-box');
-    const iframe = el('iframe');
-    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-    iframe.allow = 'autoplay; encrypted-media; fullscreen';
-    iframe.allowFullscreen = true;
-    playerBox.appendChild(iframe);
 
-    // 退出全螢幕時恢復直版
+    // 倒數提示列
+    const nextBar = el('div', 'yt-next-bar');
+    nextBar.style.display = 'none';
+    modal.appendChild(nextBar);
+
+    const loadVideo = (vid) => {
+      nextBar.style.display = 'none';
+      clearTimeout(countdownTimer);
+      clearInterval(countdownInterval);
+      if (window._ytPlayerInstance) {
+        window._ytPlayerInstance.loadVideoById(vid);
+      }
+    };
+
+    const showCountdown = () => {
+      if (!playlist || curIdx < 0) return;
+      const next = playlist[curIdx + 1];
+      if (!next) return;
+      let secs = 3;
+      nextBar.innerHTML = '';
+      const msg = el('span', '', `下一則：${next.title || ''}`);
+      const cancelBtn = el('button', 'yt-next-cancel', `取消 (${secs})`);
+      cancelBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        nextBar.style.display = 'none';
+        clearTimeout(countdownTimer);
+        clearInterval(countdownInterval);
+      });
+      nextBar.appendChild(msg);
+      nextBar.appendChild(cancelBtn);
+      nextBar.style.display = 'flex';
+
+      countdownInterval = setInterval(() => {
+        secs--;
+        cancelBtn.textContent = `取消 (${secs})`;
+        if (secs <= 0) clearInterval(countdownInterval);
+      }, 1000);
+
+      countdownTimer = setTimeout(() => {
+        nextBar.style.display = 'none';
+        curIdx++;
+        loadVideo(playlist[curIdx].videoId);
+      }, 3000);
+    };
+
+    // 等 YT API 就緒再建立 player
+    const initPlayer = () => {
+      const div = document.createElement('div');
+      div.id = 'yt-iframe-' + Date.now();
+      playerBox.appendChild(div);
+
+      window._ytPlayerInstance = new window.YT.Player(div.id, {
+        videoId: videoId,
+        playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
+        events: {
+          onStateChange: (e) => {
+            // 0 = ended
+            if (e.data === 0) showCountdown();
+          }
+        }
+      });
+
+      // PWA 全螢幕按鈕
+      if (isPwa) {
+        const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
+        fsBtn.title = '全螢幕';
+        fsBtn.addEventListener('click', e => {
+          e.stopPropagation();
+          const iframeEl = playerBox.querySelector('iframe');
+          iframeEl?.requestFullscreen?.().then(() => {
+            screen.orientation?.lock?.('landscape').catch(() => {});
+          }).catch(() => {});
+        });
+        bar.appendChild(fsBtn);
+      }
+    };
+
+    if (window.YT?.Player) {
+      initPlayer();
+    } else {
+      // 等 API 載入完畢
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => {
+        prev?.();
+        initPlayer();
+      };
+    }
+
     const onFsChange = () => {
       if (!document.fullscreenElement) {
         screen.orientation?.lock?.('portrait').catch(() => {});
@@ -4835,6 +4917,7 @@ function showYtPlayer(videoId, onClose) {
     };
     document.addEventListener('fullscreenchange', onFsChange);
 
+    bar.appendChild(closeBtn);
     modal.addEventListener('click', e => e.stopPropagation());
     modal.appendChild(bar);
     modal.appendChild(playerBox);
