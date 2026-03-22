@@ -75,7 +75,9 @@ let S = {
     weatherLat:  null,
     weatherLon:  null,
     ytApiKey:    '',
-    newsdataApiKey: ''
+    newsdataApiKey: '',
+    ytCc:        0,        // 字幕開關：1=強制開, 0=不強制
+    ytCcLang:    'zh-TW'  // 字幕語言：zh-TW=繁體, zh-CN=簡體
   },
   yt: { channels: [], fetchedAt: 0, items: [], groups: [], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
   widgetTitles: {},
@@ -4658,6 +4660,31 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
     setTimeout(() => overlay.remove(), 300);
   };
 
+  // ── 字幕開關列 ──
+  const ccRow = el('div', 'yt-cc-row');
+
+  const ccToggle = el('button', 'yt-cc-btn' + (S.cfg.ytCc ? ' on' : ''));
+  ccToggle.textContent = 'CC';
+  ccToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    S.cfg.ytCc = S.cfg.ytCc ? 0 : 1;
+    ccToggle.classList.toggle('on', !!S.cfg.ytCc);
+    lsSave();
+  });
+
+  const ccLangBtn = el('button', 'yt-cc-lang-btn');
+  ccLangBtn.textContent = S.cfg.ytCcLang === 'zh-TW' ? '繁中' : '簡中';
+  ccLangBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    S.cfg.ytCcLang = S.cfg.ytCcLang === 'zh-TW' ? 'zh-CN' : 'zh-TW';
+    ccLangBtn.textContent = S.cfg.ytCcLang === 'zh-TW' ? '繁中' : '簡中';
+    lsSave();
+  });
+
+  ccRow.appendChild(ccToggle);
+  ccRow.appendChild(ccLangBtn);
+  sheet.appendChild(ccRow);
+
   // ── Player area ──
   const playerWrap = el('div', 'yt-sheet-player');
   const thumbImg = el('img', 'yt-sheet-thumb');
@@ -4884,9 +4911,15 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       const iframe = el('iframe');
       let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1`;
       if (playlist?.length > 1) {
-        const startPos = curIdx >= 0 ? curIdx : 0;
-        const ids = playlist.slice(startPos, startPos + 20).map(v => v.videoId).join(',');
-        src += `&playlist=${ids}`;
+        const startPos = curIdx >= 0 ? curIdx + 1 : 1; // 從下一部開始，不含當前影片
+        const ids = playlist.slice(startPos, startPos + 19).map(v => v.videoId).join(',');
+        if (ids) src += `&playlist=${ids}`;
+      }
+      // 只有 CC 開啟時才加字幕參數，關閉時完全不加避免影響 YouTube 預設行為
+      const cc = S.cfg.ytCc ?? 0;
+      if (cc) {
+        const ccLang = S.cfg.ytCcLang || 'zh-TW';
+        src += `&cc_load_policy=1&cc_lang_pref=${ccLang}&hl=${ccLang}`;
       }
       iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
@@ -4896,7 +4929,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
 
     playerBox.appendChild(buildIframe(videoId));
 
-    // 上一部 / 下一部按鈕
+    // 上一部 / 下一部 / CC 按鈕（全部靠左）
     let prevBtn = null, nextBtn = null;
     if (playlist?.length > 1) {
       prevBtn = el('button', 'yt-player-nav-btn', '◀');
@@ -4912,6 +4945,21 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       bar.appendChild(prevBtn);
       bar.appendChild(nextBtn);
     }
+
+    // CC 按鈕（純文字，靠左接在導航按鈕後）
+    const ccBtn = el('button', 'yt-player-cc-btn' + (S.cfg.ytCc ? ' on' : ''));
+    ccBtn.textContent = 'CC';
+    ccBtn.title = '字幕';
+    ccBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      S.cfg.ytCc = S.cfg.ytCc ? 0 : 1;
+      ccBtn.classList.toggle('on', !!S.cfg.ytCc);
+      lsSave();
+      const newIframe = buildIframe(playlist?.[curIdx]?.videoId || videoId);
+      const oldIframe = playerBox.querySelector('iframe');
+      if (oldIframe) oldIframe.replaceWith(newIframe);
+    });
+    bar.appendChild(ccBtn);
 
     // 中間空白撐開
     const barSpacer = el('div', '');
