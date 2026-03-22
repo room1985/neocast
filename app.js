@@ -5538,6 +5538,7 @@ function initMobileLayout() {
       }
 
       // Widget content
+      panel.appendChild(panelHead);
       buildMobileWidgetContent(page.widget, panel);
 
       swipeArea.appendChild(panel);
