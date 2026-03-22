@@ -314,20 +314,24 @@ function mergeRemoteYt(remoteYt) {
 
 async function gistPull() {
   const { token, gistId } = S.cfg;
-  if (!token || !gistId) return;
+  if (!token) { toast('請先填入 GitHub Token', 'err'); return false; }
+  if (!gistId) { toast('請先填入 Gist ID', 'err'); return false; }
   try {
-    const res  = await fetch(`https://api.github.com/gists/${gistId}`, {
+    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
       headers: { Authorization: `token ${token}` }
     });
-    if (!res.ok) return;
+    if (res.status === 401) { toast('Pull 失敗：Token 無效或已過期', 'err'); return false; }
+    if (res.status === 403) { toast('Pull 失敗：Token 權限不足', 'err'); return false; }
+    if (res.status === 404) { toast('Pull 失敗：Gist ID 不存在', 'err'); return false; }
+    if (!res.ok) { toast(`Pull 失敗：HTTP ${res.status}`, 'err'); return false; }
     const data = await res.json();
     const raw  = data.files?.['neocast.json']?.content;
-    if (!raw) return;
+    if (!raw) { toast('Pull 失敗：Gist 裡找不到 neocast.json', 'err'); return false; }
     const d = JSON.parse(raw);
-    if (d.shortcuts)    S.shortcuts = d.shortcuts;
-    if (d.groups)       S.groups    = d.groups;
-    if (d.stickies)     S.stickies  = d.stickies;
-    if (d.widgets)      Object.assign(S.widgets, d.widgets);
+    if (d.shortcuts)       S.shortcuts = d.shortcuts;
+    if (d.groups)          S.groups    = d.groups;
+    if (d.stickies)        S.stickies  = d.stickies;
+    if (d.widgets)         Object.assign(S.widgets, d.widgets);
     if (d.newsKeywords)    S.news.keywords    = d.newsKeywords;
     if (d.newsLang)        S.news.lang        = d.newsLang;
     if (d.newsKwFetchedAt) S.news.kwFetchedAt = Object.assign(S.news.kwFetchedAt || {}, d.newsKwFetchedAt);
@@ -337,8 +341,11 @@ async function gistPull() {
     if (d.lastModified)    S.cfg._lastModified = d.lastModified;
     lsSaveLocal();
     renderAll();
-    toast('已從 Gist 拉取最新設定 ✓');
-  } catch(_) {}
+    return true;
+  } catch(e) {
+    toast('Pull 失敗：' + e.message, 'err');
+    return false;
+  }
 }
 
 // ── 自動同步：比較 lastModified，雲端較新才拉取 ──
@@ -386,7 +393,7 @@ async function gistAutoSync() {
     lsSaveLocal();
     renderAll();
     toast('已自動同步雲端資料 ✓');
-  } catch(_) {}
+  } catch(e) { toast('自動同步失敗：' + e.message, 'err'); }
   finally { _autoSyncBusy = false; }
 }
 
@@ -3096,6 +3103,58 @@ function renderAnimeWidget(container) {
 
   let calendarCache = null;
 
+  // 建立觀看進度元素（卡片和 sheet 共用）
+  function buildWatchProgress(animeId) {
+    const watchedEp = S.animeState.trackedData?.[animeId]?.watchedEp || 0;
+    const wrap = el('span', 'anime-watch-progress');
+    wrap.dataset.id = animeId;
+
+    function renderProgress(val) {
+      wrap.innerHTML = '';
+      const prefix = document.createTextNode('觀看至 ');
+      const numSpan = el('span', 'anime-watch-ep', String(val));
+      const suffix = document.createTextNode(' 集');
+      wrap.appendChild(prefix);
+      wrap.appendChild(numSpan);
+      wrap.appendChild(suffix);
+
+      numSpan.addEventListener('click', e => {
+        e.stopPropagation();
+        const cur = S.animeState.trackedData?.[animeId]?.watchedEp || 0;
+        const inp = document.createElement('input');
+        inp.type = 'search'; inp.autocomplete = 'new-password'; inp.spellcheck = false;
+        inp.className = 'anime-watch-ep-input';
+        inp.value = cur;
+        numSpan.replaceWith(inp);
+        inp.focus(); inp.select();
+
+        let saved = false;
+        const save = () => {
+          if (saved) return; saved = true;
+          const newVal = Math.max(0, parseInt(inp.value) || 0);
+          if (S.animeState.trackedData?.[animeId]) {
+            S.animeState.trackedData[animeId].watchedEp = newVal;
+            lsSave();
+          }
+          renderProgress(newVal);
+          // 同步所有同一 animeId 的進度元素
+          document.querySelectorAll(`.anime-watch-progress[data-id="${animeId}"]`).forEach(el => {
+            const sp = el.querySelector('.anime-watch-ep');
+            if (sp) sp.textContent = String(newVal);
+          });
+        };
+        inp.addEventListener('blur', save);
+        inp.addEventListener('keydown', ev => {
+          if (ev.key === 'Enter') { ev.preventDefault(); inp.blur(); }
+          if (ev.key === 'Escape') { saved = true; inp.replaceWith(numSpan); }
+        });
+      });
+    }
+
+    renderProgress(watchedEp);
+    return wrap;
+  }
+
   function makeAnimeCard(anime, bgmWd) {
     const isTracked = (S.animeState.tracked || []).includes(anime.id);
     const card = el('div', 'anime-card' + (isTracked ? ' pinned' : ''));
@@ -3119,6 +3178,11 @@ function renderAnimeWidget(container) {
     if (epsNum) {
       const eb = el('span', 'anime-card-badge badge-eps', `共 ${epsNum} 集`);
       meta.appendChild(eb);
+    }
+    // 觀看進度（只有追蹤中才顯示）
+    if (isTracked) {
+      const progressEl = buildWatchProgress(anime.id);
+      meta.appendChild(progressEl);
     }
 
     const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
@@ -3183,7 +3247,7 @@ function renderAnimeWidget(container) {
     card.appendChild(info);
     card.appendChild(star);
     card.addEventListener('click', e => {
-      if (e.target.closest('.anime-star') || e.target.closest('img')) return;
+      if (e.target.closest('.anime-star') || e.target.closest('img') || e.target.closest('.anime-watch-progress')) return;
       showAnimeSheet(anime);
     });
     return card;
@@ -3212,12 +3276,14 @@ function renderAnimeWidget(container) {
       if (!items.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
 
       let dragSrcFavId = null;
+      let favIsDragging = false;
 
       items.forEach(anime => {
         const card = makeAnimeCard(anime, anime.air_weekday);
         card.draggable = true;
 
         card.addEventListener('dragstart', e => {
+          favIsDragging = true;
           dragSrcFavId = String(anime.id);
           e.dataTransfer.effectAllowed = 'move';
           setTimeout(() => card.classList.add('anime-card-dragging'), 0);
@@ -3226,6 +3292,7 @@ function renderAnimeWidget(container) {
           card.classList.remove('anime-card-dragging');
           grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
           dragSrcFavId = null;
+          setTimeout(() => { favIsDragging = false; }, 0);
         });
         card.addEventListener('dragover', e => {
           e.preventDefault();
@@ -3243,6 +3310,10 @@ function renderAnimeWidget(container) {
           S.animeState.tracked.splice(di, 0, m);
           lsSave(); setTimeout(() => renderFav(), 0);
         });
+        // 攔截 click，拖曳結束後不觸發 showAnimeSheet
+        card.addEventListener('click', e => {
+          if (favIsDragging) { e.stopImmediatePropagation(); }
+        }, true);
 
         // Touch drag (long press) — 改用動態掛載 passive:false 避免捲動衝突
         let tTimer = null, tDragging = false, tGhost = null, tRafId = null;
@@ -3663,6 +3734,42 @@ async function showAnimeSheet(anime) {
     linkWrap.appendChild(a);
   });
   sheet.appendChild(linkWrap);
+
+  // 觀看進度控制（只有追蹤中才顯示）
+  if ((S.animeState.tracked || []).includes(anime.id)) {
+    const progressRow = el('div', 'anime-sheet-progress-row');
+    const minusBtn = el('button', 'anime-sheet-ep-btn', '−');
+    const progressDisplay = buildWatchProgress(anime.id);
+    progressDisplay.classList.add('anime-sheet-progress-display');
+    const plusBtn = el('button', 'anime-sheet-ep-btn', '+');
+
+    const syncAll = newVal => {
+      document.querySelectorAll(`.anime-watch-progress[data-id="${anime.id}"] .anime-watch-ep`).forEach(sp => {
+        sp.textContent = String(newVal);
+      });
+    };
+
+    minusBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!S.animeState.trackedData?.[anime.id]) return;
+      const newVal = Math.max(0, (S.animeState.trackedData[anime.id].watchedEp || 0) - 1);
+      S.animeState.trackedData[anime.id].watchedEp = newVal;
+      lsSave(); syncAll(newVal);
+    });
+
+    plusBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!S.animeState.trackedData?.[anime.id]) return;
+      const newVal = (S.animeState.trackedData[anime.id].watchedEp || 0) + 1;
+      S.animeState.trackedData[anime.id].watchedEp = newVal;
+      lsSave(); syncAll(newVal);
+    });
+
+    progressRow.appendChild(minusBtn);
+    progressRow.appendChild(progressDisplay);
+    progressRow.appendChild(plusBtn);
+    sheet.appendChild(progressRow);
+  }
 
   // Summary — 5 lines collapsed, More to expand
   const summaryWrap = el('div', 'anime-sheet-summary-wrap');
@@ -5437,9 +5544,8 @@ async function init() {
   $('cfg-ok').addEventListener('click', saveSettings);
   $('cfg-sync-now').addEventListener('click', async () => {
     if (confirm('從雲端還原？這會覆蓋你目前的本機設定。')) {
-      await gistPull();
-      renderAll();
-      toast('已從雲端還原設定 ✓');
+      const ok = await gistPull();
+      if (ok) toast('已從雲端還原設定 ✓');
     }
   });
   $('rm-vid').addEventListener('click', removeVideo);
