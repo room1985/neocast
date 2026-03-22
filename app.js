@@ -4524,7 +4524,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     const meta = el('span', 'yt-meta-text', metaParts.join('．'));
     info.appendChild(meta);
     card.appendChild(info);
-    card.addEventListener('click', () => showYtSheet(video, renderFeed, allItems));
+    card.addEventListener('click', () => showYtSheet(video, renderFeed));
     return card;
   };
 
@@ -4626,7 +4626,7 @@ function ytIsLoggedIn() {
   return S.yt.oauthToken && S.yt.oauthExpiry && Date.now() < S.yt.oauthExpiry;
 }
 
-function showYtSheet(video, onUpdate, playlist) {
+function showYtSheet(video, onUpdate) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   document.querySelector('.anime-sheet-overlay')?.remove();
   const thumb = video.thumb || '';
@@ -4659,15 +4659,13 @@ function showYtSheet(video, onUpdate, playlist) {
     e.stopPropagation();
     playerActive = true;
     playerWrap.style.display = 'none';
-    // 找當前影片在 playlist 的索引，讓自動播放從這部開始
-    const startIdx = playlist ? playlist.findIndex(v => v.videoId === video.videoId) : -1;
     showYtPlayer(video.videoId, () => {
       playerActive = false;
       playerWrap.innerHTML = '';
       playerWrap.appendChild(thumbImg);
       playerWrap.appendChild(playIcon);
       playerWrap.style.display = '';
-    }, playlist, startIdx);
+    });
   });
   sheet.appendChild(playerWrap);
 
@@ -4781,24 +4779,19 @@ function showYtSheet(video, onUpdate, playlist) {
   }
 }
 
-function showYtPlayer(videoId, onClose, playlist, startIdx) {
+function showYtPlayer(videoId, onClose) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   const key = S.cfg.ytApiKey?.trim();
 
-  let curIdx = (startIdx != null && startIdx >= 0 && playlist?.length) ? startIdx : -1;
-  let countdownTimer = null;
-  let countdownInterval = null;
-  let msgListener = null;
-
   const buildPlayer = (portrait) => {
+    // Dark backdrop — behind sheet (z-index 9500)
     const backdrop = el('div', 'yt-player-backdrop');
     backdrop.style.pointerEvents = 'none';
+
+    // Modal — above sheet (z-index 11000)
     const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
 
     const closePlayer = () => {
-      clearTimeout(countdownTimer);
-      clearInterval(countdownInterval);
-      if (msgListener) { window.removeEventListener('message', msgListener); msgListener = null; }
       backdrop.classList.remove('open');
       modal.classList.remove('open');
       setTimeout(() => { backdrop.remove(); modal.remove(); onClose?.(); }, 260);
@@ -4806,87 +4799,19 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
 
     const bar = el('div', 'yt-player-drag-bar');
     const closeBtn = el('button', 'yt-player-close', '✕');
-    closeBtn.addEventListener('click', e => { e.stopPropagation(); closePlayer(); });
+    closeBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      closePlayer();
+    });
 
+    // 全螢幕按鈕（僅 PWA standalone 顯示）
     const isPwa = window.matchMedia('(display-mode: standalone)').matches;
-    const playerBox = el('div', 'yt-player-box');
-
-    // 倒數提示列
-    const nextBar = el('div', 'yt-next-bar');
-    nextBar.style.display = 'none';
-
-    const loadVideo = (vid) => {
-      nextBar.style.display = 'none';
-      clearTimeout(countdownTimer);
-      clearInterval(countdownInterval);
-      // 換影片：重建 iframe
-      const newIframe = buildIframe(vid);
-      const oldIframe = playerBox.querySelector('iframe');
-      if (oldIframe) oldIframe.replaceWith(newIframe);
-    };
-
-    const showCountdown = () => {
-      if (!playlist || curIdx < 0) return;
-      const next = playlist[curIdx + 1];
-      if (!next) return;
-      let secs = 3;
-      nextBar.innerHTML = '';
-      const msg = el('span', '', `下一則：${next.title || ''}`);
-      const cancelBtn = el('button', 'yt-next-cancel', `取消 (${secs})`);
-      cancelBtn.addEventListener('click', e => {
-        e.stopPropagation();
-        nextBar.style.display = 'none';
-        clearTimeout(countdownTimer);
-        clearInterval(countdownInterval);
-      });
-      nextBar.appendChild(msg);
-      nextBar.appendChild(cancelBtn);
-      nextBar.style.display = 'flex';
-
-      countdownInterval = setInterval(() => {
-        secs--;
-        cancelBtn.textContent = `取消 (${secs})`;
-        if (secs <= 0) clearInterval(countdownInterval);
-      }, 1000);
-
-      countdownTimer = setTimeout(() => {
-        nextBar.style.display = 'none';
-        curIdx++;
-        loadVideo(playlist[curIdx].videoId);
-      }, 3000);
-    };
-
-    // 監聽 YouTube postMessage 偵測播放結束
-    msgListener = (e) => {
-      if (!e.origin.includes('youtube.com')) return;
-      try {
-        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        // playerState 0 = ended
-        if (data?.event === 'onStateChange' && data?.info === 0) {
-          showCountdown();
-        }
-      } catch(_) {}
-    };
-    window.addEventListener('message', msgListener);
-
-    const buildIframe = (vid) => {
-      const iframe = el('iframe');
-      // enablejsapi=1 讓 YouTube 透過 postMessage 發送播放狀態
-      iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&enablejsapi=1&rel=0&playsinline=1`;
-      iframe.allow = 'autoplay; encrypted-media; fullscreen';
-      iframe.allowFullscreen = true;
-      return iframe;
-    };
-
-    playerBox.appendChild(buildIframe(videoId));
-
     if (isPwa) {
       const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
       fsBtn.title = '全螢幕';
       fsBtn.addEventListener('click', e => {
         e.stopPropagation();
-        const iframeEl = playerBox.querySelector('iframe');
-        iframeEl?.requestFullscreen?.().then(() => {
+        iframe.requestFullscreen?.().then(() => {
           screen.orientation?.lock?.('landscape').catch(() => {});
         }).catch(() => {});
       });
@@ -4894,6 +4819,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
     }
     bar.appendChild(closeBtn);
 
+    const playerBox = el('div', 'yt-player-box');
+    const iframe = el('iframe');
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    iframe.allow = 'autoplay; encrypted-media; fullscreen';
+    iframe.allowFullscreen = true;
+    playerBox.appendChild(iframe);
+
+    // 退出全螢幕時恢復直版
     const onFsChange = () => {
       if (!document.fullscreenElement) {
         screen.orientation?.lock?.('portrait').catch(() => {});
@@ -4904,7 +4837,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
 
     modal.addEventListener('click', e => e.stopPropagation());
     modal.appendChild(bar);
-    modal.appendChild(nextBar);
     modal.appendChild(playerBox);
 
     document.body.appendChild(backdrop);
