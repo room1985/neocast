@@ -4861,8 +4861,13 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       if (!e.origin.includes('youtube.com')) return;
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        // playerState 0 = ended
-        if (data?.event === 'onStateChange' && data?.info === 0) {
+        // YouTube postMessage 格式有兩種：
+        // 1. {"event":"onStateChange","info":0}
+        // 2. {"event":"infoDelivery","info":{"playerState":0}}
+        const state1 = (data?.event === 'onStateChange') ? data?.info : null;
+        const state2 = (data?.event === 'infoDelivery') ? data?.info?.playerState : null;
+        const playerState = state1 ?? state2;
+        if (playerState === 0) {
           showCountdown();
         }
       } catch(_) {}
