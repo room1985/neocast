@@ -3337,7 +3337,7 @@ a { color:inherit; text-decoration:none; }
 }
 .yt-player-modal.open { opacity: 1; }
 
-/* 全螢幕模式：modal 撐滿，playerBox 填滿剩餘空間 */
+/* 全螢幕模式 */
 .yt-player-modal:fullscreen {
   width: 100vw;
   height: 100vh;
@@ -3440,55 +3440,6 @@ a { color:inherit; text-decoration:none; }
 .yt-next-cancel:hover { background: rgba(248,113,113,.3); border-color: #f87171; }
 
 /* 上一部/下一部按鈕 */
-/* 字幕開關列（sheet） */
-.yt-cc-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 0 6px;
-}
-.yt-cc-btn {
-  background: rgba(255,255,255,.08);
-  border: 1px solid var(--bd);
-  color: rgba(255,255,255,.5);
-  border-radius: 6px;
-  padding: 3px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all .15s;
-}
-.yt-cc-btn.on {
-  background: rgba(56,189,248,.15);
-  border-color: var(--ac);
-  color: var(--ac);
-}
-.yt-cc-lang-btn {
-  background: rgba(255,255,255,.08);
-  border: 1px solid var(--bd);
-  color: rgba(255,255,255,.5);
-  border-radius: 6px;
-  padding: 3px 10px;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all .15s;
-}
-.yt-cc-lang-btn:hover { border-color: rgba(255,255,255,.3); color: #fff; }
-
-/* 播放器 bar 字幕按鈕 */
-.yt-player-cc-btn {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.2);
-  color: rgba(255,255,255,.5);
-  border-radius: 6px;
-  width: 28px; height: 28px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-  transition: all .15s;
-}
-.yt-player-cc-btn.on { color: var(--ac); border-color: var(--ac); background: rgba(56,189,248,.15); }
-.yt-player-cc-btn:hover { border-color: rgba(255,255,255,.4); color: #fff; }
-
 .yt-player-nav-btn {
   background: rgba(255,255,255,.1);
   border: 1px solid rgba(255,255,255,.2);

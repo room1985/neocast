@@ -75,9 +75,7 @@ let S = {
     weatherLat:  null,
     weatherLon:  null,
     ytApiKey:    '',
-    newsdataApiKey: '',
-    ytCc:        1,        // 字幕開關：1=開, 0=關
-    ytCcLang:    'zh-TW'  // 字幕語言：zh-TW=繁體, zh-CN=簡體
+    newsdataApiKey: ''
   },
   yt: { channels: [], fetchedAt: 0, items: [], groups: [], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
   widgetTitles: {},
@@ -4660,32 +4658,6 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
     setTimeout(() => overlay.remove(), 300);
   };
 
-  // ── 字幕開關列 ──
-  const ccRow = el('div', 'yt-cc-row');
-
-  const ccToggle = el('button', 'yt-cc-btn' + (S.cfg.ytCc ? ' on' : ''));
-  ccToggle.textContent = S.cfg.ytCc ? 'CC 開' : 'CC 關';
-  ccToggle.addEventListener('click', e => {
-    e.stopPropagation();
-    S.cfg.ytCc = S.cfg.ytCc ? 0 : 1;
-    ccToggle.textContent = S.cfg.ytCc ? 'CC 開' : 'CC 關';
-    ccToggle.classList.toggle('on', !!S.cfg.ytCc);
-    lsSave();
-  });
-
-  const ccLangBtn = el('button', 'yt-cc-lang-btn');
-  ccLangBtn.textContent = S.cfg.ytCcLang === 'zh-TW' ? '繁中' : '簡中';
-  ccLangBtn.addEventListener('click', e => {
-    e.stopPropagation();
-    S.cfg.ytCcLang = S.cfg.ytCcLang === 'zh-TW' ? 'zh-CN' : 'zh-TW';
-    ccLangBtn.textContent = S.cfg.ytCcLang === 'zh-TW' ? '繁中' : '簡中';
-    lsSave();
-  });
-
-  ccRow.appendChild(ccToggle);
-  ccRow.appendChild(ccLangBtn);
-  sheet.appendChild(ccRow);
-
   // ── Player area ──
   const playerWrap = el('div', 'yt-sheet-player');
   const thumbImg = el('img', 'yt-sheet-thumb');
@@ -4916,10 +4888,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
         const ids = playlist.slice(startPos, startPos + 20).map(v => v.videoId).join(',');
         src += `&playlist=${ids}`;
       }
-      // 字幕設定
-      const cc = S.cfg.ytCc ?? 1;
-      const ccLang = S.cfg.ytCcLang || 'zh-TW';
-      src += `&cc_load_policy=${cc}&cc_lang_pref=${ccLang}&hl=${ccLang}`;
       iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
       iframe.allowFullscreen = true;
@@ -4950,22 +4918,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
     barSpacer.style.flex = '1';
     bar.appendChild(barSpacer);
 
-    // 字幕按鈕
-    const ccBtn = el('button', 'yt-player-cc-btn' + (S.cfg.ytCc ? ' on' : ''));
-    ccBtn.title = '字幕';
-    ccBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 8H9.5v-.5h-2v3h2V14H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V14H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>`;
-    ccBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      S.cfg.ytCc = S.cfg.ytCc ? 0 : 1;
-      ccBtn.classList.toggle('on', !!S.cfg.ytCc);
-      lsSave();
-      // 重載 iframe 套用新設定
-      const newIframe = buildIframe(playlist?.[curIdx]?.videoId || videoId);
-      const oldIframe = playerBox.querySelector('iframe');
-      if (oldIframe) oldIframe.replaceWith(newIframe);
-    });
-    bar.appendChild(ccBtn);
-
     // 全螢幕按鈕（對 modal 全螢幕，保留 bar 上的按鈕）
     const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
     fsBtn.title = '全螢幕';
@@ -4974,17 +4926,15 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       if (!document.fullscreenElement) {
         modal.requestFullscreen?.().then(() => {
           screen.orientation?.lock?.('landscape').catch(() => {});
-          fsBtn.textContent = '⛶';
         }).catch(() => {});
       } else {
-        document.exitFullscreen?.().then(() => {
-          screen.orientation?.lock?.('portrait').catch(() => {});
-        }).catch(() => {});
+        document.exitFullscreen?.().catch(() => {});
       }
     });
-    // 退出全螢幕時同步按鈕狀態
     document.addEventListener('fullscreenchange', () => {
-      fsBtn.textContent = document.fullscreenElement ? '⛶' : '⛶';
+      if (!document.fullscreenElement) {
+        screen.orientation?.lock?.('portrait').catch(() => {});
+      }
     });
     bar.appendChild(fsBtn);
     bar.appendChild(closeBtn);
