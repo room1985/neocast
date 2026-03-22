@@ -76,7 +76,7 @@ let S = {
     weatherLon:  null,
     ytApiKey:    '',
     newsdataApiKey: '',
-    ytCc:        1,        // 字幕開關：1=開, 0=關
+    ytCc:        0,        // 字幕開關：1=強制開, 0=不強制
     ytCcLang:    'zh-TW'  // 字幕語言：zh-TW=繁體, zh-CN=簡體
   },
   yt: { channels: [], fetchedAt: 0, items: [], groups: [], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
