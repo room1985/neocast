@@ -2555,35 +2555,6 @@ a { color:inherit; text-decoration:none; }
   margin-top: 3px;
 }
 
-/* 卡片觀看進度 */
-.anime-watch-progress {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.45);
-  cursor: pointer;
-  user-select: none;
-}
-.anime-watch-ep {
-  color: var(--ac);
-  font-weight: 600;
-}
-.anime-watch-ep-input {
-  width: 36px;
-  background: rgba(56,189,248,.12);
-  border: 1px solid rgba(56,189,248,.4);
-  border-radius: 4px;
-  color: var(--ac);
-  font-size: 11px;
-  font-weight: 600;
-  text-align: center;
-  padding: 0 2px;
-  outline: none;
-  -webkit-appearance: none; appearance: none;
-}
-.anime-watch-ep-input::-webkit-search-cancel-button { display: none; }
-
 /* Button group — single row */
 .anime-sheet-btn-group {
   display: flex;
@@ -2645,72 +2616,6 @@ a { color:inherit; text-decoration:none; }
 .anime-sheet-more-btn:hover { opacity: .75; }
 
 /* 4 link buttons grid */
-
-/* ── Sheet 觀看進度列 ── */
-.anime-sheet-progress-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  margin: 4px 12px 0;
-  background: rgba(56,189,248,.06);
-  border: 1px solid rgba(56,189,248,.2);
-  border-radius: 10px;
-}
-.anime-sheet-progress-pre,
-.anime-sheet-progress-suf {
-  font-size: 12px;
-  color: rgba(255,255,255,0.45);
-}
-.anime-sheet-progress-pre { margin-right: 2px; }
-.anime-sheet-progress-suf { margin-left: 2px; }
-.anime-sheet-progress-num {
-  color: var(--ac);
-  font-size: 18px;
-  font-weight: 700;
-  min-width: 28px;
-  text-align: center;
-  cursor: pointer;
-  border-radius: 4px;
-  padding: 0 4px;
-  transition: background .15s;
-}
-.anime-sheet-progress-num:hover {
-  background: rgba(56,189,248,.15);
-}
-.anime-sheet-progress-inp {
-  width: 44px;
-  background: rgba(56,189,248,.12);
-  border: 1px solid rgba(56,189,248,.4);
-  border-radius: 6px;
-  color: var(--ac);
-  font-size: 18px;
-  font-weight: 700;
-  text-align: center;
-  padding: 0 4px;
-  outline: none;
-  -webkit-appearance: none; appearance: none;
-}
-.anime-sheet-progress-inp::-webkit-search-cancel-button { display: none; }
-.anime-sheet-progress-btn,
-.anime-sheet-ep-btn {
-  background: rgba(255,255,255,.07);
-  border: 1px solid var(--bd);
-  color: rgba(255,255,255,0.6);
-  border-radius: 6px;
-  width: 28px; height: 28px;
-  font-size: 16px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .15s, color .15s;
-  flex-shrink: 0;
-}
-.anime-sheet-progress-btn:hover,
-.anime-sheet-ep-btn:hover {
-  background: rgba(56,189,248,.2);
-  color: var(--ac);
-}
-
 .anime-sheet-btns {
   display: grid;
   grid-template-columns: 1fr 1fr;

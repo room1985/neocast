@@ -3096,58 +3096,6 @@ function renderAnimeWidget(container) {
 
   let calendarCache = null;
 
-  // 建立觀看進度元素（卡片和 sheet 共用）
-  function buildWatchProgress(animeId) {
-    const watchedEp = S.animeState.trackedData?.[animeId]?.watchedEp || 0;
-    const wrap = el('span', 'anime-watch-progress');
-    wrap.dataset.id = animeId;
-
-    function renderProgress(val) {
-      wrap.innerHTML = '';
-      const prefix = document.createTextNode('觀看至 ');
-      const numSpan = el('span', 'anime-watch-ep', String(val));
-      const suffix = document.createTextNode(' 集');
-      wrap.appendChild(prefix);
-      wrap.appendChild(numSpan);
-      wrap.appendChild(suffix);
-
-      numSpan.addEventListener('click', e => {
-        e.stopPropagation(); // 只攔截數字點擊，不讓 wrap 其他點擊被擋
-        const cur = S.animeState.trackedData?.[animeId]?.watchedEp || 0;
-        const inp = document.createElement('input');
-        inp.type = 'search'; inp.autocomplete = 'new-password'; inp.spellcheck = false;
-        inp.className = 'anime-watch-ep-input';
-        inp.value = cur;
-        numSpan.replaceWith(inp);
-        inp.focus(); inp.select();
-
-        let saved = false;
-        const save = () => {
-          if (saved) return; saved = true;
-          const newVal = Math.max(0, parseInt(inp.value) || 0);
-          if (S.animeState.trackedData?.[animeId]) {
-            S.animeState.trackedData[animeId].watchedEp = newVal;
-            lsSave();
-          }
-          renderProgress(newVal);
-          // 同步所有同一 animeId 的進度元素
-          document.querySelectorAll(`.anime-watch-progress[data-id="${animeId}"]`).forEach(el => {
-            const sp = el.querySelector('.anime-watch-ep');
-            if (sp) sp.textContent = String(newVal);
-          });
-        };
-        inp.addEventListener('blur', save);
-        inp.addEventListener('keydown', ev => {
-          if (ev.key === 'Enter') { ev.preventDefault(); inp.blur(); }
-          if (ev.key === 'Escape') { saved = true; inp.replaceWith(numSpan); }
-        });
-      });
-    }
-
-    renderProgress(watchedEp);
-    return wrap;
-  }
-
   function makeAnimeCard(anime, bgmWd) {
     const isTracked = (S.animeState.tracked || []).includes(anime.id);
     const card = el('div', 'anime-card' + (isTracked ? ' pinned' : ''));
@@ -3171,11 +3119,6 @@ function renderAnimeWidget(container) {
     if (epsNum) {
       const eb = el('span', 'anime-card-badge badge-eps', `共 ${epsNum} 集`);
       meta.appendChild(eb);
-    }
-    // 觀看進度（只有追蹤中才顯示）
-    if (isTracked) {
-      const progressEl = buildWatchProgress(anime.id);
-      meta.appendChild(progressEl);
     }
 
     const star = el('button', 'anime-star' + (isTracked ? ' on' : ''));
@@ -3300,6 +3243,7 @@ function renderAnimeWidget(container) {
           S.animeState.tracked.splice(di, 0, m);
           lsSave(); setTimeout(() => renderFav(), 0);
         });
+
         // Touch drag (long press) — 改用動態掛載 passive:false 避免捲動衝突
         let tTimer = null, tDragging = false, tGhost = null, tRafId = null;
         let tGhostCenterX = 0; // 保留供相容，實際不再使用
@@ -3719,42 +3663,6 @@ async function showAnimeSheet(anime) {
     linkWrap.appendChild(a);
   });
   sheet.appendChild(linkWrap);
-
-  // 觀看進度控制（只有追蹤中才顯示）
-  if ((S.animeState.tracked || []).includes(anime.id)) {
-    const progressRow = el('div', 'anime-sheet-progress-row');
-    const minusBtn = el('button', 'anime-sheet-ep-btn', '−');
-    const progressDisplay = buildWatchProgress(anime.id);
-    progressDisplay.classList.add('anime-sheet-progress-display');
-    const plusBtn = el('button', 'anime-sheet-ep-btn', '+');
-
-    const syncAll = newVal => {
-      document.querySelectorAll(`.anime-watch-progress[data-id="${anime.id}"] .anime-watch-ep`).forEach(sp => {
-        sp.textContent = String(newVal);
-      });
-    };
-
-    minusBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      if (!S.animeState.trackedData?.[anime.id]) return;
-      const newVal = Math.max(0, (S.animeState.trackedData[anime.id].watchedEp || 0) - 1);
-      S.animeState.trackedData[anime.id].watchedEp = newVal;
-      lsSave(); syncAll(newVal);
-    });
-
-    plusBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      if (!S.animeState.trackedData?.[anime.id]) return;
-      const newVal = (S.animeState.trackedData[anime.id].watchedEp || 0) + 1;
-      S.animeState.trackedData[anime.id].watchedEp = newVal;
-      lsSave(); syncAll(newVal);
-    });
-
-    progressRow.appendChild(minusBtn);
-    progressRow.appendChild(progressDisplay);
-    progressRow.appendChild(plusBtn);
-    sheet.appendChild(progressRow);
-  }
 
   // Summary — 5 lines collapsed, More to expand
   const summaryWrap = el('div', 'anime-sheet-summary-wrap');
