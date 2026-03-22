@@ -4856,28 +4856,19 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       }, 3000);
     };
 
-    // 監聽 YouTube postMessage 偵測播放結束
-    msgListener = (e) => {
-      if (!e.origin.includes('youtube.com')) return;
-      try {
-        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        // YouTube postMessage 格式有兩種：
-        // 1. {"event":"onStateChange","info":0}
-        // 2. {"event":"infoDelivery","info":{"playerState":0}}
-        const state1 = (data?.event === 'onStateChange') ? data?.info : null;
-        const state2 = (data?.event === 'infoDelivery') ? data?.info?.playerState : null;
-        const playerState = state1 ?? state2;
-        if (playerState === 0) {
-          showCountdown();
-        }
-      } catch(_) {}
-    };
-    window.addEventListener('message', msgListener);
+    // 監聽 YouTube postMessage 偵測播放結束（保留備用）
+    msgListener = null;
 
     const buildIframe = (vid) => {
       const iframe = el('iframe');
-      // enablejsapi=1 讓 YouTube 透過 postMessage 發送播放狀態
-      iframe.src = `https://www.youtube.com/embed/${vid}?autoplay=1&enablejsapi=1&rel=0&playsinline=1`;
+      // 用 playlist 參數帶同分類影片列表，YouTube 原生自動播下一則
+      let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1`;
+      if (playlist?.length > 1) {
+        // 從當前影片開始，帶後續所有影片 ID
+        const ids = playlist.slice(curIdx >= 0 ? curIdx : 0).map(v => v.videoId).join(',');
+        src += `&playlist=${ids}`;
+      }
+      iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
       iframe.allowFullscreen = true;
       return iframe;
