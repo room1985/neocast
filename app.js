@@ -4671,18 +4671,33 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
 
   const titleEl = el('div', 'yt-sheet-title', video.title || '');
-  const metaParts0 = [video.channelName || ''];
-  metaParts0.push(fmtRelTime(video.publishedAt));
-  if (video.duration > 0) metaParts0.push(`影片時長 ${fmtDuration(video.duration)}`);
-  const meta = el('span', 'yt-meta-text', metaParts0.join('．'));
+
+  // 頻道頭像 helper
+  const getChThumb = (channelId) => (S.yt.channels || []).find(c => c.id === channelId)?.thumb || '';
+
+  const buildMetaEl = (v) => {
+    const wrap = el('div', 'yt-sheet-meta-channel');
+    const chThumb = getChThumb(v.channelId);
+    if (chThumb) {
+      const av = el('img', 'yt-sheet-ch-avatar');
+      av.src = chThumb; av.alt = v.channelName || '';
+      wrap.appendChild(av);
+    }
+    const parts = [v.channelName || ''];
+    parts.push(fmtRelTime(v.publishedAt));
+    if (v.duration > 0) parts.push(`影片時長 ${fmtDuration(v.duration)}`);
+    wrap.appendChild(el('span', 'yt-meta-text', parts.join('．')));
+    return wrap;
+  };
+
+  let metaWrap = buildMetaEl(video);
 
   // 手動切換影片時同步更新卡片內容
   const updateSheetContent = (v) => {
     titleEl.textContent = v.title || '';
-    const parts = [v.channelName || ''];
-    parts.push(fmtRelTime(v.publishedAt));
-    if (v.duration > 0) parts.push(`影片時長 ${fmtDuration(v.duration)}`);
-    meta.textContent = parts.join('．');
+    const newMeta = buildMetaEl(v);
+    metaWrap.replaceWith(newMeta);
+    metaWrap = newMeta;
     const newMaxRes = `https://i.ytimg.com/vi/${v.videoId}/maxresdefault.jpg`;
     const newHqRes  = `https://i.ytimg.com/vi/${v.videoId}/hqdefault.jpg`;
     thumbImg.onerror = () => { thumbImg.src = newHqRes; thumbImg.onerror = null; };
@@ -4707,7 +4722,7 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
 
   const infoWrap = el('div', 'yt-sheet-info');
   infoWrap.appendChild(titleEl);
-  infoWrap.appendChild(meta);
+  infoWrap.appendChild(metaWrap);
 
   // ── Action row ──
   const actionRow = el('div', 'yt-action-row');
