@@ -5099,39 +5099,46 @@ function buildMobileWidgetContent(widgetType, container) {
   }
 }
 
-function renderMobileNews(container) {
+function renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn) {
   container.innerHTML = '';
   container.className = 'mobile-news-inner';
 
-  // ── Toolbar: [✎] [⚙] [中/EN] [↻] ──
+  // ── Toolbar: [⚙] [中/EN] [↻]（若有外部按鈕則不建立 toolbar）──
   const toolbar = el('div', 'news-toolbar');
   let mEditingTags = false;
 
-  const settingsBtn = el('button', 'w-btn news-settings-btn');
-  settingsBtn.title = '新聞設定';
-  settingsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+  const settingsBtn = extSettingsBtn || el('button', 'w-btn news-settings-btn');
+  if (!extSettingsBtn) {
+    settingsBtn.title = '新聞設定';
+    settingsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+  }
 
-  const langBtn = el('button', 'w-btn news-lang-btn', S.news.lang === 'zh-TW' ? '中' : 'EN');
-  langBtn.title = '切換語言';
+  const langBtn = extLangBtn || el('button', 'w-btn news-lang-btn', S.news.lang === 'zh-TW' ? '中' : 'EN');
+  if (!extLangBtn) langBtn.title = '切換語言';
+  langBtn.textContent = S.news.lang === 'zh-TW' ? '中' : 'EN';
   langBtn.addEventListener('click', () => {
     S.news.lang = S.news.lang === 'zh-TW' ? 'en' : 'zh-TW';
     langBtn.textContent = S.news.lang === 'zh-TW' ? '中' : 'EN';
     lsSave(); fetchNews(true);
   });
 
-  const refBtn = el('button', 'w-btn');
-  refBtn.id = 'mobile-news-ref-btn';
-  refBtn.title = '重新整理';
-  refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  const refBtn = extRefBtn || el('button', 'w-btn');
+  if (!extRefBtn) {
+    refBtn.id = 'mobile-news-ref-btn';
+    refBtn.title = '重新整理';
+    refBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+  }
   refBtn.addEventListener('click', () => {
     refBtn.classList.add('spin');
     fetchNews(true).finally(() => refBtn.classList.remove('spin'));
   });
 
-  toolbar.appendChild(settingsBtn);
-  toolbar.appendChild(langBtn);
-  toolbar.appendChild(refBtn);
-  container.appendChild(toolbar);
+  if (!extSettingsBtn) {
+    toolbar.appendChild(settingsBtn);
+    toolbar.appendChild(langBtn);
+    toolbar.appendChild(refBtn);
+    container.appendChild(toolbar);
+  }
 
   // Settings panel
   const settingsPanel = el('div', 'news-settings-panel');
@@ -5535,6 +5542,43 @@ function initMobileLayout() {
         }
         dotsBar.appendChild(dot);
         return; // 跳過後面的 panel.appendChild(panelHead) 和 buildMobileWidgetContent
+      }
+
+      // 即時新聞專用：在 panelHead 加 ⚙ 中 ↺
+      if (page.widget === 'news') {
+        const newsSettingsBtn = el('button', 'yt-icon-btn news-settings-btn');
+        newsSettingsBtn.title = '新聞設定';
+        newsSettingsBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+
+        const newsLangBtn = el('button', 'yt-icon-btn news-lang-btn');
+        newsLangBtn.title = '切換語言';
+        newsLangBtn.textContent = S.news.lang === 'zh-TW' ? '中' : 'EN';
+        newsLangBtn.style.fontWeight = '700';
+        newsLangBtn.style.fontSize = '12px';
+
+        const newsRefBtn = el('button', 'yt-icon-btn');
+        newsRefBtn.title = '重新整理';
+        newsRefBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+
+        panelHead.insertBefore(newsSettingsBtn, expandBtn);
+        panelHead.insertBefore(newsLangBtn, expandBtn);
+        panelHead.insertBefore(newsRefBtn, expandBtn);
+
+        panel.appendChild(panelHead);
+        const inner = el('div', 'mobile-news-inner');
+        panel.appendChild(inner);
+        renderMobileNews(inner, newsSettingsBtn, newsLangBtn, newsRefBtn);
+        swipeArea.appendChild(panel);
+        const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
+        dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
+        if (idx > 0) {
+          let lpTimer = null;
+          dot.addEventListener('touchstart', () => { lpTimer = setTimeout(() => { if (confirm(`刪除「${meta?.label || page.widget}」頁？`)) { S.mobilePages.splice(idx, 1); if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1; lsSave(); renderPages(); } }, 600); });
+          dot.addEventListener('touchend', () => clearTimeout(lpTimer));
+          dot.addEventListener('touchmove', () => clearTimeout(lpTimer));
+        }
+        dotsBar.appendChild(dot);
+        return;
       }
 
       // Widget content
