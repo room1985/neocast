@@ -317,8 +317,12 @@ async function gistPull() {
   if (!token) { toast('請先填入 GitHub Token', 'err'); return false; }
   if (!gistId) { toast('請先填入 Gist ID', 'err'); return false; }
   try {
+    // 直接用 raw API 取得完整內容，不會有截斷問題
     const res = await fetch(`https://api.github.com/gists/${gistId}`, {
-      headers: { Authorization: `token ${token}` }
+      headers: {
+        Authorization: `token ${token}`,
+        Accept: 'application/vnd.github.raw+json'
+      }
     });
     if (res.status === 401) { toast('Pull 失敗：Token 無效或已過期', 'err'); return false; }
     if (res.status === 403) { toast('Pull 失敗：Token 權限不足', 'err'); return false; }
@@ -327,13 +331,7 @@ async function gistPull() {
     const data = await res.json();
     const fileInfo = data.files?.['neocast.json'];
     if (!fileInfo) { toast('Pull 失敗：Gist 裡找不到 neocast.json', 'err'); return false; }
-    // 檔案超過 1MB 時 content 會被截斷，改用 raw_url 取得完整內容
-    let raw = fileInfo.content;
-    if (fileInfo.truncated && fileInfo.raw_url) {
-      const rawRes = await fetch(fileInfo.raw_url, { headers: { Authorization: `token ${token}` } });
-      if (!rawRes.ok) { toast(`Pull 失敗：無法取得完整檔案 HTTP ${rawRes.status}`, 'err'); return false; }
-      raw = await rawRes.text();
-    }
+    const raw = fileInfo.content;
     if (!raw) { toast('Pull 失敗：Gist 內容是空的', 'err'); return false; }
     const d = JSON.parse(raw);
     if (d.shortcuts)       S.shortcuts = d.shortcuts;
@@ -368,29 +366,32 @@ async function gistAutoSync() {
   _autoSyncBusy = true;
   _autoSyncLastRun = Date.now();
   try {
-    // 第一步：只抓 metadata（updated_at），不下載檔案內容
+    // 第一步：抓 metadata 比較 updated_at
     const metaRes = await fetch(`https://api.github.com/gists/${gistId}`, {
       headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
     });
     if (!metaRes.ok) return;
     const meta = await metaRes.json();
 
-    // 用 Gist 的 updated_at 做快速比較
     const remoteUpdated = new Date(meta.updated_at).getTime();
     const localTs = S.cfg._lastModified || 0;
-    if (remoteUpdated <= localTs) return; // 沒有更新，直接結束
+    if (remoteUpdated <= localTs) return;
 
-    // 第二步：確認有更新，抓完整檔案內容
-    const raw = meta.files?.['neocast.json']?.content;
+    // 第二步：用 raw+json 取得完整內容，不會截斷
+    const rawRes = await fetch(`https://api.github.com/gists/${gistId}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.raw+json' }
+    });
+    if (!rawRes.ok) return;
+    const data = await rawRes.json();
+    const raw = data.files?.['neocast.json']?.content;
     if (!raw) return;
     const remote = JSON.parse(raw);
     const remoteTs = remote.lastModified || remoteUpdated;
 
-    // 雲端較新，靜默拉取
-    if (remote.shortcuts)    S.shortcuts = remote.shortcuts;
-    if (remote.groups)       S.groups    = remote.groups;
-    if (remote.stickies)     S.stickies  = remote.stickies;
-    if (remote.widgets)      Object.assign(S.widgets, remote.widgets);
+    if (remote.shortcuts)       S.shortcuts = remote.shortcuts;
+    if (remote.groups)          S.groups    = remote.groups;
+    if (remote.stickies)        S.stickies  = remote.stickies;
+    if (remote.widgets)         Object.assign(S.widgets, remote.widgets);
     if (remote.newsKeywords)    S.news.keywords    = remote.newsKeywords;
     if (remote.newsLang)        S.news.lang        = remote.newsLang;
     if (remote.newsKwFetchedAt) S.news.kwFetchedAt = Object.assign(S.news.kwFetchedAt || {}, remote.newsKwFetchedAt);
