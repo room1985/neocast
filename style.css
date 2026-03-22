@@ -3422,6 +3422,22 @@ a { color:inherit; text-decoration:none; }
 }
 .yt-next-cancel:hover { background: rgba(248,113,113,.3); border-color: #f87171; }
 
+/* 上一部/下一部按鈕 */
+.yt-player-nav-btn {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: #fff;
+  border-radius: 6px;
+  width: 28px; height: 28px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background .15s;
+}
+.yt-player-nav-btn:hover { background: rgba(255,255,255,.2); }
+.yt-player-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
 /* Description */
 .yt-desc-wrap { margin-top: 6px; }
 .yt-desc {
