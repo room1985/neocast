@@ -3256,7 +3256,7 @@ function renderAnimeWidget(container) {
     card.appendChild(info);
     card.appendChild(star);
     card.addEventListener('click', e => {
-      if (e.target.closest('.anime-star') || e.target.closest('img') || e.target.closest('.anime-watch-progress')) return;
+      if (e.target.closest('.anime-star') || e.target.closest('img')) return;
       showAnimeSheet(anime);
     });
     return card;
@@ -3742,9 +3742,8 @@ async function showAnimeSheet(anime) {
     a.dataset.label = label;
     linkWrap.appendChild(a);
   });
-  sheet.appendChild(linkWrap);
 
-  // 觀看進度控制（只有追蹤中才顯示）
+  // 觀看進度控制（只有追蹤中才顯示，放在連結按鈕之前）
   if ((S.animeState.tracked || []).includes(anime.id)) {
     const progressRow = el('div', 'anime-sheet-progress-row');
     const minusBtn = el('button', 'anime-sheet-ep-btn', '−');
@@ -3779,6 +3778,8 @@ async function showAnimeSheet(anime) {
     progressRow.appendChild(plusBtn);
     sheet.appendChild(progressRow);
   }
+
+  sheet.appendChild(linkWrap);
 
   // Summary — 5 lines collapsed, More to expand
   const summaryWrap = el('div', 'anime-sheet-summary-wrap');
