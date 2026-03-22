@@ -4664,11 +4664,10 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   const ccRow = el('div', 'yt-cc-row');
 
   const ccToggle = el('button', 'yt-cc-btn' + (S.cfg.ytCc ? ' on' : ''));
-  ccToggle.textContent = S.cfg.ytCc ? 'CC 開' : 'CC 關';
+  ccToggle.textContent = 'CC';
   ccToggle.addEventListener('click', e => {
     e.stopPropagation();
     S.cfg.ytCc = S.cfg.ytCc ? 0 : 1;
-    ccToggle.textContent = S.cfg.ytCc ? 'CC 開' : 'CC 關';
     ccToggle.classList.toggle('on', !!S.cfg.ytCc);
     lsSave();
   });
@@ -4928,7 +4927,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
 
     playerBox.appendChild(buildIframe(videoId));
 
-    // 上一部 / 下一部按鈕
+    // 上一部 / 下一部 / CC 按鈕（全部靠左）
     let prevBtn = null, nextBtn = null;
     if (playlist?.length > 1) {
       prevBtn = el('button', 'yt-player-nav-btn', '◀');
@@ -4945,26 +4944,25 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       bar.appendChild(nextBtn);
     }
 
-    // 中間空白撐開
-    const barSpacer = el('div', '');
-    barSpacer.style.flex = '1';
-    bar.appendChild(barSpacer);
-
-    // 字幕按鈕
+    // CC 按鈕（純文字，靠左接在導航按鈕後）
     const ccBtn = el('button', 'yt-player-cc-btn' + (S.cfg.ytCc ? ' on' : ''));
+    ccBtn.textContent = 'CC';
     ccBtn.title = '字幕';
-    ccBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-9 8H9.5v-.5h-2v3h2V14H11v1c0 .55-.45 1-1 1H7c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1zm7 0h-1.5v-.5h-2v3h2V14H18v1c0 .55-.45 1-1 1h-3c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1h3c.55 0 1 .45 1 1v1z"/></svg>`;
     ccBtn.addEventListener('click', e => {
       e.stopPropagation();
       S.cfg.ytCc = S.cfg.ytCc ? 0 : 1;
       ccBtn.classList.toggle('on', !!S.cfg.ytCc);
       lsSave();
-      // 重載 iframe 套用新設定
       const newIframe = buildIframe(playlist?.[curIdx]?.videoId || videoId);
       const oldIframe = playerBox.querySelector('iframe');
       if (oldIframe) oldIframe.replaceWith(newIframe);
     });
     bar.appendChild(ccBtn);
+
+    // 中間空白撐開
+    const barSpacer = el('div', '');
+    barSpacer.style.flex = '1';
+    bar.appendChild(barSpacer);
 
     if (isPwa) {
       const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
