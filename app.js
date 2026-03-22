@@ -3184,7 +3184,7 @@ function renderAnimeWidget(container) {
       const idx = S.animeState.tracked.indexOf(anime.id);
       if (idx >= 0) {
         S.animeState.tracked.splice(idx, 1);
-        delete S.animeState.trackedData[anime.id];
+        // ⚠️ 不刪 trackedData，保留 watchedEp 等資料，重新收藏時進度還在
         star.classList.remove('on');
         star.querySelector('svg').setAttribute('fill', 'none');
         card.classList.remove('pinned');
@@ -3494,7 +3494,10 @@ function renderAnimeWidget(container) {
                 let eb = metaEl.querySelector('.badge-eps');
                 if (!eb) {
                   eb = el('span', 'anime-card-badge badge-eps', `共 ${epsCount} 集`);
-                  metaEl.appendChild(eb);
+                  // 插在 progressWrap 前面，確保順序：星數 → 集數 → 觀看至
+                  const pw = metaEl.querySelector('.anime-watch-progress');
+                  if (pw) metaEl.insertBefore(eb, pw);
+                  else metaEl.appendChild(eb);
                 } else {
                   eb.textContent = `共 ${epsCount} 集`;
                 }
@@ -3648,7 +3651,7 @@ async function showAnimeSheet(anime) {
     const idx = S.animeState.tracked.indexOf(anime.id);
     if (idx >= 0) {
       S.animeState.tracked.splice(idx, 1);
-      delete S.animeState.trackedData[anime.id];
+      // ⚠️ 不刪 trackedData，保留 watchedEp，重新收藏時進度還在
       favBtn.classList.remove('on');
       favBtn.querySelector('svg').setAttribute('fill', 'none');
       // Sync list card star
