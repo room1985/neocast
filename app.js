@@ -3145,7 +3145,8 @@ function renderAnimeWidget(container) {
           e.stopPropagation();
           const cur = S.animeState.trackedData?.[anime.id]?.watchedEp ?? 0;
           const inp = document.createElement('input');
-          inp.type = 'search'; inp.autocomplete = 'new-password'; inp.spellcheck = false;
+          inp.type = 'text'; inp.inputMode = 'numeric'; inp.pattern = '[0-9]*';
+          inp.autocomplete = 'new-password'; inp.spellcheck = false;
           inp.className = 'anime-watch-ep-input';
           inp.value = cur;
           numSpan.replaceWith(inp);
@@ -3731,7 +3732,8 @@ async function showAnimeSheet(anime) {
     numDisplay.addEventListener('click', e => {
       e.stopPropagation();
       const inp = document.createElement('input');
-      inp.type = 'search'; inp.autocomplete = 'new-password'; inp.spellcheck = false;
+      inp.type = 'text'; inp.inputMode = 'numeric'; inp.pattern = '[0-9]*';
+      inp.autocomplete = 'new-password'; inp.spellcheck = false;
       inp.className = 'anime-sheet-ep-input';
       inp.value = getEp();
       numDisplay.replaceWith(inp);
