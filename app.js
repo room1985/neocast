@@ -251,7 +251,7 @@ const gistData = () => ({
   newsLang:        S.news.lang,
   newsKwFetchedAt: S.news.kwFetchedAt || {},
   animeState:      { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames },
-  yt:              { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry },
+  yt:              S.yt,
   lastModified:    Date.now()
 });
 
@@ -314,32 +314,20 @@ function mergeRemoteYt(remoteYt) {
 
 async function gistPull() {
   const { token, gistId } = S.cfg;
-  if (!token) { toast('請先填入 GitHub Token', 'err'); return false; }
-  if (!gistId) { toast('請先填入 Gist ID', 'err'); return false; }
+  if (!token || !gistId) return;
   try {
-    const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+    const res  = await fetch(`https://api.github.com/gists/${gistId}`, {
       headers: { Authorization: `token ${token}` }
     });
-    if (res.status === 401) { toast('Pull 失敗：Token 無效或已過期', 'err'); return false; }
-    if (res.status === 403) { toast('Pull 失敗：Token 權限不足', 'err'); return false; }
-    if (res.status === 404) { toast('Pull 失敗：Gist ID 不存在', 'err'); return false; }
-    if (!res.ok) { toast(`Pull 失敗：HTTP ${res.status}`, 'err'); return false; }
+    if (!res.ok) return;
     const data = await res.json();
-    const fileInfo = data.files?.['neocast.json'];
-    if (!fileInfo) { toast('Pull 失敗：Gist 裡找不到 neocast.json', 'err'); return false; }
-    // 檔案超過 1MB 時 content 會被截斷，改用 raw_url 取得完整內容
-    let raw = fileInfo.content;
-    if (fileInfo.truncated && fileInfo.raw_url) {
-      const rawRes = await fetch(fileInfo.raw_url, { headers: { Authorization: `token ${token}` } });
-      if (!rawRes.ok) { toast(`Pull 失敗：無法取得完整檔案 HTTP ${rawRes.status}`, 'err'); return false; }
-      raw = await rawRes.text();
-    }
-    if (!raw) { toast('Pull 失敗：Gist 內容是空的', 'err'); return false; }
+    const raw  = data.files?.['neocast.json']?.content;
+    if (!raw) return;
     const d = JSON.parse(raw);
-    if (d.shortcuts)       S.shortcuts = d.shortcuts;
-    if (d.groups)          S.groups    = d.groups;
-    if (d.stickies)        S.stickies  = d.stickies;
-    if (d.widgets)         Object.assign(S.widgets, d.widgets);
+    if (d.shortcuts)    S.shortcuts = d.shortcuts;
+    if (d.groups)       S.groups    = d.groups;
+    if (d.stickies)     S.stickies  = d.stickies;
+    if (d.widgets)      Object.assign(S.widgets, d.widgets);
     if (d.newsKeywords)    S.news.keywords    = d.newsKeywords;
     if (d.newsLang)        S.news.lang        = d.newsLang;
     if (d.newsKwFetchedAt) S.news.kwFetchedAt = Object.assign(S.news.kwFetchedAt || {}, d.newsKwFetchedAt);
@@ -349,11 +337,8 @@ async function gistPull() {
     if (d.lastModified)    S.cfg._lastModified = d.lastModified;
     lsSaveLocal();
     renderAll();
-    return true;
-  } catch(e) {
-    toast('Pull 失敗：' + e.message, 'err');
-    return false;
-  }
+    toast('已從 Gist 拉取最新設定 ✓');
+  } catch(_) {}
 }
 
 // ── 自動同步：比較 lastModified，雲端較新才拉取 ──
@@ -401,7 +386,7 @@ async function gistAutoSync() {
     lsSaveLocal();
     renderAll();
     toast('已自動同步雲端資料 ✓');
-  } catch(e) { toast('自動同步失敗：' + e.message, 'err'); }
+  } catch(_) {}
   finally { _autoSyncBusy = false; }
 }
 
@@ -3127,7 +3112,7 @@ function renderAnimeWidget(container) {
       wrap.appendChild(suffix);
 
       numSpan.addEventListener('click', e => {
-        e.stopPropagation();
+        e.stopPropagation(); // 只攔截數字點擊，不讓 wrap 其他點擊被擋
         const cur = S.animeState.trackedData?.[animeId]?.watchedEp || 0;
         const inp = document.createElement('input');
         inp.type = 'search'; inp.autocomplete = 'new-password'; inp.spellcheck = false;
@@ -3255,7 +3240,7 @@ function renderAnimeWidget(container) {
     card.appendChild(info);
     card.appendChild(star);
     card.addEventListener('click', e => {
-      if (e.target.closest('.anime-star') || e.target.closest('img') || e.target.closest('.anime-watch-progress')) return;
+      if (e.target.closest('.anime-star') || e.target.closest('img')) return;
       showAnimeSheet(anime);
     });
     return card;
@@ -3284,14 +3269,12 @@ function renderAnimeWidget(container) {
       if (!items.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
 
       let dragSrcFavId = null;
-      let favIsDragging = false;
 
       items.forEach(anime => {
         const card = makeAnimeCard(anime, anime.air_weekday);
         card.draggable = true;
 
         card.addEventListener('dragstart', e => {
-          favIsDragging = true;
           dragSrcFavId = String(anime.id);
           e.dataTransfer.effectAllowed = 'move';
           setTimeout(() => card.classList.add('anime-card-dragging'), 0);
@@ -3300,7 +3283,6 @@ function renderAnimeWidget(container) {
           card.classList.remove('anime-card-dragging');
           grid.querySelectorAll('.anime-card-drag-over').forEach(c => c.classList.remove('anime-card-drag-over'));
           dragSrcFavId = null;
-          setTimeout(() => { favIsDragging = false; }, 0);
         });
         card.addEventListener('dragover', e => {
           e.preventDefault();
@@ -3318,11 +3300,6 @@ function renderAnimeWidget(container) {
           S.animeState.tracked.splice(di, 0, m);
           lsSave(); setTimeout(() => renderFav(), 0);
         });
-        // 攔截 click，拖曳結束後不觸發 showAnimeSheet
-        card.addEventListener('click', e => {
-          if (favIsDragging) { e.stopImmediatePropagation(); }
-        }, true);
-
         // Touch drag (long press) — 改用動態掛載 passive:false 避免捲動衝突
         let tTimer = null, tDragging = false, tGhost = null, tRafId = null;
         let tGhostCenterX = 0; // 保留供相容，實際不再使用
@@ -5552,8 +5529,9 @@ async function init() {
   $('cfg-ok').addEventListener('click', saveSettings);
   $('cfg-sync-now').addEventListener('click', async () => {
     if (confirm('從雲端還原？這會覆蓋你目前的本機設定。')) {
-      const ok = await gistPull();
-      if (ok) toast('已從雲端還原設定 ✓');
+      await gistPull();
+      renderAll();
+      toast('已從雲端還原設定 ✓');
     }
   });
   $('rm-vid').addEventListener('click', removeVideo);
