@@ -4864,8 +4864,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx) {
       // 用 playlist 參數帶同分類影片列表，YouTube 原生自動播下一則
       let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1`;
       if (playlist?.length > 1) {
-        // 從當前影片開始，帶後續所有影片 ID
-        const ids = playlist.slice(curIdx >= 0 ? curIdx : 0).map(v => v.videoId).join(',');
+        const startPos = curIdx >= 0 ? curIdx : 0;
+        const ids = playlist.slice(startPos, startPos + 20).map(v => v.videoId).join(',');
         src += `&playlist=${ids}`;
       }
       iframe.src = src;
