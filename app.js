@@ -251,7 +251,7 @@ const gistData = () => ({
   newsLang:        S.news.lang,
   newsKwFetchedAt: S.news.kwFetchedAt || {},
   animeState:      { tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames },
-  yt:              S.yt,
+  yt:              { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry },
   lastModified:    Date.now()
 });
 
@@ -325,8 +325,16 @@ async function gistPull() {
     if (res.status === 404) { toast('Pull 失敗：Gist ID 不存在', 'err'); return false; }
     if (!res.ok) { toast(`Pull 失敗：HTTP ${res.status}`, 'err'); return false; }
     const data = await res.json();
-    const raw  = data.files?.['neocast.json']?.content;
-    if (!raw) { toast('Pull 失敗：Gist 裡找不到 neocast.json', 'err'); return false; }
+    const fileInfo = data.files?.['neocast.json'];
+    if (!fileInfo) { toast('Pull 失敗：Gist 裡找不到 neocast.json', 'err'); return false; }
+    // 檔案超過 1MB 時 content 會被截斷，改用 raw_url 取得完整內容
+    let raw = fileInfo.content;
+    if (fileInfo.truncated && fileInfo.raw_url) {
+      const rawRes = await fetch(fileInfo.raw_url, { headers: { Authorization: `token ${token}` } });
+      if (!rawRes.ok) { toast(`Pull 失敗：無法取得完整檔案 HTTP ${rawRes.status}`, 'err'); return false; }
+      raw = await rawRes.text();
+    }
+    if (!raw) { toast('Pull 失敗：Gist 內容是空的', 'err'); return false; }
     const d = JSON.parse(raw);
     if (d.shortcuts)       S.shortcuts = d.shortcuts;
     if (d.groups)          S.groups    = d.groups;
