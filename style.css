@@ -687,8 +687,13 @@ a { color:inherit; text-decoration:none; }
   text-align: center;
   width: 80px;
   overflow: hidden;
+  white-space: normal;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.3;
   transition: color .2s;
 }
 .sc-item:hover .sc-name { color:var(--tx); }
