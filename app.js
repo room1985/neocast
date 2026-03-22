@@ -3215,7 +3215,8 @@ function renderAnimeWidget(container) {
         S.animeState.trackedData[anime.id] = {
           id: anime.id, name: anime.name, name_cn: anime.name_cn,
           images: anime.images, rating: anime.rating, eps: anime.eps,
-          air_weekday: wd
+          air_weekday: wd,
+          watchedEp: S.animeState.trackedData?.[anime.id]?.watchedEp ?? 0
         };
         star.classList.add('on');
         star.querySelector('svg').setAttribute('fill', 'currentColor');
@@ -3673,7 +3674,8 @@ async function showAnimeSheet(anime) {
       S.animeState.trackedData[anime.id] = {
         id: anime.id, name: anime.name, name_cn: anime.name_cn,
         images: anime.images, rating: anime.rating, eps: anime.eps,
-        air_weekday: wd
+        air_weekday: wd,
+        watchedEp: S.animeState.trackedData?.[anime.id]?.watchedEp ?? 0
       };
       favBtn.classList.add('on');
       favBtn.querySelector('svg').setAttribute('fill', 'currentColor');
