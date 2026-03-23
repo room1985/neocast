@@ -4645,7 +4645,6 @@ const YT_OAUTH_SCOPE = 'https://www.googleapis.com/auth/youtube.force-ssl';
 
 function ytGoogleLogin(onSuccess) {
   if (!window.google?.accounts?.oauth2) {
-    // Load GIS script if not loaded
     const s = document.createElement('script');
     s.src = 'https://accounts.google.com/gsi/client';
     s.onload = () => ytGoogleLogin(onSuccess);
@@ -4661,10 +4660,32 @@ function ytGoogleLogin(onSuccess) {
         S.yt.oauthExpiry = Date.now() + (resp.expires_in - 60) * 1000;
         lsSave();
         onSuccess?.();
+        // 在 token 快過期前（55分鐘後）自動靜默刷新
+        setTimeout(() => ytSilentRefresh(), (resp.expires_in - 300) * 1000);
       }
     }
   });
   client.requestAccessToken();
+}
+
+function ytSilentRefresh() {
+  if (!window.google?.accounts?.oauth2) return;
+  try {
+    const client = window.google.accounts.oauth2.initTokenClient({
+      client_id: YT_OAUTH_CLIENT_ID,
+      scope: YT_OAUTH_SCOPE,
+      prompt: '',  // 靜默刷新，不顯示登入視窗
+      callback: (resp) => {
+        if (resp.access_token) {
+          S.yt.oauthToken = resp.access_token;
+          S.yt.oauthExpiry = Date.now() + (resp.expires_in - 60) * 1000;
+          lsSave();
+          setTimeout(() => ytSilentRefresh(), (resp.expires_in - 300) * 1000);
+        }
+      }
+    });
+    client.requestAccessToken({ prompt: '' });
+  } catch(_) {}
 }
 
 function ytIsLoggedIn() {
@@ -5798,6 +5819,17 @@ function registerSW() {
 ───────────────────────────────────── */
 async function init() {
   lsLoad();
+
+  // 若已有 YouTube OAuth token 且快過期（剩不到5分鐘），靜默刷新
+  if (S.yt.oauthToken && S.yt.oauthExpiry) {
+    const remaining = S.yt.oauthExpiry - Date.now();
+    if (remaining > 0 && remaining < 5 * 60 * 1000) {
+      setTimeout(() => ytSilentRefresh(), 2000);
+    } else if (remaining > 5 * 60 * 1000) {
+      // 正常時在快過期前自動刷新
+      setTimeout(() => ytSilentRefresh(), remaining - 5 * 60 * 1000);
+    }
+  }
 
   // IndexedDB + video
   await idbOpen().catch(()=>{});
