@@ -4214,6 +4214,19 @@ function buildYoutubeWidget() {
   if (mHead) mHead.style.display = 'none';
 }
 
+function applyYtFontSize() {
+  const listSize = (S.cfg.ytFontSizeList || 100) / 100;
+  const sheetSize = (S.cfg.ytFontSizeSheet || 100) / 100;
+  // 列表文字
+  document.querySelectorAll('.yt-title').forEach(el => el.style.fontSize = `${0.85 * listSize}rem`);
+  document.querySelectorAll('.yt-meta-text').forEach(el => el.style.fontSize = `${0.72 * listSize}rem`);
+  document.querySelectorAll('.yt-ch-section-header .yt-ch-name').forEach(el => el.style.fontSize = `${0.78 * listSize}rem`);
+  // 展開卡片文字
+  document.querySelectorAll('.yt-sheet-title').forEach(el => el.style.fontSize = `${1 * sheetSize}rem`);
+  document.querySelectorAll('.yt-sheet-meta-channel .yt-meta-text').forEach(el => el.style.fontSize = `${0.75 * sheetSize}rem`);
+  document.querySelectorAll('.yt-desc').forEach(el => el.style.fontSize = `${0.78 * sheetSize}rem`);
+}
+
 function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   container.innerHTML = '';
 
@@ -4347,6 +4360,34 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   const chList = el('div', 'yt-ch-list');
   chListSection.appendChild(chListTitle); chListSection.appendChild(chList);
   managerPanel.appendChild(chListSection);
+
+  // ── 字體大小設定 ──
+  const fontSection = el('div', 'yt-mgr-section');
+  fontSection.appendChild(el('div', 'yt-mgr-title', '字體大小'));
+
+  const makeFontRow = (label, cfgKey) => {
+    if (!S.cfg[cfgKey]) S.cfg[cfgKey] = 100;
+    const row = el('div', 'yt-font-row');
+    row.appendChild(el('span', 'yt-font-label', label));
+    const slider = document.createElement('input');
+    slider.type = 'range'; slider.min = 100; slider.max = 200; slider.step = 5;
+    slider.value = S.cfg[cfgKey];
+    slider.className = 'yt-font-slider';
+    const val = el('span', 'yt-font-val', S.cfg[cfgKey] + '%');
+    slider.addEventListener('input', () => {
+      S.cfg[cfgKey] = parseInt(slider.value);
+      val.textContent = slider.value + '%';
+      applyYtFontSize();
+      lsSave();
+    });
+    row.appendChild(slider);
+    row.appendChild(val);
+    fontSection.appendChild(row);
+  };
+
+  makeFontRow('列表文字', 'ytFontSizeList');
+  makeFontRow('卡片文字', 'ytFontSizeSheet');
+  managerPanel.appendChild(fontSection);
 
   // Group management section
   let selectedTagId = null; // "chId:tagName" for channel tags
@@ -5819,6 +5860,9 @@ function registerSW() {
 ───────────────────────────────────── */
 async function init() {
   lsLoad();
+
+  // 套用 YT 字體大小設定
+  setTimeout(() => applyYtFontSize(), 100);
 
   // 若已有 YouTube OAuth token 且快過期（剩不到5分鐘），靜默刷新
   if (S.yt.oauthToken && S.yt.oauthExpiry) {
