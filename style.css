@@ -2610,7 +2610,7 @@ a { color:inherit; text-decoration:none; }
 }
 
 .anime-sheet-summary {
-  font-size: .84rem;
+  font-size: calc(0.84rem * var(--anime-sheet-fs, 1));
   color: var(--txm);
   line-height: 1.75;
   white-space: pre-wrap;
@@ -2680,12 +2680,12 @@ a { color:inherit; text-decoration:none; }
   border-radius: 10px;
 }
 .anime-sheet-ep-label {
-  font-size: 12px;
+  font-size: calc(12px * var(--anime-sheet-fs, 1));
   color: rgba(255,255,255,0.45);
 }
 .anime-sheet-ep-num {
   color: var(--ac);
-  font-size: 18px;
+  font-size: calc(18px * var(--anime-sheet-fs, 1));
   font-weight: 700;
   min-width: 28px;
   text-align: center;
@@ -2738,7 +2738,7 @@ a { color:inherit; text-decoration:none; }
   color: var(--ac);
   border-radius: 10px;
   padding: 10px 8px;
-  font-size: .8rem;
+  font-size: calc(0.8rem * var(--anime-sheet-fs, 1));
   font-weight: 700;
   text-decoration: none;
   text-align: center;
