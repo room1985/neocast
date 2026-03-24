@@ -4217,14 +4217,9 @@ function buildYoutubeWidget() {
 function applyYtFontSize() {
   const listSize = (S.cfg.ytFontSizeList || 100) / 100;
   const sheetSize = (S.cfg.ytFontSizeSheet || 100) / 100;
-  // 列表文字
-  document.querySelectorAll('.yt-title').forEach(el => el.style.fontSize = `${0.85 * listSize}rem`);
-  document.querySelectorAll('.yt-meta-text').forEach(el => el.style.fontSize = `${0.72 * listSize}rem`);
-  document.querySelectorAll('.yt-ch-section-header .yt-ch-name').forEach(el => el.style.fontSize = `${0.78 * listSize}rem`);
-  // 展開卡片文字
-  document.querySelectorAll('.yt-sheet-title').forEach(el => el.style.fontSize = `${1 * sheetSize}rem`);
-  document.querySelectorAll('.yt-sheet-meta-channel .yt-meta-text').forEach(el => el.style.fontSize = `${0.75 * sheetSize}rem`);
-  document.querySelectorAll('.yt-desc').forEach(el => el.style.fontSize = `${0.78 * sheetSize}rem`);
+  const root = document.documentElement;
+  root.style.setProperty('--yt-list-fs', listSize);
+  root.style.setProperty('--yt-sheet-fs', sheetSize);
 }
 
 function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
