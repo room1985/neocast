@@ -3005,20 +3005,73 @@ async function fetchBangumiCalendar() {
   return await res.json();
 }
 
+function applyAnimeFontSize() {
+  const listSize = (S.cfg.animeFontSizeList || 100) / 100;
+  const sheetSize = (S.cfg.animeFontSizeSheet || 100) / 100;
+  const root = document.documentElement;
+  root.style.setProperty('--anime-list-fs', listSize);
+  root.style.setProperty('--anime-sheet-fs', sheetSize);
+}
+
 function buildAnimeWidget() {
   const body = el('div', 'anime-inner');
   body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
   const w = makeWidget('anime', '動畫追蹤', body, '');
   w.querySelector('.w-body')?.remove();
   w.insertBefore(body, w.querySelector('.resize-handle'));
-  renderAnimeWidget(body);
+
+  // 把設定按鈕加到 w-head
+  const wHead = w.querySelector('.w-head');
+  const pencilBtn = wHead?.querySelector('.w-pencil-btn');
+  const animeCfgBtn = el('button', 'yt-icon-btn anime-cfg-btn');
+  animeCfgBtn.title = '動畫設定';
+  animeCfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+  if (wHead && pencilBtn) wHead.insertBefore(animeCfgBtn, pencilBtn);
+
+  renderAnimeWidget(body, animeCfgBtn);
 }
 
-function renderAnimeWidget(container) {
+function renderAnimeWidget(container, cfgBtn) {
   container.innerHTML = '';
   if (!S.animeState) S.animeState = { weekday: -1, tracked: [], trackedData: {}, customNames: {} };
   if (!S.animeState.trackedData) S.animeState.trackedData = {};
   if (!S.animeState.customNames) S.animeState.customNames = {};
+
+  // ── 設定面板 ──
+  const animeSettingsPanel = el('div', 'anime-settings-panel');
+  animeSettingsPanel.style.display = 'none';
+  container.appendChild(animeSettingsPanel);
+
+  const makeFontRow = (label, cfgKey) => {
+    if (!S.cfg[cfgKey]) S.cfg[cfgKey] = 100;
+    const row = el('div', 'yt-font-row');
+    row.appendChild(el('span', 'yt-font-label', label));
+    const slider = document.createElement('input');
+    slider.type = 'range'; slider.min = 100; slider.max = 200; slider.step = 5;
+    slider.value = S.cfg[cfgKey];
+    slider.className = 'yt-font-slider';
+    const val = el('span', 'yt-font-val', S.cfg[cfgKey] + '%');
+    slider.addEventListener('input', () => {
+      S.cfg[cfgKey] = parseInt(slider.value);
+      val.textContent = slider.value + '%';
+      applyAnimeFontSize();
+      lsSave();
+    });
+    row.appendChild(slider);
+    row.appendChild(val);
+    animeSettingsPanel.appendChild(row);
+  };
+  makeFontRow('列表文字', 'animeFontSizeList');
+  makeFontRow('卡片文字', 'animeFontSizeSheet');
+
+  if (cfgBtn) {
+    cfgBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = animeSettingsPanel.style.display === 'none';
+      animeSettingsPanel.style.display = open ? '' : 'none';
+      cfgBtn.classList.toggle('active', open);
+    });
+  }
 
   const todayWd = new Date().getDay();
   let curWd  = S.animeState.weekday >= 0 ? S.animeState.weekday : todayWd;
@@ -5679,6 +5732,31 @@ function initMobileLayout() {
         return;
       }
 
+      // 動畫追蹤專用：在 panelHead 加 ⚙
+      if (page.widget === 'anime') {
+        const animeCfgBtn = el('button', 'yt-icon-btn anime-cfg-btn');
+        animeCfgBtn.title = '動畫設定';
+        animeCfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+        panelHead.insertBefore(animeCfgBtn, expandBtn);
+
+        panel.appendChild(panelHead);
+        const inner = el('div', 'anime-inner');
+        inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
+        panel.appendChild(inner);
+        renderAnimeWidget(inner, animeCfgBtn);
+        swipeArea.appendChild(panel);
+        const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
+        dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
+        if (idx > 0) {
+          let lpTimer = null;
+          dot.addEventListener('touchstart', () => { lpTimer = setTimeout(() => { if (confirm(`刪除「${meta?.label || page.widget}」頁？`)) { S.mobilePages.splice(idx, 1); if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1; lsSave(); renderPages(); } }, 600); });
+          dot.addEventListener('touchend', () => clearTimeout(lpTimer));
+          dot.addEventListener('touchmove', () => clearTimeout(lpTimer));
+        }
+        dotsBar.appendChild(dot);
+        return;
+      }
+
       // Widget content
       panel.appendChild(panelHead);
       buildMobileWidgetContent(page.widget, panel);
@@ -5857,7 +5935,7 @@ async function init() {
   lsLoad();
 
   // 套用 YT 字體大小設定
-  setTimeout(() => applyYtFontSize(), 100);
+  setTimeout(() => { applyYtFontSize(); applyAnimeFontSize(); }, 100);
 
   // 若已有 YouTube OAuth token 且快過期（剩不到5分鐘），靜默刷新
   if (S.yt.oauthToken && S.yt.oauthExpiry) {

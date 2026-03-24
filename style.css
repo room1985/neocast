@@ -1026,6 +1026,13 @@ a { color:inherit; text-decoration:none; }
   min-height: 0;
 }
 
+/* 動畫設定面板 */
+.anime-settings-panel {
+  padding: 8px 12px 10px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+  background: rgba(0,0,0,.15);
+}
+
 .anime-head {
   display: flex;
   align-items: center;
@@ -1188,7 +1195,7 @@ a { color:inherit; text-decoration:none; }
 }
 
 .anime-title {
-  font-size: .82rem;
+  font-size: calc(0.82rem * var(--anime-list-fs, 1));
   font-weight: 700;
   color: var(--tx);
   line-height: 1.3;
@@ -2502,7 +2509,7 @@ a { color:inherit; text-decoration:none; }
 }
 
 .anime-sheet-title {
-  font-size: 1rem;
+  font-size: calc(1rem * var(--anime-sheet-fs, 1));
   font-weight: 800;
   color: var(--tx);
   line-height: 1.35;
@@ -2534,7 +2541,7 @@ a { color:inherit; text-decoration:none; }
   height: 28px;
   padding: 0 10px;
   border-radius: 8px;
-  font-size: .78rem;
+  font-size: calc(0.78rem * var(--anime-sheet-fs, 1));
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
@@ -2545,7 +2552,7 @@ a { color:inherit; text-decoration:none; }
   align-items: center;
   padding: 2px 6px;
   border-radius: 4px;
-  font-size: .68rem;
+  font-size: calc(0.68rem * var(--anime-list-fs, 1));
   font-weight: 700;
   line-height: 1;
   white-space: nowrap;
@@ -2637,7 +2644,7 @@ a { color:inherit; text-decoration:none; }
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  font-size: 11px;
+  font-size: calc(11px * var(--anime-list-fs, 1));
   color: rgba(255,255,255,0.45);
   user-select: none;
 }
