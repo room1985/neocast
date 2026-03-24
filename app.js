@@ -3032,39 +3032,45 @@ function buildAnimeWidget() {
 }
 
 function renderAnimeWidget(container, cfgBtn) {
+  // 保留設定面板（若已存在），只清空其他內容
+  const existingPanel = container.querySelector('.anime-settings-panel');
   container.innerHTML = '';
   if (!S.animeState) S.animeState = { weekday: -1, tracked: [], trackedData: {}, customNames: {} };
   if (!S.animeState.trackedData) S.animeState.trackedData = {};
   if (!S.animeState.customNames) S.animeState.customNames = {};
 
-  // ── 設定面板 ──
-  const animeSettingsPanel = el('div', 'anime-settings-panel');
-  animeSettingsPanel.style.display = 'none';
+  // ── 設定面板（只建立一次）──
+  let animeSettingsPanel = existingPanel;
+  if (!animeSettingsPanel) {
+    animeSettingsPanel = el('div', 'anime-settings-panel');
+    animeSettingsPanel.style.display = 'none';
+
+    const makeFontRow = (label, cfgKey) => {
+      if (!S.cfg[cfgKey]) S.cfg[cfgKey] = 100;
+      const row = el('div', 'yt-font-row');
+      row.appendChild(el('span', 'yt-font-label', label));
+      const slider = document.createElement('input');
+      slider.type = 'range'; slider.min = 100; slider.max = 200; slider.step = 5;
+      slider.value = S.cfg[cfgKey];
+      slider.className = 'yt-font-slider';
+      const val = el('span', 'yt-font-val', S.cfg[cfgKey] + '%');
+      slider.addEventListener('input', () => {
+        S.cfg[cfgKey] = parseInt(slider.value);
+        val.textContent = slider.value + '%';
+        applyAnimeFontSize();
+        lsSave();
+      });
+      row.appendChild(slider);
+      row.appendChild(val);
+      animeSettingsPanel.appendChild(row);
+    };
+    makeFontRow('列表文字', 'animeFontSizeList');
+    makeFontRow('卡片文字', 'animeFontSizeSheet');
+  }
   container.appendChild(animeSettingsPanel);
 
-  const makeFontRow = (label, cfgKey) => {
-    if (!S.cfg[cfgKey]) S.cfg[cfgKey] = 100;
-    const row = el('div', 'yt-font-row');
-    row.appendChild(el('span', 'yt-font-label', label));
-    const slider = document.createElement('input');
-    slider.type = 'range'; slider.min = 100; slider.max = 200; slider.step = 5;
-    slider.value = S.cfg[cfgKey];
-    slider.className = 'yt-font-slider';
-    const val = el('span', 'yt-font-val', S.cfg[cfgKey] + '%');
-    slider.addEventListener('input', () => {
-      S.cfg[cfgKey] = parseInt(slider.value);
-      val.textContent = slider.value + '%';
-      applyAnimeFontSize();
-      lsSave();
-    });
-    row.appendChild(slider);
-    row.appendChild(val);
-    animeSettingsPanel.appendChild(row);
-  };
-  makeFontRow('列表文字', 'animeFontSizeList');
-  makeFontRow('卡片文字', 'animeFontSizeSheet');
-
-  if (cfgBtn) {
+  if (cfgBtn && !cfgBtn._animeListenerAdded) {
+    cfgBtn._animeListenerAdded = true;
     cfgBtn.addEventListener('click', e => {
       e.stopPropagation();
       const open = animeSettingsPanel.style.display === 'none';
