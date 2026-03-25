@@ -22,44 +22,6 @@
         "pub_index": "第137话",
         "pub_time": "09:00",
         "bilibili_season_id": 48518
-      },
-      {
-        "id": 250224,
-        "name": "放开那个女巫",
-        "name_cn": "放开那个女巫",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1f/91/250224_BTPPK.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1f/91/250224_BTPPK.jpg"
-        },
-        "rating": {
-          "score": 7.3
-        },
-        "eps": 8,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0
-      },
-      {
-        "id": 630676,
-        "name": "仙逆 年番3",
-        "name_cn": "仙逆 年番3",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/19/71/630676_6v15K.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/19/71/630676_6v15K.jpg"
-        },
-        "rating": {
-          "score": 7
-        },
-        "eps": 52,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0
       }
     ]
   },
@@ -169,6 +131,25 @@
         "pub_index": "第9话",
         "pub_time": "11:00",
         "bilibili_season_id": 127272
+      },
+      {
+        "id": 517057,
+        "name": "【推しの子】 第3期",
+        "name_cn": "【我推的孩子】 第三季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/92/95/517057_257ad.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/92/95/517057_257ad.jpg"
+        },
+        "rating": {
+          "score": 7
+        },
+        "eps": 11,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
       }
     ]
   },
@@ -197,17 +178,55 @@
         "bilibili_season_id": 45979
       },
       {
-        "id": 423036,
-        "name": "中国奇谭 第二季",
-        "name_cn": "中国奇谭 第二季",
+        "id": 604826,
+        "name": "超かぐや姫！",
+        "name_cn": "超时空辉夜姬！",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6c/84/423036_H88sl.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6c/84/423036_H88sl.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/f6/0f/604826_2XWRN.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f6/0f/604826_2XWRN.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 8.1
         },
-        "eps": 9,
+        "eps": 1,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 587454,
+        "name": "わたしが恋人になれるわけないじゃん、ムリムリ!（※ムリじゃなかった!?）〜ネクストシャイン！〜",
+        "name_cn": "我们不可能成为恋人！绝对不行。 (※似乎可行？) 〜再次闪耀！〜",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/a1/ea/587454_1KdKJ.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/a1/ea/587454_1KdKJ.jpg"
+        },
+        "rating": {
+          "score": 7.3
+        },
+        "eps": 5,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 472741,
+        "name": "呪術廻戦 死滅回游 前編",
+        "name_cn": "咒术回战 死灭回游 前篇",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ab/77/472741_MqsB8.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ab/77/472741_MqsB8.jpg"
+        },
+        "rating": {
+          "score": 7.6
+        },
+        "eps": 12,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -280,55 +299,17 @@
         "bilibili_season_id": 96881
       },
       {
-        "id": 507819,
-        "name": "一人之下 第6季",
-        "name_cn": "一人之下 第六季",
+        "id": 515759,
+        "name": "葬送のフリーレン 第2期",
+        "name_cn": "葬送的芙莉莲 第二季",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/ee/ae/507819_utzll.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/ee/ae/507819_utzll.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/0b/24/515759_1GGBy.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/0b/24/515759_1GGBy.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 7.8
         },
-        "eps": 26,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0
-      },
-      {
-        "id": 536891,
-        "name": "哪吒3",
-        "name_cn": "哪吒3",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/0d/59/536891_U66p6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/0d/59/536891_U66p6.jpg"
-        },
-        "rating": {
-          "score": 1.9
-        },
-        "eps": 1,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0
-      },
-      {
-        "id": 491775,
-        "name": "大主宰 年番2",
-        "name_cn": "大主宰 年番2",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/f4/ef/491775_S18Yg.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/f4/ef/491775_S18Yg.jpg"
-        },
-        "rating": {
-          "score": 6.1
-        },
-        "eps": 52,
+        "eps": 10,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -363,17 +344,17 @@
         "bilibili_season_id": 35213
       },
       {
-        "id": 627556,
-        "name": "呼唤少女特别篇 想做的事到底是什么",
-        "name_cn": "呼唤少女特别篇 想做的事到底是什么",
+        "id": 443831,
+        "name": "Fate/strange Fake",
+        "name_cn": "Fate/strange Fake",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/20/3f/627556_tk605.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/20/3f/627556_tk605.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/f0/51/443831_CNG0F.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f0/51/443831_CNG0F.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 7.7
         },
-        "eps": 1,
+        "eps": 13,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
@@ -382,17 +363,36 @@
         "bilibili_season_id": 0
       },
       {
-        "id": 526975,
-        "name": "择天记3D",
-        "name_cn": "择天记",
+        "id": 548818,
+        "name": "メダリスト 第2期",
+        "name_cn": "金牌得主 第二季",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/af/9c/526975_quBRr.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/af/9c/526975_quBRr.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/0c/08/548818_iLSG6.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/0c/08/548818_iLSG6.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 7.8
         },
-        "eps": 26,
+        "eps": 9,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 445905,
+        "name": "勇者刑に処す 懲罰勇者9004隊刑務記録",
+        "name_cn": "判处勇者刑 惩罚勇者9004队刑务纪录",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/7f/9b/445905_M0j2M.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/7f/9b/445905_M0j2M.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 12,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
@@ -446,17 +446,36 @@
         "bilibili_season_id": 45969
       },
       {
-        "id": 521431,
-        "name": "成何体统 第二季",
-        "name_cn": "成何体统 第二季",
+        "id": 525565,
+        "name": "正反対な君と僕",
+        "name_cn": "相反的你和我",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/b5/82/521431_6BRB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/b5/82/521431_6BRB6.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/71/50/525565_OxOv7.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/71/50/525565_OxOv7.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.6
         },
-        "eps": 24,
+        "eps": 12,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 493016,
+        "name": "違国日記",
+        "name_cn": "异国日记",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/fe/bf/493016_Qqmf5.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/fe/bf/493016_Qqmf5.jpg"
+        },
+        "rating": {
+          "score": 8.3
+        },
+        "eps": 13,
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
