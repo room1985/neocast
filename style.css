@@ -1251,10 +1251,8 @@ a { color:inherit; text-decoration:none; }
 
 .anime-cover-wrap {
   position: relative;
-  box-sizing: content-box; /* 覆蓋全域 border-box，讓 padding-top 正確撐高 */
   width: 100%;
-  height: 0;
-  padding-top: 150%; /* 2:3 直式比例 */
+  aspect-ratio: 2 / 3;
   overflow: hidden;
   border-radius: 10px 10px 0 0;
   background: var(--sf2);
@@ -1262,8 +1260,7 @@ a { color:inherit; text-decoration:none; }
 }
 .anime-cover-wrap .anime-cover {
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
