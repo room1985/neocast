@@ -3005,6 +3005,27 @@ async function fetchBangumiCalendar() {
   return await res.json();
 }
 
+async function fetchGuomanData() {
+  try {
+    const res = await fetch('./guoman.json');
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
+  } catch(e) { return []; }
+}
+
+function mergeGuomanIntoCalendar(calendar, guoman) {
+  guoman.forEach(guDay => {
+    const wdId = guDay.weekday?.id;
+    const target = calendar.find(d => d.weekday?.id === wdId);
+    if (!target) return;
+    const existing = new Set((target.items || []).map(i => i.id));
+    (guDay.items || []).forEach(item => {
+      if (!existing.has(item.id)) target.items.push(item);
+    });
+  });
+}
+
 function applyAnimeFontSize() {
   const listSize = (S.cfg.animeFontSizeList || 100) / 100;
   const sheetSize = (S.cfg.animeFontSizeSheet || 100) / 100;
@@ -3590,7 +3611,14 @@ function renderAnimeWidget(container, cfgBtn) {
     if (curTab === 'week') {
       if (!calendarCache) {
         grid.innerHTML = '<div class="anime-loading">載入中…</div>';
-        try { calendarCache = await fetchBangumiCalendar(); }
+        try {
+          const [bgmData, guomanData] = await Promise.all([
+            fetchBangumiCalendar(),
+            fetchGuomanData()
+          ]);
+          calendarCache = bgmData;
+          if (guomanData.length) mergeGuomanIntoCalendar(calendarCache, guomanData);
+        }
         catch(e) { grid.innerHTML = '<div class="anime-empty">載入失敗</div>'; return; }
       }
       if (curWd === ALL_WD) {
