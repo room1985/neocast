@@ -1235,7 +1235,7 @@ a { color:inherit; text-decoration:none; }
   overflow-y: auto;
 }
 .anime-grid.gallery-mobile {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
 }
 
 /* 所有在 gallery grid 內的卡片，純 CSS 強制直式排列，不依賴 JS class */
