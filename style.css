@@ -1237,6 +1237,7 @@ a { color:inherit; text-decoration:none; }
 .anime-card--gallery {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
   padding: 0;
   gap: 0;
   overflow: hidden;
@@ -1251,6 +1252,7 @@ a { color:inherit; text-decoration:none; }
   overflow: hidden;
   border-radius: 10px 10px 0 0;
   background: var(--sf2);
+  flex-shrink: 0;
 }
 .anime-cover-wrap .anime-cover {
   width: 100%;
