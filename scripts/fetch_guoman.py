@@ -148,6 +148,9 @@ def fetch_bangumi_year_all():
         offset += len(items)   # 以實際回傳數量遞增，避免跳過資料
 
     print(f"[Bangumi補援] 共 {len(all_subjects)} 部")
+    if all_subjects:
+        first = all_subjects[0]
+        print(f"[debug] 第一筆 keys={list(first.keys())}, id={first.get('id')}, type={type(first.get('id'))}")
     return all_subjects
 
 
@@ -211,10 +214,14 @@ def build_guoman():
     # Phase 2：Bangumi 本年補援
     bgm_year = fetch_bangumi_year_all()
     added = 0
+    no_id_count = 0
     for subj in bgm_year:
-        bgm_id = subj.get("id")
-        if not bgm_id or bgm_id in seen_bgm_ids:
-            continue  # 已由 Phase 1 處理，或 app.js 去重（日漫）
+        bgm_id = subj.get("id") or subj.get("subject_id") or subj.get("subjectId")
+        if not bgm_id:
+            no_id_count += 1
+            continue
+        if bgm_id in seen_bgm_ids:
+            continue
 
         date_str = subj.get("date") or subj.get("air_date") or ""
         wd = weekday_from_date(date_str) or 1
@@ -224,7 +231,7 @@ def build_guoman():
         calendar.setdefault(wd, []).append(item)
         added += 1
 
-    print(f"[Bangumi補援] 新增 {added} 部（日漫會在 app.js 去重）")
+    print(f"[Bangumi補援] 新增 {added} 部，no_id={no_id_count}（日漫會在 app.js 去重）")
 
     result = [
         {"weekday": {"id": wd}, "items": items}
