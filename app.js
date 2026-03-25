@@ -5822,8 +5822,8 @@ function initMobileLayout() {
         const inner = el('div', 'anime-inner');
         inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
         panel.appendChild(inner);
-        renderAnimeWidget(inner, animeCfgBtn);
         swipeArea.appendChild(panel);
+        renderAnimeWidget(inner, animeCfgBtn);
         const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
         dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
         if (idx > 0) {
