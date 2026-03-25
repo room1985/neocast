@@ -1,1 +1,199 @@
-[]
+[
+  {
+    "weekday": {
+      "id": 1
+    },
+    "items": [
+      {
+        "id": 627556,
+        "name": "呼唤少女特别篇 想做的事到底是什么",
+        "name_cn": "呼唤少女特别篇 想做的事到底是什么",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/20/3f/627556_tk605.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/20/3f/627556_tk605.jpg"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 1,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 507819,
+        "name": "一人之下 第6季",
+        "name_cn": "一人之下 第六季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ee/ae/507819_utzll.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_utzll.jpg"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 26,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 423036,
+        "name": "中国奇谭 第二季",
+        "name_cn": "中国奇谭 第二季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/6c/84/423036_H88sl.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/6c/84/423036_H88sl.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 9,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 250224,
+        "name": "放开那个女巫",
+        "name_cn": "放开那个女巫",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/1f/91/250224_BTPPK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_BTPPK.jpg"
+        },
+        "rating": {
+          "score": 7.3
+        },
+        "eps": 8,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 521431,
+        "name": "成何体统 第二季",
+        "name_cn": "成何体统 第二季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/b5/82/521431_6BRB6.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b5/82/521431_6BRB6.jpg"
+        },
+        "rating": {
+          "score": 7.2
+        },
+        "eps": 24,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 630676,
+        "name": "仙逆 年番3",
+        "name_cn": "仙逆 年番3",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/19/71/630676_6v15K.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
+        },
+        "rating": {
+          "score": 7
+        },
+        "eps": 52,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 526975,
+        "name": "择天记3D",
+        "name_cn": "择天记",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/af/9c/526975_quBRr.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/af/9c/526975_quBRr.jpg"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 26,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 493777,
+        "name": "深空彼岸",
+        "name_cn": "深空彼岸",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ef/2c/493777_G0G0p.jpg"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 26,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 536891,
+        "name": "哪吒3",
+        "name_cn": "哪吒3",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/0d/59/536891_U66p6.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/0d/59/536891_U66p6.jpg"
+        },
+        "rating": {
+          "score": 1.9
+        },
+        "eps": 1,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 491775,
+        "name": "大主宰 年番2",
+        "name_cn": "大主宰 年番2",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f4/ef/491775_S18Yg.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f4/ef/491775_S18Yg.jpg"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 52,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      }
+    ]
+  }
+]
