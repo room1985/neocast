@@ -113,34 +113,46 @@ def fetch_timeline_items():
     return items
 
 
-# ── Phase 2：Bangumi 多關鍵字搜尋中國動畫 ────────────────────────────────────
+# ── Phase 2：Bangumi 多 tag POST 搜尋中國動畫 ────────────────────────────────
 def fetch_bangumi_year_all():
     year = datetime.utcnow().year
     since = f"{year}-01-01"
-    keywords = [
-        "中国动画", "国产动画", "国漫", "中国大陆", "bilibili",
-        "中国", "国产", "WEB", "修仙", "仙侠", "玄幻",
-        "小说改", "战斗", "网文改", "国漫奇幻", "国创",
+    # 各 tag 獨立搜尋，結果合併去重
+    tag_groups = [
+        ["中国"],
+        ["中国大陆"],
+        ["国产动画"],
+        ["国漫"],
+        ["bilibili"],
+        ["WEB", "中国"],
+        ["修仙"],
+        ["仙侠"],
+        ["玄幻", "中国"],
     ]
-    print(f"[Bangumi補援] 多關鍵字搜尋本年（{since} 起）中國動畫...")
+    print(f"[Bangumi補援] 多 tag 搜尋本年（{since} 起）中國動畫...")
 
     seen = {}   # id → subject，去重用
-    for kw in keywords:
+    for tags in tag_groups:
         try:
             time.sleep(0.4)
-            url = BANGUMI_SEARCH.format(kw=urllib.parse.quote(kw)) + "&max_results=25"
-            data = fetch_json(url, {"User-Agent": BGM_UA})
-            for subj in (data.get("list") or []):
-                # 只保留本年以後開播的動畫
-                air_date = subj.get("air_date") or subj.get("date") or ""
-                if air_date and air_date < since:
-                    continue
+            resp = post_json(BANGUMI_V0, {
+                "keyword": "",
+                "filter": {
+                    "type": [2],
+                    "air_date": [f">={since}"],
+                    "tag": tags
+                },
+                "sort": "heat",
+                "limit": 50,
+                "offset": 0
+            })
+            for subj in (resp.get("data") or []):
                 sid = subj.get("id")
                 if sid and sid not in seen:
                     seen[sid] = subj
-            print(f"  '{kw}': {len(data.get('list') or [])} 筆，累計不重複 {len(seen)} 部")
+            print(f"  tag={tags}: {len(resp.get('data') or [])} 筆，累計不重複 {len(seen)} 部")
         except Exception as e:
-            print(f"  '{kw}' 失敗: {e}")
+            print(f"  tag={tags} 失敗: {e}")
 
     print(f"[Bangumi補援] 共 {len(seen)} 部")
     return list(seen.values())
