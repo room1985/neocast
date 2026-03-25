@@ -3336,7 +3336,7 @@ function renderAnimeWidget(container, cfgBtn) {
       card.classList.add('anime-card--gallery');
       const coverWrap = el('div', 'anime-cover-wrap');
       img.style.cursor = 'zoom-in';
-      img.addEventListener('click', e => { e.stopPropagation(); showImageViewer(img.src, img.alt); });
+      img.addEventListener('click', e => { e.stopPropagation(); showAnimeSheet(anime); showImageViewer(img.src, img.alt); });
       coverWrap.appendChild(img);
       // 星星疊加右上角
       coverWrap.appendChild(star);
