@@ -1227,7 +1227,7 @@ a { color:inherit; text-decoration:none; }
 .anime-grid.gallery-mode {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  grid-auto-rows: 225px;
+  grid-auto-rows: 240px;
   gap: 10px;
   align-content: start;
   flex: 1;
@@ -1337,7 +1337,7 @@ a { color:inherit; text-decoration:none; }
 .anime-cover-badges .anime-card-badge { font-size: .6rem; padding: 1px 4px; }
 .anime-gallery-info { padding: 5px 7px 7px; display: flex; flex-direction: column; gap: 3px; flex: 1; overflow: hidden; min-height: 0; }
 .anime-gallery-info .anime-title { font-size: calc(0.72rem * var(--anime-list-fs, 1)); -webkit-line-clamp: 2; }
-.anime-gallery-info .anime-watch-progress { font-size: calc(0.65rem * var(--anime-list-fs, 1)); color: var(--txd); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.anime-gallery-info .anime-watch-progress { font-size: calc(0.65rem * var(--anime-list-fs, 1)); color: var(--txd); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: auto; }
 
 /* ══════════════════════════════
    STICKIES WIDGET
