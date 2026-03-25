@@ -1,7 +1,10 @@
 """
-fetch_guoman.py  方案 C (v3)
-Phase 1 - Timeline：本週有更新的國漫（正確星期 + 集數）
-Phase 2 - Bangumi補援：本季有但本週沒更新的中國動畫（用 legacy API 取星期）
+fetch_guoman.py  方案 C (v4)
+Phase 1 - Bilibili timeline：本週更新的國漫（正確集數/星期）
+Phase 2 - Bangumi 本年補援：air_date >= 今年1月1日的所有動畫（不分國籍）
+           → 日漫已在 Bangumi calendar 裡，app.js 合併時自動去重
+           → 只有 calendar 沒有的（主要是國漫）才會新增進週曆
+           → weekday 直接從 date 欄位計算，不需額外 API 呼叫
 """
 
 import json
@@ -15,14 +18,14 @@ from pathlib import Path
 # ── Endpoints ────────────────────────────────────────────────────────────────
 BILI_TIMELINE  = "https://api.bilibili.com/pgc/web/timeline/v2?season_type=4"
 BANGUMI_SEARCH = "https://api.bgm.tv/search/subject/{kw}?type=2&responseGroup=large&max_results=5"
-BANGUMI_SEASON = "https://api.bgm.tv/v0/search/subjects"          # POST
-BANGUMI_SUBJ   = "https://api.bgm.tv/subject/{id}?responseGroup=large"  # legacy，含 air_weekday
+BANGUMI_V0     = "https://api.bgm.tv/v0/search/subjects"
 
 BGM_UA = "NeoCast/1.0 (https://github.com/room1985/neocast)"
 BILI_HEADERS = {
     "Referer":    "https://www.bilibili.com",
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
 }
+PAGE_SIZE = 50
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -59,13 +62,22 @@ def to_simplified(s):
     return s.translate(_TC2SC)
 
 
-# ── Bangumi 搜尋（by title）──────────────────────────────────────────────────
+# ── 從 air_date 推算星期（1=週一 ~ 7=週日）────────────────────────────────────
+def weekday_from_date(date_str):
+    """'2026-01-05' → 1 (週一)，解析失敗回傳 0"""
+    try:
+        return datetime.strptime(date_str[:10], "%Y-%m-%d").isoweekday()
+    except Exception:
+        return 0
+
+
+# ── Bangumi title 搜尋（for Phase 1 timeline 匹配）───────────────────────────
 def search_bangumi(title):
     for q in list(dict.fromkeys([title, to_simplified(title), _SEASON_RE.sub("", title).strip()])):
         if not q:
             continue
         try:
-            time.sleep(0.4)
+            time.sleep(0.35)
             data = fetch_json(BANGUMI_SEARCH.format(kw=urllib.parse.quote(q)), {"User-Agent": BGM_UA})
             for subj in (data.get("list") or []):
                 if fuzzy_match(title, subj.get("name_cn", "")) or fuzzy_match(title, subj.get("name", "")):
@@ -75,28 +87,15 @@ def search_bangumi(title):
     return None
 
 
-# ── Bangumi legacy subject（含 air_weekday）──────────────────────────────────
-def fetch_bgm_subject(bgm_id):
-    try:
-        time.sleep(0.3)
-        return fetch_json(BANGUMI_SUBJ.format(id=bgm_id), {"User-Agent": BGM_UA})
-    except Exception as e:
-        print(f"  [Bangumi subject] id={bgm_id} 失敗: {e}")
-        return None
-
-
-# ── Phase 1：Bilibili timeline（本週更新，星期正確）──────────────────────────
+# ── Phase 1：Bilibili timeline ────────────────────────────────────────────────
 def fetch_timeline_items():
-    """回傳 [{season_id, title, weekday, pub_index, pub_time}]"""
     try:
         raw = fetch_json(BILI_TIMELINE, BILI_HEADERS)
     except Exception as e:
-        print(f"[Timeline] 失敗: {e}")
-        return []
+        print(f"[Timeline] 失敗: {e}"); return []
     if raw.get("code") != 0:
-        print(f"[Timeline] API error: {raw.get('message')}")
-        return []
-    root  = raw.get("data") or raw.get("result") or {}
+        print(f"[Timeline] API error: {raw.get('message')}"); return []
+    root = raw.get("data") or raw.get("result") or {}
     items = []
     for day in (root.get("timeline") or []):
         wd = day.get("day_of_week") or day.get("dayOfWeek") or 0
@@ -105,8 +104,7 @@ def fetch_timeline_items():
             sid   = ep.get("season_id") or ep.get("seasonId") or 0
             if title:
                 items.append({
-                    "season_id": sid,
-                    "title":     title,
+                    "season_id": sid, "title": title,
                     "weekday":   wd,
                     "pub_index": ep.get("pub_index") or ep.get("pubIndex") or "",
                     "pub_time":  ep.get("pub_time")  or ep.get("pubTime")  or "",
@@ -115,25 +113,42 @@ def fetch_timeline_items():
     return items
 
 
-# ── Phase 2：Bangumi 本季中國動畫補援 ─────────────────────────────────────────
-def fetch_bangumi_season_chinese():
-    now   = datetime.utcnow()
-    start_month = ((now.month - 1) // 3) * 3 + 1
-    season_start = f"{now.year}-{start_month:02d}-01"
-    print(f"[Bangumi補援] 搜尋本季（{season_start} 起）中國動畫...")
-    try:
-        time.sleep(0.5)
-        data = post_json(BANGUMI_SEASON, {
-            "keyword": "",
-            "filter": {"type": [2], "air_date": [f">={season_start}"], "tag": ["中国"]},
-            "sort": "heat"
-        })
-        subjects = data.get("data") or data.get("list") or []
-        print(f"[Bangumi補援] 找到 {len(subjects)} 部")
-        return subjects
-    except Exception as e:
-        print(f"[Bangumi補援] 失敗: {e}")
-        return []
+# ── Phase 2：Bangumi 本年全部動畫（分頁取完）────────────────────────────────
+def fetch_bangumi_year_all():
+    year = datetime.utcnow().year
+    since = f"{year}-01-01"
+    print(f"[Bangumi補援] 搜尋 {since} 起所有動畫（不限國籍）...")
+
+    all_subjects = []
+    offset = 0
+    while True:
+        try:
+            time.sleep(0.4)
+            resp = post_json(BANGUMI_V0, {
+                "keyword": "",
+                "filter": {
+                    "type": [2],
+                    "air_date": [f">={since}"],
+                    "nsfw": False
+                },
+                "sort":   "heat",
+                "limit":  PAGE_SIZE,
+                "offset": offset
+            })
+        except Exception as e:
+            print(f"  page offset={offset} 失敗: {e}"); break
+
+        items = resp.get("data") or []
+        total = resp.get("total") or 0
+        all_subjects.extend(items)
+        print(f"  offset={offset}: {len(items)} 筆（累計 {len(all_subjects)}/{total}）")
+
+        if not items or len(all_subjects) >= total:
+            break
+        offset += PAGE_SIZE
+
+    print(f"[Bangumi補援] 共 {len(all_subjects)} 部")
+    return all_subjects
 
 
 # ── 組 item ───────────────────────────────────────────────────────────────────
@@ -163,58 +178,53 @@ def make_item(bgm, weekday, season_id=0, pub_index="", pub_time="", title_fallba
 def build_guoman():
     print("=" * 52)
 
-    # Phase 1：Timeline（本週更新）
+    # Phase 1：Timeline
     tl_items = fetch_timeline_items()
     print("=" * 52)
 
-    calendar = {}
-    seen_bgm_ids  = set()   # 已加入的 Bangumi ID
-    seen_fake_ids = set()   # 已加入的合成 ID（無 Bangumi 匹配）
+    calendar     = {}
+    seen_bgm_ids = set()
+    seen_fake_ids= set()
 
     for tl in tl_items:
         title = tl["title"]
         wd    = tl["weekday"] or 1
-        print(f"▸ [P1] {title} (第{wd}天, {tl['pub_index']})")
-        bgm = search_bangumi(title)
-        item = make_item(bgm, wd, tl["season_id"], tl["pub_index"], tl["pub_time"], title)
+        bgm   = search_bangumi(title)
+        item  = make_item(bgm, wd, tl["season_id"], tl["pub_index"], tl["pub_time"], title)
 
         if bgm:
             if bgm["id"] in seen_bgm_ids:
                 continue
             seen_bgm_ids.add(bgm["id"])
-            print(f"  ✓ {bgm.get('name_cn') or bgm.get('name')} (★{item['rating']['score']})")
+            print(f"[P1] {bgm.get('name_cn') or bgm.get('name')} ★{item['rating']['score']} wd={wd} {tl['pub_index']}")
         else:
             fid = item["id"]
             if fid in seen_fake_ids:
                 continue
             seen_fake_ids.add(fid)
-            print(f"  ✗ 未匹配")
+            print(f"[P1] {title} (未匹配) wd={wd} {tl['pub_index']}")
 
         calendar.setdefault(wd, []).append(item)
 
     print("=" * 52)
 
-    # Phase 2：Bangumi 補援（本週沒更新的本季國漫）
-    bgm_subjects = fetch_bangumi_season_chinese()
-    print("=" * 52)
-
-    for subj in bgm_subjects:
+    # Phase 2：Bangumi 本年補援
+    bgm_year = fetch_bangumi_year_all()
+    added = 0
+    for subj in bgm_year:
         bgm_id = subj.get("id")
         if not bgm_id or bgm_id in seen_bgm_ids:
-            continue
+            continue  # 已由 Phase 1 處理，或 app.js 去重（日漫）
 
-        # 用 legacy API 取 air_weekday
-        full = fetch_bgm_subject(bgm_id)
-        wd   = (full.get("air_weekday") if full else None) or subj.get("air_weekday") or 1
-        # 合併封面／評分（優先用 full）
-        merged_bgm = full if full else subj
+        date_str = subj.get("date") or subj.get("air_date") or ""
+        wd = weekday_from_date(date_str) or 1
 
-        title = merged_bgm.get("name_cn") or merged_bgm.get("name") or ""
-        print(f"▸ [P2] {title} (id={bgm_id} wd={wd})")
-
-        item = make_item(merged_bgm, wd, 0, "", "", title)
+        item = make_item(subj, wd)
         seen_bgm_ids.add(bgm_id)
         calendar.setdefault(wd, []).append(item)
+        added += 1
+
+    print(f"[Bangumi補援] 新增 {added} 部（日漫會在 app.js 去重）")
 
     result = [
         {"weekday": {"id": wd}, "items": items}
@@ -222,7 +232,7 @@ def build_guoman():
     ]
     total = sum(len(d["items"]) for d in result)
     print("=" * 52)
-    print(f"✅ 完成：{len(result)} 天，共 {total} 部國漫")
+    print(f"✅ 完成：{len(result)} 天，共 {total} 筆（含待去重的日漫）")
     return result
 
 
