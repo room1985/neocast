@@ -122,7 +122,7 @@ function lsSaveLocal() {
       yt:         { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry, items: ytItems },
       widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
-      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
+      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode }
     });
     let json = JSON.stringify(buildPayload());
     while (new Blob([json]).size > MAX_BYTES && ytItems.length > 0) {
@@ -151,7 +151,7 @@ function lsSave() {
       yt:         { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry, items: ytItems },
       widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
-      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames }
+      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode }
     });
 
     let json = JSON.stringify(buildPayload());
