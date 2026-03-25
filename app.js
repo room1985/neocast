@@ -83,7 +83,7 @@ let S = {
   activeGroup:    'all',
   privateUnlocked: false,
   ctxTarget:      null,
-  animeState:     { offset: 0, genre: '全部', tracked: [], customNames: {} },
+  animeState:     { offset: 0, genre: '全部', tracked: [], customNames: {}, viewMode: 'list' },
   scEditing:      null,
   dragSc:         null,
   mobilePages:    [],
@@ -3013,6 +3013,13 @@ function applyAnimeFontSize() {
   root.style.setProperty('--anime-sheet-fs', sheetSize);
 }
 
+const _isGallery = () => (S.animeState.viewMode || 'list') === 'gallery';
+const _updateViewBtnIcon = btn => {
+  btn.innerHTML = _isGallery()
+    ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`
+    : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`;
+};
+
 function buildAnimeWidget() {
   const body = el('div', 'anime-inner');
   body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
@@ -3026,7 +3033,22 @@ function buildAnimeWidget() {
   const animeCfgBtn = el('button', 'yt-icon-btn anime-cfg-btn');
   animeCfgBtn.title = '動畫設定';
   animeCfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
-  if (wHead && pencilBtn) wHead.insertBefore(animeCfgBtn, pencilBtn);
+  const animeViewBtn = el('button', 'yt-icon-btn anime-view-btn');
+  animeViewBtn.title = '切換顯示模式';
+  _updateViewBtnIcon(animeViewBtn);
+  animeViewBtn.addEventListener('click', e => {
+    e.stopPropagation();
+    S.animeState.viewMode = _isGallery() ? 'list' : 'gallery';
+    lsSave();
+    // 更新所有 view btn 圖示
+    document.querySelectorAll('.anime-view-btn').forEach(_updateViewBtnIcon);
+    // 重繪
+    document.querySelectorAll('.anime-inner').forEach(inner => renderAnimeWidget(inner, inner.closest('[data-widget="anime"]')?.querySelector('.anime-cfg-btn') || null));
+  });
+  if (wHead && pencilBtn) {
+    wHead.insertBefore(animeCfgBtn, pencilBtn);
+    wHead.insertBefore(animeViewBtn, animeCfgBtn);
+  }
 
   renderAnimeWidget(body, animeCfgBtn);
 }
@@ -3164,7 +3186,18 @@ function renderAnimeWidget(container, cfgBtn) {
   searchBar.appendChild(searchBtn);
   container.appendChild(searchBar);
 
+  const isMobile = !!container.closest('#mobile-layout');
+  const curViewMode = () => S.animeState.viewMode || 'list';
   const grid = el('div', 'anime-grid');
+  const applyGridMode = () => {
+    if (curViewMode() === 'gallery') {
+      grid.classList.add('gallery-mode');
+      if (isMobile) grid.classList.add('gallery-mobile');
+    } else {
+      grid.classList.remove('gallery-mode', 'gallery-mobile');
+    }
+  };
+  applyGridMode();
   container.appendChild(grid);
 
   let calendarCache = null;
@@ -3293,25 +3326,52 @@ function renderAnimeWidget(container, cfgBtn) {
       if (curTab !== 'search') loadTab();
     });
 
-    img.style.cursor = 'zoom-in';
-    img.addEventListener('click', e => {
-      e.stopPropagation();
-      showImageViewer(img.src, img.alt);
-    });
-
-    info.appendChild(titleEl);
-    info.appendChild(meta);
-    card.appendChild(img);
-    card.appendChild(info);
-    card.appendChild(star);
     card.addEventListener('click', e => {
       if (e.target.closest('.anime-star') || e.target.closest('img') || e.target.closest('.anime-watch-ep') || e.target.closest('.anime-watch-ep-input')) return;
       showAnimeSheet(anime);
     });
+
+    if (curViewMode() === 'gallery') {
+      // ── Gallery 模式 ──
+      card.classList.add('anime-card--gallery');
+      const coverWrap = el('div', 'anime-cover-wrap');
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', e => { e.stopPropagation(); showImageViewer(img.src, img.alt); });
+      coverWrap.appendChild(img);
+      // 星星疊加右上角
+      coverWrap.appendChild(star);
+      // 底部漸層遮罩 + badges
+      const gradient = el('div', 'anime-cover-gradient');
+      const coverBadges = el('div', 'anime-cover-badges');
+      if (anime.rating?.score) coverBadges.appendChild(el('span', 'anime-card-badge badge-score', `★ ${anime.rating.score.toFixed(1)}`));
+      if (anime.eps_count || anime.eps) coverBadges.appendChild(el('span', 'anime-card-badge badge-eps', `共 ${anime.eps_count || anime.eps} 集`));
+      gradient.appendChild(coverBadges);
+      coverWrap.appendChild(gradient);
+      card.appendChild(coverWrap);
+      // 圖片下方：標題 + 進度
+      const galleryInfo = el('div', 'anime-gallery-info');
+      galleryInfo.appendChild(titleEl);
+      if (isTracked) {
+        const progressWrap2 = meta.querySelector('.anime-watch-progress');
+        if (progressWrap2) galleryInfo.appendChild(progressWrap2);
+      }
+      card.appendChild(galleryInfo);
+    } else {
+      // ── List 模式（原本）──
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', e => { e.stopPropagation(); showImageViewer(img.src, img.alt); });
+      info.appendChild(titleEl);
+      info.appendChild(meta);
+      card.appendChild(img);
+      card.appendChild(info);
+      card.appendChild(star);
+    }
+
     return card;
   }
 
   function renderItems(items, bgmWd) {
+    applyGridMode();
     grid.innerHTML = '';
     if (!items.length) { grid.innerHTML = '<div class="anime-empty">沒有找到動畫</div>'; return; }
     const tracked = S.animeState.tracked || [];
@@ -3325,6 +3385,7 @@ function renderAnimeWidget(container, cfgBtn) {
   }
 
   function renderFav() {
+    applyGridMode();
     grid.innerHTML = '';
     const tracked = S.animeState.tracked || [];
     if (!tracked.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
@@ -3505,6 +3566,7 @@ function renderAnimeWidget(container, cfgBtn) {
   const doSearch = async () => {
     const q = searchInp.value.trim();
     if (!q) return;
+    applyGridMode();
     grid.innerHTML = '<div class="anime-loading">搜尋中…</div>';
     try {
       const res = await fetch('https://api.bgm.tv/v0/search/subjects?limit=20', {
@@ -5738,12 +5800,23 @@ function initMobileLayout() {
         return;
       }
 
-      // 動畫追蹤專用：在 panelHead 加 ⚙
+      // 動畫追蹤專用：在 panelHead 加 ⚙ 和切換按鈕
       if (page.widget === 'anime') {
         const animeCfgBtn = el('button', 'yt-icon-btn anime-cfg-btn');
         animeCfgBtn.title = '動畫設定';
         animeCfgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+        const animeViewBtnM = el('button', 'yt-icon-btn anime-view-btn');
+        animeViewBtnM.title = '切換顯示模式';
+        _updateViewBtnIcon(animeViewBtnM);
+        animeViewBtnM.addEventListener('click', e => {
+          e.stopPropagation();
+          S.animeState.viewMode = _isGallery() ? 'list' : 'gallery';
+          lsSave();
+          document.querySelectorAll('.anime-view-btn').forEach(_updateViewBtnIcon);
+          document.querySelectorAll('.anime-inner').forEach(inner => renderAnimeWidget(inner, inner.closest('[data-widget="anime"]')?.querySelector('.anime-cfg-btn') || null));
+        });
         panelHead.insertBefore(animeCfgBtn, expandBtn);
+        panelHead.insertBefore(animeViewBtnM, animeCfgBtn);
 
         panel.appendChild(panelHead);
         const inner = el('div', 'anime-inner');
