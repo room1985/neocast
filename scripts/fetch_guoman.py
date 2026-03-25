@@ -113,45 +113,37 @@ def fetch_timeline_items():
     return items
 
 
-# ── Phase 2：Bangumi 本年全部動畫（分頁取完）────────────────────────────────
+# ── Phase 2：Bangumi 多關鍵字搜尋中國動畫 ────────────────────────────────────
 def fetch_bangumi_year_all():
     year = datetime.utcnow().year
     since = f"{year}-01-01"
-    print(f"[Bangumi補援] 搜尋 {since} 起所有動畫（不限國籍）...")
+    keywords = [
+        "中国动画", "国产动画", "国漫", "中国大陆", "bilibili",
+        "中国", "国产", "WEB", "修仙", "仙侠", "玄幻",
+        "小说改", "战斗", "网文改", "国漫奇幻", "国创",
+    ]
+    print(f"[Bangumi補援] 多關鍵字搜尋本年（{since} 起）中國動畫...")
 
-    all_subjects = []
-    offset = 0
-    while True:
+    seen = {}   # id → subject，去重用
+    for kw in keywords:
         try:
             time.sleep(0.4)
-            resp = post_json(BANGUMI_V0, {
-                "keyword": "",
-                "filter": {
-                    "type": [2],
-                    "air_date": [f">={since}"],
-                    "nsfw": False
-                },
-                "sort":   "heat",
-                "limit":  PAGE_SIZE,
-                "offset": offset
-            })
+            url = BANGUMI_SEARCH.format(kw=urllib.parse.quote(kw)) + "&max_results=25"
+            data = fetch_json(url, {"User-Agent": BGM_UA})
+            for subj in (data.get("list") or []):
+                # 只保留本年以後開播的動畫
+                air_date = subj.get("air_date") or subj.get("date") or ""
+                if air_date and air_date < since:
+                    continue
+                sid = subj.get("id")
+                if sid and sid not in seen:
+                    seen[sid] = subj
+            print(f"  '{kw}': {len(data.get('list') or [])} 筆，累計不重複 {len(seen)} 部")
         except Exception as e:
-            print(f"  page offset={offset} 失敗: {e}"); break
+            print(f"  '{kw}' 失敗: {e}")
 
-        items = resp.get("data") or []
-        total = resp.get("total") or 0
-        all_subjects.extend(items)
-        print(f"  offset={offset}: {len(items)} 筆（累計 {len(all_subjects)}/{total}）")
-
-        if not items or len(all_subjects) >= total:
-            break
-        offset += len(items)   # 以實際回傳數量遞增，避免跳過資料
-
-    print(f"[Bangumi補援] 共 {len(all_subjects)} 部")
-    if all_subjects:
-        first = all_subjects[0]
-        print(f"[debug] 第一筆 keys={list(first.keys())}, id={first.get('id')}, type={type(first.get('id'))}")
-    return all_subjects
+    print(f"[Bangumi補援] 共 {len(seen)} 部")
+    return list(seen.values())
 
 
 # ── 組 item ───────────────────────────────────────────────────────────────────
@@ -214,13 +206,9 @@ def build_guoman():
     # Phase 2：Bangumi 本年補援
     bgm_year = fetch_bangumi_year_all()
     added = 0
-    no_id_count = 0
     for subj in bgm_year:
-        bgm_id = subj.get("id") or subj.get("subject_id") or subj.get("subjectId")
-        if not bgm_id:
-            no_id_count += 1
-            continue
-        if bgm_id in seen_bgm_ids:
+        bgm_id = subj.get("id")
+        if not bgm_id or bgm_id in seen_bgm_ids:
             continue
 
         date_str = subj.get("date") or subj.get("air_date") or ""
@@ -231,7 +219,7 @@ def build_guoman():
         calendar.setdefault(wd, []).append(item)
         added += 1
 
-    print(f"[Bangumi補援] 新增 {added} 部，no_id={no_id_count}（日漫會在 app.js 去重）")
+    print(f"[Bangumi補援] 新增 {added} 部（日漫會在 app.js 去重）")
 
     result = [
         {"weekday": {"id": wd}, "items": items}
