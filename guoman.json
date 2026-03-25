@@ -162,6 +162,44 @@
         "pub_index": "",
         "pub_time": "",
         "bilibili_season_id": 0
+      },
+      {
+        "id": 569761,
+        "name": "熊出没·年年有熊",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ce/5b/569761_t1r2N.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ce/5b/569761_t1r2N.jpg"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 1,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 624695,
+        "name": "喜羊羊与灰太狼之古古怪界有古怪番外篇",
+        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪番外篇",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/39/e3/624695_jg6sf.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/39/e3/624695_jg6sf.jpg"
+        },
+        "rating": {
+          "score": 7.8
+        },
+        "eps": 3,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
       }
     ]
   },
@@ -405,6 +443,25 @@
           "score": 7
         },
         "eps": 3,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 545972,
+        "name": "喜羊羊与灰太狼之古古怪界有古怪",
+        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 60,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
