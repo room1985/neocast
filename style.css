@@ -1237,8 +1237,9 @@ a { color:inherit; text-decoration:none; }
   grid-template-columns: repeat(2, 110px);
 }
 
-.anime-card--gallery {
-  display: flex;
+/* 所有在 gallery grid 內的卡片，純 CSS 強制直式排列，不依賴 JS class */
+.anime-grid.gallery-mode .anime-card {
+  position: relative;
   flex-direction: column;
   align-items: stretch;
   align-self: start;
@@ -1247,8 +1248,51 @@ a { color:inherit; text-decoration:none; }
   overflow: hidden;
   border-radius: 10px;
 }
-.anime-card--gallery:hover { background: rgba(255,255,255,.09); }
+.anime-grid.gallery-mode .anime-card:hover { background: rgba(255,255,255,.09); }
 
+/* 封面圖：固定高度，全寬 */
+.anime-grid.gallery-mode .anime-cover {
+  width: 100%;
+  height: 160px;
+  border-radius: 10px 10px 0 0;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+/* 星星：疊加在圖片右上角 */
+.anime-grid.gallery-mode .anime-card > .anime-star {
+  position: absolute;
+  top: 5px;
+  right: 4px;
+  padding: 3px;
+  background: rgba(0,0,0,.45);
+  border-radius: 50%;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+/* 文字區：圖片下方 */
+.anime-grid.gallery-mode .anime-info {
+  padding: 5px 7px 7px;
+  gap: 3px;
+}
+.anime-grid.gallery-mode .anime-title {
+  font-size: calc(0.72rem * var(--anime-list-fs, 1));
+  -webkit-line-clamp: 2;
+}
+.anime-grid.gallery-mode .anime-meta {
+  flex-wrap: wrap;
+  gap: 3px;
+}
+.anime-grid.gallery-mode .anime-watch-progress {
+  font-size: calc(0.65rem * var(--anime-list-fs, 1));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 以下保留給 JS 建出 gallery 結構的卡片（有 cover-wrap 的版本） */
 .anime-cover-wrap {
   position: relative;
   width: 100%;
@@ -1278,12 +1322,9 @@ a { color:inherit; text-decoration:none; }
   -webkit-backdrop-filter: blur(4px);
   z-index: 2;
 }
-
 .anime-cover-gradient {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 0; left: 0; right: 0;
   height: 52px;
   background: linear-gradient(to top, rgba(0,0,0,.82) 0%, transparent 100%);
   z-index: 1;
@@ -1291,33 +1332,11 @@ a { color:inherit; text-decoration:none; }
   align-items: flex-end;
   padding: 0 5px 5px;
 }
-.anime-cover-badges {
-  display: flex;
-  gap: 3px;
-  flex-wrap: wrap;
-}
-.anime-cover-badges .anime-card-badge {
-  font-size: .6rem;
-  padding: 1px 4px;
-}
-
-.anime-gallery-info {
-  padding: 5px 7px 7px;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.anime-gallery-info .anime-title {
-  font-size: calc(0.72rem * var(--anime-list-fs, 1));
-  -webkit-line-clamp: 2;
-}
-.anime-gallery-info .anime-watch-progress {
-  font-size: calc(0.65rem * var(--anime-list-fs, 1));
-  color: var(--txd);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.anime-cover-badges { display: flex; gap: 3px; flex-wrap: wrap; }
+.anime-cover-badges .anime-card-badge { font-size: .6rem; padding: 1px 4px; }
+.anime-gallery-info { padding: 5px 7px 7px; display: flex; flex-direction: column; gap: 3px; }
+.anime-gallery-info .anime-title { font-size: calc(0.72rem * var(--anime-list-fs, 1)); -webkit-line-clamp: 2; }
+.anime-gallery-info .anime-watch-progress { font-size: calc(0.65rem * var(--anime-list-fs, 1)); color: var(--txd); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ══════════════════════════════
    STICKIES WIDGET
