@@ -145,7 +145,7 @@ def fetch_bangumi_year_all():
 
         if not items or len(all_subjects) >= total:
             break
-        offset += PAGE_SIZE
+        offset += len(items)   # 以實際回傳數量遞增，避免跳過資料
 
     print(f"[Bangumi補援] 共 {len(all_subjects)} 部")
     return all_subjects
