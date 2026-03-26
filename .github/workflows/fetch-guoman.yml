@@ -2,14 +2,14 @@ name: 更新國漫資料
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
-  workflow_dispatch:
+    - cron: '0 */6 * * *'   # 每 6 小時自動執行
+  workflow_dispatch:         # 也可在 GitHub 網頁手動觸發
 
 jobs:
   fetch:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: write        # 需要寫入權限才能 commit guoman.json
 
     steps:
       - name: Checkout
@@ -21,6 +21,10 @@ jobs:
           python-version: '3.11'
 
       - name: 執行抓取腳本
+        env:
+          BGM_APP_ID: bgm582369c530b5dcaf9
+          BGM_APP_SECRET: ${{ secrets.BGM_APP_SECRET }}
+          BGM_REFRESH_TOKEN: ${{ secrets.BGM_REFRESH_TOKEN }}
         run: python scripts/fetch_guoman.py
 
       - name: Commit guoman.json
