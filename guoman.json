@@ -287,7 +287,7 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第7话",
+        "pub_index": "第7话",
         "pub_time": "11:00",
         "bilibili_season_id": 45979
       },
@@ -322,6 +322,25 @@
           "score": 0
         },
         "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0
+      },
+      {
+        "id": 406488,
+        "name": "将夜",
+        "name_cn": "将夜",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/12/ec/406488_YUXzx.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/12/ec/406488_YUXzx.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 16,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
