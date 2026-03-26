@@ -5190,6 +5190,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let countdownInterval = null;
   let msgListener = null;
   let keyListener = null;
+  let syncLockUntil = 0;
 
   const buildPlayer = (portrait) => {
     const backdrop = el('div', 'yt-player-backdrop');
@@ -5220,16 +5221,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const loadVideo = (idx) => {
       if (!playlist || idx < 0 || idx >= playlist.length) return;
       curIdx = idx;
+      syncLockUntil = Date.now() + 2000; // 2秒內忽略舊 iframe 的 infoDelivery
       nextBar.style.display = 'none';
       clearTimeout(countdownTimer);
       clearInterval(countdownInterval);
-      // 用 playVideoAt 指令控制 YouTube，不重建 iframe
-      const iframe = playerBox.querySelector('iframe');
-      if (iframe) {
-        iframe.contentWindow.postMessage(JSON.stringify({
-          event: 'command', func: 'playVideoAt', args: [curIdx], id: 1
-        }), '*');
-      }
+      // 換影片：重建 iframe
+      const newIframe = buildIframe(playlist[curIdx].videoId);
+      const oldIframe = playerBox.querySelector('iframe');
+      if (oldIframe) oldIframe.replaceWith(newIframe);
       // 更新上一部/下一部按鈕狀態
       if (prevBtn) prevBtn.disabled = curIdx <= 0;
       if (nextBtn) nextBtn.disabled = curIdx >= playlist.length - 1;
@@ -5272,7 +5271,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       if (!e.origin.includes('youtube.com')) return;
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        if (data?.event === 'infoDelivery' && data?.info?.videoData?.videoId && playlist?.length) {
+        if (Date.now() > syncLockUntil && data?.event === 'infoDelivery' && data?.info?.videoData?.videoId && playlist?.length) {
           const vid = data.info.videoData.videoId;
           const idx = playlist.findIndex(v => v.videoId === vid);
           if (idx >= 0 && idx !== curIdx) {
@@ -5288,9 +5287,9 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     const buildIframe = (vid) => {
       const iframe = el('iframe');
-      let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${location.origin}&index=${curIdx >= 0 ? curIdx : 0}`;
-      if (playlist?.length > 1) {
-        const ids = playlist.map(v => v.videoId).join(',');
+      let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${location.origin}`;
+      if (playlist?.length > 1 && curIdx >= 0) {
+        const ids = playlist.slice(curIdx, curIdx + 20).map(v => v.videoId).join(',');
         src += `&playlist=${ids}`;
       }
       iframe.src = src;
