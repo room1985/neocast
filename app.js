@@ -1015,6 +1015,10 @@ function initLockBtn() {
       const body = bar.closest('.stickies-inner');
       if (body?._renderTagBar) body._renderTagBar();
     });
+    // 重新渲染動畫 widget（顯示裏番 tab）
+    document.querySelectorAll('.anime-inner').forEach(inner => {
+      renderAnimeWidget(inner, inner.closest('[data-widget="anime"]')?.querySelector('.anime-cfg-btn') || null);
+    });
     toast('私人群組已解鎖');
   }
 
@@ -1039,6 +1043,10 @@ function initLockBtn() {
     // 重新渲染便利貼（隱藏私人項目）
     document.querySelectorAll('.stickies-inner').forEach(body => {
       renderStickiesWidget(body);
+    });
+    // 重新渲染動畫 widget（隱藏裏番 tab）
+    document.querySelectorAll('.anime-inner').forEach(inner => {
+      renderAnimeWidget(inner, inner.closest('[data-widget="anime"]')?.querySelector('.anime-cfg-btn') || null);
     });
   }
 }
@@ -3017,11 +3025,17 @@ async function fetchGuomanData() {
 function mergeGuomanIntoCalendar(calendar, guoman) {
   guoman.forEach(guDay => {
     const wdId = guDay.weekday?.id;
-    const target = calendar.find(d => d.weekday?.id === wdId);
-    if (!target) return;
-    const existing = new Set((target.items || []).map(i => i.id));
     (guDay.items || []).forEach(item => {
-      if (!existing.has(item.id)) target.items.push(item);
+      if (item.is_nsfw) {
+        if (!S.animeState.nsfwCalendar[wdId]) S.animeState.nsfwCalendar[wdId] = [];
+        const arr = S.animeState.nsfwCalendar[wdId];
+        if (!arr.some(i => i.id === item.id)) arr.push(item);
+      } else {
+        const target = calendar.find(d => d.weekday?.id === wdId);
+        if (!target) return;
+        const existing = new Set((target.items || []).map(i => i.id));
+        if (!existing.has(item.id)) target.items.push(item);
+      }
     });
   });
 }
@@ -3145,6 +3159,21 @@ function renderAnimeWidget(container, cfgBtn) {
     });
     mainTabs.appendChild(t);
   });
+
+  // 裏番 tab — 只在 privateUnlocked 時顯示
+  if (S.privateUnlocked) {
+    const nsfwTab = el('button', 'anime-main-tab', '裏番');
+    nsfwTab.addEventListener('click', () => {
+      curTab = 'nsfw';
+      mainTabs.querySelectorAll('.anime-main-tab').forEach(tb => tb.classList.remove('on'));
+      nsfwTab.classList.add('on');
+      weekTabsWrap.style.display = 'flex';
+      todayBtn.style.display = '';
+      searchBar.style.display = 'none';
+      loadTab();
+    });
+    mainTabs.appendChild(nsfwTab);
+  }
 
   const todayBtn = el('button', 'anime-today-btn', '今日');
   todayBtn.addEventListener('click', () => {
@@ -3608,7 +3637,7 @@ function renderAnimeWidget(container, cfgBtn) {
   searchInp.addEventListener('keydown', e => { if (e.key === 'Enter') doSearch(); });
 
   async function loadTab() {
-    if (curTab === 'week') {
+    if (curTab === 'week' || curTab === 'nsfw') {
       if (!calendarCache) {
         grid.innerHTML = '<div class="anime-loading">載入中…</div>';
         try {
@@ -3617,9 +3646,20 @@ function renderAnimeWidget(container, cfgBtn) {
             fetchGuomanData()
           ]);
           calendarCache = bgmData;
+          S.animeState.nsfwCalendar = {};
           if (guomanData.length) mergeGuomanIntoCalendar(calendarCache, guomanData);
         }
         catch(e) { grid.innerHTML = '<div class="anime-empty">載入失敗</div>'; return; }
+      }
+      if (curTab === 'nsfw') {
+        const nsfw = S.animeState.nsfwCalendar || {};
+        if (curWd === ALL_WD) {
+          renderItems(Object.values(nsfw).flat(), undefined);
+        } else {
+          const bgmId = curWd === 0 ? 7 : curWd;
+          renderItems(nsfw[bgmId] || [], curWd);
+        }
+        return;
       }
       if (curWd === ALL_WD) {
         // Merge all days
