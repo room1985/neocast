@@ -165,19 +165,28 @@ def fetch_anilist_nsfw():
     all_media = []
     page = 1
     while True:
-        try:
-            time.sleep(0.5)
-            resp = post_json(ANILIST_URL, {"query": ANILIST_QUERY, "variables": {"page": page}})
-            page_data = (resp.get("data") or {}).get("Page") or {}
-            media_list = page_data.get("media") or []
-            has_next   = page_data.get("pageInfo", {}).get("hasNextPage", False)
-            all_media.extend(media_list)
-            print(f"  page {page}: {len(media_list)} 筆（累計 {len(all_media)}）")
-            if not has_next or not media_list:
+        success = False
+        for retry in range(3):
+            try:
+                time.sleep(1.0 + retry * 2)
+                resp = post_json(ANILIST_URL, {"query": ANILIST_QUERY, "variables": {"page": page}})
+                page_data = (resp.get("data") or {}).get("Page") or {}
+                media_list = page_data.get("media") or []
+                has_next   = page_data.get("pageInfo", {}).get("hasNextPage", False)
+                all_media.extend(media_list)
+                print(f"  page {page}: {len(media_list)} 筆（累計 {len(all_media)}）")
+                if not has_next or not media_list:
+                    has_next = False
+                page += 1
+                success = True
                 break
-            page += 1
-        except Exception as e:
-            print(f"  page {page} 失敗: {e}"); break
+            except Exception as e:
+                print(f"  page {page} 第{retry+1}次失敗: {e}")
+        if not success:
+            print(f"  page {page} 重試3次仍失敗，跳過")
+            break
+        if not has_next:
+            break
     print(f"[Phase 3] 共 {len(all_media)} 部成人動畫")
     return all_media
 

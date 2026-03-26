@@ -3365,7 +3365,7 @@ function renderAnimeWidget(container, cfgBtn) {
         S.animeState.trackedData[anime.id] = {
           id: anime.id, name: anime.name, name_cn: anime.name_cn,
           images: anime.images, rating: anime.rating, eps: anime.eps,
-          air_weekday: wd,
+          air_weekday: wd, is_nsfw: !!anime.is_nsfw,
           watchedEp: S.animeState.trackedData?.[anime.id]?.watchedEp ?? 0
         };
         star.classList.add('on');
@@ -3441,7 +3441,7 @@ function renderAnimeWidget(container, cfgBtn) {
     if (!tracked.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
 
     if (curWd === ALL_WD) {
-      const items = tracked.map(id => S.animeState.trackedData?.[id]).filter(a => a && (S.privateUnlocked || !a.is_nsfw));
+      const items = tracked.map(id => S.animeState.trackedData?.[id]).filter(a => a && (S.privateUnlocked || !(a.is_nsfw || a.id >= 10_000_000)));
       if (!items.length) { grid.innerHTML = '<div class="anime-empty">還沒有收藏的番組</div>'; return; }
 
       let dragSrcFavId = null;
@@ -3607,7 +3607,7 @@ function renderAnimeWidget(container, cfgBtn) {
     } else {
       const items = tracked
         .map(id => S.animeState.trackedData?.[id])
-        .filter(a => a && a.air_weekday === curWd && (S.privateUnlocked || !a.is_nsfw));
+        .filter(a => a && a.air_weekday === curWd && (S.privateUnlocked || !(a.is_nsfw || a.id >= 10_000_000)));
       if (!items.length) { grid.innerHTML = '<div class="anime-empty">這天沒有收藏的番組</div>'; return; }
       items.forEach(anime => grid.appendChild(makeAnimeCard(anime, anime.air_weekday)));
     }
@@ -3903,7 +3903,7 @@ async function showAnimeSheet(anime) {
       S.animeState.trackedData[anime.id] = {
         id: anime.id, name: anime.name, name_cn: anime.name_cn,
         images: anime.images, rating: anime.rating, eps: anime.eps,
-        air_weekday: wd,
+        air_weekday: wd, is_nsfw: !!anime.is_nsfw,
         watchedEp: S.animeState.trackedData?.[anime.id]?.watchedEp ?? 0
       };
       favBtn.classList.add('on');
