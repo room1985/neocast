@@ -33,7 +33,8 @@ query ($page: Int) {
     pageInfo { hasNextPage }
     media(isAdult: true, type: ANIME, status: RELEASING, sort: POPULARITY_DESC) {
       id
-      title { romaji native }
+      title { romaji native english }
+      synonyms
       coverImage { large medium }
       averageScore
       episodes
@@ -181,8 +182,19 @@ def fetch_anilist_nsfw():
     return all_media
 
 
+def _pick_cn_title(title, synonyms):
+    """優先從 synonyms 找中文標題（含漢字但無假名），否則用 native，最後 romaji"""
+    for s in (synonyms or []):
+        has_cjk  = any('\u4e00' <= c <= '\u9fff' for c in s)
+        has_kana = any('\u3040' <= c <= '\u30ff' for c in s)
+        if has_cjk and not has_kana:
+            return s
+    return title.get("native") or title.get("romaji") or ""
+
+
 def make_nsfw_item(media):
     title    = media.get("title") or {}
+    synonyms = media.get("synonyms") or []
     cover    = media.get("coverImage") or {}
     score    = media.get("averageScore") or 0
     next_ep  = media.get("nextAiringEpisode") or {}
@@ -202,7 +214,7 @@ def make_nsfw_item(media):
     return {
         "id":       10_000_000 + (media.get("id") or 0),  # 避免與 Bangumi ID 碰撞
         "name":     title.get("native") or title.get("romaji") or "",
-        "name_cn":  title.get("romaji") or title.get("native") or "",
+        "name_cn":  _pick_cn_title(title, synonyms),
         "images": {
             "large":  cover.get("large")  or cover.get("medium") or "",
             "common": cover.get("medium") or cover.get("large")  or "",
