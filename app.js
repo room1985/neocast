@@ -5190,6 +5190,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let countdownInterval = null;
   let msgListener = null;
   let keyListener = null;
+  let ignoreInfoDelivery = false;
+  let ignoreTimer = null;
 
   const buildPlayer = (portrait) => {
     const backdrop = el('div', 'yt-player-backdrop');
@@ -5220,6 +5222,10 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const loadVideo = (idx) => {
       if (!playlist || idx < 0 || idx >= playlist.length) return;
       curIdx = idx;
+      // 忽略舊 iframe 的殘留 infoDelivery 事件
+      ignoreInfoDelivery = true;
+      clearTimeout(ignoreTimer);
+      ignoreTimer = setTimeout(() => { ignoreInfoDelivery = false; }, 1500);
       nextBar.style.display = 'none';
       clearTimeout(countdownTimer);
       clearInterval(countdownInterval);
@@ -5269,7 +5275,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       if (!e.origin.includes('youtube.com')) return;
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        if (data?.event === 'infoDelivery' && data?.info?.videoData?.videoId && playlist?.length) {
+        if (!ignoreInfoDelivery && data?.event === 'infoDelivery' && data?.info?.videoData?.videoId && playlist?.length) {
           const vid = data.info.videoData.videoId;
           const idx = playlist.findIndex(v => v.videoId === vid);
           if (idx >= 0 && idx !== curIdx) {
