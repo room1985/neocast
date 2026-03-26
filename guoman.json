@@ -83,26 +83,6 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
-      },
-      {
-        "id": 478555,
-        "name": "ゾンビのあふれた世界で俺だけが襲われない",
-        "name_cn": "在遍地都是丧尸的世界里唯独我不被袭击",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/81/62/478555_MZmxZ.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/81/62/478555_MZmxZ.jpg"
-        },
-        "rating": {
-          "score": 7
-        },
-        "eps": 0,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
       }
     ]
   },
@@ -230,6 +210,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 10154887,
+        "name": "異世界来たのでスケベスキルで全力謳歌しようと思う THE ANIMATION",
+        "name_cn": "Isekai Kita node Sukebe Skill de Zenryoku Ouka Shiyou to Omou THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx154887-yTRXVOLMLleD.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx154887-yTRXVOLMLleD.jpg"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -384,6 +384,266 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 10112936,
+        "name": "○○交配",
+        "name_cn": "Enjo Kouhai",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx112936-MOPqLdKu7dgJ.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx112936-MOPqLdKu7dgJ.jpg"
+        },
+        "rating": {
+          "score": 6.9
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第11話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10161680,
+        "name": "1LDK＋JK いきなり同居？密着！？初エッチ！！？",
+        "name_cn": "1LDK+JK Ikinari Doukyo? Micchaku!? Hatsu Ecchi!!?",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx161680-NjggzN5hw0UL.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx161680-NjggzN5hw0UL.jpg"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第7話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10178445,
+        "name": "ボクの理想の異世界生活",
+        "name_cn": "Boku no Risou no Isekai Seikatsu",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178445-Vx7wQLiwH664.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178445-Vx7wQLiwH664.png"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第4話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10196722,
+        "name": "レイカは華麗な僕の女王 THE ANIMATION",
+        "name_cn": "Reika wa Karei na Boku no Joou THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196722-mpsggThw5jFv.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
+        },
+        "rating": {
+          "score": 7.1
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第3話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10160701,
+        "name": "告白……",
+        "name_cn": "Kokuhaku...",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第3話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10194353,
+        "name": "ちょろ・めす・でいず",
+        "name_cn": "Choro Mesu Days",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "Honey Blonde 2",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第4話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10199162,
+        "name": "クール de M",
+        "name_cn": "Cool de M",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10202894,
+        "name": "剣鬼バルゴ",
+        "name_cn": "Kenki Virgo",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202894-vv6EPa1MKCmD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202894-vv6EPa1MKCmD.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10199164,
+        "name": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
+        "name_cn": "Seihou Shouka Saint Lime VN: VeasTube Eroero Haishin Edition♪",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199164-kQ2sVvNXU392.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10201153,
+        "name": "聖光閃姫ポニーセレス",
+        "name_cn": "Seikou Senki Pony Celes",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx201153-9xwz47bJi3wp.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10200930,
+        "name": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
+        "name_cn": "Anal Mania Otaku to Ananie Daisuki na Ojou-sama: Kiseki no Matching",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200930-LilV7nMGiVKm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200930-LilV7nMGiVKm.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10202893,
+        "name": "L'amour fou de l'automate",
+        "name_cn": "L'amour fou de l'automate",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -533,20 +793,1500 @@
         "is_nsfw": false
       },
       {
-        "id": 558296,
-        "name": "アンドロイドは経験人数に入りますか？？",
-        "name_cn": "和机器人啪啪啪能算在经验次数里吗？？",
+        "id": 10021828,
+        "name": "小女ラムネ",
+        "name_cn": "Shoujo Ramune",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/f0/78/558296_W25j2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f0/78/558296_W25j2.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21828-3KDKm3Zu2DyX.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10132203,
+        "name": "今泉ん家はどうやらギャルの溜まり場になってるらしい",
+        "name_cn": "Imaizumin-chi wa Douyara Gal no Tamariba ni Natteru Rashii",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx132203-s7yzfJv6d48L.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx132203-s7yzfJv6d48L.jpg"
+        },
+        "rating": {
+          "score": 7.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10134469,
+        "name": "思春期のお勉強",
+        "name_cn": "Shishunki no Obenkyou",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b134469-Ku4foJLXK4Sl.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/b134469-Ku4foJLXK4Sl.jpg"
+        },
+        "rating": {
+          "score": 7.2
+        },
+        "eps": 6,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10113947,
+        "name": "初めてのヒトヅマ",
+        "name_cn": "Hajimete no Hitozuma",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx113947-POn7IuMfAJZp.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx113947-POn7IuMfAJZp.png"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10147622,
+        "name": "メイド教育。－没落貴族 瑠璃川椿－ THE ANIMATION",
+        "name_cn": "Maid Kyouiku.: Botsuraku Kizoku Rurikawa Tsubaki - THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx147622-Yj7BhXXdWuIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx147622-Yj7BhXXdWuIA.png"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10179823,
+        "name": "入り浸りギャルにま〇こ使わせて貰う話 Animation",
+        "name_cn": "Iribitari Gal ni Manko Tsukawasete Morau Hanashi Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179823-bRAv7uaS8mxl.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179823-bRAv7uaS8mxl.png"
+        },
+        "rating": {
+          "score": 7.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10119254,
+        "name": "彼女がヤツに抱かれたヒ",
+        "name_cn": "Kanojo ga Yatsu ni Dakareta hi",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx119254-WwnChLQIewTC.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx119254-WwnChLQIewTC.jpg"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10170599,
+        "name": "フルール The Animation",
+        "name_cn": "Fleur The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx170599-0aMEXpy9rak1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx170599-0aMEXpy9rak1.png"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10179368,
+        "name": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
+        "name_cn": "InCha Couple ga You Gal-tachi to SEX Training Suru Hanashi",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179368-LUseTIJVIjD4.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179368-LUseTIJVIjD4.png"
+        },
+        "rating": {
+          "score": 7.2
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10155170,
+        "name": "ママ喝っ",
+        "name_cn": "Mama Katsu",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155170-rgYkDP4pQmgc.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155170-rgYkDP4pQmgc.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10176707,
+        "name": "僕にハーレムセフレが出来た理由",
+        "name_cn": "Boku ni Harem Sefure ga Dekita Riyuu",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176707-RWXgVpuxgPCf.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176707-RWXgVpuxgPCf.png"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10177255,
+        "name": "性欲つよつよ THE ANIMATION",
+        "name_cn": "Seiyoku Tsuyo Tsuyo THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177255-9p0ee1xmvcpZ.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177255-9p0ee1xmvcpZ.png"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10174634,
+        "name": "セックスが好きで好きで大好きなクラスメイトのあの娘",
+        "name_cn": "Sex ga Suki de Suki de Daisuki na Classmate no Anoko",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174634-mKIuuDwfTkY9.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174634-mKIuuDwfTkY9.png"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10168947,
+        "name": "NO 猥婦 NO LIFE！",
+        "name_cn": "NO Wife NO LIFE!",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx168947-WSTbOv30uTYR.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx168947-WSTbOv30uTYR.png"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10148148,
+        "name": "SUMMER ～田舎の性活～",
+        "name_cn": "SUMMER: Inaka No Seikatsu",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx148148-vxVvdujEBy1C.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10174633,
+        "name": "みだれうち",
+        "name_cn": "Midareuchi",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174633-8PVPsJ4yKthq.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174633-8PVPsJ4yKthq.png"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10142229,
+        "name": "エロリーマン",
+        "name_cn": "Eroriman",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx142229-ux7lcdcfJhN1.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx142229-ux7lcdcfJhN1.jpg"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10186827,
+        "name": "風紀委員とフーゾク活動",
+        "name_cn": "Fuuki Iin to Fuuzoku Katsudou",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186827-B9FgO0n9G0IC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
+        },
+        "rating": {
+          "score": 7.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10177149,
+        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "name_cn": "Bubble de House de ***: Ofuro Maker no Showroom ga Sharehouse de... The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
+        },
+        "rating": {
+          "score": 6.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10196750,
+        "name": "シスターブリーダー",
+        "name_cn": "Sister Breeder",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
+        },
+        "rating": {
+          "score": 7.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10146837,
+        "name": "ツグナヒ",
+        "name_cn": "Tsugunai",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx146837-Ot4gdIYCA34z.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx146837-Ot4gdIYCA34z.jpg"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10172218,
+        "name": "夢見ル乙女",
+        "name_cn": "Yumemiru Otome",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10185506,
+        "name": "野々原柚花のヒミツのハイシン",
+        "name_cn": "Nonohara Yuka no Himitsu no Haishin",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185506-e6BT2M2TFz3i.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10183602,
+        "name": "彼女フェイス THE ANIMATION",
+        "name_cn": "Kanojo Face THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183602-8yGvSxmilgjW.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183602-8yGvSxmilgjW.png"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10168946,
+        "name": "Sweet and Hot",
+        "name_cn": "Sweet and Hot",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx168946-ueSFYB6Ym1FC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx168946-ueSFYB6Ym1FC.png"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10184810,
+        "name": "インモラルーティーン The Animation",
+        "name_cn": "Immoral Routine The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184810-BJhp0LMwWKpP.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
+        },
+        "rating": {
+          "score": 6.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10183741,
+        "name": "肉園",
+        "name_cn": "Nikuen",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183741-eW11ec61Vg0T.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183741-eW11ec61Vg0T.png"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10156162,
+        "name": "ヤリ上がり",
+        "name_cn": "Yari Agari",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx156162-Gzv9Xy1jweEL.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx156162-Gzv9Xy1jweEL.jpg"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10185001,
+        "name": "知らないこと知りたいの？ The Animation",
+        "name_cn": "Shiranai Koto Shiritai no? The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185001-ueqGXlmN8iVe.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185001-ueqGXlmN8iVe.png"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10164240,
+        "name": "くノ一○○伝　紫陽花",
+        "name_cn": "Kunoichi Ryoujokuden Ajisai",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10174181,
+        "name": "サキュバス★コネクト！",
+        "name_cn": "Succubus★Connect!",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174181-vHbr7mnWOxK7.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10186058,
+        "name": "黒ギャルアラカルト",
+        "name_cn": "Kuro Gal A La Carte",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
           "score": 5.9
         },
-        "eps": 8,
+        "eps": 0,
         "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10180704,
+        "name": "エルフに淫紋を付ける本 The Animation",
+        "name_cn": "Elf ni Inmon wo Tsukeru Hon The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "Tsuma wo Dousoukai ni Ikasetara",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "Immoral Game Master THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10176396,
+        "name": "誤爆〜萌えママ徒然〜",
+        "name_cn": "Gobaku: Moe Mama Tsurezure",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176396-WnffuWa1xEA1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176396-WnffuWa1xEA1.png"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10169941,
+        "name": "勇者姫ミリア",
+        "name_cn": "Yuusha-hime Milia",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx169941-mV5b81i9JU8m.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx169941-mV5b81i9JU8m.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10180832,
+        "name": "おにちちハーレム",
+        "name_cn": "Oni Chichi Harem",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180832-N1TzYgyWcKiB.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10176907,
+        "name": "糸を撚る",
+        "name_cn": "Ito wo Yoru",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176907-YzsMqplVkGQ3.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176907-YzsMqplVkGQ3.jpg"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10183742,
+        "name": "亜人がお好きなんですね♡",
+        "name_cn": "Ajin ga Osuki nan desu ne♡",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10164239,
+        "name": "so_low",
+        "name_cn": "so_low",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10182104,
+        "name": "育精",
+        "name_cn": "IKUsei",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182104-bEI58qeRFj9L.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx182104-bEI58qeRFj9L.png"
+        },
+        "rating": {
+          "score": 4.8
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10166461,
+        "name": "子作り妊活部！",
+        "name_cn": "Kozukuri Ninkatsu-bu!",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166461-1RCN93WTfXyN.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx166461-1RCN93WTfXyN.jpg"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10174184,
+        "name": "ディアレストブルー",
+        "name_cn": "Dearest Blue",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174184-N7eCrGXa2isV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174184-N7eCrGXa2isV.png"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10200228,
+        "name": "おしかけ！爆乳ギャルハーレム性活",
+        "name_cn": "Oshikake! Bakunyuu Gal Harem Seikatsu",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200228-r8Bm5BulKKOS.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200228-r8Bm5BulKKOS.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10167474,
+        "name": "魔法闘姫リルスティア",
+        "name_cn": "Mahou Touki Lilustear",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx167474-zG5QI4WzZ5yC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx167474-zG5QI4WzZ5yC.png"
+        },
+        "rating": {
+          "score": 4.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10198048,
+        "name": "夏妻",
+        "name_cn": "Natsuzuma",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10185166,
+        "name": "憧れの女上司が、相部屋出張の隣のベッドで絶倫男に寝取られている",
+        "name_cn": "Akogare no Onna Joushi ga, Aibeya Shucchou no Tonari no Bed de Zetsurin Otoko ni Netorarete Iru",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185166-nRoGrSNTd13z.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185166-nRoGrSNTd13z.png"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10177707,
+        "name": "リジネッタさんの冒険",
+        "name_cn": "Rignetta-san no Bouken",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177707-v3mFU4F2mJkI.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177707-v3mFU4F2mJkI.png"
+        },
+        "rating": {
+          "score": 5.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10176395,
+        "name": "やらかし",
+        "name_cn": "Yarakashi",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176395-xqKh8N2LTiph.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176395-xqKh8N2LTiph.png"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10175250,
+        "name": "夢獄の国のアリス",
+        "name_cn": "Mugoku no Kuni no Alice",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx175250-Dh06UaJ8VYAm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx175250-Dh06UaJ8VYAm.png"
+        },
+        "rating": {
+          "score": 5.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "Natsu to Hako",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10180533,
+        "name": "卑触家のルール",
+        "name_cn": "Bishoku-ka no Rule",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180533-TaMdpv4g5xkT.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180533-TaMdpv4g5xkT.png"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10185779,
+        "name": "ハメツの誘惑",
+        "name_cn": "Hametsu no Yuuwaku",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185779-uzQoDrD3Sy6r.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185779-uzQoDrD3Sy6r.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10178557,
+        "name": "祓魔○女シャルロット",
+        "name_cn": "Futsuma Shoujo Charlotte",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178557-yjrjuYOOCCbs.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178557-yjrjuYOOCCbs.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10195068,
+        "name": "ピュアピュア ぺろぺろ プリンセス",
+        "name_cn": "Purepure Peropero Princess",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195068-LOr1MKlDtH4Y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10196547,
+        "name": "Hな義姉シリーズ The Animation",
+        "name_cn": "H na Gishi Series The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10196116,
+        "name": "ながちち永井さん THE ANIMATION",
+        "name_cn": "Nagachichi Nagai-san THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196116-3bli0EwyZlBM.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196116-3bli0EwyZlBM.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10165439,
+        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "name_cn": "Mahou Shoujo Noble Rose THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10193707,
+        "name": "無人駅 The Animation ",
+        "name_cn": "Mujin Eki The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193707-kOyJ9fzeQPZC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193707-kOyJ9fzeQPZC.png"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10186308,
+        "name": "甘いイジワル",
+        "name_cn": "Amai Ijiwaru",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186308-REUfR4DxBB18.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186308-REUfR4DxBB18.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10192452,
+        "name": "好色の忠義くノ一ぼたん",
+        "name_cn": "Koushoku no Chuugi Kunoichi Botan",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx192452-sPIuxMLvBMNT.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx192452-sPIuxMLvBMNT.png"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10188933,
+        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "name_cn": "Princess Burst!: Kiken-bi no Tanetsuke Haramase Shuuchi Battle!",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10179722,
+        "name": "メカ技師リスタの大冒険",
+        "name_cn": "Mecha Gishi Resta no Daibouken",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179722-rYsWrcrZRpGr.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179722-rYsWrcrZRpGr.png"
+        },
+        "rating": {
+          "score": 4.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10184824,
+        "name": "勇者ちゃんの冒険は終わってしまった！",
+        "name_cn": "Yuusha-chan no Bouken wa Owatte Shimatta!",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
+        },
+        "rating": {
+          "score": 5.2
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10196540,
+        "name": "聖痕のアリア",
+        "name_cn": "Seikon no Aria",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196540-bgmJs8Kou7zD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196540-bgmJs8Kou7zD.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "Mou Ichido, Shitemitai.",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10195034,
+        "name": "これってナ～ニ？",
+        "name_cn": "Korette Naani?",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195034-kh5FbK07fShG.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195034-kh5FbK07fShG.png"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10193347,
+        "name": "社畜シンデレラ",
+        "name_cn": "Shachiku Cinderella",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193347-EnTUvSR3JOgd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193347-EnTUvSR3JOgd.png"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10186307,
+        "name": "のっと・せくさろいど・エウリィ！",
+        "name_cn": "Notto Sexaroid Eurie!",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186307-gFvI6OyQpql0.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186307-gFvI6OyQpql0.png"
+        },
+        "rating": {
+          "score": 5.2
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10195033,
+        "name": "危険な森 おにごっこ",
+        "name_cn": "Kiken na Mori Onigokko",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195033-U5Y8Hy5zbnMC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195033-U5Y8Hy5zbnMC.png"
+        },
+        "rating": {
+          "score": 4.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10198046,
+        "name": "ドＳなペット",
+        "name_cn": "Do S na Pet",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10187304,
+        "name": "淫触王デマール",
+        "name_cn": "Inshoku-Ou Demar",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx187304-CwTKRUiG6kRd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10191451,
+        "name": "今日は指輪を外すから……",
+        "name_cn": "Kyou wa Yubiwa wo Hazusu kara......",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191451-weddKt3utNpb.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191451-weddKt3utNpb.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10207035,
+        "name": "彼女がセパレートをまとう理由",
+        "name_cn": "Kanojo ga Separate wo Matou Riyuu",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
         "pub_index": "",
         "pub_time": "",
         "bilibili_season_id": 0,
@@ -685,46 +2425,6 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
-      },
-      {
-        "id": 583313,
-        "name": "イチゴ哀歌〜雑で生イキな妹と割り切れない兄〜",
-        "name_cn": "草莓哀歌",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/ba/d7/583313_qZNGU.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ba/d7/583313_qZNGU.jpg"
-        },
-        "rating": {
-          "score": 4.6
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 616453,
-        "name": "大きい女の子は好きですか？",
-        "name_cn": "这样高大的女孩子你喜欢吗？",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/a4/3f/616453_q2e2i.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/a4/3f/616453_q2e2i.jpg"
-        },
-        "rating": {
-          "score": 7.3
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
       }
     ]
   }
