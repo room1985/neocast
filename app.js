@@ -5264,12 +5264,22 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 3000);
     };
 
-    // 監聽 YouTube postMessage 偵測播放結束（保留備用）
-    msgListener = null;
+    // 監聽 YouTube postMessage 偵測播放結束
+    msgListener = (e) => {
+      if (!e.origin.includes('youtube.com')) return;
+      try {
+        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+        // playerStateChange: 0 = ended
+        if (data?.event === 'onStateChange' && data?.info === 0) {
+          if (playlist && curIdx >= 0 && curIdx < playlist.length - 1) loadVideo(curIdx + 1);
+        }
+      } catch(_) {}
+    };
+    window.addEventListener('message', msgListener);
 
     const buildIframe = (vid) => {
       const iframe = el('iframe');
-      const src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1`;
+      const src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1`;
       iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
       iframe.allowFullscreen = true;
