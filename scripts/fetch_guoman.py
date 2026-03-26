@@ -43,13 +43,31 @@ def post_json(url, body, headers=None):
         return json.loads(r.read().decode("utf-8"))
 
 
-# ── OAuth：用 refresh_token 換新的 access_token ───────────────────────────────
+# ── OAuth：用 refresh_token 換新的 access_token，並更新 bgm_token.json ────────
+TOKEN_FILE = Path(__file__).parent.parent / "bgm_token.json"
+
 def get_access_token():
-    refresh_token = os.environ.get("BGM_REFRESH_TOKEN", "")
-    app_secret    = os.environ.get("BGM_APP_SECRET", "")
-    if not refresh_token or not app_secret:
-        print("[Auth] 無 BGM_REFRESH_TOKEN / BGM_APP_SECRET，跳過 Phase 3")
+    app_secret = os.environ.get("BGM_APP_SECRET", "")
+    if not app_secret:
+        print("[Auth] 無 BGM_APP_SECRET，跳過 Phase 3")
         return None
+
+    # 讀 token 檔
+    if not TOKEN_FILE.exists():
+        print("[Auth] bgm_token.json 不存在，跳過 Phase 3")
+        return None
+    try:
+        tokens = json.loads(TOKEN_FILE.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"[Auth] 讀取 bgm_token.json 失敗: {e}")
+        return None
+
+    refresh_token = tokens.get("refresh_token", "")
+    if not refresh_token:
+        print("[Auth] bgm_token.json 無 refresh_token")
+        return None
+
+    # 用 refresh_token 換新 token
     try:
         body = urllib.parse.urlencode({
             "grant_type":    "refresh_token",
@@ -65,11 +83,23 @@ def get_access_token():
         )
         with urllib.request.urlopen(req, timeout=15) as r:
             result = json.loads(r.read().decode("utf-8"))
-        token = result.get("access_token")
-        if token:
-            print("[Auth] access_token 取得成功")
-            return token
-        print(f"[Auth] 回應異常: {result}")
+
+        new_access  = result.get("access_token")
+        new_refresh = result.get("refresh_token")
+        if not new_access:
+            print(f"[Auth] 回應異常: {result}")
+            return None
+
+        # 把新 token 存回檔案（workflow 會一起 commit）
+        TOKEN_FILE.write_text(json.dumps({
+            "access_token":  new_access,
+            "refresh_token": new_refresh or refresh_token,
+            "updated_at":    datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"),
+        }, ensure_ascii=False, indent=2), encoding="utf-8")
+
+        print("[Auth] access_token 取得成功，bgm_token.json 已更新")
+        return new_access
+
     except Exception as e:
         print(f"[Auth] 失敗: {e}")
     return None
