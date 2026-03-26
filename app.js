@@ -5264,14 +5264,20 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 3000);
     };
 
-    // 監聽 YouTube postMessage 偵測播放結束
+    // 監聽 YouTube infoDelivery 同步 curIdx（YouTube 自動播時更新位置）
     msgListener = (e) => {
       if (!e.origin.includes('youtube.com')) return;
       try {
         const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        // playerStateChange: 0 = ended
-        if (data?.event === 'onStateChange' && data?.info === 0) {
-          if (playlist && curIdx >= 0 && curIdx < playlist.length - 1) loadVideo(curIdx + 1);
+        if (data?.event === 'infoDelivery' && data?.info?.videoData?.videoId && playlist?.length) {
+          const vid = data.info.videoData.videoId;
+          const idx = playlist.findIndex(v => v.videoId === vid);
+          if (idx >= 0 && idx !== curIdx) {
+            curIdx = idx;
+            if (prevBtn) prevBtn.disabled = curIdx <= 0;
+            if (nextBtn) nextBtn.disabled = curIdx >= playlist.length - 1;
+            if (onVideoChange) onVideoChange(playlist[curIdx]);
+          }
         }
       } catch(_) {}
     };
@@ -5279,14 +5285,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     const buildIframe = (vid) => {
       const iframe = el('iframe');
-      const origin = encodeURIComponent(location.origin);
-      const src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${origin}`;
+      let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${location.origin}`;
+      if (playlist?.length > 1 && curIdx >= 0) {
+        const ids = playlist.slice(curIdx, curIdx + 20).map(v => v.videoId).join(',');
+        src += `&playlist=${ids}`;
+      }
       iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
       iframe.allowFullscreen = true;
-      iframe.addEventListener('load', () => {
-        iframe.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 1 }), '*');
-      });
       return iframe;
     };
 
