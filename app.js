@@ -3619,16 +3619,47 @@ function renderAnimeWidget(container, cfgBtn) {
     applyGridMode();
     grid.innerHTML = '<div class="anime-loading">搜尋中…</div>';
     try {
-      const res = await fetch('https://api.bgm.tv/v0/search/subjects?limit=20', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)'
-        },
-        body: JSON.stringify({ keyword: q, filter: { type: [2] } })
-      });
-      const data = await res.json();
-      renderItems(data.data || []);
+      if (S.privateUnlocked) {
+        // AniList adult search
+        const gql = `query($s:String){Page(page:1,perPage:20){media(search:$s,isAdult:true,type:ANIME,sort:POPULARITY_DESC){id title{romaji native}synonyms coverImage{large medium}averageScore episodes nextAiringEpisode{episode airingAt}}}}`;
+        const res = await fetch('https://graphql.anilist.co', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: gql, variables: { s: q } })
+        });
+        const json = await res.json();
+        const media = json.data?.Page?.media || [];
+        const items = media.map(m => {
+          const t = m.title || {}, synonyms = m.synonyms || [], cover = m.coverImage || {};
+          let nameCn = '';
+          for (const s of synonyms) {
+            if (/[\u4e00-\u9fff]/.test(s) && !/[\u3040-\u30ff]/.test(s)) { nameCn = s; break; }
+          }
+          return {
+            id: 10_000_000 + (m.id || 0),
+            name: t.native || t.romaji || '',
+            name_cn: nameCn || t.native || t.romaji || '',
+            images: { large: cover.large || cover.medium || '', common: cover.medium || cover.large || '' },
+            rating: { score: m.averageScore ? Math.round(m.averageScore / 10 * 10) / 10 : 0 },
+            eps: m.episodes || 0,
+            source: 'anilist',
+            is_nsfw: true,
+            pub_index: m.nextAiringEpisode?.episode ? `第${m.nextAiringEpisode.episode}話` : '',
+          };
+        });
+        renderItems(items);
+      } else {
+        const res = await fetch('https://api.bgm.tv/v0/search/subjects?limit=20', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)'
+          },
+          body: JSON.stringify({ keyword: q, filter: { type: [2] } })
+        });
+        const data = await res.json();
+        renderItems(data.data || []);
+      }
     } catch(e) {
       grid.innerHTML = '<div class="anime-empty">搜尋失敗，請稍後再試</div>';
     }
@@ -3810,7 +3841,8 @@ async function showAnimeSheet(anime) {
         switch(a.dataset.label) {
           case '動畫瘋': a.href = `https://ani.gamer.com.tw/search.php?keyword=${q}`; break;
           case 'YouTube': a.href = `https://www.youtube.com/results?search_query=${q}`; break;
-          case '劇迷':   a.href = `https://gimyai.tw/find/-------------.html?wd=${q}`; break;
+          case '劇迷':    a.href = `https://gimyai.tw/find/-------------.html?wd=${q}`; break;
+          case 'Hanime1': a.href = `https://hanime1.me/search?query=${q}&type=&genre=&sort=&date=&duration=`; break;
         }
       });
       // Update all list cards with this anime id
@@ -3964,7 +3996,13 @@ async function showAnimeSheet(anime) {
 
   // 4 link buttons (placed BEFORE summary so visible immediately)
   const linkWrap = el('div', 'anime-sheet-btns');
-  const linkDefs = [
+  const isNsfwAnime = !!anime.is_nsfw;
+  const linkDefs = isNsfwAnime ? [
+    { label: 'AniList', url: `https://anilist.co/anime/${anime.id - 10_000_000}` },
+    { label: '動畫瘋', url: '' },
+    { label: 'YouTube', url: '' },
+    { label: 'Hanime1', url: '' },
+  ] : [
     { label: 'Bangumi', url: `https://bgm.tv/subject/${anime.id}` },
     { label: '動畫瘋', url: '' },
     { label: 'YouTube', url: '' },
@@ -3999,53 +4037,66 @@ async function showAnimeSheet(anime) {
   overlay.addEventListener('click', e => { if (e.target === overlay) closeSheet(); });
 
   // Fetch full data
-  try {
-    const res = await fetch(`https://api.bgm.tv/subject/${anime.id}`, {
-      headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
-    });
-    const data = await res.json();
-    const rawSummary = data.summary || '（暫無故事大綱）';
-    const twSummary  = await toTW(rawSummary);
-    const rawTitle   = data.name_cn || anime.name_cn || anime.name;
-    const twTitle    = await toTW(rawTitle);
-    summaryEl.textContent = twSummary;
-
-    // Only update title if no custom name set
-    if (!S.animeState.customNames?.[anime.id]) {
-      sheetTitle.textContent = twTitle;
-    }
-
-    // Update eps badge from API (eps_count is more accurate)
-    const epsCount = data.eps_count || data.eps || 0;
-    if (epsCount) {
-      epsBadge.textContent = `共 ${epsCount} 集`;
-      epsBadge.style.display = '';
-    }
-    // Also update list card eps badge if it was missing
-    if (epsCount) {
-      document.querySelectorAll(`.anime-card[data-id="${anime.id}"] .anime-meta`).forEach(metaEl => {
-        let epsBadgeCard = metaEl.querySelector('.badge-eps');
-        if (!epsBadgeCard) {
-          epsBadgeCard = el('span', 'anime-card-badge badge-eps', `共 ${epsCount} 集`);
-          metaEl.appendChild(epsBadgeCard);
-        } else {
-          epsBadgeCard.textContent = `共 ${epsCount} 集`;
-        }
-      });
-    }
-
-    // Update link URLs
-    const displayName = S.animeState.customNames?.[anime.id] || twTitle;
+  if (isNsfwAnime) {
+    summaryEl.textContent = '（暫無故事大綱）';
+    const displayName = S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name;
     const q = encodeURIComponent(displayName);
     linkWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
       switch(a.dataset.label) {
         case '動畫瘋': a.href = `https://ani.gamer.com.tw/search.php?keyword=${q}`; break;
         case 'YouTube': a.href = `https://www.youtube.com/results?search_query=${q}`; break;
-        case '劇迷':   a.href = `https://gimyai.tw/find/-------------.html?wd=${q}`; break;
+        case 'Hanime1': a.href = `https://hanime1.me/search?query=${q}&type=&genre=&sort=&date=&duration=`; break;
       }
     });
-  } catch(_) {
-    summaryEl.textContent = '無法載入故事大綱';
+  } else {
+    try {
+      const res = await fetch(`https://api.bgm.tv/subject/${anime.id}`, {
+        headers: { 'User-Agent': 'NeoCast/1.0 (https://github.com/room1985/neocast)' }
+      });
+      const data = await res.json();
+      const rawSummary = data.summary || '（暫無故事大綱）';
+      const twSummary  = await toTW(rawSummary);
+      const rawTitle   = data.name_cn || anime.name_cn || anime.name;
+      const twTitle    = await toTW(rawTitle);
+      summaryEl.textContent = twSummary;
+
+      // Only update title if no custom name set
+      if (!S.animeState.customNames?.[anime.id]) {
+        sheetTitle.textContent = twTitle;
+      }
+
+      // Update eps badge from API (eps_count is more accurate)
+      const epsCount = data.eps_count || data.eps || 0;
+      if (epsCount) {
+        epsBadge.textContent = `共 ${epsCount} 集`;
+        epsBadge.style.display = '';
+      }
+      // Also update list card eps badge if it was missing
+      if (epsCount) {
+        document.querySelectorAll(`.anime-card[data-id="${anime.id}"] .anime-meta`).forEach(metaEl => {
+          let epsBadgeCard = metaEl.querySelector('.badge-eps');
+          if (!epsBadgeCard) {
+            epsBadgeCard = el('span', 'anime-card-badge badge-eps', `共 ${epsCount} 集`);
+            metaEl.appendChild(epsBadgeCard);
+          } else {
+            epsBadgeCard.textContent = `共 ${epsCount} 集`;
+          }
+        });
+      }
+
+      // Update link URLs
+      const displayName = S.animeState.customNames?.[anime.id] || twTitle;
+      const q = encodeURIComponent(displayName);
+      linkWrap.querySelectorAll('.anime-sheet-link-btn').forEach(a => {
+        switch(a.dataset.label) {
+          case '動畫瘋': a.href = `https://ani.gamer.com.tw/search.php?keyword=${q}`; break;
+          case 'YouTube': a.href = `https://www.youtube.com/results?search_query=${q}`; break;
+          case '劇迷':   a.href = `https://gimyai.tw/find/-------------.html?wd=${q}`; break;
+        }
+      });
+    } catch(_) {
+      summaryEl.textContent = '無法載入故事大綱';
+    }
   }
 }
 
