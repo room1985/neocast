@@ -83,6 +83,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 478555,
+        "name": "ゾンビのあふれた世界で俺だけが襲われない",
+        "name_cn": "在遍地都是丧尸的世界里唯独我不被袭击",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/81/62/478555_MZmxZ.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/81/62/478555_MZmxZ.jpg"
+        },
+        "rating": {
+          "score": 7
+        },
+        "eps": 0,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -511,6 +531,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 558296,
+        "name": "アンドロイドは経験人数に入りますか？？",
+        "name_cn": "和机器人啪啪啪能算在经验次数里吗？？",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f0/78/558296_W25j2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f0/78/558296_W25j2.jpg"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 8,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -645,6 +685,46 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 583313,
+        "name": "イチゴ哀歌〜雑で生イキな妹と割り切れない兄〜",
+        "name_cn": "草莓哀歌",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ba/d7/583313_qZNGU.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ba/d7/583313_qZNGU.jpg"
+        },
+        "rating": {
+          "score": 4.6
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 616453,
+        "name": "大きい女の子は好きですか？",
+        "name_cn": "这样高大的女孩子你喜欢吗？",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/a4/3f/616453_q2e2i.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/a4/3f/616453_q2e2i.jpg"
+        },
+        "rating": {
+          "score": 7.3
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   }
