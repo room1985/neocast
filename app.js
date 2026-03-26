@@ -3167,8 +3167,8 @@ function renderAnimeWidget(container, cfgBtn) {
       curTab = 'nsfw';
       mainTabs.querySelectorAll('.anime-main-tab').forEach(tb => tb.classList.remove('on'));
       nsfwTab.classList.add('on');
-      weekTabsWrap.style.display = 'flex';
-      todayBtn.style.display = '';
+      weekTabsWrap.style.display = 'none';
+      todayBtn.style.display = 'none';
       searchBar.style.display = 'none';
       loadTab();
     });
@@ -3684,12 +3684,7 @@ function renderAnimeWidget(container, cfgBtn) {
       }
       if (curTab === 'nsfw') {
         const nsfw = S.animeState.nsfwCalendar || {};
-        if (curWd === ALL_WD) {
-          renderItems(Object.values(nsfw).flat(), undefined);
-        } else {
-          const bgmId = curWd === 0 ? 7 : curWd;
-          renderItems(nsfw[bgmId] || [], curWd);
-        }
+        renderItems(Object.values(nsfw).flat(), undefined);
         return;
       }
       if (curWd === ALL_WD) {
