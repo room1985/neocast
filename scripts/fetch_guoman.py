@@ -1,8 +1,8 @@
 """
-fetch_guoman.py  方案 C (v5)
+fetch_guoman.py  方案 C (v6)
 Phase 1 - Bilibili timeline：本週更新的國漫（正確集數/星期）
-Phase 2 - Bangumi 多 tag 補援：本年中國動畫，app.js 合併時去重日漫
-Phase 3 - Bangumi NSFW（需 OAuth token）：成人動畫，標記 is_nsfw=true
+Phase 2 - Bangumi 多 tag 補援：本年中國動畫（app.js 合併時去重日漫）
+Phase 3 - AniList isAdult：目前在播成人動畫，標記 is_nsfw=true
 """
 
 import json
@@ -18,7 +18,7 @@ from pathlib import Path
 BILI_TIMELINE  = "https://api.bilibili.com/pgc/web/timeline/v2?season_type=4"
 BANGUMI_SEARCH = "https://api.bgm.tv/search/subject/{kw}?type=2&responseGroup=large&max_results=5"
 BANGUMI_V0     = "https://api.bgm.tv/v0/search/subjects"
-BGM_TOKEN_URL  = "https://bgm.tv/oauth/access_token"
+ANILIST_URL    = "https://graphql.anilist.co"
 
 BGM_UA = "NeoCast/1.0 (https://github.com/room1985/neocast)"
 BILI_HEADERS = {
@@ -26,6 +26,23 @@ BILI_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36",
 }
 BGM_APP_ID = os.environ.get("BGM_APP_ID", "bgm582369c530b5dcaf9")
+
+ANILIST_QUERY = """
+query ($page: Int) {
+  Page(page: $page, perPage: 50) {
+    pageInfo { hasNextPage }
+    media(isAdult: true, type: ANIME, status: RELEASING, sort: POPULARITY_DESC) {
+      id
+      title { romaji native }
+      coverImage { large medium }
+      averageScore
+      episodes
+      nextAiringEpisode { episode airingAt }
+      startDate { year month day }
+    }
+  }
+}
+"""
 # ─────────────────────────────────────────────────────────────────────────────
 
 
@@ -41,68 +58,6 @@ def post_json(url, body, headers=None):
     req = urllib.request.Request(url, data=data, headers=h, method="POST")
     with urllib.request.urlopen(req, timeout=15) as r:
         return json.loads(r.read().decode("utf-8"))
-
-
-# ── OAuth：用 refresh_token 換新的 access_token，並更新 bgm_token.json ────────
-TOKEN_FILE = Path(__file__).parent.parent / "bgm_token.json"
-
-def get_access_token():
-    app_secret = os.environ.get("BGM_APP_SECRET", "")
-    if not app_secret:
-        print("[Auth] 無 BGM_APP_SECRET，跳過 Phase 3")
-        return None
-
-    # 讀 token 檔
-    if not TOKEN_FILE.exists():
-        print("[Auth] bgm_token.json 不存在，跳過 Phase 3")
-        return None
-    try:
-        tokens = json.loads(TOKEN_FILE.read_text(encoding="utf-8"))
-    except Exception as e:
-        print(f"[Auth] 讀取 bgm_token.json 失敗: {e}")
-        return None
-
-    refresh_token = tokens.get("refresh_token", "")
-    if not refresh_token:
-        print("[Auth] bgm_token.json 無 refresh_token")
-        return None
-
-    # 用 refresh_token 換新 token
-    try:
-        body = urllib.parse.urlencode({
-            "grant_type":    "refresh_token",
-            "client_id":     BGM_APP_ID,
-            "client_secret": app_secret,
-            "refresh_token": refresh_token,
-            "redirect_uri":  "https://room1985.github.io/neocast/",
-        }).encode("utf-8")
-        req = urllib.request.Request(
-            BGM_TOKEN_URL, data=body,
-            headers={"Content-Type": "application/x-www-form-urlencoded"},
-            method="POST"
-        )
-        with urllib.request.urlopen(req, timeout=15) as r:
-            result = json.loads(r.read().decode("utf-8"))
-
-        new_access  = result.get("access_token")
-        new_refresh = result.get("refresh_token")
-        if not new_access:
-            print(f"[Auth] 回應異常: {result}")
-            return None
-
-        # 把新 token 存回檔案（workflow 會一起 commit）
-        TOKEN_FILE.write_text(json.dumps({
-            "access_token":  new_access,
-            "refresh_token": new_refresh or refresh_token,
-            "updated_at":    datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S"),
-        }, ensure_ascii=False, indent=2), encoding="utf-8")
-
-        print("[Auth] access_token 取得成功，bgm_token.json 已更新")
-        return new_access
-
-    except Exception as e:
-        print(f"[Auth] 失敗: {e}")
-    return None
 
 
 # ── 標題工具 ──────────────────────────────────────────────────────────────────
@@ -132,7 +87,7 @@ def weekday_from_date(date_str):
         return 0
 
 
-# ── Bangumi title 搜尋（for Phase 1 timeline 匹配）───────────────────────────
+# ── Bangumi title 搜尋（for Phase 1）─────────────────────────────────────────
 def search_bangumi(title):
     for q in list(dict.fromkeys([title, to_simplified(title), _SEASON_RE.sub("", title).strip()])):
         if not q:
@@ -203,35 +158,69 @@ def fetch_bangumi_year_all(since):
     return list(seen.values())
 
 
-# ── Phase 3：Bangumi NSFW（需 OAuth token）────────────────────────────────────
-def fetch_bangumi_nsfw(access_token, since):
-    if not access_token:
-        return []
-    auth_headers = {"Authorization": f"Bearer {access_token}"}
-    tag_groups = [["成人"], ["18禁"], ["H动画"], ["R18"], ["成人动画"], ["里番"], ["OVA", "成人"]]
-    print(f"[Phase 3 NSFW] 搜尋成人動畫（{since} 起）...")
-    seen = {}
-    for tags in tag_groups:
+# ── Phase 3：AniList 成人動畫 ─────────────────────────────────────────────────
+def fetch_anilist_nsfw():
+    print("[Phase 3 NSFW] 搜尋 AniList 在播成人動畫...")
+    all_media = []
+    page = 1
+    while True:
         try:
-            time.sleep(0.4)
-            resp = post_json(BANGUMI_V0, {
-                "keyword": "",
-                "filter": {"type": [2], "air_date": [f">={since}"], "tag": tags, "nsfw": True},
-                "sort": "heat", "limit": 50, "offset": 0
-            }, auth_headers)
-            for subj in (resp.get("data") or []):
-                sid = subj.get("id")
-                if sid and sid not in seen:
-                    seen[sid] = subj
-            print(f"  tag={tags}: {len(resp.get('data') or [])} 筆，累計 {len(seen)} 部")
+            time.sleep(0.5)
+            resp = post_json(ANILIST_URL, {"query": ANILIST_QUERY, "variables": {"page": page}})
+            page_data = (resp.get("data") or {}).get("Page") or {}
+            media_list = page_data.get("media") or []
+            has_next   = page_data.get("pageInfo", {}).get("hasNextPage", False)
+            all_media.extend(media_list)
+            print(f"  page {page}: {len(media_list)} 筆（累計 {len(all_media)}）")
+            if not has_next or not media_list:
+                break
+            page += 1
         except Exception as e:
-            print(f"  tag={tags} 失敗: {e}")
-    print(f"[Phase 3] 共 {len(seen)} 部成人動畫")
-    return list(seen.values())
+            print(f"  page {page} 失敗: {e}"); break
+    print(f"[Phase 3] 共 {len(all_media)} 部成人動畫")
+    return all_media
 
 
-# ── 組 item ───────────────────────────────────────────────────────────────────
-def make_item(bgm, weekday, season_id=0, pub_index="", pub_time="", title_fallback="", is_nsfw=False):
+def make_nsfw_item(media):
+    title    = media.get("title") or {}
+    cover    = media.get("coverImage") or {}
+    score    = media.get("averageScore") or 0
+    next_ep  = media.get("nextAiringEpisode") or {}
+
+    # 星期：從下集播出時間推算
+    airing_at = next_ep.get("airingAt")
+    if airing_at:
+        weekday = datetime.utcfromtimestamp(airing_at).isoweekday()
+    else:
+        sd = media.get("startDate") or {}
+        y, m, d = sd.get("year", ""), str(sd.get("month") or "").zfill(2), str(sd.get("day") or "").zfill(2)
+        weekday = weekday_from_date(f"{y}-{m}-{d}") or 1
+
+    ep_num    = next_ep.get("episode")
+    pub_index = f"第{ep_num}話" if ep_num else ""
+
+    return {
+        "id":       10_000_000 + (media.get("id") or 0),  # 避免與 Bangumi ID 碰撞
+        "name":     title.get("native") or title.get("romaji") or "",
+        "name_cn":  title.get("romaji") or title.get("native") or "",
+        "images": {
+            "large":  cover.get("large")  or cover.get("medium") or "",
+            "common": cover.get("medium") or cover.get("large")  or "",
+        },
+        "rating":      {"score": round(score / 10, 1) if score else 0},
+        "eps":         media.get("episodes") or 0,
+        "air_weekday": weekday,
+        "source":      "anilist",
+        "bgm_matched": False,
+        "pub_index":   pub_index,
+        "pub_time":    "",
+        "bilibili_season_id": 0,
+        "is_nsfw":     True,
+    }
+
+
+# ── 組 item（Phase 1 & 2 用）──────────────────────────────────────────────────
+def make_item(bgm, weekday, season_id=0, pub_index="", pub_time="", title_fallback=""):
     imgs   = (bgm.get("images") or {}) if bgm else {}
     rating = (bgm.get("rating") or {}) if bgm else {}
     return {
@@ -250,7 +239,7 @@ def make_item(bgm, weekday, season_id=0, pub_index="", pub_time="", title_fallba
         "pub_index":   pub_index,
         "pub_time":    pub_time,
         "bilibili_season_id": season_id,
-        "is_nsfw":     is_nsfw,
+        "is_nsfw":     False,
     }
 
 
@@ -306,18 +295,17 @@ def build_guoman():
 
     print("=" * 52)
 
-    # Phase 3：NSFW（需 OAuth）
-    access_token = get_access_token()
-    nsfw_items   = fetch_bangumi_nsfw(access_token, since)
-    p3_added = 0
-    for subj in nsfw_items:
-        bgm_id = subj.get("id")
-        if not bgm_id or bgm_id in seen_bgm_ids:
+    # Phase 3：AniList 成人動畫
+    nsfw_media    = fetch_anilist_nsfw()
+    seen_al_ids   = set()
+    p3_added      = 0
+    for media in nsfw_media:
+        al_id = media.get("id")
+        if not al_id or al_id in seen_al_ids:
             continue
-        wd   = weekday_from_date(subj.get("date") or "") or 1
-        item = make_item(subj, wd, is_nsfw=True)
-        seen_bgm_ids.add(bgm_id)
-        calendar.setdefault(wd, []).append(item)
+        seen_al_ids.add(al_id)
+        item = make_nsfw_item(media)
+        calendar.setdefault(item["air_weekday"], []).append(item)
         p3_added += 1
     print(f"[Phase 3] 新增 {p3_added} 部成人動畫")
 
