@@ -178,7 +178,7 @@ def fetch_bangumi_nsfw(access_token, since):
     if not access_token:
         return []
     auth_headers = {"Authorization": f"Bearer {access_token}"}
-    tag_groups = [["成人"], ["18禁"], ["H动画"]]
+    tag_groups = [["成人"], ["18禁"], ["H动画"], ["R18"], ["成人动画"], ["里番"], ["OVA", "成人"]]
     print(f"[Phase 3 NSFW] 搜尋成人動畫（{since} 起）...")
     seen = {}
     for tags in tag_groups:
@@ -186,7 +186,7 @@ def fetch_bangumi_nsfw(access_token, since):
             time.sleep(0.4)
             resp = post_json(BANGUMI_V0, {
                 "keyword": "",
-                "filter": {"type": [2], "air_date": [f">={since}"], "tag": tags},
+                "filter": {"type": [2], "air_date": [f">={since}"], "tag": tags, "nsfw": True},
                 "sort": "heat", "limit": 50, "offset": 0
             }, auth_headers)
             for subj in (resp.get("data") or []):
