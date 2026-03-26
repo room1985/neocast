@@ -21,7 +21,8 @@
         "bgm_matched": true,
         "pub_index": "第137话",
         "pub_time": "09:00",
-        "bilibili_season_id": 48518
+        "bilibili_season_id": 48518,
+        "is_nsfw": false
       },
       {
         "id": 250224,
@@ -40,7 +41,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 630676,
@@ -59,7 +61,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 536891,
@@ -78,7 +81,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   },
@@ -104,7 +108,8 @@
         "bgm_matched": true,
         "pub_index": "第12话",
         "pub_time": "09:00",
-        "bilibili_season_id": 148433
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
       },
       {
         "id": 473671,
@@ -123,7 +128,8 @@
         "bgm_matched": true,
         "pub_index": "第22话",
         "pub_time": "11:00",
-        "bilibili_season_id": 73971
+        "bilibili_season_id": 73971,
+        "is_nsfw": false
       },
       {
         "id": 565411,
@@ -142,7 +148,8 @@
         "bgm_matched": true,
         "pub_index": "第1004话",
         "pub_time": "19:00",
-        "bilibili_season_id": 34149
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
       },
       {
         "id": 542324,
@@ -161,7 +168,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 569761,
@@ -180,7 +188,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 624695,
@@ -199,7 +208,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   },
@@ -225,7 +235,8 @@
         "bgm_matched": true,
         "pub_index": "第20话",
         "pub_time": "10:00",
-        "bilibili_season_id": 73973
+        "bilibili_season_id": 73973,
+        "is_nsfw": false
       },
       {
         "id": 467711,
@@ -244,7 +255,8 @@
         "bgm_matched": true,
         "pub_index": "第9话",
         "pub_time": "11:00",
-        "bilibili_season_id": 127272
+        "bilibili_season_id": 127272,
+        "is_nsfw": false
       },
       {
         "id": 434759,
@@ -263,7 +275,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   },
@@ -289,7 +302,8 @@
         "bgm_matched": true,
         "pub_index": "第7话",
         "pub_time": "11:00",
-        "bilibili_season_id": 45979
+        "bilibili_season_id": 45979,
+        "is_nsfw": false
       },
       {
         "id": 423036,
@@ -308,7 +322,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 553397,
@@ -327,7 +342,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 406488,
@@ -346,7 +362,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   },
@@ -372,7 +389,8 @@
         "bgm_matched": true,
         "pub_index": "第55话",
         "pub_time": "10:00",
-        "bilibili_season_id": 39947
+        "bilibili_season_id": 39947,
+        "is_nsfw": false
       },
       {
         "id": 493777,
@@ -391,7 +409,8 @@
         "bgm_matched": true,
         "pub_index": "第13话",
         "pub_time": "11:00",
-        "bilibili_season_id": 73968
+        "bilibili_season_id": 73968,
+        "is_nsfw": false
       },
       {
         "id": 572689,
@@ -410,7 +429,8 @@
         "bgm_matched": true,
         "pub_index": "第47话",
         "pub_time": "18:00",
-        "bilibili_season_id": 96881
+        "bilibili_season_id": 96881,
+        "is_nsfw": false
       },
       {
         "id": 507819,
@@ -429,7 +449,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 491775,
@@ -448,7 +469,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 591580,
@@ -467,7 +489,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 545972,
@@ -486,7 +509,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   },
@@ -512,7 +536,8 @@
         "bgm_matched": true,
         "pub_index": "第73话",
         "pub_time": "10:00",
-        "bilibili_season_id": 35213
+        "bilibili_season_id": 35213,
+        "is_nsfw": false
       },
       {
         "id": 627556,
@@ -531,7 +556,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       },
       {
         "id": 526975,
@@ -550,7 +576,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   },
@@ -576,7 +603,8 @@
         "bgm_matched": true,
         "pub_index": "第11话",
         "pub_time": "10:00",
-        "bilibili_season_id": 34569
+        "bilibili_season_id": 34569,
+        "is_nsfw": false
       },
       {
         "id": 456159,
@@ -595,7 +623,8 @@
         "bgm_matched": true,
         "pub_index": "第76话",
         "pub_time": "11:00",
-        "bilibili_season_id": 45969
+        "bilibili_season_id": 45969,
+        "is_nsfw": false
       },
       {
         "id": 521431,
@@ -614,7 +643,8 @@
         "bgm_matched": true,
         "pub_index": "",
         "pub_time": "",
-        "bilibili_season_id": 0
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   }
