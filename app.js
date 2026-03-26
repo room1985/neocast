@@ -5279,10 +5279,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     const buildIframe = (vid) => {
       const iframe = el('iframe');
-      const src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1`;
+      const origin = encodeURIComponent(location.origin);
+      const src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${origin}`;
       iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
       iframe.allowFullscreen = true;
+      iframe.addEventListener('load', () => {
+        iframe.contentWindow?.postMessage(JSON.stringify({ event: 'listening', id: 1 }), '*');
+      });
       return iframe;
     };
 
