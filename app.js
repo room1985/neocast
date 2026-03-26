@@ -5269,12 +5269,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     const buildIframe = (vid) => {
       const iframe = el('iframe');
-      let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1`;
-      if (playlist?.length > 1) {
-        const startPos = curIdx >= 0 ? curIdx : 0;
-        const ids = playlist.slice(startPos, startPos + 20).map(v => v.videoId).join(',');
-        src += `&playlist=${ids}`;
-      }
+      const src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1`;
       iframe.src = src;
       iframe.allow = 'autoplay; encrypted-media; fullscreen';
       iframe.allowFullscreen = true;
