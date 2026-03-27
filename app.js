@@ -5185,12 +5185,17 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
   const key = S.cfg.ytApiKey?.trim();
 
-  let curIdx = (startIdx != null && startIdx >= 0 && playlist?.length) ? startIdx : -1;
+  let curIdx = (startIdx != null && startIdx >= 0 && playlist?.length) ? startIdx : 0;
   let countdownTimer = null;
   let countdownInterval = null;
-  let msgListener = null;
   let keyListener = null;
-  let syncLockUntil = 0;
+  let ytPlayer = null;
+  let prevBtn = null, nextBtn = null;
+
+  const updateNavButtons = () => {
+    if (prevBtn) prevBtn.disabled = curIdx <= 0;
+    if (nextBtn) nextBtn.disabled = curIdx >= (playlist?.length || 1) - 1;
+  };
 
   const buildPlayer = (portrait) => {
     const backdrop = el('div', 'yt-player-backdrop');
@@ -5200,8 +5205,9 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const closePlayer = () => {
       clearTimeout(countdownTimer);
       clearInterval(countdownInterval);
-      if (msgListener) { window.removeEventListener('message', msgListener); msgListener = null; }
       if (keyListener) { window.removeEventListener('keydown', keyListener); keyListener = null; }
+      try { ytPlayer?.destroy(); } catch(_) {}
+      ytPlayer = null;
       backdrop.classList.remove('open');
       modal.classList.remove('open');
       setTimeout(() => { backdrop.remove(); modal.remove(); onClose?.(); }, 260);
@@ -5211,30 +5217,15 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const closeBtn = el('button', 'yt-player-close', '✕');
     closeBtn.addEventListener('click', e => { e.stopPropagation(); closePlayer(); });
 
-    const isPwa = window.matchMedia('(display-mode: standalone)').matches;
     const playerBox = el('div', 'yt-player-box');
-
-    // 倒數提示列
     const nextBar = el('div', 'yt-next-bar');
     nextBar.style.display = 'none';
 
-    const loadVideo = (idx) => {
-      if (!playlist || idx < 0 || idx >= playlist.length) return;
-      curIdx = idx;
-      syncLockUntil = Date.now() + 2000; // 2秒內忽略舊 iframe 的 infoDelivery
-      nextBar.style.display = 'none';
-      clearTimeout(countdownTimer);
-      clearInterval(countdownInterval);
-      // 換影片：重建 iframe
-      const newIframe = buildIframe(playlist[curIdx].videoId);
-      const oldIframe = playerBox.querySelector('iframe');
-      if (oldIframe) oldIframe.replaceWith(newIframe);
-      // 更新上一部/下一部按鈕狀態
-      if (prevBtn) prevBtn.disabled = curIdx <= 0;
-      if (nextBtn) nextBtn.disabled = curIdx >= playlist.length - 1;
-      // 同步更新 sheet 卡片內容
-      if (onVideoChange) onVideoChange(playlist[curIdx]);
-    };
+    // YT.Player 需要一個 div 容器
+    const ytContainer = el('div', '');
+    ytContainer.id = 'yt-api-player-' + Date.now();
+    ytContainer.style.cssText = 'width:100%;height:100%;';
+    playerBox.appendChild(ytContainer);
 
     const showCountdown = () => {
       if (!playlist || curIdx < 0) return;
@@ -5253,76 +5244,88 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       nextBar.appendChild(msg);
       nextBar.appendChild(cancelBtn);
       nextBar.style.display = 'flex';
-
       countdownInterval = setInterval(() => {
         secs--;
         cancelBtn.textContent = `取消 (${secs})`;
         if (secs <= 0) clearInterval(countdownInterval);
       }, 1000);
-
       countdownTimer = setTimeout(() => {
         nextBar.style.display = 'none';
-        loadVideo(curIdx + 1);
+        ytPlayer?.nextVideo();
       }, 3000);
     };
 
-    // 監聽 YouTube infoDelivery 同步 curIdx（YouTube 自動播時更新位置）
-    msgListener = (e) => {
-      if (!e.origin.includes('youtube.com')) return;
-      try {
-        const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
-        if (Date.now() > syncLockUntil && data?.event === 'infoDelivery' && data?.info?.videoData?.videoId && playlist?.length) {
-          const vid = data.info.videoData.videoId;
-          const idx = playlist.findIndex(v => v.videoId === vid);
-          if (idx >= 0 && idx !== curIdx) {
-            curIdx = idx;
-            if (prevBtn) prevBtn.disabled = curIdx <= 0;
-            if (nextBtn) nextBtn.disabled = curIdx >= playlist.length - 1;
-            if (onVideoChange) onVideoChange(playlist[curIdx]);
+    const initYtPlayer = () => {
+      const ids = playlist?.length ? playlist.map(v => v.videoId) : [videoId];
+      ytPlayer = new YT.Player(ytContainer.id, {
+        width: '100%',
+        height: '100%',
+        playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
+        events: {
+          onReady: (e) => {
+            e.target.loadPlaylist({ playlist: ids, index: curIdx });
+          },
+          onStateChange: (e) => {
+            if (e.data === 1) { // playing — 同步 curIdx
+              const ytIdx = e.target.getPlaylistIndex();
+              if (ytIdx >= 0 && ytIdx !== curIdx) {
+                curIdx = ytIdx;
+                updateNavButtons();
+                if (onVideoChange && playlist?.[curIdx]) onVideoChange(playlist[curIdx]);
+              }
+              nextBar.style.display = 'none';
+              clearTimeout(countdownTimer);
+              clearInterval(countdownInterval);
+            }
+            if (e.data === 0) showCountdown(); // ended
           }
         }
-      } catch(_) {}
+      });
     };
-    window.addEventListener('message', msgListener);
 
-    const buildIframe = (vid) => {
-      const iframe = el('iframe');
-      let src = `https://www.youtube.com/embed/${vid}?autoplay=1&rel=0&playsinline=1&enablejsapi=1&origin=${location.origin}`;
-      if (playlist?.length > 1 && curIdx >= 0) {
-        const ids = playlist.slice(curIdx, curIdx + 20).map(v => v.videoId).join(',');
-        src += `&playlist=${ids}`;
+    // 載入 YouTube IFrame API（只載一次）
+    if (window.YT?.Player) {
+      initYtPlayer();
+    } else {
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => { prev?.(); initYtPlayer(); };
+      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        const s = document.createElement('script');
+        s.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(s);
       }
-      iframe.src = src;
-      iframe.allow = 'autoplay; encrypted-media; fullscreen';
-      iframe.allowFullscreen = true;
-      return iframe;
-    };
-
-    playerBox.appendChild(buildIframe(videoId));
+    }
 
     // 上一部 / 下一部按鈕
-    let prevBtn = null, nextBtn = null;
     if (playlist?.length > 1) {
       prevBtn = el('button', 'yt-player-nav-btn', '◀');
       prevBtn.title = '上一部（←）';
       prevBtn.disabled = curIdx <= 0;
-      prevBtn.addEventListener('click', e => { e.stopPropagation(); loadVideo(curIdx - 1); });
+      prevBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        nextBar.style.display = 'none';
+        clearTimeout(countdownTimer); clearInterval(countdownInterval);
+        ytPlayer?.previousVideo();
+      });
 
       nextBtn = el('button', 'yt-player-nav-btn', '▶');
       nextBtn.title = '下一部（→）';
       nextBtn.disabled = curIdx >= playlist.length - 1;
-      nextBtn.addEventListener('click', e => { e.stopPropagation(); loadVideo(curIdx + 1); });
+      nextBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        nextBar.style.display = 'none';
+        clearTimeout(countdownTimer); clearInterval(countdownInterval);
+        ytPlayer?.nextVideo();
+      });
 
       bar.appendChild(prevBtn);
       bar.appendChild(nextBtn);
     }
 
-    // 中間空白撐開
     const barSpacer = el('div', '');
     barSpacer.style.flex = '1';
     bar.appendChild(barSpacer);
 
-    // 全螢幕按鈕（對 modal 全螢幕，保留 bar 上的按鈕）
     const fsBtn = el('button', 'yt-player-fs-btn', '⛶');
     fsBtn.title = '全螢幕';
     fsBtn.addEventListener('click', e => {
@@ -5335,23 +5338,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
         document.exitFullscreen?.().catch(() => {});
       }
     });
-    document.addEventListener('fullscreenchange', () => {
-      if (!document.fullscreenElement) {
-        screen.orientation?.lock?.('portrait').catch(() => {});
-      }
-    });
-    bar.appendChild(fsBtn);
-    bar.appendChild(closeBtn);
-
-    // 鍵盤左右鍵
-    if (playlist?.length > 1) {
-      keyListener = (e) => {
-        if (e.key === 'ArrowLeft')  { e.preventDefault(); loadVideo(curIdx - 1); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); loadVideo(curIdx + 1); }
-      };
-      window.addEventListener('keydown', keyListener);
-    }
-
     const onFsChange = () => {
       if (!document.fullscreenElement) {
         screen.orientation?.lock?.('portrait').catch(() => {});
@@ -5359,6 +5345,17 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }
     };
     document.addEventListener('fullscreenchange', onFsChange);
+    bar.appendChild(fsBtn);
+    bar.appendChild(closeBtn);
+
+    // 鍵盤左右鍵
+    if (playlist?.length > 1) {
+      keyListener = (e) => {
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); nextBar.style.display='none'; clearTimeout(countdownTimer); clearInterval(countdownInterval); ytPlayer?.previousVideo(); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextBar.style.display='none'; clearTimeout(countdownTimer); clearInterval(countdownInterval); ytPlayer?.nextVideo(); }
+      };
+      window.addEventListener('keydown', keyListener);
+    }
 
     modal.addEventListener('click', e => e.stopPropagation());
     modal.appendChild(bar);
