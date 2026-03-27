@@ -5228,11 +5228,13 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const nextBar = el('div', 'yt-next-bar');
     nextBar.style.display = 'none';
 
-    // YT.Player 需要一個 div 容器
-    const ytContainer = el('div', '');
-    ytContainer.id = 'yt-api-player-' + Date.now();
-    ytContainer.style.cssText = 'width:100%;height:100%;';
-    playerBox.appendChild(ytContainer);
+    // YT.Player 容器（let 以便錯誤時重建）
+    let ytContainerEl = el('div', '');
+    ytContainerEl.id = 'yt-api-player-' + Date.now();
+    ytContainerEl.style.cssText = 'width:100%;height:100%;';
+    playerBox.appendChild(ytContainerEl);
+
+    const ids = playlist?.length ? playlist.map(v => v.videoId) : [videoId];
 
     const showCountdown = () => {
       if (!playlist || curIdx < 0) return;
@@ -5262,9 +5264,20 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 3000);
     };
 
+    const rebuildPlayer = () => {
+      // 錯誤時完全重建播放器
+      try { ytPlayer?.destroy(); } catch(_) {}
+      ytPlayer = null; window._ytActivePlayer = null;
+      const nc = el('div', '');
+      nc.id = 'yt-api-player-' + Date.now();
+      nc.style.cssText = 'width:100%;height:100%;';
+      ytContainerEl.replaceWith(nc);
+      ytContainerEl = nc;
+      initYtPlayer();
+    };
+
     const initYtPlayer = () => {
-      const ids = playlist?.length ? playlist.map(v => v.videoId) : [videoId];
-      ytPlayer = window._ytActivePlayer = new YT.Player(ytContainer.id, {
+      ytPlayer = window._ytActivePlayer = new YT.Player(ytContainerEl.id, {
         width: '100%',
         height: '100%',
         playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
@@ -5286,16 +5299,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             }
             if (e.data === 0) showCountdown(); // ended
           },
-          onError: (e) => {
-            // 任何錯誤都跳下一部（error state 下 nextVideo 無效，改用 playVideoAt）
+          onError: () => {
+            // 跳下一部並重建播放器（error state 下 API 方法無效）
             if (playlist && curIdx < playlist.length - 1) {
               curIdx++;
               updateNavButtons();
               if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
-              try { e.target.playVideoAt(curIdx); } catch(_) {
-                try { e.target.loadPlaylist({ playlist: ids, index: curIdx }); } catch(__) {}
-              }
             }
+            rebuildPlayer();
           }
         }
       });
