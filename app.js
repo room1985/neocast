@@ -5182,7 +5182,13 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
 }
 
 function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
-  document.querySelector('.yt-player-backdrop')?.remove(); document.querySelector('.yt-player-modal')?.remove();
+  // 清除殘留的舊播放器
+  document.querySelector('.yt-player-backdrop')?.remove();
+  document.querySelector('.yt-player-modal')?.remove();
+  if (window._ytActivePlayer) {
+    try { window._ytActivePlayer.destroy(); } catch(_) {}
+    window._ytActivePlayer = null;
+  }
   const key = S.cfg.ytApiKey?.trim();
 
   let curIdx = (startIdx != null && startIdx >= 0 && playlist?.length) ? startIdx : 0;
@@ -5208,6 +5214,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       if (keyListener) { window.removeEventListener('keydown', keyListener); keyListener = null; }
       try { ytPlayer?.destroy(); } catch(_) {}
       ytPlayer = null;
+      window._ytActivePlayer = null;
       backdrop.classList.remove('open');
       modal.classList.remove('open');
       setTimeout(() => { backdrop.remove(); modal.remove(); onClose?.(); }, 260);
@@ -5257,7 +5264,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     const initYtPlayer = () => {
       const ids = playlist?.length ? playlist.map(v => v.videoId) : [videoId];
-      ytPlayer = new YT.Player(ytContainer.id, {
+      ytPlayer = window._ytActivePlayer = new YT.Player(ytContainer.id, {
         width: '100%',
         height: '100%',
         playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
@@ -5278,6 +5285,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearInterval(countdownInterval);
             }
             if (e.data === 0) showCountdown(); // ended
+          },
+          onError: (e) => {
+            // 101/150: 影片禁止嵌入，自動跳下一部
+            if (e.data === 101 || e.data === 150 || e.data === 100) {
+              if (playlist && curIdx < playlist.length - 1) {
+                ytPlayer?.nextVideo();
+              }
+            }
           }
         }
       });
