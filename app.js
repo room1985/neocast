@@ -5219,6 +5219,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let ytPlayer = null;
   let prevBtn = null, nextBtn = null;
   let hadRebuild = false;
+  let playerReadyAt = 0; // 播放器就緒時間，用於防止初始化期間誤觸自動播放
 
   const updateNavButtons = () => {
     if (prevBtn) prevBtn.disabled = curIdx <= 0;
@@ -5313,6 +5314,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
             // 重建後需明確觸發播放（autoplay 政策可能擋住）
             if (forcePlay) setTimeout(() => { try { e.target.playVideo(); } catch(_) {} }, 300);
+            // 記錄就緒時間，2秒內的 state=0 視為初始化雜訊，不觸發自動跳轉
+            playerReadyAt = Date.now();
           },
           onStateChange: (e) => {
             if (e.data === 1) { // playing — 同步 curIdx
@@ -5326,7 +5329,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
             }
-            if (e.data === 0) showCountdown(); // ended
+            if (e.data === 0 && Date.now() - playerReadyAt > 2000) showCountdown(); // ended（2秒內忽略）
           },
           onError: () => {
             // 有下一部才跳，避免無限重建
