@@ -5319,18 +5319,20 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       });
     };
 
-    // 載入 YouTube IFrame API（只載一次）
-    if (window.YT?.Player) {
-      initYtPlayer();
-    } else {
-      const prev = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = () => { prev?.(); initYtPlayer(); };
-      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
-        const s = document.createElement('script');
-        s.src = 'https://www.youtube.com/iframe_api';
-        document.head.appendChild(s);
+    // 載入 YouTube IFrame API — 延到 modal 加入 DOM 後再初始化
+    const startYtApi = () => {
+      if (window.YT?.Player) {
+        initYtPlayer();
+      } else {
+        const prev = window.onYouTubeIframeAPIReady;
+        window.onYouTubeIframeAPIReady = () => { prev?.(); initYtPlayer(); };
+        if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+          const s = document.createElement('script');
+          s.src = 'https://www.youtube.com/iframe_api';
+          document.head.appendChild(s);
+        }
       }
-    }
+    };
 
     // 上一部 / 下一部按鈕
     if (playlist?.length > 1) {
@@ -5400,7 +5402,11 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     document.body.appendChild(backdrop);
     document.body.appendChild(modal);
-    requestAnimationFrame(() => { backdrop.classList.add('open'); modal.classList.add('open'); });
+    requestAnimationFrame(() => {
+      backdrop.classList.add('open'); modal.classList.add('open');
+      // modal 已在 DOM，才安全初始化 YT.Player
+      setTimeout(startYtApi, 0);
+    });
   };
 
   if (key) {
