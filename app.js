@@ -6386,10 +6386,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (hideAllBtn) {
     const HIDE_KEY = 'neocast_widgets_hidden';
     const applyHidden = (hidden) => {
-      const wc = document.getElementById('wc');
-      if (wc) wc.style.display = hidden ? 'none' : '';
-      const ml = document.getElementById('mobile-layout');
-      if (ml) ml.style.display = hidden ? 'none' : '';
+      document.body.classList.toggle('widgets-hidden', hidden);
       const icon = document.getElementById('hide-all-icon');
       if (icon) {
         icon.querySelector('polyline')?.setAttribute('points', hidden ? '4 9 12 17 20 9' : '4 15 12 7 20 15');

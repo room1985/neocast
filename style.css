@@ -182,6 +182,8 @@ a { color:inherit; text-decoration:none; }
 }
 #hide-all-btn svg { width: 14px; height: 14px; }
 #hide-all-btn:hover { color: var(--txm); background: var(--sf); }
+body.widgets-hidden #wc,
+body.widgets-hidden #mobile-layout { display: none !important; }
 #lock-btn {
   background: none;
   border: none;
