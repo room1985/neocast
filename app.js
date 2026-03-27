@@ -6381,6 +6381,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   }, 30 * 60 * 1000);
 
   // ── 效能監控 ──
+  // 隱藏全部 Widget 按鈕
+  const hideAllBtn = document.getElementById('hide-all-btn');
+  if (hideAllBtn) {
+    const HIDE_KEY = 'neocast_widgets_hidden';
+    const applyHidden = (hidden) => {
+      const wc = document.getElementById('wc');
+      if (wc) wc.style.display = hidden ? 'none' : '';
+      hideAllBtn.textContent = hidden ? '▼' : '▲';
+      hideAllBtn.title = hidden ? '顯示所有 Widget' : '隱藏所有 Widget';
+      localStorage.setItem(HIDE_KEY, hidden ? '1' : '');
+    };
+    hideAllBtn.addEventListener('click', () => {
+      const nowHidden = localStorage.getItem(HIDE_KEY) === '1';
+      applyHidden(!nowHidden);
+    });
+    // 還原上次狀態
+    if (localStorage.getItem(HIDE_KEY) === '1') applyHidden(true);
+  }
+
   const perfBtn   = document.getElementById('perf-btn');
   const perfPanel = document.getElementById('perf-panel');
   const perfFps   = document.getElementById('perf-fps');
