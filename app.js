@@ -5319,14 +5319,15 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             const now = Date.now();
             if (now - errorSkipAt < 1000) return;
             errorSkipAt = now;
-            if (!playlist || playlist.length <= 1) return;
-            // 把錯誤影片從清單移除，重建 playlist 繼續播
-            playlist.splice(curIdx, 1);
-            if (curIdx >= playlist.length) curIdx = playlist.length - 1;
-            updateNavButtons();
-            if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
-            const newIds = playlist.map(v => v.videoId);
-            ytPlayer.loadPlaylist({ playlist: newIds, index: curIdx });
+            if (!playlist || curIdx >= playlist.length - 1) return;
+            const nextIdx = curIdx + 1;
+            // 直接銷毀並重開播放器，跳過錯誤影片
+            try { ytPlayer?.destroy(); } catch(_) {}
+            ytPlayer = null; window._ytActivePlayer = null;
+            backdrop.remove(); modal.remove();
+            setTimeout(() => {
+              showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
+            }, 100);
           }
         }
       });
