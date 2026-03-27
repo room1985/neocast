@@ -5219,7 +5219,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let ytPlayer = null;
   let prevBtn = null, nextBtn = null;
   let hadRebuild = false;
-  let playerReadyAt = 0; // 播放器就緒時間，用於防止初始化期間誤觸自動播放
 
   const updateNavButtons = () => {
     if (prevBtn) prevBtn.disabled = curIdx <= 0;
@@ -5292,19 +5291,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 3000);
     };
 
-    const rebuildPlayer = (autoplay = false) => {
-      hadRebuild = true;
-      try { ytPlayer?.destroy(); } catch(_) {}
-      ytPlayer = null; window._ytActivePlayer = null;
-      const nc = el('div', '');
-      nc.id = 'yt-api-player-' + Date.now();
-      nc.style.cssText = 'width:100%;height:100%;';
-      ytContainerEl.replaceWith(nc);
-      ytContainerEl = nc;
-      initYtPlayer(autoplay);
-    };
-
-    const initYtPlayer = (forcePlay = false) => {
+    const initYtPlayer = () => {
       ytPlayer = window._ytActivePlayer = new YT.Player(ytContainerEl.id, {
         width: '100%',
         height: '100%',
@@ -5312,10 +5299,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
         events: {
           onReady: (e) => {
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
-            // 重建後需明確觸發播放（autoplay 政策可能擋住）
-            if (forcePlay) setTimeout(() => { try { e.target.playVideo(); } catch(_) {} }, 300);
-            // 記錄就緒時間，2秒內的 state=0 視為初始化雜訊，不觸發自動跳轉
-            playerReadyAt = Date.now();
           },
           onStateChange: (e) => {
             if (e.data === 1) { // playing — 同步 curIdx
@@ -5329,15 +5312,15 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
             }
-            if (e.data === 0 && Date.now() - playerReadyAt > 2000) showCountdown(); // ended（2秒內忽略）
+            if (e.data === 0) showCountdown(); // ended
           },
           onError: () => {
-            // 有下一部才跳，避免無限重建
+            // 直接叫 YouTube 跳下一部，不重建播放器
             if (playlist && curIdx < playlist.length - 1) {
               curIdx++;
               updateNavButtons();
               if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
-              rebuildPlayer(true);
+              try { ytPlayer.playVideoAt(curIdx); } catch(_) {}
             }
           }
         }
