@@ -4568,6 +4568,24 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   };
   renderGroupBar();
 
+  // ── Duration filter bar ──
+  const DUR_OPTS = [0, 5, 10, 15, 20, 25, 30]; // 0 = 不限
+  let activeDur = 0; // 目前選中的分鐘上限（0 = 不限）
+
+  const durBar = el('div', 'yt-dur-bar');
+  container.appendChild(durBar);
+
+  const renderDurBar = () => {
+    durBar.innerHTML = '';
+    DUR_OPTS.forEach(min => {
+      const label = min === 0 ? '不限' : `${min}分`;
+      const btn = el('button', 'yt-group-tab' + (activeDur === min ? ' on' : ''), label);
+      btn.addEventListener('click', () => { activeDur = min; renderDurBar(); renderFeed(); });
+      durBar.appendChild(btn);
+    });
+  };
+  renderDurBar();
+
   // ── Manager panel ──
   const managerPanel = el('div', 'yt-manager');
   managerPanel.style.display = 'none';
@@ -4741,7 +4759,10 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       ? S.yt.channels
       : S.yt.channels.filter(c => (c.groups||[]).some(g => activeGroups.has(g)));
 
-    const allItems = (S.yt.items || []).filter(v => visibleChannels.find(c => c.id === v.channelId));
+    const allItems = (S.yt.items || []).filter(v =>
+      visibleChannels.find(c => c.id === v.channelId) &&
+      (activeDur === 0 || (v.duration > 0 && v.duration <= activeDur * 60))
+    );
 
   const makeVideoCard = (video) => {
     const watched = (S.yt.watched||[]).includes(video.videoId);
