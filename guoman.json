@@ -627,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第47话",
+        "pub_index": "第47话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -1721,27 +1721,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176395-xqKh8N2LTiph.png"
         },
         "rating": {
-          "score": 5.5
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10175250,
-        "name": "夢獄の国のアリス",
-        "name_cn": "夢獄の国のアリス",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx175250-Dh06UaJ8VYAm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx175250-Dh06UaJ8VYAm.png"
-        },
-        "rating": {
-          "score": 5.0
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1762,6 +1742,26 @@
         },
         "rating": {
           "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10175250,
+        "name": "夢獄の国のアリス",
+        "name_cn": "夢獄の国のアリス",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx175250-Dh06UaJ8VYAm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx175250-Dh06UaJ8VYAm.png"
+        },
+        "rating": {
+          "score": 5.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2053,26 +2053,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
-        },
-        "rating": {
-          "score": 6.0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10203367,
         "name": "もう一度、してみたい。",
         "name_cn": "もう一度、してみたい。",
@@ -2093,6 +2073,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10195034,
         "name": "これってナ～ニ？",
         "name_cn": "これってナ～ニ？",
@@ -2101,7 +2101,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195034-kh5FbK07fShG.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
