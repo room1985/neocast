@@ -5303,7 +5303,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
           onReady: (e) => {
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
             setTimeout(() => {
-              try { e.target.playVideo(); } catch(_) {}
+              try { if (e.target.getPlayerState() !== 1) e.target.playVideo(); } catch(_) {}
               playerInitialized = true;
             }, 800);
           },
