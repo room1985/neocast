@@ -5301,9 +5301,11 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
         playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
         events: {
           onReady: (e) => {
-            playerInitialized = true;
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
-            setTimeout(() => { try { e.target.playVideo(); } catch(_) {} }, 300);
+            setTimeout(() => {
+              try { e.target.playVideo(); } catch(_) {}
+              playerInitialized = true;
+            }, 800);
           },
           onStateChange: (e) => {
             if (e.data === 1) { // playing
