@@ -6388,7 +6388,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const applyHidden = (hidden) => {
       const wc = document.getElementById('wc');
       if (wc) wc.style.display = hidden ? 'none' : '';
-      hideAllBtn.textContent = hidden ? '▼' : '▲';
+      const ml = document.getElementById('mobile-layout');
+      if (ml) ml.style.display = hidden ? 'none' : '';
+      const icon = document.getElementById('hide-all-icon');
+      if (icon) {
+        icon.querySelector('polyline')?.setAttribute('points', hidden ? '4 9 12 17 20 9' : '4 15 12 7 20 15');
+      }
       hideAllBtn.title = hidden ? '顯示所有 Widget' : '隱藏所有 Widget';
       localStorage.setItem(HIDE_KEY, hidden ? '1' : '');
     };
