@@ -5312,6 +5312,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
         events: {
           onReady: (e) => {
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
+            e.target.playVideo();
           },
           onStateChange: (e) => {
             if (e.data === 1) { // playing — 同步 curIdx
