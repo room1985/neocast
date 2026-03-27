@@ -5317,14 +5317,16 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
           },
           onError: () => {
             const now = Date.now();
-            if (now - errorSkipAt < 3000) return; // 3秒內只處理一次錯誤
+            if (now - errorSkipAt < 1000) return;
             errorSkipAt = now;
-            if (playlist && curIdx < playlist.length - 1) {
-              curIdx++;
-              updateNavButtons();
-              if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
-              setTimeout(() => { try { ytPlayer.playVideoAt(curIdx); } catch(_) {} }, 500);
-            }
+            if (!playlist || playlist.length <= 1) return;
+            // 把錯誤影片從清單移除，重建 playlist 繼續播
+            playlist.splice(curIdx, 1);
+            if (curIdx >= playlist.length) curIdx = playlist.length - 1;
+            updateNavButtons();
+            if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
+            const newIds = playlist.map(v => v.videoId);
+            ytPlayer.loadPlaylist({ playlist: newIds, index: curIdx });
           }
         }
       });
