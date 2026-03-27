@@ -5219,6 +5219,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let ytPlayer = null;
   let prevBtn = null, nextBtn = null;
   let hadRebuild = false;
+  let errorSkipAt = 0;
 
   const updateNavButtons = () => {
     if (prevBtn) prevBtn.disabled = curIdx <= 0;
@@ -5315,12 +5316,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             if (e.data === 0) showCountdown(); // ended
           },
           onError: () => {
-            // 直接叫 YouTube 跳下一部，不重建播放器
+            const now = Date.now();
+            if (now - errorSkipAt < 3000) return; // 3秒內只處理一次錯誤
+            errorSkipAt = now;
             if (playlist && curIdx < playlist.length - 1) {
               curIdx++;
               updateNavButtons();
               if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
-              try { ytPlayer.playVideoAt(curIdx); } catch(_) {}
+              setTimeout(() => { try { ytPlayer.playVideoAt(curIdx); } catch(_) {} }, 500);
             }
           }
         }
