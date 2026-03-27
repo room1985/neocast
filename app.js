@@ -5291,9 +5291,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 3000);
     };
 
-    const rebuildPlayer = () => {
+    const rebuildPlayer = (autoplay = false) => {
       hadRebuild = true;
-      // 錯誤時完全重建播放器
       try { ytPlayer?.destroy(); } catch(_) {}
       ytPlayer = null; window._ytActivePlayer = null;
       const nc = el('div', '');
@@ -5301,10 +5300,10 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       nc.style.cssText = 'width:100%;height:100%;';
       ytContainerEl.replaceWith(nc);
       ytContainerEl = nc;
-      initYtPlayer();
+      initYtPlayer(autoplay);
     };
 
-    const initYtPlayer = () => {
+    const initYtPlayer = (forcePlay = false) => {
       ytPlayer = window._ytActivePlayer = new YT.Player(ytContainerEl.id, {
         width: '100%',
         height: '100%',
@@ -5312,7 +5311,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
         events: {
           onReady: (e) => {
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
-            e.target.playVideo();
+            // 重建後需明確觸發播放（autoplay 政策可能擋住）
+            if (forcePlay) setTimeout(() => { try { e.target.playVideo(); } catch(_) {} }, 300);
           },
           onStateChange: (e) => {
             if (e.data === 1) { // playing — 同步 curIdx
@@ -5329,13 +5329,13 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             if (e.data === 0) showCountdown(); // ended
           },
           onError: () => {
-            // 跳下一部並重建播放器（error state 下 API 方法無效）
+            // 有下一部才跳，避免無限重建
             if (playlist && curIdx < playlist.length - 1) {
               curIdx++;
               updateNavButtons();
               if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
+              rebuildPlayer(true);
             }
-            rebuildPlayer();
           }
         }
       });
