@@ -5220,6 +5220,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let prevBtn = null, nextBtn = null;
   let hadRebuild = false;
   let errorSkipAt = 0;
+  let stuckTimer = null;
+  let playerInitialized = false;
 
   const updateNavButtons = () => {
     if (prevBtn) prevBtn.disabled = curIdx <= 0;
@@ -5299,10 +5301,12 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
         playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
         events: {
           onReady: (e) => {
+            playerInitialized = true;
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
           },
           onStateChange: (e) => {
-            if (e.data === 1) { // playing — 同步 curIdx
+            if (e.data === 1) { // playing
+              clearTimeout(stuckTimer); stuckTimer = null;
               const ytIdx = e.target.getPlaylistIndex();
               if (ytIdx >= 0 && ytIdx !== curIdx) {
                 curIdx = ytIdx;
@@ -5312,6 +5316,22 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               nextBar.style.display = 'none';
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
+            }
+            if ((e.data === 3 || e.data === -1) && playerInitialized) {
+              clearTimeout(stuckTimer);
+              stuckTimer = setTimeout(() => {
+                const now = Date.now();
+                if (now - errorSkipAt < 1000) return;
+                errorSkipAt = now;
+                if (!playlist || curIdx >= playlist.length - 1) return;
+                const nextIdx = curIdx + 1;
+                try { ytPlayer?.destroy(); } catch(_) {}
+                ytPlayer = null; window._ytActivePlayer = null;
+                backdrop.remove(); modal.remove();
+                setTimeout(() => {
+                  showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
+                }, 100);
+              }, 3000);
             }
             if (e.data === 0) showCountdown(); // ended
           },
