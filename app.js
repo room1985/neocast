@@ -5287,10 +5287,13 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             if (e.data === 0) showCountdown(); // ended
           },
           onError: (e) => {
-            // 101/150: 影片禁止嵌入，自動跳下一部
-            if (e.data === 101 || e.data === 150 || e.data === 100) {
-              if (playlist && curIdx < playlist.length - 1) {
-                ytPlayer?.nextVideo();
+            // 任何錯誤都跳下一部（error state 下 nextVideo 無效，改用 playVideoAt）
+            if (playlist && curIdx < playlist.length - 1) {
+              curIdx++;
+              updateNavButtons();
+              if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
+              try { e.target.playVideoAt(curIdx); } catch(_) {
+                try { e.target.loadPlaylist({ playlist: ids, index: curIdx }); } catch(__) {}
               }
             }
           }
