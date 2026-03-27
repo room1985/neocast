@@ -5303,6 +5303,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
           onReady: (e) => {
             playerInitialized = true;
             e.target.loadPlaylist({ playlist: ids, index: curIdx });
+            setTimeout(() => { try { e.target.playVideo(); } catch(_) {} }, 300);
           },
           onStateChange: (e) => {
             if (e.data === 1) { // playing
@@ -5325,6 +5326,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
                 errorSkipAt = now;
                 if (!playlist || curIdx >= playlist.length - 1) return;
                 const nextIdx = curIdx + 1;
+                if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
                 try { ytPlayer?.destroy(); } catch(_) {}
                 ytPlayer = null; window._ytActivePlayer = null;
                 backdrop.remove(); modal.remove();
@@ -5341,7 +5343,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             errorSkipAt = now;
             if (!playlist || curIdx >= playlist.length - 1) return;
             const nextIdx = curIdx + 1;
-            // 直接銷毀並重開播放器，跳過錯誤影片
+            if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
             try { ytPlayer?.destroy(); } catch(_) {}
             ytPlayer = null; window._ytActivePlayer = null;
             backdrop.remove(); modal.remove();
