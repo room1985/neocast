@@ -5339,8 +5339,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearTimeout(stuckTimer); stuckTimer = null;
             }
             if (e.data === -1) {
-              nextBar.style.display = 'none';
-              clearTimeout(countdownTimer); clearInterval(countdownInterval);
               if (playerInitialized) {
                 clearTimeout(stuckTimer);
                 stuckTimer = setTimeout(() => skipToNext(), 5000);
