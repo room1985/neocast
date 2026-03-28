@@ -5314,22 +5314,32 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
             }
-            if ((e.data === 3 || e.data === -1) && playerInitialized) {
-              clearTimeout(stuckTimer);
-              stuckTimer = setTimeout(() => {
-                const now = Date.now();
-                if (now - errorSkipAt < 1000) return;
-                errorSkipAt = now;
-                if (!playlist || curIdx >= playlist.length - 1) return;
-                const nextIdx = curIdx + 1;
-                if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
-                try { ytPlayer?.destroy(); } catch(_) {}
-                ytPlayer = null; window._ytActivePlayer = null;
-                backdrop.remove(); modal.remove();
-                setTimeout(() => {
-                  showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
-                }, 100);
-              }, 3000);
+            if (e.data === 3) {
+              // 緩衝中：取消卡住計時（慢速網路不誤判）
+              clearTimeout(stuckTimer); stuckTimer = null;
+            }
+            if (e.data === -1) {
+              // YouTube 切換下一部：取消我們的倒數避免雙重跳過
+              nextBar.style.display = 'none';
+              clearTimeout(countdownTimer); clearInterval(countdownInterval);
+              if (playerInitialized) {
+                // 若 5 秒內未開始播放 → 著作權限制，跳過
+                clearTimeout(stuckTimer);
+                stuckTimer = setTimeout(() => {
+                  const now = Date.now();
+                  if (now - errorSkipAt < 1000) return;
+                  errorSkipAt = now;
+                  if (!playlist || curIdx >= playlist.length - 1) return;
+                  const nextIdx = curIdx + 1;
+                  if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
+                  try { ytPlayer?.destroy(); } catch(_) {}
+                  ytPlayer = null; window._ytActivePlayer = null;
+                  backdrop.remove(); modal.remove();
+                  setTimeout(() => {
+                    showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
+                  }, 100);
+                }, 5000);
+              }
             }
             if (e.data === 0) showCountdown(); // ended
           },
