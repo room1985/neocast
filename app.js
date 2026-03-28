@@ -5299,6 +5299,19 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             setTimeout(() => {
               try { if (e.target.getPlayerState() !== 1) e.target.playVideo(); } catch(_) {}
               playerInitialized = true;
+              // 若初始化後仍卡在 -1 或 5（影片無法播放）→ 5秒後跳下一部
+              try {
+                const ps = e.target.getPlayerState();
+                if ((ps === -1 || ps === 5) && playlist && curIdx < playlist.length - 1) {
+                  clearTimeout(stuckTimer);
+                  stuckTimer = setTimeout(() => {
+                    const now = Date.now();
+                    if (now - _ytSkipAt < 2000) return;
+                    _ytSkipAt = now;
+                    try { ytPlayer?.nextVideo(); } catch(_) {}
+                  }, 5000);
+                }
+              } catch(_) {}
             }, 800);
           },
           onStateChange: (e) => {
