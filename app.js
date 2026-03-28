@@ -5202,6 +5202,8 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   }
 }
 
+let _ytSkipAt = 0; // 跨遞迴呼叫共用的跳過防抖時間戳
+
 function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   // 清除殘留的舊播放器
   document.querySelector('.yt-player-backdrop')?.remove();
@@ -5218,7 +5220,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let keyListener = null;
   let ytPlayer = null;
   let prevBtn = null, nextBtn = null;
-  let errorSkipAt = 0;
   let stuckTimer = null;
   let playerInitialized = false;
 
@@ -5326,8 +5327,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
                 clearTimeout(stuckTimer);
                 stuckTimer = setTimeout(() => {
                   const now = Date.now();
-                  if (now - errorSkipAt < 1000) return;
-                  errorSkipAt = now;
+                  if (now - _ytSkipAt < 1000) return;
+                  _ytSkipAt = now;
                   if (!playlist || curIdx >= playlist.length - 1) return;
                   const nextIdx = curIdx + 1;
                   if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
@@ -5344,8 +5345,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
           },
           onError: () => {
             const now = Date.now();
-            if (now - errorSkipAt < 1000) return;
-            errorSkipAt = now;
+            if (now - _ytSkipAt < 1000) return;
+            _ytSkipAt = now;
             if (!playlist || curIdx >= playlist.length - 1) return;
             const nextIdx = curIdx + 1;
             if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
