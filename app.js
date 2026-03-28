@@ -5288,6 +5288,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 1000);
       countdownTimer = setTimeout(() => {
         nextBar.style.display = 'none';
+        try { ytPlayer?.nextVideo(); } catch(_) {}
       }, 3000);
     };
 
@@ -5297,7 +5298,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       if (now - _ytSkipAt < 2000) return;
       _ytSkipAt = now;
       if (!playlist || curIdx >= playlist.length - 1) return;
-      active = false; // 防止重複觸發
       clearTimeout(stuckTimer); stuckTimer = null;
       const nextIdx = curIdx + 1;
       if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
@@ -5305,6 +5305,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       ytPlayer = null; window._ytActivePlayer = null;
       backdrop.remove(); modal.remove();
       setTimeout(() => {
+        if (!active) return;
         showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
       }, 300);
     };
@@ -5320,14 +5321,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             setTimeout(() => {
               try { if (e.target.getPlayerState() !== 1) e.target.playVideo(); } catch(_) {}
               playerInitialized = true;
-              // 若初始化後仍卡在 -1 或 5（影片無法播放）→ 5秒後 rebuild 跳下一部
-              try {
-                const ps = e.target.getPlayerState();
-                if (ps === -1 || ps === 5) {
-                  clearTimeout(stuckTimer);
-                  stuckTimer = setTimeout(() => skipToNext(), 5000);
-                }
-              } catch(_) {}
             }, 800);
           },
           onStateChange: (e) => {
@@ -5351,7 +5344,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearTimeout(countdownTimer); clearInterval(countdownInterval);
               if (playerInitialized) {
                 clearTimeout(stuckTimer);
-                stuckTimer = setTimeout(() => skipToNext(), 15000);
+                stuckTimer = setTimeout(() => skipToNext(), 5000);
               }
             }
             if (e.data === 0) showCountdown();
