@@ -5202,7 +5202,8 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   }
 }
 
-let _ytSkipAt = 0; // 跨遞迴呼叫共用的跳過防抖時間戳
+let _ytSkipAt = 0;          // 跨遞迴呼叫共用的跳過防抖時間戳
+let _ytConsecSkips = 0;    // 連續跳過計數，成功播放後歸零
 
 function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   // 清除殘留的舊播放器
@@ -5304,6 +5305,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
           onStateChange: (e) => {
             if (e.data === 1) { // playing
               clearTimeout(stuckTimer); stuckTimer = null;
+              _ytConsecSkips = 0; // 成功播放，重置連續跳過計數
               const ytIdx = e.target.getPlaylistIndex();
               if (ytIdx >= 0 && ytIdx !== curIdx) {
                 curIdx = ytIdx;
@@ -5323,14 +5325,16 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               nextBar.style.display = 'none';
               clearTimeout(countdownTimer); clearInterval(countdownInterval);
               if (playerInitialized) {
-                // 若 15 秒內未開始播放 → 著作權限制，跳過
+                // 若 8 秒內未開始播放 → 著作權限制，跳過
                 clearTimeout(stuckTimer);
                 stuckTimer = setTimeout(() => {
+                  if (_ytConsecSkips >= 5) return; // 連續跳過上限
                   const now = Date.now();
-                  if (now - _ytSkipAt < 1000) return;
+                  if (now - _ytSkipAt < 2000) return;
                   _ytSkipAt = now;
                   if (!playlist || curIdx >= playlist.length - 1) return;
                   const nextIdx = curIdx + 1;
+                  _ytConsecSkips++;
                   if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
                   try { ytPlayer?.destroy(); } catch(_) {}
                   ytPlayer = null; window._ytActivePlayer = null;
@@ -5338,17 +5342,21 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
                   setTimeout(() => {
                     showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
                   }, 100);
-                }, 15000);
+                }, 8000);
               }
             }
             if (e.data === 0) showCountdown(); // ended
           },
-          onError: () => {
+          onError: (e) => {
+            // 只跳過確定無法播放的錯誤：100=已刪除/私人, 101/150=不允許嵌入
+            if (e.data !== 100 && e.data !== 101 && e.data !== 150) return;
+            if (_ytConsecSkips >= 5) return; // 連續跳過上限
             const now = Date.now();
-            if (now - _ytSkipAt < 1000) return;
+            if (now - _ytSkipAt < 2000) return;
             _ytSkipAt = now;
             if (!playlist || curIdx >= playlist.length - 1) return;
             const nextIdx = curIdx + 1;
+            _ytConsecSkips++;
             if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
             try { ytPlayer?.destroy(); } catch(_) {}
             ytPlayer = null; window._ytActivePlayer = null;
