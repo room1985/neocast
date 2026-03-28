@@ -33,7 +33,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.8
         },
         "eps": 52,
         "air_weekday": 1,
@@ -193,7 +193,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第20话",
+        "pub_index": "第21话",
         "pub_time": "10:00",
         "bilibili_season_id": 73973,
         "is_nsfw": false
@@ -213,7 +213,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第9话",
+        "pub_index": "第10话",
         "pub_time": "11:00",
         "bilibili_season_id": 127272,
         "is_nsfw": false
@@ -721,7 +721,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.4
         },
         "eps": 3,
         "air_weekday": 5,
