@@ -5288,6 +5288,21 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 3000);
     };
 
+    const skipToNext = () => {
+      const now = Date.now();
+      if (now - _ytSkipAt < 2000) return;
+      _ytSkipAt = now;
+      if (!playlist || curIdx >= playlist.length - 1) return;
+      const nextIdx = curIdx + 1;
+      if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
+      try { ytPlayer?.destroy(); } catch(_) {}
+      ytPlayer = null; window._ytActivePlayer = null;
+      backdrop.remove(); modal.remove();
+      setTimeout(() => {
+        showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
+      }, 100);
+    };
+
     const initYtPlayer = () => {
       ytPlayer = window._ytActivePlayer = new YT.Player(ytContainerEl.id, {
         width: '100%',
@@ -5299,17 +5314,12 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             setTimeout(() => {
               try { if (e.target.getPlayerState() !== 1) e.target.playVideo(); } catch(_) {}
               playerInitialized = true;
-              // 若初始化後仍卡在 -1 或 5（影片無法播放）→ 5秒後跳下一部
+              // 若初始化後仍卡在 -1 或 5（影片無法播放）→ 5秒後 rebuild 跳下一部
               try {
                 const ps = e.target.getPlayerState();
-                if ((ps === -1 || ps === 5) && playlist && curIdx < playlist.length - 1) {
+                if (ps === -1 || ps === 5) {
                   clearTimeout(stuckTimer);
-                  stuckTimer = setTimeout(() => {
-                    const now = Date.now();
-                    if (now - _ytSkipAt < 2000) return;
-                    _ytSkipAt = now;
-                    try { ytPlayer?.nextVideo(); } catch(_) {}
-                  }, 5000);
+                  stuckTimer = setTimeout(() => skipToNext(), 5000);
                 }
               } catch(_) {}
             }, 800);
@@ -5328,35 +5338,21 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearInterval(countdownInterval);
             }
             if (e.data === 3) {
-              // 緩衝中：取消卡住計時（慢速網路不誤判）
               clearTimeout(stuckTimer); stuckTimer = null;
             }
             if (e.data === -1) {
-              // YouTube 切換下一部：取消我們的倒數避免雙重跳過
               nextBar.style.display = 'none';
               clearTimeout(countdownTimer); clearInterval(countdownInterval);
               if (playerInitialized) {
-                // 若 8 秒內未開始播放 → 著作權限制，跳過
                 clearTimeout(stuckTimer);
-                stuckTimer = setTimeout(() => {
-                  const now = Date.now();
-                  if (now - _ytSkipAt < 2000) return;
-                  _ytSkipAt = now;
-                  if (!playlist || curIdx >= playlist.length - 1) return;
-                  try { ytPlayer?.nextVideo(); } catch(_) {}
-                }, 30000);
+                stuckTimer = setTimeout(() => skipToNext(), 15000);
               }
             }
-            if (e.data === 0) showCountdown(); // ended
+            if (e.data === 0) showCountdown();
           },
           onError: (e) => {
-            // 播放錯誤：直接跳下一部，不摧毀播放器
             clearTimeout(stuckTimer); stuckTimer = null;
-            const now = Date.now();
-            if (now - _ytSkipAt < 2000) return;
-            _ytSkipAt = now;
-            if (!playlist || curIdx >= playlist.length - 1) return;
-            try { ytPlayer?.nextVideo(); } catch(_) {}
+            skipToNext();
           }
         }
       });
