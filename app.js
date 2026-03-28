@@ -5237,7 +5237,9 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     const closePlayer = () => {
       active = false;
+      active = false;
       clearTimeout(stuckTimer); stuckTimer = null;
+      clearInterval(watchdogInterval); watchdogInterval = null;
       clearTimeout(countdownTimer);
       clearInterval(countdownInterval);
       if (keyListener) { window.removeEventListener('keydown', keyListener); keyListener = null; }
