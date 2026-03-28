@@ -5284,7 +5284,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 1000);
       countdownTimer = setTimeout(() => {
         nextBar.style.display = 'none';
-        ytPlayer?.nextVideo();
       }, 3000);
     };
 
