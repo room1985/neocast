@@ -5222,6 +5222,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let prevBtn = null, nextBtn = null;
   let stuckTimer = null;
   let playerInitialized = false;
+  let active = true; // 關閉或跳過後設 false，阻止重複觸發
 
   const updateNavButtons = () => {
     if (prevBtn) prevBtn.disabled = curIdx <= 0;
@@ -5234,6 +5235,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const modal = el('div', 'yt-player-modal' + (portrait ? ' portrait' : ''));
 
     const closePlayer = () => {
+      active = false;
+      clearTimeout(stuckTimer); stuckTimer = null;
       clearTimeout(countdownTimer);
       clearInterval(countdownInterval);
       if (keyListener) { window.removeEventListener('keydown', keyListener); keyListener = null; }
@@ -5289,10 +5292,13 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     };
 
     const skipToNext = () => {
+      if (!active) return;
       const now = Date.now();
       if (now - _ytSkipAt < 2000) return;
       _ytSkipAt = now;
       if (!playlist || curIdx >= playlist.length - 1) return;
+      active = false; // 防止重複觸發
+      clearTimeout(stuckTimer); stuckTimer = null;
       const nextIdx = curIdx + 1;
       if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
       try { ytPlayer?.destroy(); } catch(_) {}
@@ -5300,7 +5306,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       backdrop.remove(); modal.remove();
       setTimeout(() => {
         showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
-      }, 100);
+      }, 300);
     };
 
     const initYtPlayer = () => {
