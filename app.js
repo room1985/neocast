@@ -5330,34 +5330,20 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
                   if (now - _ytSkipAt < 2000) return;
                   _ytSkipAt = now;
                   if (!playlist || curIdx >= playlist.length - 1) return;
-                  const nextIdx = curIdx + 1;
-                  if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
-                  try { ytPlayer?.destroy(); } catch(_) {}
-                  ytPlayer = null; window._ytActivePlayer = null;
-                  backdrop.remove(); modal.remove();
-                  setTimeout(() => {
-                    showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
-                  }, 100);
+                  try { ytPlayer?.nextVideo(); } catch(_) {}
                 }, 30000);
               }
             }
             if (e.data === 0) showCountdown(); // ended
           },
           onError: (e) => {
-            // 任何錯誤都跳過：2=無效ID, 5=無法嵌入, 100=已刪除/私人, 101/150=不允許嵌入
+            // 播放錯誤：直接跳下一部，不摧毀播放器
             clearTimeout(stuckTimer); stuckTimer = null;
             const now = Date.now();
             if (now - _ytSkipAt < 2000) return;
             _ytSkipAt = now;
             if (!playlist || curIdx >= playlist.length - 1) return;
-            const nextIdx = curIdx + 1;
-            if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
-            try { ytPlayer?.destroy(); } catch(_) {}
-            ytPlayer = null; window._ytActivePlayer = null;
-            backdrop.remove(); modal.remove();
-            setTimeout(() => {
-              showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
-            }, 100);
+            try { ytPlayer?.nextVideo(); } catch(_) {}
           }
         }
       });
