@@ -5202,8 +5202,6 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   }
 }
 
-let _ytSkipAt = 0;          // 跨遞迴呼叫共用的跳過防抖時間戳
-
 function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   // 清除殘留的舊播放器
   document.querySelector('.yt-player-backdrop')?.remove();
@@ -5222,6 +5220,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let prevBtn = null, nextBtn = null;
   let stuckTimer = null;
   let playerInitialized = false;
+  let errorSkipAt = 0;
   let active = true; // 關閉或跳過後設 false，阻止重複觸發
 
   const updateNavButtons = () => {
@@ -5295,8 +5294,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const skipToNext = () => {
       if (!active) return;
       const now = Date.now();
-      if (now - _ytSkipAt < 2000) return;
-      _ytSkipAt = now;
+      if (now - errorSkipAt < 2000) return;
+      errorSkipAt = now;
       if (!playlist || curIdx >= playlist.length - 1) return;
       clearTimeout(stuckTimer); stuckTimer = null;
       const nextIdx = curIdx + 1;
