@@ -5218,7 +5218,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let keyListener = null;
   let ytPlayer = null;
   let prevBtn = null, nextBtn = null;
-  let hadRebuild = false;
   let errorSkipAt = 0;
   let stuckTimer = null;
   let playerInitialized = false;
@@ -5240,11 +5239,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       try { ytPlayer?.destroy(); } catch(_) {}
       ytPlayer = null;
       window._ytActivePlayer = null;
-      // 若曾發生錯誤重建，清除 YT API 全域狀態讓下次重新初始化
-      if (hadRebuild) {
-        try { delete window.YT; } catch(_) {}
-        document.querySelector('script[src*="youtube.com/iframe_api"]')?.remove();
-      }
       backdrop.classList.remove('open');
       modal.classList.remove('open');
       setTimeout(() => { backdrop.remove(); modal.remove(); onClose?.(); }, 260);
