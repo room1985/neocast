@@ -5322,7 +5322,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               nextBar.style.display = 'none';
               clearTimeout(countdownTimer); clearInterval(countdownInterval);
               if (playerInitialized) {
-                // 若 5 秒內未開始播放 → 著作權限制，跳過
+                // 若 15 秒內未開始播放 → 著作權限制，跳過
                 clearTimeout(stuckTimer);
                 stuckTimer = setTimeout(() => {
                   const now = Date.now();
@@ -5337,7 +5337,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
                   setTimeout(() => {
                     showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
                   }, 100);
-                }, 5000);
+                }, 15000);
               }
             }
             if (e.data === 0) showCountdown(); // ended
