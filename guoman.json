@@ -673,6 +673,26 @@
         "is_nsfw": false
       },
       {
+        "id": 456303,
+        "name": "开拍啦！怪兽大电影！",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_fV9xR.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_fV9xR.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 12,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 491775,
         "name": "大主宰 年番2",
         "name_cn": "",
@@ -701,7 +721,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.4
         },
         "eps": 3,
         "air_weekday": 5,
