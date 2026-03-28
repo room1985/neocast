@@ -5222,7 +5222,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
   let playerInitialized = false;
   let errorSkipAt = 0;
   let active = true; // 關閉或跳過後設 false，阻止重複觸發
-  let lastAlive = Date.now();
+  let lastPos = -1;
+  let lastPosTime = 0;
   let watchdogInterval = null;
 
   const updateNavButtons = () => {
@@ -5325,19 +5326,20 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
             setTimeout(() => {
               try { if (e.target.getPlayerState() !== 1) e.target.playVideo(); } catch(_) {}
               playerInitialized = true;
-              lastAlive = Date.now();
-              // Watchdog：每 5 秒確認播放器是否還活著
+              lastPosTime = Date.now();
+              // Watchdog：每 5 秒檢查播放位置是否有前進
               watchdogInterval = setInterval(() => {
                 if (!active) { clearInterval(watchdogInterval); return; }
                 try {
                   const st = ytPlayer?.getPlayerState?.();
-                  if (st === 1 || st === 2 || st === 3) { lastAlive = Date.now(); return; }
-                  if (Date.now() - lastAlive > 15000) {
+                  if (st === 2) { lastPosTime = Date.now(); return; } // 暫停中，正常
+                  const pos = ytPlayer?.getCurrentTime?.() ?? 0;
+                  if (pos > lastPos + 0.1) { lastPos = pos; lastPosTime = Date.now(); return; }
+                  if (Date.now() - lastPosTime > 20000) {
                     clearInterval(watchdogInterval);
                     skipToNext();
                   }
                 } catch(_) {
-                  // 播放器完全崩潰，強制 rebuild
                   clearInterval(watchdogInterval);
                   skipToNext();
                 }
@@ -5347,7 +5349,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
           onStateChange: (e) => {
             if (e.data === 1) { // playing
               clearTimeout(stuckTimer); stuckTimer = null;
-              lastAlive = Date.now();
               const ytIdx = e.target.getPlaylistIndex();
               if (ytIdx >= 0 && ytIdx !== curIdx) {
                 curIdx = ytIdx;
@@ -5358,10 +5359,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
             }
-            if (e.data === 2) { lastAlive = Date.now(); } // paused
             if (e.data === 3) {
               clearTimeout(stuckTimer); stuckTimer = null;
-              lastAlive = Date.now();
             }
             if (e.data === -1) {
               if (playerInitialized) {
