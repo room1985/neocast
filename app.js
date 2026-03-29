@@ -2446,10 +2446,10 @@ function renderStickiesWidget(container) {
   inp.addEventListener('focus', () => {
     moveBarToBody(); // 桌面 / 無 touch 的 fallback
     if (vvSync) return; // 已設定
-    const origH = window.innerHeight; // 鍵盤出現前的 layout viewport 高度
     const updatePos = () => {
-      const vvH = window.visualViewport ? window.visualViewport.height : origH;
-      const kbH = Math.max(0, origH - vvH);
+      // 用即時 innerHeight：網址列收起時 innerHeight 會變大，要即時抓才正確
+      const vvH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      const kbH = Math.max(0, window.innerHeight - vvH);
       bar.style.bottom = kbH + 'px';
     };
     // 同時用事件 + 輪詢（確保各 Android Chrome 版本都能偵測到鍵盤高度）
