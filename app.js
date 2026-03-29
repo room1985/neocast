@@ -2411,17 +2411,32 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤出現時，將輸入列捲動到可見區域
+  // 手機鍵盤出現時，將輸入列固定在鍵盤上方
   inp.addEventListener('focus', () => {
-    const scrollToInp = () => inp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    setTimeout(scrollToInp, 350);
-    if (window.visualViewport) {
-      const vvHandler = () => scrollToInp();
-      window.visualViewport.addEventListener('resize', vvHandler);
-      inp.addEventListener('blur', () => {
-        window.visualViewport.removeEventListener('resize', vvHandler);
-      }, { once: true });
-    }
+    if (!window.visualViewport) return;
+    const reposition = () => {
+      const kbH = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
+      if (kbH > 50) {
+        bar.style.position = 'fixed';
+        bar.style.bottom = kbH + 'px';
+        bar.style.left = '0';
+        bar.style.right = '0';
+        bar.style.zIndex = '8000';
+        bar.style.background = 'var(--bg-card, #1a1a2e)';
+        bar.style.borderTop = '1px solid var(--bd)';
+      }
+    };
+    const reset = () => {
+      bar.style.cssText = '';
+    };
+    window.visualViewport.addEventListener('resize', reposition);
+    window.visualViewport.addEventListener('scroll', reposition);
+    inp.addEventListener('blur', () => {
+      window.visualViewport.removeEventListener('resize', reposition);
+      window.visualViewport.removeEventListener('scroll', reposition);
+      reset();
+    }, { once: true });
+    setTimeout(reposition, 350);
   });
 
   bar.appendChild(colorGrid);
