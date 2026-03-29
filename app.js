@@ -2413,6 +2413,7 @@ function renderStickiesWidget(container) {
 
   // 手機鍵盤：touchstart 時將 bar 移至 body + position:fixed，桌面完全不觸發
   let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
+  let movingBar = false; // DOM 搬移期間忽略 blur，防止 restoreBar 過早執行
 
   const applyFixed = () => {
     const vv = window.visualViewport;
@@ -2441,6 +2442,7 @@ function renderStickiesWidget(container) {
 
   const moveBarToBody = () => {
     if (barOrigParent) return;
+    movingBar = true;
     barOrigParent = bar.parentNode;
     barOrigNext = bar.nextSibling;
     barPlaceholder = document.createElement('div');
@@ -2449,8 +2451,10 @@ function renderStickiesWidget(container) {
     barOrigParent.removeChild(bar);
     document.body.appendChild(bar);
     applyFixed();
-    // 移動 DOM 後 touchend 找不到原位置，auto-focus 失效 → 手動觸發
-    setTimeout(() => inp.focus(), 50);
+    // 同步呼叫 focus（仍在 touchstart gesture context 內）→ Lemur 才會開鍵盤
+    inp.focus();
+    // 400ms 後解除 movingBar，讓正常的 blur → restoreBar 恢復運作
+    setTimeout(() => { movingBar = false; }, 400);
   };
 
   const restoreBar = () => {
@@ -2488,6 +2492,7 @@ function renderStickiesWidget(container) {
   });
 
   inp.addEventListener('blur', () => {
+    if (movingBar) return; // DOM 搬移 + focus 建立期間忽略 blur
     setTimeout(restoreBar, 500); // 延遲讓 addBtn / colorGrid 的 click 先執行，亦緩衝 IME 焦點切換
   });
 
