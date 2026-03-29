@@ -2317,16 +2317,7 @@ function buildStickiesWidget() {
   renderStickiesWidget(body);
   w._updateDelChecked?.();
 
-  new ResizeObserver(() => {
-    const list   = body.querySelector('.sticky-list');
-    const bar    = body.querySelector('.sticky-input-bar');
-    const tagBar = body.querySelector('.sticky-tag-bar');
-    if (list) {
-      const tagBarH = tagBar ? tagBar.offsetHeight : 0;
-      const barH = (bar && bar.style.display !== 'none') ? bar.offsetHeight : 0;
-      list.style.height = (body.offsetHeight - barH - tagBarH) + 'px';
-    }
-  }).observe(body);
+  // 高度交給 CSS Flexbox，不需要 ResizeObserver 計算
 }
 
 function renderStickiesWidget(container) {
@@ -2475,19 +2466,9 @@ function renderStickiesWidget(container) {
     });
   }
 
-  // JS height — most reliable, bypasses all flex overflow quirks
-  requestAnimationFrame(() => {
-    const barH = (bar.style.display !== 'none') ? (bar.offsetHeight || 53) : 0;
-    const tagBarEl = container.querySelector('.sticky-tag-bar');
-    const tagBarH = tagBarEl ? tagBarEl.offsetHeight : 0;
-    const containerH = container.offsetHeight;
-    if (containerH > 0) {
-      list.style.height = (containerH - barH - tagBarH) + 'px';
-      list.style.overflowY = 'auto';
-    }
-    // 還原捲動位置（勾選/編輯完後不跳回頂端）
-    if (prevScrollTop > 0) list.scrollTop = prevScrollTop;
-  });
+  // 還原捲動位置（勾選/編輯完後不跳回頂端）
+  // 高度完全交給 CSS Flexbox（.sticky-list { flex:1; min-height:0; }），不用 JS 計算
+  if (prevScrollTop > 0) requestAnimationFrame(() => { list.scrollTop = prevScrollTop; });
 }
 
 function makeStickyCard(sticky, container) {
@@ -5572,18 +5553,7 @@ function buildMobileWidgetContent(widgetType, container) {
     mountStickyTagBar(mTagBar, inner);
     renderStickiesWidget(inner);
 
-    // 手機版高度動態計算（跟桌面版一樣用 ResizeObserver）
-    new ResizeObserver(() => {
-      const list   = inner.querySelector('.sticky-list');
-      const bar    = inner.querySelector('.sticky-input-bar');
-      const tagBar = inner.querySelector('.sticky-tag-bar');
-      if (list) {
-        const tagBarH = tagBar ? tagBar.offsetHeight : 0;
-        const barH = (bar && bar.style.display !== 'none') ? bar.offsetHeight : 0;
-        list.style.height = (inner.offsetHeight - barH - tagBarH) + 'px';
-        list.style.overflowY = 'auto';
-      }
-    }).observe(inner);
+    // 高度交給 CSS Flexbox，不需要 ResizeObserver 計算
   } else if (widgetType === 'anime') {
     const inner = el('div', 'anime-inner');
     inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
