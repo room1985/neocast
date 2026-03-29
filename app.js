@@ -5633,7 +5633,33 @@ function buildMobileWidgetContent(widgetType, container) {
 /* ─────────────────────────────────────
    GALLERY WIDGET — 視覺書籤
 ───────────────────────────────────── */
+function injectGalleryCSS() {
+  if (document.getElementById('gallery-style')) return;
+  const s = document.createElement('style');
+  s.id = 'gallery-style';
+  s.textContent = `
+    .gallery-card { transition: transform 0.15s ease, filter 0.15s ease; }
+    .gallery-card:active { transform: scale(0.96); filter: brightness(0.82); }
+    .gallery-detail-overlay {
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .gallery-detail-overlay.show { opacity: 1; }
+    .gallery-detail-card {
+      opacity: 0;
+      transform: translateY(44px) scale(0.95);
+      transition: opacity 0.4s cubic-bezier(0.175,0.885,0.32,1.275),
+                  transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .gallery-detail-overlay.show .gallery-detail-card {
+      opacity: 1; transform: translateY(0) scale(1);
+    }
+  `;
+  document.head.appendChild(s);
+}
+
 function renderGalleryWidget(container) {
+  injectGalleryCSS();
   // 清除舊內容，保留 FAB
   container.querySelectorAll('.gallery-scroll, .gallery-fab').forEach(e => e.remove());
 
@@ -5691,7 +5717,7 @@ function renderGalleryWidget(container) {
         lpTimer = setTimeout(() => {
           lpFired = true;
           navigator.vibrate?.(50);
-          showGalleryCardMenu(item, container);
+          openGalleryEditDialog(item, container);
         }, 800);
       }, { passive: true });
       card.addEventListener('touchmove', e => {
@@ -5699,8 +5725,8 @@ function renderGalleryWidget(container) {
           clearTimeout(lpTimer);
       }, { passive: true });
       card.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
-      card.addEventListener('click', () => { if (!lpFired && item.url) window.open(item.url, '_blank'); });
-      card.addEventListener('contextmenu', e => { e.preventDefault(); showGalleryCardMenu(item, container); });
+      card.addEventListener('click', () => { if (!lpFired) openGalleryDetail(item, container); });
+      card.addEventListener('contextmenu', e => { e.preventDefault(); openGalleryEditDialog(item, container); });
 
       cols[idx % 2].appendChild(card);
     });
@@ -5726,6 +5752,10 @@ function openGalleryAddDialog(container) {
     <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">新增視覺書籤</div>
     <div id="_gal-preview" style="width:100%;min-height:90px;border:1.5px dashed rgba(255,255,255,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;">點擊選擇圖片或影片</div>
     <input type="file" accept="image/*,video/*" id="_gal-file" style="display:none">
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標題（選填）</div>
+    <input type="text" id="_gal-title" placeholder="輸入標題…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
+    <textarea id="_gal-desc" placeholder="輸入描述…" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;margin-bottom:12px;"></textarea>
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
     <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
     <div style="display:flex;gap:10px;">
@@ -5763,7 +5793,7 @@ function openGalleryAddDialog(container) {
     const imageId = 'gallery_img_' + id;
     await idbSet(imageId, blob);
     if (!S.gallery) S.gallery = [];
-    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', url: box.querySelector('#_gal-url').value.trim(), addedAt: Date.now() });
+    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', title: box.querySelector('#_gal-title').value.trim(), description: box.querySelector('#_gal-desc').value.trim(), url: box.querySelector('#_gal-url').value.trim(), addedAt: Date.now() });
     lsSave();
     overlay.remove();
     renderGalleryWidget(container);
@@ -5798,6 +5828,130 @@ function showGalleryCardMenu(item, container) {
     lsSave();
     overlay.remove();
     renderGalleryWidget(container);
+  });
+}
+
+function openGalleryDetail(item, container) {
+  injectGalleryCSS();
+  const overlay = el('div', 'gallery-detail-overlay');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:9910;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
+
+  const card = el('div', 'gallery-detail-card');
+  card.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:20px;width:100%;max-width:420px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.6);';
+
+  // 媒體區
+  const mediaWrap = el('div');
+  mediaWrap.style.cssText = 'width:100%;overflow:hidden;border-radius:20px 20px 0 0;background:#000;';
+  idbGet(item.imageId).then(blob => {
+    if (!blob) return;
+    const url = URL.createObjectURL(blob);
+    if (item.type === 'video') {
+      const vid = el('video');
+      vid.style.cssText = 'width:100%;display:block;max-height:58vh;object-fit:contain;';
+      vid.muted = true; vid.loop = true; vid.playsInline = true; vid.controls = true;
+      vid.src = url;
+      vid.oncanplay = () => URL.revokeObjectURL(url);
+      mediaWrap.appendChild(vid);
+    } else {
+      const img = el('img');
+      img.style.cssText = 'width:100%;display:block;max-height:58vh;object-fit:contain;';
+      img.src = url;
+      img.onload = () => URL.revokeObjectURL(url);
+      mediaWrap.appendChild(img);
+    }
+  });
+  card.appendChild(mediaWrap);
+
+  // 文字 + 按鈕區
+  const info = el('div');
+  info.style.cssText = 'padding:16px;';
+  if (item.title) {
+    const t = el('div');
+    t.style.cssText = 'font-size:16px;font-weight:600;color:#fff;margin-bottom:6px;';
+    t.textContent = item.title;
+    info.appendChild(t);
+  }
+  if (item.description) {
+    const d = el('div');
+    d.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:14px;';
+    d.textContent = item.description;
+    info.appendChild(d);
+  }
+
+  const actions = el('div');
+  actions.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  if (item.url) {
+    const linkBtn = el('button');
+    linkBtn.style.cssText = 'flex:1;padding:12px;border-radius:10px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;';
+    linkBtn.textContent = '🔗 前往連結';
+    linkBtn.addEventListener('click', () => window.open(item.url, '_blank'));
+    actions.appendChild(linkBtn);
+  }
+  const editBtn = el('button');
+  editBtn.style.cssText = 'padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:15px;cursor:pointer;';
+  editBtn.textContent = '✏️';
+  editBtn.addEventListener('click', () => { doClose(); openGalleryEditDialog(item, container); });
+  const delBtn = el('button');
+  delBtn.style.cssText = 'padding:12px 14px;border-radius:10px;background:rgba(200,50,50,0.15);color:#ff7070;border:none;font-size:15px;cursor:pointer;';
+  delBtn.textContent = '🗑️';
+  delBtn.addEventListener('click', async () => {
+    if (!confirm('確定刪除這個書籤？')) return;
+    S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
+    await idbDel(item.imageId);
+    lsSave(); doClose(); renderGalleryWidget(container);
+  });
+  actions.appendChild(editBtn);
+  actions.appendChild(delBtn);
+  info.appendChild(actions);
+  card.appendChild(info);
+  overlay.appendChild(card);
+  document.body.appendChild(overlay);
+
+  // Spring in
+  requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('show')));
+
+  const doClose = () => {
+    overlay.classList.remove('show');
+    setTimeout(() => overlay.remove(), 380);
+  };
+  overlay.addEventListener('click', e => { if (e.target === overlay) doClose(); });
+
+  // 下滑關閉
+  let sy = 0, sx = 0;
+  card.addEventListener('touchstart', e => { sy = e.touches[0].clientY; sx = e.touches[0].clientX; }, { passive: true });
+  card.addEventListener('touchend', e => {
+    const dy = e.changedTouches[0].clientY - sy;
+    const dx = Math.abs(e.changedTouches[0].clientX - sx);
+    if (dy > 80 && dx < 60) doClose();
+  }, { passive: true });
+}
+
+function openGalleryEditDialog(item, container) {
+  const overlay = el('div', 'gallery-overlay');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9910;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
+  const box = el('div');
+  box.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px;padding:20px;width:100%;max-width:380px;box-sizing:border-box;max-height:85vh;overflow-y:auto;';
+  box.innerHTML = `
+    <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">編輯書籤</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標題（選填）</div>
+    <input type="text" id="_gal-e-title" value="${esc(item.title||'')}" placeholder="輸入標題…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
+    <textarea id="_gal-e-desc" rows="2" placeholder="輸入描述…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;margin-bottom:12px;">${esc(item.description||'')}</textarea>
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
+    <input type="url" id="_gal-e-url" value="${esc(item.url||'')}" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
+    <div style="display:flex;gap:10px;">
+      <button id="_gal-e-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
+      <button id="_gal-e-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>
+    </div>`;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  box.querySelector('#_gal-e-cancel').addEventListener('click', () => overlay.remove());
+  box.querySelector('#_gal-e-save').addEventListener('click', () => {
+    item.title       = box.querySelector('#_gal-e-title').value.trim();
+    item.description = box.querySelector('#_gal-e-desc').value.trim();
+    item.url         = box.querySelector('#_gal-e-url').value.trim();
+    lsSave(); overlay.remove(); renderGalleryWidget(container);
   });
 }
 
