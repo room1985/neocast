@@ -2412,143 +2412,65 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // ── 手機鍵盤處理 ──────────────────────────────────────────────
+  // ── 鍵盤處理：底部推擠法（Padding Push）─────────────────────────
+  // 不搬移 DOM，不用 position:fixed，相容 Chrome / Firefox（狐猴）
   const isMobile = !!container.closest('#mobile-layout');
 
   bar.appendChild(colorGrid);
   bar.appendChild(inp);
   bar.appendChild(addBtn);
+  container.appendChild(bar);
 
   if (isMobile) {
-    // Mobile：bar 預先放到 body，不在 focus 時搬移 DOM（相容 Firefox / 狐猴瀏覽器）
-    bar.id = 'sticky-kb-floating';
-    bar.style.cssText = 'display:none;position:fixed;left:0;right:0;bottom:0;z-index:9900;margin:0;border-radius:0;box-sizing:border-box;background:var(--bg-card,#1a1a2e);border-top:1px solid var(--bd);';
-    document.body.appendChild(bar);
+    // origH：頁面載入時的 innerHeight，用來偵測 Firefox 的鍵盤高度
+    // （Firefox 的 innerHeight 會跟著鍵盤縮小，vv.height 也跟著縮，差值≈0）
+    const origH = window.innerHeight;
+    let kbCleanup = null;
 
-    // Placeholder 在 container 佔位，讓 ResizeObserver 算出正確的 list 高度
-    const ph = document.createElement('div');
-    ph.className = 'sticky-input-bar'; // ResizeObserver querySelector 可找到
-    ph.style.cssText = 'flex-shrink:0;height:53px;pointer-events:none;visibility:hidden;';
-    if (searchQ || S.stickyLocked) ph.style.display = 'none';
-    container.appendChild(ph);
-    requestAnimationFrame(() => { ph.style.height = (bar.offsetHeight || 53) + 'px'; });
+    const getKbH = () => {
+      const vv = window.visualViewport;
+      // Chrome：innerHeight 不變，vv.height 縮小
+      const chromeKb = vv ? Math.max(0, window.innerHeight - vv.height) : 0;
+      // Firefox（狐猴）：innerHeight 跟著縮小，與 origH 的差值即鍵盤高度
+      const firefoxKb = Math.max(0, origH - window.innerHeight);
+      return Math.max(chromeKb, firefoxKb);
+    };
 
-    let vvCleanup = null;
-
-    const showBar = () => {
+    const applyPush = () => {
       if (searchQ || S.stickyLocked) return;
-      if (bar.style.display !== 'none') return;
-      bar.style.display = '';
-      const updatePos = () => {
-        const vv = window.visualViewport;
-        const kbH = Math.max(0, window.innerHeight - (vv ? vv.height : window.innerHeight));
-        bar.style.bottom = kbH + 'px';
-      };
-      window.visualViewport?.addEventListener('resize', updatePos);
-      window.visualViewport?.addEventListener('scroll', updatePos);
-      window.addEventListener('resize', updatePos);
-      let n = 0;
-      const poll = setInterval(() => { updatePos(); if (++n >= 40) clearInterval(poll); }, 100);
-      vvCleanup = () => {
-        window.visualViewport?.removeEventListener('resize', updatePos);
-        window.visualViewport?.removeEventListener('scroll', updatePos);
-        window.removeEventListener('resize', updatePos);
-        clearInterval(poll);
-      };
-      updatePos();
+      const kbH = getKbH();
+      container.style.paddingBottom = kbH > 0 ? kbH + 'px' : '';
+      if (kbH > 0) requestAnimationFrame(() => bar.scrollIntoView({ block: 'nearest' }));
     };
 
-    const hideBar = () => {
-      vvCleanup?.(); vvCleanup = null;
-      bar.style.display = 'none';
-      bar.style.bottom = '0';
+    const removePush = () => {
+      if (kbCleanup) { kbCleanup(); kbCleanup = null; }
+      container.style.paddingBottom = '';
     };
-
-    inp.addEventListener('focus', showBar);
-    inp.addEventListener('blur', () => {
-      setTimeout(() => { if (document.activeElement !== inp) hideBar(); }, 300);
-    });
-
-  } else {
-    // Desktop：bar 放在 container，維持原有邏輯
-    container.appendChild(bar);
-
-    let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
-
-    const applyFixed = (bottomPx) => {
-      bar.style.setProperty('position', 'fixed', 'important');
-      bar.style.setProperty('left',     '0',            'important');
-      bar.style.setProperty('right',    '0',            'important');
-      bar.style.setProperty('bottom',   bottomPx + 'px','important');
-      bar.style.setProperty('z-index',  '9900',         'important');
-      bar.style.setProperty('margin',   '0',            'important');
-      bar.style.setProperty('border-radius', '0',       'important');
-      bar.style.setProperty('box-sizing', 'border-box', 'important');
-      bar.style.setProperty('background', 'var(--bg-card,#1a1a2e)', 'important');
-      bar.style.setProperty('border-top', '1px solid var(--bd)',     'important');
-    };
-
-    const moveBarToBody = () => {
-      if (barOrigParent) return;
-      barOrigParent = bar.parentNode;
-      barOrigNext   = bar.nextSibling;
-      barPlaceholder = document.createElement('div');
-      barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
-      barOrigParent.insertBefore(barPlaceholder, bar);
-      barOrigParent.removeChild(bar);
-      document.body.appendChild(bar);
-      applyFixed(0);
-    };
-
-    const restoreBar = () => {
-      if (document.activeElement === inp) return;
-      if (vvSync) { vvSync(); vvSync = null; }
-      if (barOrigParent) {
-        if (bar.parentNode === document.body) document.body.removeChild(bar);
-        barOrigParent.insertBefore(bar, barOrigNext);
-        barPlaceholder?.remove();
-        barOrigParent = null; barOrigNext = null; barPlaceholder = null;
-      }
-      bar.style.cssText = '';
-    };
-
-    inp.addEventListener('touchstart', moveBarToBody, { passive: true });
 
     inp.addEventListener('focus', () => {
-      moveBarToBody();
-      if (vvSync) return;
-      const updatePos = () => {
-        const vv = window.visualViewport;
-        const vvH   = vv ? vv.height    : window.innerHeight;
-        const vvTop = vv ? vv.offsetTop : 0;
-        applyFixed(Math.max(0, window.innerHeight - vvTop - vvH));
-      };
-      window.visualViewport?.addEventListener('resize', updatePos);
-      window.visualViewport?.addEventListener('scroll', updatePos);
-      window.addEventListener('resize', updatePos);
+      if (searchQ || S.stickyLocked) return;
+      if (kbCleanup) return;
+      applyPush();
+      window.visualViewport?.addEventListener('resize', applyPush);
+      window.addEventListener('resize', applyPush);
       let n = 0;
-      const poll = setInterval(() => { updatePos(); if (++n >= 30) clearInterval(poll); }, 100);
-      vvSync = () => {
-        window.visualViewport?.removeEventListener('resize', updatePos);
-        window.visualViewport?.removeEventListener('scroll', updatePos);
-        window.removeEventListener('resize', updatePos);
+      const poll = setInterval(() => { applyPush(); if (++n >= 40) clearInterval(poll); }, 100);
+      kbCleanup = () => {
+        window.visualViewport?.removeEventListener('resize', applyPush);
+        window.removeEventListener('resize', applyPush);
         clearInterval(poll);
       };
-      updatePos();
     });
 
-    inp.addEventListener('blur', () => { setTimeout(restoreBar, 200); });
+    inp.addEventListener('blur', () => {
+      setTimeout(() => { if (document.activeElement !== inp) removePush(); }, 300);
+    });
   }
 
   // JS height — most reliable, bypasses all flex overflow quirks
   requestAnimationFrame(() => {
-    let barH;
-    if (isMobile) {
-      const ph = container.querySelector('.sticky-input-bar');
-      barH = (ph && ph.style.display !== 'none') ? (ph.offsetHeight || 53) : 0;
-    } else {
-      barH = (bar.style.display !== 'none') ? (bar.offsetHeight || 53) : 0;
-    }
+    const barH = (bar.style.display !== 'none') ? (bar.offsetHeight || 53) : 0;
     const tagBarEl = container.querySelector('.sticky-tag-bar');
     const tagBarH = tagBarEl ? tagBarEl.offsetHeight : 0;
     const containerH = container.offsetHeight;
