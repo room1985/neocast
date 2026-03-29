@@ -2414,6 +2414,7 @@ function renderStickiesWidget(container) {
   // 手機鍵盤：原生 focus 先發生（瀏覽器開鍵盤），再於 focus handler 內移動 bar
   let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
   let suppressBlur = false; // DOM 搬移瞬間屏蔽 blur，防止 restoreBar 過早執行
+  let isTouchInteraction = false; // touchstart 設旗標，比任何 API 偵測都可靠
 
   const applyFixed = () => {
     const vv = window.visualViewport;
@@ -2470,9 +2471,14 @@ function renderStickiesWidget(container) {
     });
   };
 
+  // touchstart：只設旗標，不動 DOM，不破壞原生 focus 鏈
+  // 桌面用滑鼠點擊不觸發 touchstart → isTouchInteraction 永遠 false → 桌面完全不受影響
+  inp.addEventListener('touchstart', () => { isTouchInteraction = true; }, { passive: true });
+
   inp.addEventListener('focus', () => {
-    // 桌面防護：非觸控裝置完全不執行移動邏輯
-    if (!(navigator.maxTouchPoints > 0)) return;
+    // 桌面防護：沒有 touchstart 就跳過（比任何 API 偵測都可靠）
+    if (!isTouchInteraction) return;
+    isTouchInteraction = false; // 重置，避免下次誤觸發
 
     if (!barOrigParent) {
       // 第一次 focus：讓瀏覽器先完成原生 focus 流程，再搬移 bar
