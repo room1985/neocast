@@ -2411,9 +2411,9 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤：touchstart 時將 bar 移至 body + position:fixed，桌面完全不觸發
+  // 手機鍵盤：原生 focus 先發生（瀏覽器開鍵盤），再於 focus handler 內移動 bar
   let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
-  let movingBar = false; // DOM 搬移期間忽略 blur，防止 restoreBar 過早執行
+  let suppressBlur = false; // DOM 搬移瞬間屏蔽 blur，防止 restoreBar 過早執行
 
   const applyFixed = () => {
     const vv = window.visualViewport;
@@ -2442,26 +2442,6 @@ function renderStickiesWidget(container) {
     bar.style.setProperty('border-top', '1px solid var(--bd)', 'important');
   };
 
-  const moveBarToBody = () => {
-    if (barOrigParent) return;
-    movingBar = true;
-    barOrigParent = bar.parentNode;
-    barOrigNext = bar.nextSibling;
-    barPlaceholder = document.createElement('div');
-    barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
-    barOrigParent.insertBefore(barPlaceholder, bar);
-    barOrigParent.removeChild(bar);
-    document.body.appendChild(bar);
-    applyFixed();
-    // Safety: if focus never fires (rare), unlock after 1s
-    setTimeout(() => { movingBar = false; }, 1000);
-  };
-
-  // touchend 才是瀏覽器觸控焦點的正確時機（touchstart 太早，Lemur 會忽略 focus 請求）
-  inp.addEventListener('touchend', () => {
-    if (barOrigParent && document.activeElement !== inp) inp.focus();
-  }, { passive: true });
-
   const restoreBar = () => {
     if (document.activeElement === inp) return;
     if (vvSync) { vvSync(); vvSync = null; }
@@ -2474,13 +2454,33 @@ function renderStickiesWidget(container) {
     bar.style.cssText = '';
   };
 
-  // touchstart 在 focus 之前觸發 → bar 移至 body 時 inp 尚未 focus，不會造成 blur
-  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
+  const moveBarToBody = () => {
+    if (barOrigParent) return;
+    suppressBlur = true; // 屏蔽 DOM 移除觸發的 blur
+    barOrigParent = bar.parentNode;
+    barOrigNext = bar.nextSibling;
+    barPlaceholder = document.createElement('div');
+    barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
+    barOrigParent.insertBefore(barPlaceholder, bar);
+    document.body.appendChild(bar); // 隱式從舊父節點移除（DOM 規範），觸發 blur 但被 suppressBlur 擋住
+    applyFixed();
+    requestAnimationFrame(() => {
+      inp.focus(); // 重新索取焦點以維持鍵盤開啟
+      setTimeout(() => { suppressBlur = false; }, 100); // 第二次 focus 穩定後才解保護
+    });
+  };
 
   inp.addEventListener('focus', () => {
-    movingBar = false; // 真正取得焦點後才解除 blur 保護（不用計時器）
-    // barOrigParent 為 null 代表 touchstart 未觸發（桌面），直接 return
-    if (!barOrigParent) return;
+    // 桌面防護：非觸控裝置完全不執行移動邏輯
+    if (!(navigator.maxTouchPoints > 0)) return;
+
+    if (!barOrigParent) {
+      // 第一次 focus：讓瀏覽器先完成原生 focus 流程，再搬移 bar
+      setTimeout(moveBarToBody, 50);
+      return;
+    }
+
+    // 第二次 focus（搬移後重新 focus）：建立位置輪詢
     if (vvSync) return;
     const updatePos = () => { applyFixed(); };
     window.visualViewport?.addEventListener('resize', updatePos);
@@ -2494,11 +2494,11 @@ function renderStickiesWidget(container) {
       window.removeEventListener('resize', updatePos);
       clearInterval(poll);
     };
-    updatePos();
+    updatePos(); // 立即對齊，不等第一次 poll
   });
 
   inp.addEventListener('blur', () => {
-    if (movingBar) return; // DOM 搬移 + focus 建立期間忽略 blur
+    if (suppressBlur) return; // DOM 搬移瞬間的 blur，忽略
     setTimeout(restoreBar, 500); // 延遲讓 addBtn / colorGrid 的 click 先執行，亦緩衝 IME 焦點切換
   });
 
