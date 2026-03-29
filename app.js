@@ -16,7 +16,8 @@ const GAP     = 10;
 const IDB_DB  = 'neocast';
 const IDB_VER = 1;
 const IDB_ST  = 'blobs';
-const VID_KEY = 'bg_video';
+const VID_KEY     = 'bg_video';
+const PAGE_VID_KEY = id => `page_video_${id}`; // per-page background video key
 const LS_KEY  = 'neocast_v2';
 
 /* ─────────────────────────────────────
@@ -432,7 +433,9 @@ function dismissToast(t) {
 /* ─────────────────────────────────────
    VIDEO BACKGROUND
 ───────────────────────────────────── */
-let videoBlobUrl = null;
+let videoBlobUrl    = null;
+let pageVideoBlobUrl = null; // per-page video blob URL（切換時 revoke 釋放記憶體）
+let _pvGen           = 0;   // generation counter，防止多個 async load 競爭
 
 async function loadVideo() {
   try {
@@ -462,6 +465,32 @@ async function removeVideo() {
     $('bg-orbs').style.display = '';
     toast('已移除背景影片');
   } catch(_) {}
+}
+
+// 切換至指定分頁的背景影片（優先分頁設定，否則 fallback 全局影片）
+async function switchPageVideo(pageId) {
+  const gen = ++_pvGen;
+  // 釋放前一個分頁的 blob URL，防止記憶體累積
+  if (pageVideoBlobUrl) {
+    URL.revokeObjectURL(pageVideoBlobUrl);
+    pageVideoBlobUrl = null;
+  }
+  const v = $('bg-video');
+  if (!v) return;
+  try {
+    const blob = await idbGet(PAGE_VID_KEY(pageId));
+    if (gen !== _pvGen) return; // 已被更新的呼叫取代，中止
+    if (blob) {
+      pageVideoBlobUrl = URL.createObjectURL(blob);
+      v.src = pageVideoBlobUrl;
+      $('bg-orbs').style.display = 'none';
+    } else {
+      // 此分頁無獨立設定 → 使用全局影片
+      v.src = videoBlobUrl || '';
+      $('bg-orbs').style.display = videoBlobUrl ? 'none' : '';
+    }
+    v.load();
+  } catch (_) {}
 }
 
 /* ─────────────────────────────────────
@@ -5812,6 +5841,8 @@ function initMobileLayout() {
   if (!S.mobilePages.length || S.mobilePages[0].widget !== 'shortcuts') {
     S.mobilePages = [{ id: 'shortcuts', widget: 'shortcuts' }, ...S.mobilePages.filter(p => p.widget !== 'shortcuts')];
   }
+  // 向下相容：確保每個分頁都有 id（舊版資料可能沒有）
+  S.mobilePages.forEach(p => { if (!p.id) p.id = uid(); });
 
   // ── Fixed clock at top ──
   const clockWrap = el('div', 'mobile-clock-wrap');
@@ -5897,8 +5928,10 @@ function initMobileLayout() {
         delPageBtn.textContent = '✕';
         delPageBtn.addEventListener('click', () => {
           if (confirm(`刪除「${meta?.label || page.widget}」頁？`)) {
+            const delId = page.id;
             S.mobilePages.splice(idx, 1);
             if (S.mobilePageIdx >= S.mobilePages.length) S.mobilePageIdx = S.mobilePages.length - 1;
+            if (delId) idbDel(PAGE_VID_KEY(delId)).catch(() => {}); // 釋放分頁影片儲存
             lsSave();
             renderPages();
           }
@@ -6178,6 +6211,10 @@ function initMobileLayout() {
     if (activePanels[S.mobilePageIdx]) {
       activePanels[S.mobilePageIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
     }
+
+    // 切換背景影片至當前分頁的設定
+    const activePage = S.mobilePages[S.mobilePageIdx];
+    if (activePage?.id) switchPageVideo(activePage.id);
   }
 
   // Touch swipe — only trigger when horizontal dominates
@@ -6224,6 +6261,57 @@ function openMobileWidgetPicker(pageIdx) {
     </div>`;
 
   const list = overlay.querySelector('.mobile-picker-list');
+
+  // ── 分頁獨立背景設定（置頂，優先於小工具選項）──
+  const page   = S.mobilePages[pageIdx];
+  if (!page.id) { page.id = uid(); lsSave(); }
+  const pageId = page.id;
+
+  const bgSetItem = el('div', 'mobile-picker-item');
+  bgSetItem.style.cssText = 'border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:10px;padding-bottom:12px;';
+  bgSetItem.innerHTML = `<span class="awp-icon">🎬</span><span>為此分頁設定獨立背景</span>`;
+  bgSetItem.addEventListener('click', () => {
+    const fi = document.createElement('input');
+    fi.type = 'file'; fi.accept = 'video/mp4,video/webm,video/*';
+    fi.addEventListener('change', async () => {
+      const file = fi.files[0];
+      if (!file) return;
+      try {
+        await idbSet(PAGE_VID_KEY(pageId), file);
+        // 若目前正在這個分頁，立即切換
+        if (S.mobilePages[S.mobilePageIdx]?.id === pageId) {
+          _pvGen++;
+          if (pageVideoBlobUrl) { URL.revokeObjectURL(pageVideoBlobUrl); pageVideoBlobUrl = null; }
+          const v = $('bg-video');
+          pageVideoBlobUrl = URL.createObjectURL(file);
+          v.src = pageVideoBlobUrl;
+          $('bg-orbs').style.display = 'none';
+          v.load();
+        }
+        toast('分頁背景已設定 ✓');
+      } catch (_) { toast('設定失敗', 'err'); }
+    });
+    fi.click();
+  });
+  list.appendChild(bgSetItem);
+
+  // 非同步確認是否已設定過（若有則顯示移除按鈕）
+  idbGet(PAGE_VID_KEY(pageId)).then(blob => {
+    if (!blob) return;
+    const bgRmItem = el('div', 'mobile-picker-item');
+    bgRmItem.style.cssText = 'border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:10px;padding-bottom:12px;color:rgba(255,120,120,0.9);';
+    bgRmItem.innerHTML = `<span class="awp-icon">🗑</span><span>移除此分頁獨立背景</span>`;
+    bgRmItem.addEventListener('click', async () => {
+      await idbDel(PAGE_VID_KEY(pageId)).catch(() => {});
+      if (S.mobilePages[S.mobilePageIdx]?.id === pageId) switchPageVideo(pageId);
+      toast('已移除分頁背景');
+      document.body.removeChild(overlay);
+    });
+    // 插在 bgSetItem 之後，小工具列表之前
+    list.insertBefore(bgRmItem, bgSetItem.nextSibling);
+  });
+
+  // ── 小工具選項 ──
   choices.forEach(([key, meta]) => {
     const item = el('div', 'mobile-picker-item');
     item.innerHTML = `<span class="awp-icon">${meta.icon}</span><span>${meta.label}</span>`;
