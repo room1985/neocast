@@ -2414,18 +2414,22 @@ function renderStickiesWidget(container) {
   // 手機鍵盤：touchstart（早於 focus）移 bar 到 body，避免 backdrop-filter 破壞 fixed 定位
   let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
 
-  const applyFixed = (bottomPx) => {
-    // 用 setProperty + important 確保蓋過任何 CSS 規則
-    bar.style.setProperty('position', 'fixed', 'important');
-    bar.style.setProperty('left',     '0',            'important');
-    bar.style.setProperty('right',    '0',            'important');
-    bar.style.setProperty('bottom',   bottomPx + 'px','important');
-    bar.style.setProperty('z-index',  '9900',         'important');
-    bar.style.setProperty('margin',   '0',            'important');
-    bar.style.setProperty('border-radius', '0',       'important');
-    bar.style.setProperty('box-sizing', 'border-box', 'important');
-    bar.style.setProperty('background', 'var(--bg-card,#1a1a2e)', 'important');
-    bar.style.setProperty('border-top', '1px solid var(--bd)',     'important');
+  const applyFixed = () => {
+    // 直接定位在 visual viewport 底部，不依賴鍵盤高度計算，相容所有行動瀏覽器
+    const vv   = window.visualViewport;
+    const barH = bar.offsetHeight || 53;
+    const topPx = vv ? (vv.offsetTop + vv.height - barH) : (window.innerHeight - barH);
+    bar.style.setProperty('position',      'fixed',                  'important');
+    bar.style.setProperty('top',           topPx + 'px',             'important');
+    bar.style.setProperty('bottom',        'auto',                   'important');
+    bar.style.setProperty('left',          '0',                      'important');
+    bar.style.setProperty('right',         '0',                      'important');
+    bar.style.setProperty('z-index',       '9900',                   'important');
+    bar.style.setProperty('margin',        '0',                      'important');
+    bar.style.setProperty('border-radius', '0',                      'important');
+    bar.style.setProperty('box-sizing',    'border-box',             'important');
+    bar.style.setProperty('background',    'var(--bg-card,#1a1a2e)', 'important');
+    bar.style.setProperty('border-top',    '1px solid var(--bd)',    'important');
   };
 
   const moveBarToBody = () => {
@@ -2437,7 +2441,7 @@ function renderStickiesWidget(container) {
     barOrigParent.insertBefore(barPlaceholder, bar);
     barOrigParent.removeChild(bar);
     document.body.appendChild(bar);
-    applyFixed(0);
+    applyFixed();
   };
 
   const restoreBar = () => {
@@ -2456,25 +2460,14 @@ function renderStickiesWidget(container) {
   };
 
   // touchstart 比 focus 早 → 鍵盤決定彈出前 bar 已在 body
-  let cachedLayoutH = window.innerHeight;
-  inp.addEventListener('touchstart', () => {
-    cachedLayoutH = window.innerHeight; // 鍵盤彈出前先快照，供 iOS 高度計算使用
-    moveBarToBody();
-  }, { passive: true });
+  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
 
   inp.addEventListener('focus', () => {
     // 非觸控裝置（桌面）不移動 bar，避免 removeChild 在 focus 期間觸發 blur 導致無法輸入
     if (!('ontouchstart' in window)) return;
     moveBarToBody(); // touchstart 未觸發時的 fallback
     if (vvSync) return; // 已設定
-    const updatePos = () => {
-      const vv = window.visualViewport;
-      // 用 cachedLayoutH（touchstart 前快照）避免 iOS innerHeight 隨鍵盤縮小導致 kbH=0
-      const vvH    = vv ? vv.height    : window.innerHeight;
-      const vvTop  = vv ? vv.offsetTop : 0;
-      const kbH = Math.max(0, cachedLayoutH - vvTop - vvH);
-      applyFixed(kbH);
-    };
+    const updatePos = () => { applyFixed(); };
     // 三種事件 + 輪詢，確保各版本 Chrome 都能即時更新
     window.visualViewport?.addEventListener('resize', updatePos);
     window.visualViewport?.addEventListener('scroll', updatePos);
