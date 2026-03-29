@@ -2456,17 +2456,23 @@ function renderStickiesWidget(container) {
   };
 
   // touchstart 比 focus 早 → 鍵盤決定彈出前 bar 已在 body
-  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
+  let cachedLayoutH = window.innerHeight;
+  inp.addEventListener('touchstart', () => {
+    cachedLayoutH = window.innerHeight; // 鍵盤彈出前先快照，供 iOS 高度計算使用
+    moveBarToBody();
+  }, { passive: true });
 
   inp.addEventListener('focus', () => {
-    moveBarToBody(); // 桌面 / 無 touch 的 fallback
+    // 非觸控裝置（桌面）不移動 bar，避免 removeChild 在 focus 期間觸發 blur 導致無法輸入
+    if (!('ontouchstart' in window)) return;
+    moveBarToBody(); // touchstart 未觸發時的 fallback
     if (vvSync) return; // 已設定
     const updatePos = () => {
       const vv = window.visualViewport;
-      // 含 offsetTop：Chrome focus 時會 pan visual viewport，offsetTop 不為 0
+      // 用 cachedLayoutH（touchstart 前快照）避免 iOS innerHeight 隨鍵盤縮小導致 kbH=0
       const vvH    = vv ? vv.height    : window.innerHeight;
       const vvTop  = vv ? vv.offsetTop : 0;
-      const kbH = Math.max(0, window.innerHeight - vvTop - vvH);
+      const kbH = Math.max(0, cachedLayoutH - vvTop - vvH);
       applyFixed(kbH);
     };
     // 三種事件 + 輪詢，確保各版本 Chrome 都能即時更新
@@ -2614,6 +2620,10 @@ function startEdit(sticky, textEl, card, container) {
   textEl.replaceWith(inp);
   inp.focus();
   inp.select();
+  // 手機鍵盤彈出後捲動至輸入框，確保不被鍵盤遮住
+  if ('ontouchstart' in window) {
+    setTimeout(() => inp.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 300);
+  }
 
   // 停用 draggable，讓文字可以正常選取
   card.draggable = false;
