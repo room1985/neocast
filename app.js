@@ -88,7 +88,8 @@ let S = {
   scEditing:      null,
   dragSc:         null,
   mobilePages:    [],
-  mobilePageIdx:  0
+  mobilePageIdx:  0,
+  gallery:        []
 };
 
 /* ─────────────────────────────────────
@@ -123,7 +124,8 @@ function lsSaveLocal() {
       yt:         { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry, items: ytItems },
       widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
-      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode }
+      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode },
+      gallery: S.gallery || []
     });
     let json = JSON.stringify(buildPayload());
     while (new Blob([json]).size > MAX_BYTES && ytItems.length > 0) {
@@ -152,7 +154,8 @@ function lsSave() {
       yt:         { channels: S.yt.channels, groups: S.yt.groups, watched: S.yt.watched || [], liked: S.yt.liked || [], oauthToken: S.yt.oauthToken, oauthExpiry: S.yt.oauthExpiry, items: ytItems },
       widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
-      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode }
+      animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode },
+      gallery: S.gallery || []
     });
 
     let json = JSON.stringify(buildPayload());
@@ -196,6 +199,7 @@ function lsLoad() {
     if (d.widgetTitles)  Object.assign(S.widgetTitles, d.widgetTitles);
     if (d.mobilePages)   S.mobilePages = d.mobilePages;
     if (d.animeState)  Object.assign(S.animeState, { ...d.animeState, offset: 0 }); // always start at current season
+    if (d.gallery)     S.gallery = d.gallery;
   } catch(_) {}
 }
 
@@ -5575,7 +5579,8 @@ const MOBILE_WIDGET_TYPES = {
   clock:     { label: '時鐘',   icon: '🕐' },
   stickies:  { label: '便利貼', icon: '📝' },
   anime:     { label: '動畫追蹤', icon: '🎌' },
-  youtube:   { label: 'YouTube 訂閱', icon: '▶️' }
+  youtube:   { label: 'YouTube 訂閱', icon: '▶️' },
+  gallery:   { label: '視覺書籤', icon: '🖼️' }
 };
 
 function buildMobileWidgetContent(widgetType, container) {
@@ -5617,7 +5622,170 @@ function buildMobileWidgetContent(widgetType, container) {
     inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
     container.appendChild(inner);
     renderYoutubeWidget(inner);
+  } else if (widgetType === 'gallery') {
+    const inner = el('div', 'gallery-inner');
+    inner.style.cssText = 'position:relative;flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;';
+    container.appendChild(inner);
+    renderGalleryWidget(inner);
   }
+}
+
+/* ─────────────────────────────────────
+   GALLERY WIDGET — 視覺書籤
+───────────────────────────────────── */
+function renderGalleryWidget(container) {
+  // 清除舊內容，保留 FAB
+  container.querySelectorAll('.gallery-scroll, .gallery-fab').forEach(e => e.remove());
+
+  const scroll = el('div', 'gallery-scroll');
+  scroll.style.cssText = 'flex:1;min-height:0;overflow-y:auto;padding:8px;-webkit-overflow-scrolling:touch;';
+
+  const items = S.gallery || [];
+
+  if (!items.length) {
+    const empty = el('div');
+    empty.style.cssText = 'text-align:center;padding:60px 16px;color:rgba(255,255,255,0.3);font-size:14px;';
+    empty.textContent = '點擊 ＋ 新增視覺書籤';
+    scroll.appendChild(empty);
+  } else {
+    // 雙欄瀑布流
+    const colWrap = el('div');
+    colWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
+    const cols = [el('div'), el('div')];
+    cols.forEach(c => {
+      c.style.cssText = 'flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;';
+      colWrap.appendChild(c);
+    });
+    scroll.appendChild(colWrap);
+
+    items.forEach((item, idx) => {
+      const card = el('div', 'gallery-card');
+      card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);';
+
+      const img = el('img');
+      img.style.cssText = 'width:100%;display:block;border-radius:10px;';
+      img.alt = '';
+      img.loading = 'lazy';
+      // 載入後立即釋放 object URL，瀏覽器已解碼存在記憶體中
+      idbGet(item.imageId).then(blob => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        img.src = url;
+        img.onload = () => URL.revokeObjectURL(url);
+      });
+      card.appendChild(img);
+
+      // 長按 / 點擊
+      let lpTimer = null, lpFired = false, startX = 0, startY = 0;
+      card.addEventListener('touchstart', e => {
+        lpFired = false;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        lpTimer = setTimeout(() => {
+          lpFired = true;
+          navigator.vibrate?.(50);
+          showGalleryCardMenu(item, container);
+        }, 800);
+      }, { passive: true });
+      card.addEventListener('touchmove', e => {
+        if (Math.hypot(e.touches[0].clientX - startX, e.touches[0].clientY - startY) > 10)
+          clearTimeout(lpTimer);
+      }, { passive: true });
+      card.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
+      card.addEventListener('click', () => { if (!lpFired && item.url) window.open(item.url, '_blank'); });
+      card.addEventListener('contextmenu', e => { e.preventDefault(); showGalleryCardMenu(item, container); });
+
+      cols[idx % 2].appendChild(card);
+    });
+  }
+
+  container.appendChild(scroll);
+
+  // FAB 新增按鈕
+  const fab = el('button', 'gallery-fab');
+  fab.textContent = '+';
+  fab.style.cssText = 'position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:var(--accent,#7c6af5);color:#fff;font-size:24px;line-height:1;border:none;cursor:pointer;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;';
+  fab.addEventListener('click', () => openGalleryAddDialog(container));
+  container.appendChild(fab);
+}
+
+function openGalleryAddDialog(container) {
+  const overlay = el('div', 'gallery-overlay');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9900;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
+
+  const box = el('div');
+  box.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px;padding:20px;width:100%;max-width:380px;box-sizing:border-box;';
+  box.innerHTML = `
+    <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">新增視覺書籤</div>
+    <div id="_gal-preview" style="width:100%;min-height:90px;border:1.5px dashed rgba(255,255,255,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;">點擊選擇圖片</div>
+    <input type="file" accept="image/*" id="_gal-file" style="display:none">
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
+    <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
+    <div style="display:flex;gap:10px;">
+      <button id="_gal-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
+      <button id="_gal-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>
+    </div>`;
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+
+  let blob = null;
+  const preview = box.querySelector('#_gal-preview');
+  const fileInp = box.querySelector('#_gal-file');
+
+  preview.addEventListener('click', () => fileInp.click());
+  fileInp.addEventListener('change', () => {
+    const f = fileInp.files[0];
+    if (!f) return;
+    blob = f;
+    const u = URL.createObjectURL(f);
+    preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
+  });
+
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  box.querySelector('#_gal-cancel').addEventListener('click', () => overlay.remove());
+  box.querySelector('#_gal-save').addEventListener('click', async () => {
+    if (!blob) return;
+    const id = uid();
+    const imageId = 'gallery_img_' + id;
+    await idbSet(imageId, blob);
+    if (!S.gallery) S.gallery = [];
+    S.gallery.push({ id, imageId, url: box.querySelector('#_gal-url').value.trim(), addedAt: Date.now() });
+    lsSave();
+    overlay.remove();
+    renderGalleryWidget(container);
+  });
+}
+
+function showGalleryCardMenu(item, container) {
+  const overlay = el('div', 'gallery-overlay');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9900;display:flex;align-items:flex-end;justify-content:center;';
+
+  const sheet = el('div');
+  sheet.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:500px;box-sizing:border-box;';
+  sheet.innerHTML = `
+    <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:12px;">編輯書籤</div>
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結</div>
+    <input type="url" id="_gal-edit-url" value="${esc(item.url||'')}" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:14px;">
+    <button id="_gal-edit-save" style="width:100%;padding:12px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;margin-bottom:10px;">更新連結</button>
+    <button id="_gal-del" style="width:100%;padding:12px;border-radius:8px;background:rgba(200,50,50,0.2);color:#ff7070;border:1px solid rgba(200,50,50,0.35);font-size:14px;cursor:pointer;">刪除此書籤</button>`;
+
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  sheet.querySelector('#_gal-edit-save').addEventListener('click', () => {
+    item.url = sheet.querySelector('#_gal-edit-url').value.trim();
+    lsSave();
+    overlay.remove();
+  });
+  sheet.querySelector('#_gal-del').addEventListener('click', async () => {
+    S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
+    await idbDel(item.imageId);
+    lsSave();
+    overlay.remove();
+    renderGalleryWidget(container);
+  });
 }
 
 function renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn) {
