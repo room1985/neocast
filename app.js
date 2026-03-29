@@ -6065,6 +6065,7 @@ function initMobileLayout() {
           dot.addEventListener('touchend', () => clearTimeout(lpTimer));
           dot.addEventListener('touchmove', () => clearTimeout(lpTimer));
         }
+        dot.addEventListener('click', () => { S.mobilePageIdx = idx; renderPages(); });
         dotsBar.appendChild(dot);
         return; // 跳過後面的 panel.appendChild(panelHead) 和 buildMobileWidgetContent
       }
@@ -6102,6 +6103,7 @@ function initMobileLayout() {
           dot.addEventListener('touchend', () => clearTimeout(lpTimer));
           dot.addEventListener('touchmove', () => clearTimeout(lpTimer));
         }
+        dot.addEventListener('click', () => { S.mobilePageIdx = idx; renderPages(); });
         dotsBar.appendChild(dot);
         return;
       }
@@ -6138,6 +6140,7 @@ function initMobileLayout() {
           dot.addEventListener('touchend', () => clearTimeout(lpTimer));
           dot.addEventListener('touchmove', () => clearTimeout(lpTimer));
         }
+        dot.addEventListener('click', () => { S.mobilePageIdx = idx; renderPages(); });
         dotsBar.appendChild(dot);
         return;
       }
