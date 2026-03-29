@@ -2411,72 +2411,74 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤：縮短 sticky-list 高度讓 bar 自然浮到鍵盤上方
-  let kbOrigListH = null;
-  let kbCleanup   = null;
-  let preKbH      = 0;
+  // 手機鍵盤：touchstart 時將 bar 移至 body + position:fixed，桌面完全不觸發
+  let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
 
-  // vv.height 與 innerHeight 取最小值，兼容各瀏覽器
-  const getVvH = () => Math.min(
-    window.visualViewport ? window.visualViewport.height : window.innerHeight,
-    window.innerHeight
-  );
-
-  // 觸控裝置偵測（不依賴 matchMedia，避免部分瀏覽器不支援）
-  const isMobileTouch = () => navigator.maxTouchPoints > 0 || ('ontouchstart' in window);
-
-  const applyListShrink = (availH) => {
-    const listEl = container.querySelector('.sticky-list');
-    if (!listEl) return;
-    if (kbOrigListH === null) kbOrigListH = listEl.offsetHeight;
-    const containerTop = container.getBoundingClientRect().top;
-    const tagBarH = container.querySelector('.sticky-tag-bar')?.offsetHeight || 0;
-    const barH    = bar.offsetHeight || 53;
-    const maxListH = availH - containerTop - tagBarH - barH;
-    listEl.style.height = Math.max(20, Math.min(kbOrigListH, maxListH)) + 'px';
+  const applyFixed = () => {
+    const vv = window.visualViewport;
+    const vvH = vv ? vv.height : window.innerHeight;
+    const vvTop = vv ? vv.offsetTop : 0;
+    const kbH = Math.max(0, window.innerHeight - vvTop - vvH);
+    bar.style.setProperty('position', 'fixed', 'important');
+    bar.style.setProperty('left', '0', 'important');
+    bar.style.setProperty('right', '0', 'important');
+    bar.style.setProperty('bottom', kbH + 'px', 'important');
+    bar.style.setProperty('z-index', '9900', 'important');
+    bar.style.setProperty('margin', '0', 'important');
+    bar.style.setProperty('border-radius', '0', 'important');
+    bar.style.setProperty('box-sizing', 'border-box', 'important');
+    bar.style.setProperty('background', 'var(--bg-card,#1a1a2e)', 'important');
+    bar.style.setProperty('border-top', '1px solid var(--bd)', 'important');
   };
 
-  // viewport 真的縮小時精確修正（Chrome 等支援 resize 的瀏覽器）
-  // 不呼叫 onKbHide，避免蓋掉 focus 時的估算值
-  const onKbResize = () => {
-    const currentH = getVvH();
-    if (!preKbH || currentH > preKbH * 0.80) return;
-    applyListShrink(currentH);
+  const moveBarToBody = () => {
+    if (barOrigParent) return;
+    barOrigParent = bar.parentNode;
+    barOrigNext = bar.nextSibling;
+    barPlaceholder = document.createElement('div');
+    barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
+    barOrigParent.insertBefore(barPlaceholder, bar);
+    barOrigParent.removeChild(bar);
+    document.body.appendChild(bar);
+    applyFixed();
   };
 
-  const onKbHide = () => {
-    const listEl = container.querySelector('.sticky-list');
-    if (listEl && kbOrigListH !== null) {
-      listEl.style.height = kbOrigListH + 'px';
-      kbOrigListH = null;
+  const restoreBar = () => {
+    if (document.activeElement === inp) return;
+    if (vvSync) { vvSync(); vvSync = null; }
+    if (barOrigParent) {
+      if (bar.parentNode === document.body) document.body.removeChild(bar);
+      barOrigParent.insertBefore(bar, barOrigNext);
+      barPlaceholder?.remove();
+      barOrigParent = null; barOrigNext = null; barPlaceholder = null;
     }
+    bar.style.cssText = '';
   };
+
+  // touchstart 在 focus 之前觸發 → bar 移至 body 時 inp 尚未 focus，不會造成 blur
+  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
 
   inp.addEventListener('focus', () => {
-    preKbH = getVvH();
-    if (kbCleanup) return;
-    // 觸控手機立即以估算值縮短（Lemur 等 overlay 鍵盤瀏覽器不會觸發 resize）
-    if (isMobileTouch()) {
-      applyListShrink(preKbH * 0.58); // 假設鍵盤約佔 42% 螢幕高度
-    }
-    window.visualViewport?.addEventListener('resize', onKbResize);
-    window.addEventListener('resize', onKbResize);
-    const t1 = setTimeout(onKbResize, 150);
-    const t2 = setTimeout(onKbResize, 400);
-    const t3 = setTimeout(onKbResize, 700);
-    kbCleanup = () => {
-      window.visualViewport?.removeEventListener('resize', onKbResize);
-      window.removeEventListener('resize', onKbResize);
-      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
-      kbCleanup = null;
+    // barOrigParent 為 null 代表 touchstart 未觸發（桌面），直接 return
+    if (!barOrigParent) return;
+    if (vvSync) return;
+    const updatePos = () => { applyFixed(); };
+    window.visualViewport?.addEventListener('resize', updatePos);
+    window.visualViewport?.addEventListener('scroll', updatePos);
+    window.addEventListener('resize', updatePos);
+    let n = 0;
+    const poll = setInterval(() => { updatePos(); if (++n >= 40) clearInterval(poll); }, 100);
+    vvSync = () => {
+      window.visualViewport?.removeEventListener('resize', updatePos);
+      window.visualViewport?.removeEventListener('scroll', updatePos);
+      window.removeEventListener('resize', updatePos);
+      clearInterval(poll);
     };
+    updatePos();
   });
 
   inp.addEventListener('blur', () => {
-    setTimeout(() => {
-      if (kbCleanup) kbCleanup();
-      onKbHide();
-    }, 200); // 延遲讓 addBtn / colorGrid 的 click 先執行
+    setTimeout(restoreBar, 200); // 延遲讓 addBtn / colorGrid 的 click 先執行
   });
 
   bar.appendChild(colorGrid);
