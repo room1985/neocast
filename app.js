@@ -2441,22 +2441,27 @@ function renderStickiesWidget(container) {
     bar.style.cssText = '';
   };
 
-  // touchstart 比 focus 早 → 鍵盤出現前 bar 已在 body，不影響鍵盤彈出
-  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
-
-  inp.addEventListener('focus', () => {
-    moveBarToBody(); // 桌面 / 無 touch 的 fallback
-    if (!window.visualViewport) return;
+  const setupVvSync = () => {
+    if (vvSync || !window.visualViewport) return;
+    const baseH = window.innerHeight; // 鍵盤彈出前的高度（interactive-widget 不會改這個）
     vvSync = () => {
-      const kbH = Math.max(0,
-        document.documentElement.clientHeight
-        - window.visualViewport.offsetTop
-        - window.visualViewport.height);
+      const kbH = Math.max(0, baseH - window.visualViewport.height);
       bar.style.bottom = kbH + 'px';
     };
     window.visualViewport.addEventListener('resize', vvSync);
     window.visualViewport.addEventListener('scroll', vvSync);
     vvSync();
+  };
+
+  // touchstart 比 focus 早 → 鍵盤決定彈出前 bar 已在 body、vvSync 已就位
+  inp.addEventListener('touchstart', () => {
+    moveBarToBody();
+    setupVvSync();
+  }, { passive: true });
+
+  inp.addEventListener('focus', () => {
+    moveBarToBody(); // 桌面 / 無 touch 的 fallback
+    setupVvSync();
   });
 
   inp.addEventListener('blur', () => {
