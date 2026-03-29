@@ -2411,81 +2411,52 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤：touchstart（早於 focus）移 bar 到 body，避免 backdrop-filter 破壞 fixed 定位
-  let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
+  // 手機鍵盤：縮短 sticky-list 高度讓 bar 自然浮到鍵盤上方，不需移動 DOM 或 fixed 定位
+  let kbOrigListH = null;
+  let kbCleanup = null;
 
-  const applyFixed = () => {
-    // 直接定位在 visual viewport 底部，不依賴鍵盤高度計算，相容所有行動瀏覽器
-    const vv   = window.visualViewport;
-    const barH = bar.offsetHeight || 53;
-    const topPx = vv ? (vv.offsetTop + vv.height - barH) : (window.innerHeight - barH);
-    bar.style.setProperty('position',      'fixed',                  'important');
-    bar.style.setProperty('top',           topPx + 'px',             'important');
-    bar.style.setProperty('bottom',        'auto',                   'important');
-    bar.style.setProperty('left',          '0',                      'important');
-    bar.style.setProperty('right',         '0',                      'important');
-    bar.style.setProperty('z-index',       '9900',                   'important');
-    bar.style.setProperty('margin',        '0',                      'important');
-    bar.style.setProperty('border-radius', '0',                      'important');
-    bar.style.setProperty('box-sizing',    'border-box',             'important');
-    bar.style.setProperty('background',    'var(--bg-card,#1a1a2e)', 'important');
-    bar.style.setProperty('border-top',    '1px solid var(--bd)',    'important');
+  const onKbResize = () => {
+    const listEl = container.querySelector('.sticky-list');
+    if (!listEl) return;
+    if (kbOrigListH === null) kbOrigListH = listEl.offsetHeight;
+    const vvH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    const containerTop = container.getBoundingClientRect().top;
+    const tagBarH = container.querySelector('.sticky-tag-bar')?.offsetHeight || 0;
+    const barH    = bar.offsetHeight || 53;
+    // 計算 list 最大可用高度，使 bar 底部剛好不超過 visual viewport
+    const maxListH = vvH - containerTop - tagBarH - barH;
+    listEl.style.height = Math.max(0, Math.min(kbOrigListH, maxListH)) + 'px';
   };
 
-  const moveBarToBody = () => {
-    if (barOrigParent) return;
-    barOrigParent = bar.parentNode;
-    barOrigNext   = bar.nextSibling;
-    barPlaceholder = document.createElement('div');
-    barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
-    barOrigParent.insertBefore(barPlaceholder, bar);
-    barOrigParent.removeChild(bar);
-    document.body.appendChild(bar);
-    applyFixed();
-  };
-
-  const restoreBar = () => {
-    if (document.activeElement === inp) return; // 還在 focus，不要還原
-    if (vvSync) {
-      vvSync(); // 內部已包含 removeEventListener + clearInterval
-      vvSync = null;
+  const onKbHide = () => {
+    const listEl = container.querySelector('.sticky-list');
+    if (listEl && kbOrigListH !== null) {
+      listEl.style.height = kbOrigListH + 'px';
+      kbOrigListH = null;
     }
-    if (barOrigParent) {
-      if (bar.parentNode === document.body) document.body.removeChild(bar);
-      barOrigParent.insertBefore(bar, barOrigNext);
-      barPlaceholder?.remove();
-      barOrigParent = null; barOrigNext = null; barPlaceholder = null;
-    }
-    bar.style.cssText = '';
   };
-
-  // touchstart 比 focus 早 → 鍵盤決定彈出前 bar 已在 body
-  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
 
   inp.addEventListener('focus', () => {
-    // 非觸控裝置（桌面）不移動 bar，避免 removeChild 在 focus 期間觸發 blur 導致無法輸入
-    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    if (!isTouch) return;
-    moveBarToBody(); // touchstart 未觸發時的 fallback
-    if (vvSync) return; // 已設定
-    const updatePos = () => { applyFixed(); };
-    // 三種事件 + 輪詢，確保各版本 Chrome 都能即時更新
-    window.visualViewport?.addEventListener('resize', updatePos);
-    window.visualViewport?.addEventListener('scroll', updatePos);
-    window.addEventListener('resize', updatePos);
-    let n = 0;
-    const poll = setInterval(() => { updatePos(); if (++n >= 30) clearInterval(poll); }, 100);
-    vvSync = () => {
-      window.visualViewport?.removeEventListener('resize', updatePos);
-      window.visualViewport?.removeEventListener('scroll', updatePos);
-      window.removeEventListener('resize', updatePos);
-      clearInterval(poll);
+    if (kbCleanup) return; // 已設定
+    window.visualViewport?.addEventListener('resize', onKbResize);
+    window.addEventListener('resize', onKbResize);
+    // 多次延遲確保鍵盤動畫結束後仍能正確定位
+    const t1 = setTimeout(onKbResize, 100);
+    const t2 = setTimeout(onKbResize, 300);
+    const t3 = setTimeout(onKbResize, 600);
+    kbCleanup = () => {
+      window.visualViewport?.removeEventListener('resize', onKbResize);
+      window.removeEventListener('resize', onKbResize);
+      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+      kbCleanup = null;
     };
-    updatePos();
   });
 
   inp.addEventListener('blur', () => {
-    setTimeout(restoreBar, 200); // 延遲讓 addBtn / colorGrid 的 click 先執行
+    setTimeout(() => {
+      if (kbCleanup) { kbCleanup(); }
+      onKbHide();
+    }, 200); // 延遲讓 addBtn / colorGrid 的 click 先執行
   });
 
   bar.appendChild(colorGrid);
