@@ -2459,12 +2459,14 @@ function renderStickiesWidget(container) {
 
       function doModalAdd() {
         const text = modalInp.value.trim();
-        overlay.remove();
         if (!text) return;
         const newTag = (S.activeStickyTag && S.activeStickyTag !== 'all') ? S.activeStickyTag : '';
         S.stickies.unshift({ id: uid(), text, color: modalColor, pinned: false, tag: newTag });
         lsSave();
         renderStickiesWidget(container);
+        // 清空輸入框並重新聚焦，允許連續新增
+        modalInp.value = '';
+        requestAnimationFrame(() => modalInp.focus());
       }
 
       confirmBtn.addEventListener('click', doModalAdd);
@@ -6017,11 +6019,11 @@ function initMobileLayout() {
         inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
         panel.appendChild(panelHead);
         panel.appendChild(inner);
+        swipeArea.appendChild(panel); // 先掛載到 DOM
         renderYoutubeWidget(inner, ytAddBtn, ytRefBtn);
         // 隱藏 renderYoutubeWidget 建立的 mHead（因為已整合到 panelHead）
         const mHead = inner.querySelector('.yt-mobile-head');
         if (mHead) mHead.style.display = 'none';
-        swipeArea.appendChild(panel);
         const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
         dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
         if (idx > 0) {
@@ -6057,8 +6059,8 @@ function initMobileLayout() {
         panel.appendChild(panelHead);
         const inner = el('div', 'mobile-news-inner');
         panel.appendChild(inner);
+        swipeArea.appendChild(panel); // 先掛載到 DOM
         renderMobileNews(inner, newsSettingsBtn, newsLangBtn, newsRefBtn);
-        swipeArea.appendChild(panel);
         const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
         dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
         if (idx > 0) {
@@ -6109,9 +6111,8 @@ function initMobileLayout() {
 
       // Widget content
       panel.appendChild(panelHead);
+      swipeArea.appendChild(panel); // 先掛載到 DOM，確保 container.closest('#mobile-layout') 能正確偵測
       buildMobileWidgetContent(page.widget, panel);
-
-      swipeArea.appendChild(panel);
 
       // Dot
       const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
