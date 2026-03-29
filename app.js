@@ -2421,11 +2421,11 @@ function renderStickiesWidget(container) {
 
       const overlay = document.createElement('div');
       overlay.id = 'sticky-mobile-modal';
-      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:stretch;';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;';
 
-      // 輸入框區塊（固定在頂部，鍵盤不可能蓋到）
+      // 輸入框區塊（置中，鍵盤不可能蓋到）
       const box = document.createElement('div');
-      box.style.cssText = 'background:#1e2030;padding:14px 12px 12px;display:flex;flex-direction:column;gap:10px;';
+      box.style.cssText = 'background:#1e2030;padding:16px 14px;border-radius:12px;display:flex;flex-direction:column;gap:10px;width:90%;max-width:420px;box-sizing:border-box;';
 
       // 顏色選擇列
       let modalColor = 'none';
