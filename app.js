@@ -2449,6 +2449,8 @@ function renderStickiesWidget(container) {
     barOrigParent.removeChild(bar);
     document.body.appendChild(bar);
     applyFixed();
+    // 移動 DOM 後 touchend 找不到原位置，auto-focus 失效 → 手動觸發
+    setTimeout(() => inp.focus(), 50);
   };
 
   const restoreBar = () => {
@@ -2486,7 +2488,7 @@ function renderStickiesWidget(container) {
   });
 
   inp.addEventListener('blur', () => {
-    setTimeout(restoreBar, 200); // 延遲讓 addBtn / colorGrid 的 click 先執行
+    setTimeout(restoreBar, 500); // 延遲讓 addBtn / colorGrid 的 click 先執行，亦緩衝 IME 焦點切換
   });
 
   bar.appendChild(colorGrid);
