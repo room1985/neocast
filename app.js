@@ -2333,6 +2333,7 @@ function renderStickiesWidget(container) {
   // 保留 tagBar，只清掉 list 和 input-bar
   // 記住目前捲動位置，重建後還原（避免勾選/編輯時跳回頂端）
   const prevScrollTop = container.querySelector('.sticky-list')?.scrollTop ?? 0;
+  document.getElementById('sticky-kb-floating')?.remove();
   container.querySelectorAll('.sticky-list, .sticky-input-bar').forEach(e => e.remove());
   // 若還沒有 tagBar（首次建立），補渲染一次
   if (!container.querySelector('.sticky-tag-bar')) container._renderTagBar?.();
@@ -2411,111 +2412,143 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤：原生 focus 先發生（瀏覽器開鍵盤），再於 focus handler 內移動 bar
-  let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
-  let suppressBlur = false; // DOM 搬移瞬間屏蔽 blur，防止 restoreBar 過早執行
-  let isTouchInteraction = false; // touchstart 設旗標，比任何 API 偵測都可靠
-
-  const applyFixed = () => {
-    const vv = window.visualViewport;
-    const vh = window.innerHeight;
-    const vvH = vv ? vv.height : vh;
-    const vvTop = vv ? vv.offsetTop : 0;
-    let kbH = Math.max(0, vh - vvTop - vvH);
-    // Fallback for overlay-keyboard browsers (e.g. Lemur) where viewport doesn't shrink,
-    // or where only toolbar collapse (< 15% of vh) is reported instead of real kb height
-    if (kbH < vh * 0.15) {
-      const isLandscape = window.innerWidth > vh;
-      kbH = isLandscape
-        ? Math.round(vh * 0.60)
-        : Math.round(vh * 0.44);
-    }
-    bar.style.setProperty('position', 'fixed', 'important');
-    bar.style.setProperty('left', '0', 'important');
-    bar.style.setProperty('right', '0', 'important');
-    bar.style.setProperty('bottom', (kbH + 2) + 'px', 'important');
-    bar.style.setProperty('z-index', '9900', 'important');
-    bar.style.setProperty('margin', '0', 'important');
-    bar.style.setProperty('border-radius', '0', 'important');
-    bar.style.setProperty('box-sizing', 'border-box', 'important');
-    bar.style.setProperty('touch-action', 'none', 'important');
-    bar.style.setProperty('background', 'var(--bg-card,#1a1a2e)', 'important');
-    bar.style.setProperty('border-top', '1px solid var(--bd)', 'important');
-  };
-
-  const restoreBar = () => {
-    if (document.activeElement === inp) return;
-    if (vvSync) { vvSync(); vvSync = null; }
-    if (barOrigParent) {
-      if (bar.parentNode === document.body) document.body.removeChild(bar);
-      barOrigParent.insertBefore(bar, barOrigNext);
-      barPlaceholder?.remove();
-      barOrigParent = null; barOrigNext = null; barPlaceholder = null;
-    }
-    bar.style.cssText = '';
-  };
-
-  const moveBarToBody = () => {
-    if (barOrigParent) return;
-    suppressBlur = true; // 屏蔽 DOM 移除觸發的 blur
-    barOrigParent = bar.parentNode;
-    barOrigNext = bar.nextSibling;
-    barPlaceholder = document.createElement('div');
-    barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
-    barOrigParent.insertBefore(barPlaceholder, bar);
-    document.body.appendChild(bar); // 隱式從舊父節點移除（DOM 規範），觸發 blur 但被 suppressBlur 擋住
-    applyFixed();
-    requestAnimationFrame(() => {
-      inp.focus(); // 重新索取焦點以維持鍵盤開啟
-      setTimeout(() => { suppressBlur = false; }, 100); // 第二次 focus 穩定後才解保護
-    });
-  };
-
-  // touchstart：只設旗標，不動 DOM，不破壞原生 focus 鏈
-  // 桌面用滑鼠點擊不觸發 touchstart → isTouchInteraction 永遠 false → 桌面完全不受影響
-  inp.addEventListener('touchstart', () => { isTouchInteraction = true; }, { passive: true });
-
-  inp.addEventListener('focus', () => {
-    // 桌面防護：沒有 touchstart 就跳過（比任何 API 偵測都可靠）
-    if (!isTouchInteraction) return;
-    isTouchInteraction = false; // 重置，避免下次誤觸發
-
-    if (!barOrigParent) {
-      // 第一次 focus：讓瀏覽器先完成原生 focus 流程，再搬移 bar
-      setTimeout(moveBarToBody, 50);
-      return;
-    }
-
-    // 第二次 focus（搬移後重新 focus）：建立位置輪詢
-    if (vvSync) return;
-    const updatePos = () => { applyFixed(); };
-    window.visualViewport?.addEventListener('resize', updatePos);
-    window.visualViewport?.addEventListener('scroll', updatePos);
-    window.addEventListener('resize', updatePos);
-    let n = 0;
-    const poll = setInterval(() => { updatePos(); if (++n >= 40) clearInterval(poll); }, 100);
-    vvSync = () => {
-      window.visualViewport?.removeEventListener('resize', updatePos);
-      window.visualViewport?.removeEventListener('scroll', updatePos);
-      window.removeEventListener('resize', updatePos);
-      clearInterval(poll);
-    };
-    updatePos(); // 立即對齊，不等第一次 poll
-  });
-
-  inp.addEventListener('blur', () => {
-    if (suppressBlur) return; // DOM 搬移瞬間的 blur，忽略
-    setTimeout(restoreBar, 500); // 延遲讓 addBtn / colorGrid 的 click 先執行，亦緩衝 IME 焦點切換
-  });
+  // ── 手機鍵盤處理 ──────────────────────────────────────────────
+  const isMobile = !!container.closest('#mobile-layout');
 
   bar.appendChild(colorGrid);
   bar.appendChild(inp);
   bar.appendChild(addBtn);
-  container.appendChild(bar);
+
+  if (isMobile) {
+    // Mobile：bar 預先放到 body，不在 focus 時搬移 DOM（相容 Firefox / 狐猴瀏覽器）
+    bar.id = 'sticky-kb-floating';
+    bar.style.cssText = 'display:none;position:fixed;left:0;right:0;bottom:0;z-index:9900;margin:0;border-radius:0;box-sizing:border-box;background:var(--bg-card,#1a1a2e);border-top:1px solid var(--bd);';
+    document.body.appendChild(bar);
+
+    // Placeholder 在 container 佔位，讓 ResizeObserver 算出正確的 list 高度
+    const ph = document.createElement('div');
+    ph.className = 'sticky-input-bar'; // ResizeObserver querySelector 可找到
+    ph.style.cssText = 'flex-shrink:0;height:53px;pointer-events:none;visibility:hidden;';
+    if (searchQ || S.stickyLocked) ph.style.display = 'none';
+    container.appendChild(ph);
+    requestAnimationFrame(() => { ph.style.height = (bar.offsetHeight || 53) + 'px'; });
+
+    let vvCleanup = null;
+
+    const showBar = () => {
+      if (searchQ || S.stickyLocked) return;
+      if (bar.style.display !== 'none') return;
+      bar.style.display = '';
+      const updatePos = () => {
+        const vv = window.visualViewport;
+        const kbH = Math.max(0, window.innerHeight - (vv ? vv.height : window.innerHeight));
+        bar.style.bottom = kbH + 'px';
+      };
+      window.visualViewport?.addEventListener('resize', updatePos);
+      window.visualViewport?.addEventListener('scroll', updatePos);
+      window.addEventListener('resize', updatePos);
+      let n = 0;
+      const poll = setInterval(() => { updatePos(); if (++n >= 40) clearInterval(poll); }, 100);
+      vvCleanup = () => {
+        window.visualViewport?.removeEventListener('resize', updatePos);
+        window.visualViewport?.removeEventListener('scroll', updatePos);
+        window.removeEventListener('resize', updatePos);
+        clearInterval(poll);
+      };
+      updatePos();
+    };
+
+    const hideBar = () => {
+      vvCleanup?.(); vvCleanup = null;
+      bar.style.display = 'none';
+      bar.style.bottom = '0';
+    };
+
+    inp.addEventListener('focus', showBar);
+    inp.addEventListener('blur', () => {
+      setTimeout(() => { if (document.activeElement !== inp) hideBar(); }, 300);
+    });
+
+  } else {
+    // Desktop：bar 放在 container，維持原有邏輯
+    container.appendChild(bar);
+
+    let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
+
+    const applyFixed = (bottomPx) => {
+      bar.style.setProperty('position', 'fixed', 'important');
+      bar.style.setProperty('left',     '0',            'important');
+      bar.style.setProperty('right',    '0',            'important');
+      bar.style.setProperty('bottom',   bottomPx + 'px','important');
+      bar.style.setProperty('z-index',  '9900',         'important');
+      bar.style.setProperty('margin',   '0',            'important');
+      bar.style.setProperty('border-radius', '0',       'important');
+      bar.style.setProperty('box-sizing', 'border-box', 'important');
+      bar.style.setProperty('background', 'var(--bg-card,#1a1a2e)', 'important');
+      bar.style.setProperty('border-top', '1px solid var(--bd)',     'important');
+    };
+
+    const moveBarToBody = () => {
+      if (barOrigParent) return;
+      barOrigParent = bar.parentNode;
+      barOrigNext   = bar.nextSibling;
+      barPlaceholder = document.createElement('div');
+      barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
+      barOrigParent.insertBefore(barPlaceholder, bar);
+      barOrigParent.removeChild(bar);
+      document.body.appendChild(bar);
+      applyFixed(0);
+    };
+
+    const restoreBar = () => {
+      if (document.activeElement === inp) return;
+      if (vvSync) { vvSync(); vvSync = null; }
+      if (barOrigParent) {
+        if (bar.parentNode === document.body) document.body.removeChild(bar);
+        barOrigParent.insertBefore(bar, barOrigNext);
+        barPlaceholder?.remove();
+        barOrigParent = null; barOrigNext = null; barPlaceholder = null;
+      }
+      bar.style.cssText = '';
+    };
+
+    inp.addEventListener('touchstart', moveBarToBody, { passive: true });
+
+    inp.addEventListener('focus', () => {
+      moveBarToBody();
+      if (vvSync) return;
+      const updatePos = () => {
+        const vv = window.visualViewport;
+        const vvH   = vv ? vv.height    : window.innerHeight;
+        const vvTop = vv ? vv.offsetTop : 0;
+        applyFixed(Math.max(0, window.innerHeight - vvTop - vvH));
+      };
+      window.visualViewport?.addEventListener('resize', updatePos);
+      window.visualViewport?.addEventListener('scroll', updatePos);
+      window.addEventListener('resize', updatePos);
+      let n = 0;
+      const poll = setInterval(() => { updatePos(); if (++n >= 30) clearInterval(poll); }, 100);
+      vvSync = () => {
+        window.visualViewport?.removeEventListener('resize', updatePos);
+        window.visualViewport?.removeEventListener('scroll', updatePos);
+        window.removeEventListener('resize', updatePos);
+        clearInterval(poll);
+      };
+      updatePos();
+    });
+
+    inp.addEventListener('blur', () => { setTimeout(restoreBar, 200); });
+  }
 
   // JS height — most reliable, bypasses all flex overflow quirks
   requestAnimationFrame(() => {
-    const barH    = (bar.style.display !== 'none') ? (bar.offsetHeight || 53) : 0;
+    let barH;
+    if (isMobile) {
+      const ph = container.querySelector('.sticky-input-bar');
+      barH = (ph && ph.style.display !== 'none') ? (ph.offsetHeight || 53) : 0;
+    } else {
+      barH = (bar.style.display !== 'none') ? (bar.offsetHeight || 53) : 0;
+    }
     const tagBarEl = container.querySelector('.sticky-tag-bar');
     const tagBarH = tagBarEl ? tagBarEl.offsetHeight : 0;
     const containerH = container.offsetHeight;
@@ -2634,10 +2667,6 @@ function startEdit(sticky, textEl, card, container) {
   textEl.replaceWith(inp);
   inp.focus();
   inp.select();
-  // 手機鍵盤彈出後捲動至輸入框，確保不被鍵盤遮住
-  if ('ontouchstart' in window) {
-    setTimeout(() => inp.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), 300);
-  }
 
   // 停用 draggable，讓文字可以正常選取
   card.draggable = false;
