@@ -5660,7 +5660,7 @@ function renderGalleryWidget(container) {
   injectGalleryCSS();
   container.querySelectorAll('.gallery-scroll, .gallery-fab').forEach(e => e.remove());
 
-  // ── panelHead trash button (multi-select batch delete) ──
+  // ── panelHead trash button（建立一次，保留跨渲染）──
   const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
                  || container.parentElement?.querySelector?.('.mobile-panel-head');
   let trashBtn = panelHead?.querySelector('.gallery-trash-btn');
@@ -5672,7 +5672,6 @@ function renderGalleryWidget(container) {
     const expandBtn = panelHead.querySelector('.expand-btn');
     if (expandBtn) panelHead.insertBefore(trashBtn, expandBtn);
     else panelHead.appendChild(trashBtn);
-
     trashBtn.addEventListener('click', async () => {
       if (!_galSelected.size) return;
       const ids = [..._galSelected];
@@ -5698,7 +5697,6 @@ function renderGalleryWidget(container) {
     empty.textContent = '點擊 ＋ 新增視覺書籤';
     scroll.appendChild(empty);
   } else {
-    // 雙欄瀑布流
     const colWrap = el('div');
     colWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
     const cols = [el('div'), el('div')];
@@ -5710,9 +5708,11 @@ function renderGalleryWidget(container) {
 
     items.forEach((item, idx) => {
       const card = el('div', 'gallery-card');
+      card.dataset.galid = item.id;
       const isSel = _galSelected.has(item.id);
       card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);box-shadow:0 0 0 1px rgba(255,255,255,0.08);';
       if (isSel) card.classList.add('gallery-selected');
+      if (_galMultiActive) _galAddSelDot(card, isSel);
 
       idbGet(item.imageId).then(blob => {
         if (!blob) return;
@@ -5734,15 +5734,7 @@ function renderGalleryWidget(container) {
         }
       });
 
-      // 多選指示圓點
-      if (_galMultiActive) {
-        const dot = document.createElement('div');
-        dot.style.cssText = `position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;box-sizing:border-box;pointer-events:none;z-index:2;display:flex;align-items:center;justify-content:center;${isSel ? 'background:#5865f2;border:2px solid #fff;' : 'background:rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.5);'}`;
-        if (isSel) dot.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" width="11" height="11"><polyline points="20 6 9 17 4 12"/></svg>`;
-        card.appendChild(dot);
-      }
-
-      // 長按進入多選 / 點擊切換選取或開詳情
+      // 長按進入多選（震動與 UI 同步，不 re-render）
       let lpTimer = null, lpFired = false, startX = 0, startY = 0;
       card.addEventListener('touchstart', e => {
         lpFired = false;
@@ -5752,9 +5744,7 @@ function renderGalleryWidget(container) {
           lpTimer = setTimeout(() => {
             lpFired = true;
             navigator.vibrate?.(50);
-            _galMultiActive = true;
-            _galSelected.add(item.id);
-            renderGalleryWidget(container);
+            _galEnterMultiSelect(container, item.id);
           }, 800);
         }
       }, { passive: true });
@@ -5763,21 +5753,17 @@ function renderGalleryWidget(container) {
           clearTimeout(lpTimer);
       }, { passive: true });
       card.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
+
+      // 點擊：多選模式就地切換，不 re-render
       card.addEventListener('click', () => {
         if (lpFired) return;
         if (_galMultiActive) {
-          if (_galSelected.has(item.id)) {
-            _galSelected.delete(item.id);
-            if (_galSelected.size === 0) _galMultiActive = false;
-          } else {
-            _galSelected.add(item.id);
-          }
-          renderGalleryWidget(container);
+          _galToggleCardSelect(card, item.id, container);
         } else {
           openGalleryDetail(item, container);
         }
       });
-      card.addEventListener('contextmenu', e => { e.preventDefault(); });
+      card.addEventListener('contextmenu', e => e.preventDefault());
 
       cols[idx % 2].appendChild(card);
     });
@@ -5785,7 +5771,7 @@ function renderGalleryWidget(container) {
 
   container.appendChild(scroll);
 
-  // FAB 新增按鈕（多選模式下隱藏）
+  // FAB（多選模式下隱藏）
   if (!_galMultiActive) {
     const fab = el('button', 'gallery-fab');
     fab.textContent = '+';
@@ -5793,6 +5779,77 @@ function renderGalleryWidget(container) {
     fab.addEventListener('click', () => openGalleryAddDialog(container));
     container.appendChild(fab);
   }
+}
+
+/* ── 多選輔助：圓點 ── */
+function _galAddSelDot(card, selected) {
+  card.querySelector('.gal-sel-dot')?.remove();
+  const dot = document.createElement('div');
+  dot.className = 'gal-sel-dot';
+  dot.style.cssText = `position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;box-sizing:border-box;pointer-events:none;z-index:2;display:flex;align-items:center;justify-content:center;${selected ? 'background:#5865f2;border:2px solid #fff;' : 'background:rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.5);'}`;
+  if (selected) dot.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" width="11" height="11"><polyline points="20 6 9 17 4 12"/></svg>`;
+  card.appendChild(dot);
+}
+
+/* ── 多選輔助：進入多選（就地 DOM，不重新渲染） ── */
+function _galEnterMultiSelect(container, firstItemId) {
+  _galMultiActive = true;
+  _galSelected.add(firstItemId);
+  // 為所有卡片加上圓點
+  container.querySelectorAll('.gallery-card').forEach(card => {
+    _galAddSelDot(card, _galSelected.has(card.dataset.galid));
+    if (_galSelected.has(card.dataset.galid)) card.classList.add('gallery-selected');
+  });
+  // 隱藏 FAB
+  container.querySelector('.gallery-fab')?.remove();
+  // 顯示垃圾桶
+  const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
+                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+  const tb = panelHead?.querySelector('.gallery-trash-btn');
+  if (tb) tb.style.display = '';
+}
+
+/* ── 多選輔助：退出多選（就地 DOM，不重新渲染） ── */
+function _galExitMultiSelect(container) {
+  _galMultiActive = false;
+  _galSelected.clear();
+  container.querySelectorAll('.gal-sel-dot').forEach(d => d.remove());
+  container.querySelectorAll('.gallery-card').forEach(c => c.classList.remove('gallery-selected'));
+  // 恢復 FAB
+  if (!container.querySelector('.gallery-fab')) {
+    const fab = el('button', 'gallery-fab');
+    fab.textContent = '+';
+    fab.style.cssText = 'position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:var(--accent,#7c6af5);color:#fff;font-size:24px;line-height:1;border:none;cursor:pointer;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;';
+    fab.addEventListener('click', () => openGalleryAddDialog(container));
+    container.appendChild(fab);
+  }
+  // 隱藏垃圾桶
+  const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
+                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+  const tb = panelHead?.querySelector('.gallery-trash-btn');
+  if (tb) tb.style.display = 'none';
+}
+
+/* ── 多選輔助：切換單張卡片選取（就地 DOM，不重新渲染） ── */
+function _galToggleCardSelect(card, itemId, container) {
+  if (_galSelected.has(itemId)) {
+    _galSelected.delete(itemId);
+    card.classList.remove('gallery-selected');
+    if (_galSelected.size === 0) {
+      _galExitMultiSelect(container);
+    } else {
+      _galAddSelDot(card, false);
+    }
+  } else {
+    _galSelected.add(itemId);
+    card.classList.add('gallery-selected');
+    _galAddSelDot(card, true);
+  }
+  // 同步垃圾桶可見性
+  const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
+                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+  const tb = panelHead?.querySelector('.gallery-trash-btn');
+  if (tb) tb.style.display = _galMultiActive ? '' : 'none';
 }
 
 function openGalleryAddDialog(container) {
