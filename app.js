@@ -2422,10 +2422,8 @@ function renderStickiesWidget(container) {
     window.innerHeight
   );
 
-  // 純觸控手機/平板（有 touch 且無滑鼠，排除觸控螢幕桌機）
-  const isMobileTouch = () =>
-    (navigator.maxTouchPoints > 0 || ('ontouchstart' in window)) &&
-    window.matchMedia('(pointer: coarse)').matches;
+  // 觸控裝置偵測（不依賴 matchMedia，避免部分瀏覽器不支援）
+  const isMobileTouch = () => navigator.maxTouchPoints > 0 || ('ontouchstart' in window);
 
   const applyListShrink = (availH) => {
     const listEl = container.querySelector('.sticky-list');
