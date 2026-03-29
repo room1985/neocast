@@ -2413,19 +2413,20 @@ function renderStickiesWidget(container) {
   container.appendChild(bar);
 
   if (isMobile) {
-    // 手機版：點擊輸入框 → 彈出全螢幕 Modal（輸入框在畫面頂部，永遠不被鍵盤遮住）
-    inp.addEventListener('focus', () => {
-      inp.blur();
+    // 手機版：點擊 bar → 彈出全螢幕 Modal（輸入框置中偏上，永遠不被鍵盤遮住）
+    // 用 readOnly + click 取代 focus，避免滑動換頁後 focus 不觸發的問題
+    inp.readOnly = true;
+
+    const openStickyModal = () => {
       if (searchQ || S.stickyLocked) return;
       document.getElementById('sticky-mobile-modal')?.remove();
 
       const overlay = document.createElement('div');
       overlay.id = 'sticky-mobile-modal';
-      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:25vh;box-sizing:border-box;';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.4);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:25vh;box-sizing:border-box;';
 
-      // 輸入框區塊（置中，鍵盤不可能蓋到）
       const box = document.createElement('div');
-      box.style.cssText = 'background:#1e2030;padding:16px 14px;border-radius:12px;display:flex;flex-direction:column;gap:10px;width:90%;max-width:420px;box-sizing:border-box;';
+      box.style.cssText = 'background:#2e3352;border:1.5px solid rgba(255,255,255,0.28);padding:16px 14px;border-radius:14px;display:flex;flex-direction:column;gap:10px;width:90%;max-width:420px;box-sizing:border-box;box-shadow:0 8px 32px rgba(0,0,0,0.4);';
 
       // 顏色選擇列
       let modalColor = 'none';
@@ -2450,15 +2451,11 @@ function renderStickiesWidget(container) {
       modalInp.type = 'text';
       modalInp.placeholder = '新增待辦…';
       modalInp.autocomplete = 'off';
-      modalInp.style.cssText = 'flex:1;min-width:0;padding:10px 12px;border-radius:8px;border:none;background:#2a2d3e;color:#fff;font-size:16px;outline:none;';
+      modalInp.style.cssText = 'flex:1;min-width:0;padding:10px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:#3d4166;color:#fff;font-size:16px;outline:none;';
 
       const confirmBtn = document.createElement('button');
       confirmBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M2 12l20-8-8 20-4-8-8-4z"/></svg>`;
       confirmBtn.style.cssText = 'padding:10px 14px;border-radius:8px;border:none;background:#5865f2;color:#fff;cursor:pointer;flex-shrink:0;';
-
-      const cancelBtn = document.createElement('button');
-      cancelBtn.textContent = '取消';
-      cancelBtn.style.cssText = 'padding:10px 14px;border-radius:8px;border:none;background:#444;color:#fff;cursor:pointer;flex-shrink:0;';
 
       function doModalAdd() {
         const text = modalInp.value.trim();
@@ -2471,8 +2468,7 @@ function renderStickiesWidget(container) {
       }
 
       confirmBtn.addEventListener('click', doModalAdd);
-      cancelBtn.addEventListener('click', () => overlay.remove());
-      // 點擊遮罩（box 以外的區域）關閉
+      // 點擊遮罩關閉（不需要取消按鈕）
       overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
       modalInp.addEventListener('keydown', e => {
         if (e.key === 'Enter') doModalAdd();
@@ -2481,14 +2477,15 @@ function renderStickiesWidget(container) {
 
       row.appendChild(modalInp);
       row.appendChild(confirmBtn);
-      row.appendChild(cancelBtn);
       box.appendChild(modalColorGrid);
       box.appendChild(row);
       overlay.appendChild(box);
       document.body.appendChild(overlay);
 
       requestAnimationFrame(() => modalInp.focus());
-    });
+    };
+
+    bar.addEventListener('click', openStickyModal);
   }
 
   // 還原捲動位置（勾選/編輯完後不跳回頂端）
