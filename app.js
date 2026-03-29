@@ -5662,18 +5662,25 @@ function renderGalleryWidget(container) {
       const card = el('div', 'gallery-card');
       card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);';
 
-      const img = el('img');
-      img.style.cssText = 'width:100%;display:block;border-radius:10px;';
-      img.alt = '';
-      img.loading = 'lazy';
-      // 載入後立即釋放 object URL，瀏覽器已解碼存在記憶體中
       idbGet(item.imageId).then(blob => {
         if (!blob) return;
         const url = URL.createObjectURL(blob);
-        img.src = url;
-        img.onload = () => URL.revokeObjectURL(url);
+        if (item.type === 'video') {
+          const vid = el('video');
+          vid.style.cssText = 'width:100%;display:block;border-radius:10px;';
+          vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
+          vid.src = url;
+          vid.oncanplay = () => URL.revokeObjectURL(url);
+          card.appendChild(vid);
+        } else {
+          const img = el('img');
+          img.style.cssText = 'width:100%;display:block;border-radius:10px;';
+          img.alt = ''; img.loading = 'lazy';
+          img.src = url;
+          img.onload = () => URL.revokeObjectURL(url);
+          card.appendChild(img);
+        }
       });
-      card.appendChild(img);
 
       // 長按 / 點擊
       let lpTimer = null, lpFired = false, startX = 0, startY = 0;
@@ -5714,11 +5721,11 @@ function openGalleryAddDialog(container) {
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9900;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
 
   const box = el('div');
-  box.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px;padding:20px;width:100%;max-width:380px;box-sizing:border-box;';
+  box.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px;padding:20px;width:100%;max-width:380px;box-sizing:border-box;max-height:85vh;overflow-y:auto;';
   box.innerHTML = `
     <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">新增視覺書籤</div>
-    <div id="_gal-preview" style="width:100%;min-height:90px;border:1.5px dashed rgba(255,255,255,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;">點擊選擇圖片</div>
-    <input type="file" accept="image/*" id="_gal-file" style="display:none">
+    <div id="_gal-preview" style="width:100%;min-height:90px;border:1.5px dashed rgba(255,255,255,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;">點擊選擇圖片或影片</div>
+    <input type="file" accept="image/*,video/*" id="_gal-file" style="display:none">
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
     <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
     <div style="display:flex;gap:10px;">
@@ -5739,7 +5746,13 @@ function openGalleryAddDialog(container) {
     if (!f) return;
     blob = f;
     const u = URL.createObjectURL(f);
-    preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
+    if (f.type.startsWith('video/')) {
+      preview.innerHTML = `<video src="${u}" style="width:100%;display:block;" muted playsinline></video>`;
+      const v = preview.querySelector('video');
+      v.oncanplay = () => URL.revokeObjectURL(u);
+    } else {
+      preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
+    }
   });
 
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
@@ -5750,7 +5763,7 @@ function openGalleryAddDialog(container) {
     const imageId = 'gallery_img_' + id;
     await idbSet(imageId, blob);
     if (!S.gallery) S.gallery = [];
-    S.gallery.push({ id, imageId, url: box.querySelector('#_gal-url').value.trim(), addedAt: Date.now() });
+    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', url: box.querySelector('#_gal-url').value.trim(), addedAt: Date.now() });
     lsSave();
     overlay.remove();
     renderGalleryWidget(container);
