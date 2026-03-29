@@ -5297,20 +5297,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const goToIdx = (idx) => {
       if (!active) return;
       if (!playlist || idx < 0 || idx >= playlist.length) return;
-      const wasFs = !!document.fullscreenElement;
-      if (wasFs) { window._ytRestoreFs = true; document.exitFullscreen?.().catch(() => {}); }
-      active = false;
+      curIdx = idx;
+      updateNavButtons();
+      if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
+      lastPos = -1; lastPosTime = Date.now();
       clearTimeout(stuckTimer); stuckTimer = null;
-      clearInterval(watchdogInterval); watchdogInterval = null;
       clearTimeout(countdownTimer); clearInterval(countdownInterval);
       nextBar.style.display = 'none';
-      if (onVideoChange && playlist[idx]) onVideoChange(playlist[idx]);
-      try { ytPlayer?.destroy(); } catch(_) {}
-      ytPlayer = null; window._ytActivePlayer = null;
-      backdrop.remove(); modal.remove();
-      setTimeout(() => {
-        showYtPlayer(playlist[idx].videoId, onClose, playlist, idx, onVideoChange);
-      }, 300);
+      try { ytPlayer?.loadVideoById(playlist[curIdx].videoId); } catch(_) {}
     };
 
     const skipToNext = () => {
@@ -5460,14 +5454,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     document.body.appendChild(modal);
     requestAnimationFrame(() => {
       backdrop.classList.add('open'); modal.classList.add('open');
-      if (window._ytRestoreFs) {
-        window._ytRestoreFs = false;
-        setTimeout(() => {
-          modal.requestFullscreen?.().then(() => {
-            screen.orientation?.lock?.('landscape').catch(() => {});
-          }).catch(() => {});
-        }, 400);
-      }
       // modal 已在 DOM，才安全初始化 YT.Player
       setTimeout(startYtApi, 0);
     });
