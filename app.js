@@ -2413,63 +2413,81 @@ function renderStickiesWidget(container) {
   container.appendChild(bar);
 
   if (isMobile) {
-    // origH：頁面載入時的 innerHeight，用來偵測 Firefox 的鍵盤高度
-    // （Firefox 的 innerHeight 會跟著鍵盤縮小，vv.height 也跟著縮，差值≈0）
-    const origH = window.innerHeight;
-    let kbCleanup = null;
-
-    const getKbH = () => {
-      const vv = window.visualViewport;
-      const vh = window.innerHeight;
-      // Chrome：innerHeight 不變，vv.height 縮小
-      let kbH = vv ? Math.max(0, vh - vv.height) : 0;
-      // Firefox：innerHeight 跟著縮小，與 origH 的差值即鍵盤高度
-      if (kbH === 0) kbH = Math.max(0, origH - vh);
-      // 狐猴（Lemur）補丁：Overlay 鍵盤不縮視窗，API 全部回傳 0
-      // 只要算出來不到螢幕高度 15%，就強制用估算值推擠
-      if (kbH < vh * 0.15) {
-        const isLandscape = window.innerWidth > vh;
-        kbH = isLandscape ? vh * 0.60 : vh * 0.44;
-      }
-      return kbH;
-    };
-
-    const applyPush = () => {
-      if (searchQ || S.stickyLocked) return;
-      const kbH = getKbH();
-      bar.style.transform = '';
-      container.style.paddingBottom = kbH > 0 ? kbH + 'px' : '';
-      if (kbH > 0) {
-        requestAnimationFrame(() => {
-          const scrollParent = container.closest('.mobile-page-panel');
-          if (scrollParent) scrollParent.scrollTop = scrollParent.scrollHeight;
-        });
-      }
-    };
-
-    const removePush = () => {
-      if (kbCleanup) { kbCleanup(); kbCleanup = null; }
-      bar.style.transform = '';
-      container.style.paddingBottom = '';
-    };
-
+    // 手機版：點擊輸入框 → 彈出全螢幕 Modal（輸入框在畫面頂部，永遠不被鍵盤遮住）
     inp.addEventListener('focus', () => {
+      inp.blur();
       if (searchQ || S.stickyLocked) return;
-      if (kbCleanup) return;
-      applyPush();
-      window.visualViewport?.addEventListener('resize', applyPush);
-      window.addEventListener('resize', applyPush);
-      let n = 0;
-      const poll = setInterval(() => { applyPush(); if (++n >= 40) clearInterval(poll); }, 100);
-      kbCleanup = () => {
-        window.visualViewport?.removeEventListener('resize', applyPush);
-        window.removeEventListener('resize', applyPush);
-        clearInterval(poll);
-      };
-    });
+      document.getElementById('sticky-mobile-modal')?.remove();
 
-    inp.addEventListener('blur', () => {
-      setTimeout(() => { if (document.activeElement !== inp) removePush(); }, 300);
+      const overlay = document.createElement('div');
+      overlay.id = 'sticky-mobile-modal';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:stretch;';
+
+      // 輸入框區塊（固定在頂部，鍵盤不可能蓋到）
+      const box = document.createElement('div');
+      box.style.cssText = 'background:#1e2030;padding:14px 12px 12px;display:flex;flex-direction:column;gap:10px;';
+
+      // 顏色選擇列
+      let modalColor = 'none';
+      const modalColorGrid = document.createElement('div');
+      modalColorGrid.style.cssText = 'display:flex;gap:8px;';
+      ['blue','green','red','yellow'].forEach(key => {
+        const sq = document.createElement('button');
+        sq.style.cssText = `width:28px;height:28px;border-radius:6px;border:2px solid transparent;background:${STICKY_COLORS[key].bg};cursor:pointer;flex-shrink:0;`;
+        sq.addEventListener('click', () => {
+          modalColor = modalColor === key ? 'none' : key;
+          modalColorGrid.querySelectorAll('button').forEach(b => b.style.borderColor = 'transparent');
+          if (modalColor !== 'none') sq.style.borderColor = '#fff';
+        });
+        modalColorGrid.appendChild(sq);
+      });
+
+      // 輸入列
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+
+      const modalInp = document.createElement('input');
+      modalInp.type = 'text';
+      modalInp.placeholder = '新增待辦…';
+      modalInp.autocomplete = 'off';
+      modalInp.style.cssText = 'flex:1;min-width:0;padding:10px 12px;border-radius:8px;border:none;background:#2a2d3e;color:#fff;font-size:16px;outline:none;';
+
+      const confirmBtn = document.createElement('button');
+      confirmBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M2 12l20-8-8 20-4-8-8-4z"/></svg>`;
+      confirmBtn.style.cssText = 'padding:10px 14px;border-radius:8px;border:none;background:#5865f2;color:#fff;cursor:pointer;flex-shrink:0;';
+
+      const cancelBtn = document.createElement('button');
+      cancelBtn.textContent = '取消';
+      cancelBtn.style.cssText = 'padding:10px 14px;border-radius:8px;border:none;background:#444;color:#fff;cursor:pointer;flex-shrink:0;';
+
+      function doModalAdd() {
+        const text = modalInp.value.trim();
+        overlay.remove();
+        if (!text) return;
+        const newTag = (S.activeStickyTag && S.activeStickyTag !== 'all') ? S.activeStickyTag : '';
+        S.stickies.unshift({ id: uid(), text, color: modalColor, pinned: false, tag: newTag });
+        lsSave();
+        renderStickiesWidget(container);
+      }
+
+      confirmBtn.addEventListener('click', doModalAdd);
+      cancelBtn.addEventListener('click', () => overlay.remove());
+      // 點擊遮罩（box 以外的區域）關閉
+      overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+      modalInp.addEventListener('keydown', e => {
+        if (e.key === 'Enter') doModalAdd();
+        if (e.key === 'Escape') overlay.remove();
+      });
+
+      row.appendChild(modalInp);
+      row.appendChild(confirmBtn);
+      row.appendChild(cancelBtn);
+      box.appendChild(modalColorGrid);
+      box.appendChild(row);
+      overlay.appendChild(box);
+      document.body.appendChild(overlay);
+
+      requestAnimationFrame(() => modalInp.focus());
     });
   }
 
