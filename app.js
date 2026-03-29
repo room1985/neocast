@@ -2421,7 +2421,7 @@ function renderStickiesWidget(container) {
 
       const overlay = document.createElement('div');
       overlay.id = 'sticky-mobile-modal';
-      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:25vh;box-sizing:border-box;';
 
       // 輸入框區塊（置中，鍵盤不可能蓋到）
       const box = document.createElement('div');
