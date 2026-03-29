@@ -2414,6 +2414,20 @@ function renderStickiesWidget(container) {
   // 手機鍵盤：touchstart（早於 focus）移 bar 到 body，避免 backdrop-filter 破壞 fixed 定位
   let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
 
+  const applyFixed = (bottomPx) => {
+    // 用 setProperty + important 確保蓋過任何 CSS 規則
+    bar.style.setProperty('position', 'fixed', 'important');
+    bar.style.setProperty('left',     '0',            'important');
+    bar.style.setProperty('right',    '0',            'important');
+    bar.style.setProperty('bottom',   bottomPx + 'px','important');
+    bar.style.setProperty('z-index',  '9900',         'important');
+    bar.style.setProperty('margin',   '0',            'important');
+    bar.style.setProperty('border-radius', '0',       'important');
+    bar.style.setProperty('box-sizing', 'border-box', 'important');
+    bar.style.setProperty('background', 'var(--bg-card,#1a1a2e)', 'important');
+    bar.style.setProperty('border-top', '1px solid var(--bd)',     'important');
+  };
+
   const moveBarToBody = () => {
     if (barOrigParent) return;
     barOrigParent = bar.parentNode;
@@ -2423,7 +2437,7 @@ function renderStickiesWidget(container) {
     barOrigParent.insertBefore(barPlaceholder, bar);
     barOrigParent.removeChild(bar);
     document.body.appendChild(bar);
-    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9900;background:var(--bg-card,#1a1a2e);border-top:1px solid var(--bd);margin:0;border-radius:0;box-sizing:border-box;';
+    applyFixed(0);
   };
 
   const restoreBar = () => {
@@ -2447,19 +2461,23 @@ function renderStickiesWidget(container) {
     moveBarToBody(); // 桌面 / 無 touch 的 fallback
     if (vvSync) return; // 已設定
     const updatePos = () => {
-      // 用即時 innerHeight：網址列收起時 innerHeight 會變大，要即時抓才正確
-      const vvH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      const kbH = Math.max(0, window.innerHeight - vvH);
-      bar.style.bottom = kbH + 'px';
+      const vv = window.visualViewport;
+      // 含 offsetTop：Chrome focus 時會 pan visual viewport，offsetTop 不為 0
+      const vvH    = vv ? vv.height    : window.innerHeight;
+      const vvTop  = vv ? vv.offsetTop : 0;
+      const kbH = Math.max(0, window.innerHeight - vvTop - vvH);
+      applyFixed(kbH);
     };
-    // 同時用事件 + 輪詢（確保各 Android Chrome 版本都能偵測到鍵盤高度）
+    // 三種事件 + 輪詢，確保各版本 Chrome 都能即時更新
     window.visualViewport?.addEventListener('resize', updatePos);
     window.visualViewport?.addEventListener('scroll', updatePos);
+    window.addEventListener('resize', updatePos);
     let n = 0;
     const poll = setInterval(() => { updatePos(); if (++n >= 30) clearInterval(poll); }, 100);
     vvSync = () => {
       window.visualViewport?.removeEventListener('resize', updatePos);
       window.visualViewport?.removeEventListener('scroll', updatePos);
+      window.removeEventListener('resize', updatePos);
       clearInterval(poll);
     };
     updatePos();
