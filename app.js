@@ -2437,18 +2437,20 @@ function renderStickiesWidget(container) {
     const applyPush = () => {
       if (searchQ || S.stickyLocked) return;
       const kbH = getKbH();
-      // transform 純視覺平移，無視外層裁切，不影響 DOM 排版
-      bar.style.transform = kbH > 0 ? `translateY(-${kbH}px)` : '';
-      // 清單底部留白，確保最後一張便利貼不被浮空的 bar 擋住
-      const listEl = container.querySelector('.sticky-list');
-      if (listEl) listEl.style.paddingBottom = kbH > 0 ? kbH + 'px' : '';
+      bar.style.transform = '';
+      container.style.paddingBottom = kbH > 0 ? kbH + 'px' : '';
+      if (kbH > 0) {
+        requestAnimationFrame(() => {
+          const scrollParent = container.closest('.mobile-page-panel');
+          if (scrollParent) scrollParent.scrollTop = scrollParent.scrollHeight;
+        });
+      }
     };
 
     const removePush = () => {
       if (kbCleanup) { kbCleanup(); kbCleanup = null; }
       bar.style.transform = '';
-      const listEl = container.querySelector('.sticky-list');
-      if (listEl) listEl.style.paddingBottom = '';
+      container.style.paddingBottom = '';
     };
 
     inp.addEventListener('focus', () => {
