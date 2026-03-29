@@ -2411,32 +2411,65 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤出現時，將輸入列固定在鍵盤上方
+  // 手機鍵盤出現時：將 bar 搬到 document.body，用 visualViewport 貼在鍵盤正上方
+  // （position:fixed 在有 backdrop-filter 的祖先裡會失效，搬到 body 才能真正覆蓋全畫面）
+  let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvHandlers = null;
+
+  // 點 bar 內（非 input）時阻止 blur 觸發，讓 click 能正常執行
+  bar.addEventListener('pointerdown', e => { if (e.target !== inp) e.preventDefault(); });
+
   inp.addEventListener('focus', () => {
-    if (!window.visualViewport) return;
-    const reposition = () => {
-      const kbH = window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop;
-      if (kbH > 50) {
-        bar.style.position = 'fixed';
-        bar.style.bottom = kbH + 'px';
-        bar.style.left = '0';
-        bar.style.right = '0';
-        bar.style.zIndex = '8000';
-        bar.style.background = 'var(--bg-card, #1a1a2e)';
-        bar.style.borderTop = '1px solid var(--bd)';
+    if (barOrigParent) return; // 已移出
+    barOrigParent = bar.parentNode;
+    barOrigNext   = bar.nextSibling;
+    // 留一個佔位符保持 layout 高度不跳動
+    barPlaceholder = document.createElement('div');
+    barPlaceholder.style.cssText = `height:${bar.offsetHeight}px;flex-shrink:0;`;
+    barOrigParent.insertBefore(barPlaceholder, bar);
+    barOrigParent.removeChild(bar);
+    document.body.appendChild(bar);
+
+    bar.style.cssText = [
+      'position:fixed', 'left:0', 'right:0', 'bottom:0',
+      'z-index:9900',
+      'background:var(--bg-card,#1a1a2e)',
+      'border-top:1px solid var(--bd)',
+      'margin:0', 'border-radius:0',
+      'box-sizing:border-box'
+    ].join(';');
+
+    const syncPos = () => {
+      if (!window.visualViewport) return;
+      const kbH = Math.max(0,
+        document.documentElement.clientHeight
+        - window.visualViewport.offsetTop
+        - window.visualViewport.height);
+      bar.style.bottom = kbH + 'px';
+    };
+    syncPos();
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', syncPos);
+      window.visualViewport.addEventListener('scroll', syncPos);
+      vvHandlers = syncPos;
+    }
+  });
+
+  inp.addEventListener('blur', () => {
+    // 延遲一點，讓 addBtn click / colorGrid click 先執行
+    setTimeout(() => {
+      if (vvHandlers && window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', vvHandlers);
+        window.visualViewport.removeEventListener('scroll', vvHandlers);
+        vvHandlers = null;
       }
-    };
-    const reset = () => {
+      if (barOrigParent) {
+        document.body.removeChild(bar);
+        barOrigParent.insertBefore(bar, barOrigNext);
+        barPlaceholder?.remove();
+        barOrigParent = null; barOrigNext = null; barPlaceholder = null;
+      }
       bar.style.cssText = '';
-    };
-    window.visualViewport.addEventListener('resize', reposition);
-    window.visualViewport.addEventListener('scroll', reposition);
-    inp.addEventListener('blur', () => {
-      window.visualViewport.removeEventListener('resize', reposition);
-      window.visualViewport.removeEventListener('scroll', reposition);
-      reset();
-    }, { once: true });
-    setTimeout(reposition, 350);
+    }, 200);
   });
 
   bar.appendChild(colorGrid);
