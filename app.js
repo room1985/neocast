@@ -2441,6 +2441,7 @@ function renderStickiesWidget(container) {
   };
 
   const restoreBar = () => {
+    if (document.activeElement === inp) return; // 還在 focus，不要還原
     if (vvSync) {
       vvSync(); // 內部已包含 removeEventListener + clearInterval
       vvSync = null;
