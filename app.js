@@ -5660,7 +5660,7 @@ function renderGalleryWidget(container) {
 
     items.forEach((item, idx) => {
       const card = el('div', 'gallery-card');
-      card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);';
+      card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);box-shadow:0 0 0 1px rgba(255,255,255,0.08);';
 
       idbGet(item.imageId).then(blob => {
         if (!blob) return;
