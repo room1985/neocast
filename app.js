@@ -2427,9 +2427,8 @@ function renderStickiesWidget(container) {
   };
 
   const restoreBar = () => {
-    if (vvSync && window.visualViewport) {
-      window.visualViewport.removeEventListener('resize', vvSync);
-      window.visualViewport.removeEventListener('scroll', vvSync);
+    if (vvSync) {
+      vvSync(); // 內部已包含 removeEventListener + clearInterval
       vvSync = null;
     }
     if (barOrigParent) {
@@ -2441,27 +2440,29 @@ function renderStickiesWidget(container) {
     bar.style.cssText = '';
   };
 
-  const setupVvSync = () => {
-    if (vvSync || !window.visualViewport) return;
-    const baseH = window.innerHeight; // 鍵盤彈出前的高度（interactive-widget 不會改這個）
-    vvSync = () => {
-      const kbH = Math.max(0, baseH - window.visualViewport.height);
-      bar.style.bottom = kbH + 'px';
-    };
-    window.visualViewport.addEventListener('resize', vvSync);
-    window.visualViewport.addEventListener('scroll', vvSync);
-    vvSync();
-  };
-
-  // touchstart 比 focus 早 → 鍵盤決定彈出前 bar 已在 body、vvSync 已就位
-  inp.addEventListener('touchstart', () => {
-    moveBarToBody();
-    setupVvSync();
-  }, { passive: true });
+  // touchstart 比 focus 早 → 鍵盤決定彈出前 bar 已在 body
+  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
 
   inp.addEventListener('focus', () => {
     moveBarToBody(); // 桌面 / 無 touch 的 fallback
-    setupVvSync();
+    if (vvSync) return; // 已設定
+    const origH = window.innerHeight; // 鍵盤出現前的 layout viewport 高度
+    const updatePos = () => {
+      const vvH = window.visualViewport ? window.visualViewport.height : origH;
+      const kbH = Math.max(0, origH - vvH);
+      bar.style.bottom = kbH + 'px';
+    };
+    // 同時用事件 + 輪詢（確保各 Android Chrome 版本都能偵測到鍵盤高度）
+    window.visualViewport?.addEventListener('resize', updatePos);
+    window.visualViewport?.addEventListener('scroll', updatePos);
+    let n = 0;
+    const poll = setInterval(() => { updatePos(); if (++n >= 30) clearInterval(poll); }, 100);
+    vvSync = () => {
+      window.visualViewport?.removeEventListener('resize', updatePos);
+      window.visualViewport?.removeEventListener('scroll', updatePos);
+      clearInterval(poll);
+    };
+    updatePos();
   });
 
   inp.addEventListener('blur', () => {
