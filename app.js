@@ -5633,35 +5633,59 @@ function buildMobileWidgetContent(widgetType, container) {
 /* ─────────────────────────────────────
    GALLERY WIDGET — 視覺書籤
 ───────────────────────────────────── */
+let _galMultiActive = false;
+let _galSelected    = new Set();
+
 function injectGalleryCSS() {
   if (document.getElementById('gallery-style')) return;
   const s = document.createElement('style');
   s.id = 'gallery-style';
   s.textContent = `
-    .gallery-card { transition: transform 0.15s ease, filter 0.15s ease; }
+    .gallery-card { transition: transform 0.15s ease, filter 0.15s ease; position: relative; }
     .gallery-card:active { transform: scale(0.96); filter: brightness(0.82); }
-    .gallery-detail-overlay {
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
+    .gallery-card.gallery-selected { box-shadow: 0 0 0 2px #5865f2 !important; }
+    .gallery-detail-overlay { opacity: 0; transition: opacity 0.25s ease; }
     .gallery-detail-overlay.show { opacity: 1; }
     .gallery-detail-card {
-      opacity: 0;
-      transform: translateY(44px) scale(0.95);
+      opacity: 0; transform: translateY(44px) scale(0.95);
       transition: opacity 0.4s cubic-bezier(0.175,0.885,0.32,1.275),
                   transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
     }
-    .gallery-detail-overlay.show .gallery-detail-card {
-      opacity: 1; transform: translateY(0) scale(1);
-    }
+    .gallery-detail-overlay.show .gallery-detail-card { opacity: 1; transform: translateY(0) scale(1); }
   `;
   document.head.appendChild(s);
 }
 
 function renderGalleryWidget(container) {
   injectGalleryCSS();
-  // 清除舊內容，保留 FAB
   container.querySelectorAll('.gallery-scroll, .gallery-fab').forEach(e => e.remove());
+
+  // ── panelHead trash button (multi-select batch delete) ──
+  const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
+                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+  let trashBtn = panelHead?.querySelector('.gallery-trash-btn');
+  if (panelHead && !trashBtn) {
+    trashBtn = document.createElement('button');
+    trashBtn.className = 'yt-icon-btn gallery-trash-btn';
+    trashBtn.title = '刪除選取';
+    trashBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>`;
+    const expandBtn = panelHead.querySelector('.expand-btn');
+    if (expandBtn) panelHead.insertBefore(trashBtn, expandBtn);
+    else panelHead.appendChild(trashBtn);
+
+    trashBtn.addEventListener('click', async () => {
+      if (!_galSelected.size) return;
+      const ids = [..._galSelected];
+      const toDelete = (S.gallery || []).filter(g => ids.includes(g.id));
+      S.gallery = (S.gallery || []).filter(g => !ids.includes(g.id));
+      _galSelected.clear();
+      _galMultiActive = false;
+      lsSave();
+      await Promise.all(toDelete.map(g => idbDel(g.imageId)));
+      renderGalleryWidget(container);
+    });
+  }
+  if (trashBtn) trashBtn.style.display = _galMultiActive ? '' : 'none';
 
   const scroll = el('div', 'gallery-scroll');
   scroll.style.cssText = 'flex:1;min-height:0;overflow-y:auto;padding:8px;-webkit-overflow-scrolling:touch;';
@@ -5686,7 +5710,9 @@ function renderGalleryWidget(container) {
 
     items.forEach((item, idx) => {
       const card = el('div', 'gallery-card');
+      const isSel = _galSelected.has(item.id);
       card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);box-shadow:0 0 0 1px rgba(255,255,255,0.08);';
+      if (isSel) card.classList.add('gallery-selected');
 
       idbGet(item.imageId).then(blob => {
         if (!blob) return;
@@ -5708,25 +5734,50 @@ function renderGalleryWidget(container) {
         }
       });
 
-      // 長按 / 點擊
+      // 多選指示圓點
+      if (_galMultiActive) {
+        const dot = document.createElement('div');
+        dot.style.cssText = `position:absolute;top:6px;right:6px;width:20px;height:20px;border-radius:50%;box-sizing:border-box;pointer-events:none;z-index:2;display:flex;align-items:center;justify-content:center;${isSel ? 'background:#5865f2;border:2px solid #fff;' : 'background:rgba(0,0,0,0.35);border:2px solid rgba(255,255,255,0.5);'}`;
+        if (isSel) dot.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" width="11" height="11"><polyline points="20 6 9 17 4 12"/></svg>`;
+        card.appendChild(dot);
+      }
+
+      // 長按進入多選 / 點擊切換選取或開詳情
       let lpTimer = null, lpFired = false, startX = 0, startY = 0;
       card.addEventListener('touchstart', e => {
         lpFired = false;
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
-        lpTimer = setTimeout(() => {
-          lpFired = true;
-          navigator.vibrate?.(50);
-          openGalleryEditDialog(item, container);
-        }, 800);
+        if (!_galMultiActive) {
+          lpTimer = setTimeout(() => {
+            lpFired = true;
+            navigator.vibrate?.(50);
+            _galMultiActive = true;
+            _galSelected.add(item.id);
+            renderGalleryWidget(container);
+          }, 800);
+        }
       }, { passive: true });
       card.addEventListener('touchmove', e => {
         if (Math.hypot(e.touches[0].clientX - startX, e.touches[0].clientY - startY) > 10)
           clearTimeout(lpTimer);
       }, { passive: true });
       card.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
-      card.addEventListener('click', () => { if (!lpFired) openGalleryDetail(item, container); });
-      card.addEventListener('contextmenu', e => { e.preventDefault(); openGalleryEditDialog(item, container); });
+      card.addEventListener('click', () => {
+        if (lpFired) return;
+        if (_galMultiActive) {
+          if (_galSelected.has(item.id)) {
+            _galSelected.delete(item.id);
+            if (_galSelected.size === 0) _galMultiActive = false;
+          } else {
+            _galSelected.add(item.id);
+          }
+          renderGalleryWidget(container);
+        } else {
+          openGalleryDetail(item, container);
+        }
+      });
+      card.addEventListener('contextmenu', e => { e.preventDefault(); });
 
       cols[idx % 2].appendChild(card);
     });
@@ -5734,12 +5785,14 @@ function renderGalleryWidget(container) {
 
   container.appendChild(scroll);
 
-  // FAB 新增按鈕
-  const fab = el('button', 'gallery-fab');
-  fab.textContent = '+';
-  fab.style.cssText = 'position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:var(--accent,#7c6af5);color:#fff;font-size:24px;line-height:1;border:none;cursor:pointer;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;';
-  fab.addEventListener('click', () => openGalleryAddDialog(container));
-  container.appendChild(fab);
+  // FAB 新增按鈕（多選模式下隱藏）
+  if (!_galMultiActive) {
+    const fab = el('button', 'gallery-fab');
+    fab.textContent = '+';
+    fab.style.cssText = 'position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:var(--accent,#7c6af5);color:#fff;font-size:24px;line-height:1;border:none;cursor:pointer;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;';
+    fab.addEventListener('click', () => openGalleryAddDialog(container));
+    container.appendChild(fab);
+  }
 }
 
 function openGalleryAddDialog(container) {
@@ -5878,29 +5931,27 @@ function openGalleryDetail(item, container) {
     info.appendChild(d);
   }
 
-  const btnBase = 'padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s,border-color .15s;outline:none;-webkit-tap-highlight-color:transparent;';
+  // 單排按鈕：[✏][前往連結 ↗][×]
   const actions = el('div');
-  actions.style.cssText = 'display:flex;flex-direction:column;gap:8px;margin-top:4px;';
+  actions.style.cssText = 'display:flex;gap:8px;margin-top:4px;align-items:center;';
 
-  if (item.url) {
-    const linkBtn = el('button');
-    linkBtn.style.cssText = btnBase + 'width:100%;background:#5865f2;border:none;color:#fff;';
-    linkBtn.textContent = '前往連結';
-    linkBtn.addEventListener('click', () => window.open(item.url, '_blank'));
-    actions.appendChild(linkBtn);
-  }
-
-  const row2 = el('div');
-  row2.style.cssText = 'display:flex;gap:8px;';
+  const iconBtnBase = 'flex-shrink:0;width:36px;height:36px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;outline:none;-webkit-tap-highlight-color:transparent;transition:background .15s;';
 
   const editBtn = el('button');
-  editBtn.style.cssText = btnBase + 'flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.85);';
-  editBtn.textContent = '編輯';
+  editBtn.style.cssText = iconBtnBase + 'background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.85);';
+  editBtn.title = '編輯';
+  editBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
   editBtn.addEventListener('click', () => { doClose(); openGalleryEditDialog(item, container); });
 
+  const linkBtn = el('button');
+  linkBtn.style.cssText = `flex:1;padding:9px 12px;border-radius:8px;background:#5865f2;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;${item.url ? '' : 'opacity:0.3;pointer-events:none;'}`;
+  linkBtn.textContent = '前往連結 ↗';
+  if (item.url) linkBtn.addEventListener('click', () => window.open(item.url, '_blank'));
+
   const delBtn = el('button');
-  delBtn.style.cssText = btnBase + 'flex:1;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:#f87171;';
-  delBtn.textContent = '刪除';
+  delBtn.style.cssText = iconBtnBase + 'background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:#f87171;';
+  delBtn.title = '刪除';
+  delBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>`;
   delBtn.addEventListener('click', async () => {
     if (!confirm('確定刪除這個書籤？')) return;
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
@@ -5908,9 +5959,9 @@ function openGalleryDetail(item, container) {
     lsSave(); doClose(); renderGalleryWidget(container);
   });
 
-  row2.appendChild(editBtn);
-  row2.appendChild(delBtn);
-  actions.appendChild(row2);
+  actions.appendChild(editBtn);
+  actions.appendChild(linkBtn);
+  actions.appendChild(delBtn);
   info.appendChild(actions);
   card.appendChild(info);
   overlay.appendChild(card);
