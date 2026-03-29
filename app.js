@@ -2411,20 +2411,29 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤：縮短 sticky-list 高度讓 bar 自然浮到鍵盤上方，不需移動 DOM 或 fixed 定位
+  // 手機鍵盤：縮短 sticky-list 高度讓 bar 自然浮到鍵盤上方
+  // 原則：只有 viewport 真的縮小才調整（桌面不觸發），兼容 Chrome/Firefox/Lemur
   let kbOrigListH = null;
-  let kbCleanup = null;
+  let kbCleanup   = null;
+  let preKbH      = 0; // focus 前 viewport 高度快照
+
+  // 取 vv.height 與 innerHeight 兩者最小值，確保 Firefox/Lemur 也能偵測鍵盤
+  const getVvH = () => Math.min(
+    window.visualViewport ? window.visualViewport.height : window.innerHeight,
+    window.innerHeight
+  );
 
   const onKbResize = () => {
+    const currentH = getVvH();
+    // viewport 縮減不到 20% → 沒有鍵盤（桌面或鍵盤未出現），還原並跳出
+    if (!preKbH || currentH > preKbH * 0.80) { onKbHide(); return; }
     const listEl = container.querySelector('.sticky-list');
     if (!listEl) return;
     if (kbOrigListH === null) kbOrigListH = listEl.offsetHeight;
-    const vvH = window.visualViewport ? window.visualViewport.height : window.innerHeight;
     const containerTop = container.getBoundingClientRect().top;
     const tagBarH = container.querySelector('.sticky-tag-bar')?.offsetHeight || 0;
     const barH    = bar.offsetHeight || 53;
-    // 計算 list 最大可用高度，使 bar 底部剛好不超過 visual viewport
-    const maxListH = vvH - containerTop - tagBarH - barH;
+    const maxListH = currentH - containerTop - tagBarH - barH;
     listEl.style.height = Math.max(0, Math.min(kbOrigListH, maxListH)) + 'px';
   };
 
@@ -2437,13 +2446,13 @@ function renderStickiesWidget(container) {
   };
 
   inp.addEventListener('focus', () => {
-    if (kbCleanup) return; // 已設定
+    preKbH = getVvH(); // 鍵盤彈出前先快照高度
+    if (kbCleanup) return;
     window.visualViewport?.addEventListener('resize', onKbResize);
     window.addEventListener('resize', onKbResize);
-    // 多次延遲確保鍵盤動畫結束後仍能正確定位
-    const t1 = setTimeout(onKbResize, 100);
-    const t2 = setTimeout(onKbResize, 300);
-    const t3 = setTimeout(onKbResize, 600);
+    const t1 = setTimeout(onKbResize, 150);
+    const t2 = setTimeout(onKbResize, 400);
+    const t3 = setTimeout(onKbResize, 700);
     kbCleanup = () => {
       window.visualViewport?.removeEventListener('resize', onKbResize);
       window.removeEventListener('resize', onKbResize);
@@ -2454,7 +2463,7 @@ function renderStickiesWidget(container) {
 
   inp.addEventListener('blur', () => {
     setTimeout(() => {
-      if (kbCleanup) { kbCleanup(); }
+      if (kbCleanup) kbCleanup();
       onKbHide();
     }, 200); // 延遲讓 addBtn / colorGrid 的 click 先執行
   });
