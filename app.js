@@ -5266,8 +5266,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     ytContainerEl.style.cssText = 'width:100%;height:100%;';
     playerBox.appendChild(ytContainerEl);
 
-    const ids = playlist?.length ? playlist.map(v => v.videoId) : [videoId];
-
     const showCountdown = () => {
       if (!playlist || curIdx < 0) return;
       const next = playlist[curIdx + 1];
@@ -5292,28 +5290,35 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       }, 1000);
       countdownTimer = setTimeout(() => {
         nextBar.style.display = 'none';
-        try { ytPlayer?.nextVideo(); } catch(_) {}
+        skipToNext();
       }, 3000);
     };
 
-    const skipToNext = () => {
+    const goToIdx = (idx) => {
       if (!active) return;
-      const now = Date.now();
-      if (now - errorSkipAt < 2000) return;
-      errorSkipAt = now;
-      if (!playlist || curIdx >= playlist.length - 1) return;
+      if (!playlist || idx < 0 || idx >= playlist.length) return;
+      active = false;
       clearTimeout(stuckTimer); stuckTimer = null;
       clearInterval(watchdogInterval); watchdogInterval = null;
-      const nextIdx = curIdx + 1;
-      if (onVideoChange && playlist[nextIdx]) onVideoChange(playlist[nextIdx]);
+      clearTimeout(countdownTimer); clearInterval(countdownInterval);
+      nextBar.style.display = 'none';
+      if (onVideoChange && playlist[idx]) onVideoChange(playlist[idx]);
       try { ytPlayer?.destroy(); } catch(_) {}
       ytPlayer = null; window._ytActivePlayer = null;
       backdrop.remove(); modal.remove();
       setTimeout(() => {
-        if (!active) return;
-        showYtPlayer(playlist[nextIdx].videoId, onClose, playlist, nextIdx, onVideoChange);
+        showYtPlayer(playlist[idx].videoId, onClose, playlist, idx, onVideoChange);
       }, 300);
     };
+
+    const skipToNext = () => {
+      const now = Date.now();
+      if (now - errorSkipAt < 500) return;
+      errorSkipAt = now;
+      goToIdx(curIdx + 1);
+    };
+
+    const skipToPrev = () => goToIdx(curIdx - 1);
 
     const initYtPlayer = () => {
       ytPlayer = window._ytActivePlayer = new YT.Player(ytContainerEl.id, {
@@ -5322,7 +5327,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
         playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
         events: {
           onReady: (e) => {
-            e.target.loadPlaylist({ playlist: ids, index: curIdx });
+            e.target.loadVideoById(videoId);
             setTimeout(() => {
               try { if (e.target.getPlayerState() !== 1) e.target.playVideo(); } catch(_) {}
               playerInitialized = true;
@@ -5349,12 +5354,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
           onStateChange: (e) => {
             if (e.data === 1) { // playing
               clearTimeout(stuckTimer); stuckTimer = null;
-              const ytIdx = e.target.getPlaylistIndex();
-              if (ytIdx >= 0 && ytIdx !== curIdx) {
-                curIdx = ytIdx;
-                updateNavButtons();
-                if (onVideoChange && playlist?.[curIdx]) onVideoChange(playlist[curIdx]);
-              }
               nextBar.style.display = 'none';
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
@@ -5400,9 +5399,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       prevBtn.disabled = curIdx <= 0;
       prevBtn.addEventListener('click', e => {
         e.stopPropagation();
-        nextBar.style.display = 'none';
-        clearTimeout(countdownTimer); clearInterval(countdownInterval);
-        ytPlayer?.previousVideo();
+        skipToPrev();
       });
 
       nextBtn = el('button', 'yt-player-nav-btn', '▶');
@@ -5410,9 +5407,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       nextBtn.disabled = curIdx >= playlist.length - 1;
       nextBtn.addEventListener('click', e => {
         e.stopPropagation();
-        nextBar.style.display = 'none';
-        clearTimeout(countdownTimer); clearInterval(countdownInterval);
-        ytPlayer?.nextVideo();
+        skipToNext();
       });
 
       bar.appendChild(prevBtn);
