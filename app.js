@@ -2411,65 +2411,56 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
-  // 手機鍵盤出現時：將 bar 搬到 document.body，用 visualViewport 貼在鍵盤正上方
-  // （position:fixed 在有 backdrop-filter 的祖先裡會失效，搬到 body 才能真正覆蓋全畫面）
-  let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvHandlers = null;
+  // 手機鍵盤：touchstart（早於 focus）移 bar 到 body，避免 backdrop-filter 破壞 fixed 定位
+  let barOrigParent = null, barOrigNext = null, barPlaceholder = null, vvSync = null;
 
-  // 點 bar 內（非 input）時阻止 blur 觸發，讓 click 能正常執行
-  bar.addEventListener('pointerdown', e => { if (e.target !== inp) e.preventDefault(); });
-
-  inp.addEventListener('focus', () => {
-    if (barOrigParent) return; // 已移出
+  const moveBarToBody = () => {
+    if (barOrigParent) return;
     barOrigParent = bar.parentNode;
     barOrigNext   = bar.nextSibling;
-    // 留一個佔位符保持 layout 高度不跳動
     barPlaceholder = document.createElement('div');
-    barPlaceholder.style.cssText = `height:${bar.offsetHeight}px;flex-shrink:0;`;
+    barPlaceholder.style.cssText = 'height:' + bar.offsetHeight + 'px;flex-shrink:0;';
     barOrigParent.insertBefore(barPlaceholder, bar);
     barOrigParent.removeChild(bar);
     document.body.appendChild(bar);
+    bar.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:9900;background:var(--bg-card,#1a1a2e);border-top:1px solid var(--bd);margin:0;border-radius:0;box-sizing:border-box;';
+  };
 
-    bar.style.cssText = [
-      'position:fixed', 'left:0', 'right:0', 'bottom:0',
-      'z-index:9900',
-      'background:var(--bg-card,#1a1a2e)',
-      'border-top:1px solid var(--bd)',
-      'margin:0', 'border-radius:0',
-      'box-sizing:border-box'
-    ].join(';');
+  const restoreBar = () => {
+    if (vvSync && window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', vvSync);
+      window.visualViewport.removeEventListener('scroll', vvSync);
+      vvSync = null;
+    }
+    if (barOrigParent) {
+      if (bar.parentNode === document.body) document.body.removeChild(bar);
+      barOrigParent.insertBefore(bar, barOrigNext);
+      barPlaceholder?.remove();
+      barOrigParent = null; barOrigNext = null; barPlaceholder = null;
+    }
+    bar.style.cssText = '';
+  };
 
-    const syncPos = () => {
-      if (!window.visualViewport) return;
+  // touchstart 比 focus 早 → 鍵盤出現前 bar 已在 body，不影響鍵盤彈出
+  inp.addEventListener('touchstart', moveBarToBody, { passive: true });
+
+  inp.addEventListener('focus', () => {
+    moveBarToBody(); // 桌面 / 無 touch 的 fallback
+    if (!window.visualViewport) return;
+    vvSync = () => {
       const kbH = Math.max(0,
         document.documentElement.clientHeight
         - window.visualViewport.offsetTop
         - window.visualViewport.height);
       bar.style.bottom = kbH + 'px';
     };
-    syncPos();
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', syncPos);
-      window.visualViewport.addEventListener('scroll', syncPos);
-      vvHandlers = syncPos;
-    }
+    window.visualViewport.addEventListener('resize', vvSync);
+    window.visualViewport.addEventListener('scroll', vvSync);
+    vvSync();
   });
 
   inp.addEventListener('blur', () => {
-    // 延遲一點，讓 addBtn click / colorGrid click 先執行
-    setTimeout(() => {
-      if (vvHandlers && window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', vvHandlers);
-        window.visualViewport.removeEventListener('scroll', vvHandlers);
-        vvHandlers = null;
-      }
-      if (barOrigParent) {
-        document.body.removeChild(bar);
-        barOrigParent.insertBefore(bar, barOrigNext);
-        barPlaceholder?.remove();
-        barOrigParent = null; barOrigNext = null; barPlaceholder = null;
-      }
-      bar.style.cssText = '';
-    }, 200);
+    setTimeout(restoreBar, 200); // 延遲讓 addBtn / colorGrid 的 click 先執行
   });
 
   bar.appendChild(colorGrid);
