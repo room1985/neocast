@@ -5297,6 +5297,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     const goToIdx = (idx) => {
       if (!active) return;
       if (!playlist || idx < 0 || idx >= playlist.length) return;
+      const wasFs = !!document.fullscreenElement;
+      if (wasFs) { window._ytRestoreFs = true; document.exitFullscreen?.().catch(() => {}); }
       active = false;
       clearTimeout(stuckTimer); stuckTimer = null;
       clearInterval(watchdogInterval); watchdogInterval = null;
@@ -5443,8 +5445,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     // 鍵盤左右鍵
     if (playlist?.length > 1) {
       keyListener = (e) => {
-        if (e.key === 'ArrowLeft')  { e.preventDefault(); nextBar.style.display='none'; clearTimeout(countdownTimer); clearInterval(countdownInterval); ytPlayer?.previousVideo(); }
-        if (e.key === 'ArrowRight') { e.preventDefault(); nextBar.style.display='none'; clearTimeout(countdownTimer); clearInterval(countdownInterval); ytPlayer?.nextVideo(); }
+        if (e.key === 'ArrowLeft')  { e.preventDefault(); skipToPrev(); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); skipToNext(); }
       };
       window.addEventListener('keydown', keyListener);
     }
@@ -5458,6 +5460,14 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
     document.body.appendChild(modal);
     requestAnimationFrame(() => {
       backdrop.classList.add('open'); modal.classList.add('open');
+      if (window._ytRestoreFs) {
+        window._ytRestoreFs = false;
+        setTimeout(() => {
+          modal.requestFullscreen?.().then(() => {
+            screen.orientation?.lock?.('landscape').catch(() => {});
+          }).catch(() => {});
+        }, 400);
+      }
       // modal 已在 DOM，才安全初始化 YT.Player
       setTimeout(startYtApi, 0);
     });
