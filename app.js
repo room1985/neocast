@@ -2412,29 +2412,38 @@ function renderStickiesWidget(container) {
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
   // 手機鍵盤：縮短 sticky-list 高度讓 bar 自然浮到鍵盤上方
-  // 原則：只有 viewport 真的縮小才調整（桌面不觸發），兼容 Chrome/Firefox/Lemur
   let kbOrigListH = null;
   let kbCleanup   = null;
-  let preKbH      = 0; // focus 前 viewport 高度快照
+  let preKbH      = 0;
 
-  // 取 vv.height 與 innerHeight 兩者最小值，確保 Firefox/Lemur 也能偵測鍵盤
+  // vv.height 與 innerHeight 取最小值，兼容各瀏覽器
   const getVvH = () => Math.min(
     window.visualViewport ? window.visualViewport.height : window.innerHeight,
     window.innerHeight
   );
 
-  const onKbResize = () => {
-    const currentH = getVvH();
-    // viewport 縮減不到 20% → 沒有鍵盤（桌面或鍵盤未出現），還原並跳出
-    if (!preKbH || currentH > preKbH * 0.80) { onKbHide(); return; }
+  // 純觸控手機/平板（有 touch 且無滑鼠，排除觸控螢幕桌機）
+  const isMobileTouch = () =>
+    (navigator.maxTouchPoints > 0 || ('ontouchstart' in window)) &&
+    window.matchMedia('(pointer: coarse)').matches;
+
+  const applyListShrink = (availH) => {
     const listEl = container.querySelector('.sticky-list');
     if (!listEl) return;
     if (kbOrigListH === null) kbOrigListH = listEl.offsetHeight;
     const containerTop = container.getBoundingClientRect().top;
     const tagBarH = container.querySelector('.sticky-tag-bar')?.offsetHeight || 0;
     const barH    = bar.offsetHeight || 53;
-    const maxListH = currentH - containerTop - tagBarH - barH;
-    listEl.style.height = Math.max(0, Math.min(kbOrigListH, maxListH)) + 'px';
+    const maxListH = availH - containerTop - tagBarH - barH;
+    listEl.style.height = Math.max(20, Math.min(kbOrigListH, maxListH)) + 'px';
+  };
+
+  // viewport 真的縮小時精確修正（Chrome 等支援 resize 的瀏覽器）
+  // 不呼叫 onKbHide，避免蓋掉 focus 時的估算值
+  const onKbResize = () => {
+    const currentH = getVvH();
+    if (!preKbH || currentH > preKbH * 0.80) return;
+    applyListShrink(currentH);
   };
 
   const onKbHide = () => {
@@ -2446,8 +2455,12 @@ function renderStickiesWidget(container) {
   };
 
   inp.addEventListener('focus', () => {
-    preKbH = getVvH(); // 鍵盤彈出前先快照高度
+    preKbH = getVvH();
     if (kbCleanup) return;
+    // 觸控手機立即以估算值縮短（Lemur 等 overlay 鍵盤瀏覽器不會觸發 resize）
+    if (isMobileTouch()) {
+      applyListShrink(preKbH * 0.58); // 假設鍵盤約佔 42% 螢幕高度
+    }
     window.visualViewport?.addEventListener('resize', onKbResize);
     window.addEventListener('resize', onKbResize);
     const t1 = setTimeout(onKbResize, 150);
