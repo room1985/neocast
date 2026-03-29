@@ -2411,6 +2411,19 @@ function renderStickiesWidget(container) {
   addBtn.addEventListener('click', doAdd);
   inp.addEventListener('keydown', e => { if (e.key === 'Enter') doAdd(); });
 
+  // 手機鍵盤出現時，將輸入列捲動到可見區域
+  inp.addEventListener('focus', () => {
+    const scrollToInp = () => inp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setTimeout(scrollToInp, 350);
+    if (window.visualViewport) {
+      const vvHandler = () => scrollToInp();
+      window.visualViewport.addEventListener('resize', vvHandler);
+      inp.addEventListener('blur', () => {
+        window.visualViewport.removeEventListener('resize', vvHandler);
+      }, { once: true });
+    }
+  });
+
   bar.appendChild(colorGrid);
   bar.appendChild(inp);
   bar.appendChild(addBtn);
