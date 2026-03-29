@@ -5878,30 +5878,39 @@ function openGalleryDetail(item, container) {
     info.appendChild(d);
   }
 
+  const btnBase = 'padding:10px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s,border-color .15s;outline:none;-webkit-tap-highlight-color:transparent;';
   const actions = el('div');
-  actions.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  actions.style.cssText = 'display:flex;flex-direction:column;gap:8px;margin-top:4px;';
+
   if (item.url) {
     const linkBtn = el('button');
-    linkBtn.style.cssText = 'flex:1;padding:12px;border-radius:10px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;';
-    linkBtn.textContent = '🔗 前往連結';
+    linkBtn.style.cssText = btnBase + 'width:100%;background:#5865f2;border:none;color:#fff;';
+    linkBtn.textContent = '前往連結';
     linkBtn.addEventListener('click', () => window.open(item.url, '_blank'));
     actions.appendChild(linkBtn);
   }
+
+  const row2 = el('div');
+  row2.style.cssText = 'display:flex;gap:8px;';
+
   const editBtn = el('button');
-  editBtn.style.cssText = 'padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:15px;cursor:pointer;';
-  editBtn.textContent = '✏️';
+  editBtn.style.cssText = btnBase + 'flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.85);';
+  editBtn.textContent = '編輯';
   editBtn.addEventListener('click', () => { doClose(); openGalleryEditDialog(item, container); });
+
   const delBtn = el('button');
-  delBtn.style.cssText = 'padding:12px 14px;border-radius:10px;background:rgba(200,50,50,0.15);color:#ff7070;border:none;font-size:15px;cursor:pointer;';
-  delBtn.textContent = '🗑️';
+  delBtn.style.cssText = btnBase + 'flex:1;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:#f87171;';
+  delBtn.textContent = '刪除';
   delBtn.addEventListener('click', async () => {
     if (!confirm('確定刪除這個書籤？')) return;
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
     await idbDel(item.imageId);
     lsSave(); doClose(); renderGalleryWidget(container);
   });
-  actions.appendChild(editBtn);
-  actions.appendChild(delBtn);
+
+  row2.appendChild(editBtn);
+  row2.appendChild(delBtn);
+  actions.appendChild(row2);
   info.appendChild(actions);
   card.appendChild(info);
   overlay.appendChild(card);
