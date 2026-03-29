@@ -2417,15 +2417,17 @@ function renderStickiesWidget(container) {
 
   const applyFixed = () => {
     const vv = window.visualViewport;
-    const vvH = vv ? vv.height : window.innerHeight;
+    const vh = window.innerHeight;
+    const vvH = vv ? vv.height : vh;
     const vvTop = vv ? vv.offsetTop : 0;
-    let kbH = Math.max(0, window.innerHeight - vvTop - vvH);
-    // Fallback for overlay-keyboard browsers (e.g. Lemur) where viewport doesn't shrink
-    if (kbH === 0) {
-      const isLandscape = window.innerWidth > window.innerHeight;
+    let kbH = Math.max(0, vh - vvTop - vvH);
+    // Fallback for overlay-keyboard browsers (e.g. Lemur) where viewport doesn't shrink,
+    // or where only toolbar collapse (< 15% of vh) is reported instead of real kb height
+    if (kbH < vh * 0.15) {
+      const isLandscape = window.innerWidth > vh;
       kbH = isLandscape
-        ? Math.round(window.innerHeight * 0.60)
-        : Math.round(window.innerHeight * 0.44);
+        ? Math.round(vh * 0.60)
+        : Math.round(vh * 0.44);
     }
     bar.style.setProperty('position', 'fixed', 'important');
     bar.style.setProperty('left', '0', 'important');
@@ -2451,11 +2453,14 @@ function renderStickiesWidget(container) {
     barOrigParent.removeChild(bar);
     document.body.appendChild(bar);
     applyFixed();
-    // 同步呼叫 focus（仍在 touchstart gesture context 內）→ Lemur 才會開鍵盤
-    inp.focus();
-    // 400ms 後解除 movingBar，讓正常的 blur → restoreBar 恢復運作
-    setTimeout(() => { movingBar = false; }, 400);
+    // Safety: if focus never fires (rare), unlock after 1s
+    setTimeout(() => { movingBar = false; }, 1000);
   };
+
+  // touchend 才是瀏覽器觸控焦點的正確時機（touchstart 太早，Lemur 會忽略 focus 請求）
+  inp.addEventListener('touchend', () => {
+    if (barOrigParent && document.activeElement !== inp) inp.focus();
+  }, { passive: true });
 
   const restoreBar = () => {
     if (document.activeElement === inp) return;
@@ -2473,6 +2478,7 @@ function renderStickiesWidget(container) {
   inp.addEventListener('touchstart', moveBarToBody, { passive: true });
 
   inp.addEventListener('focus', () => {
+    movingBar = false; // 真正取得焦點後才解除 blur 保護（不用計時器）
     // barOrigParent 為 null 代表 touchstart 未觸發（桌面），直接 return
     if (!barOrigParent) return;
     if (vvSync) return;
