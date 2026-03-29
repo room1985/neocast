@@ -2464,7 +2464,8 @@ function renderStickiesWidget(container) {
 
   inp.addEventListener('focus', () => {
     // 非觸控裝置（桌面）不移動 bar，避免 removeChild 在 focus 期間觸發 blur 導致無法輸入
-    if (!('ontouchstart' in window)) return;
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    if (!isTouch) return;
     moveBarToBody(); // touchstart 未觸發時的 fallback
     if (vvSync) return; // 已設定
     const updatePos = () => { applyFixed(); };
