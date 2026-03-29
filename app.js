@@ -2418,15 +2418,23 @@ function renderStickiesWidget(container) {
     const vv = window.visualViewport;
     const vvH = vv ? vv.height : window.innerHeight;
     const vvTop = vv ? vv.offsetTop : 0;
-    const kbH = Math.max(0, window.innerHeight - vvTop - vvH);
+    let kbH = Math.max(0, window.innerHeight - vvTop - vvH);
+    // Fallback for overlay-keyboard browsers (e.g. Lemur) where viewport doesn't shrink
+    if (kbH === 0) {
+      const isLandscape = window.innerWidth > window.innerHeight;
+      kbH = isLandscape
+        ? Math.round(window.innerHeight * 0.60)
+        : Math.round(window.innerHeight * 0.44);
+    }
     bar.style.setProperty('position', 'fixed', 'important');
     bar.style.setProperty('left', '0', 'important');
     bar.style.setProperty('right', '0', 'important');
-    bar.style.setProperty('bottom', kbH + 'px', 'important');
+    bar.style.setProperty('bottom', (kbH + 2) + 'px', 'important');
     bar.style.setProperty('z-index', '9900', 'important');
     bar.style.setProperty('margin', '0', 'important');
     bar.style.setProperty('border-radius', '0', 'important');
     bar.style.setProperty('box-sizing', 'border-box', 'important');
+    bar.style.setProperty('touch-action', 'none', 'important');
     bar.style.setProperty('background', 'var(--bg-card,#1a1a2e)', 'important');
     bar.style.setProperty('border-top', '1px solid var(--bd)', 'important');
   };
