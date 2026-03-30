@@ -6346,28 +6346,6 @@ function openGalleryAddDialog(container, prefill = null) {
     if (fillTitle) box.querySelector('#_gal-title').value = fillTitle;
     if (fillUrl)   box.querySelector('#_gal-url').value   = fillUrl;
 
-    // YT 連結：非同步抓頻道名稱填入描述欄
-    if (fillUrl && !prefill.blob) {
-      const ytId = extractYouTubeId(fillUrl);
-      if (ytId) {
-        const descEl = box.querySelector('#_gal-desc');
-        const apiKey = S.cfg.ytApiKey?.trim();
-        const fillChannel = name => { if (name) descEl.value = name; };
-        if (apiKey) {
-          fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ytId}&key=${apiKey}`)
-            .then(r => r.json())
-            .then(data => fillChannel(data.items?.[0]?.snippet?.channelTitle))
-            .catch(() =>
-              fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(fillUrl)}&format=json`)
-                .then(r => r.json()).then(d => fillChannel(d.author_name)).catch(() => {})
-            );
-        } else {
-          fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(fillUrl)}&format=json`)
-            .then(r => r.json()).then(d => fillChannel(d.author_name)).catch(() => {});
-        }
-      }
-    }
-
     if (prefill.blob) {
       blob = prefill.blob;
       const u = URL.createObjectURL(blob);
@@ -6379,40 +6357,8 @@ function openGalleryAddDialog(container, prefill = null) {
         preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
       }
     } else if (fillUrl) {
-      const ytId = extractYouTubeId(fillUrl);
-      if (ytId) {
-        // YouTube 縮圖
-        preview.innerHTML = `
-          <div style="position:relative;width:100%;">
-            <img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" style="width:100%;display:block;border-radius:6px;" loading="lazy">
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
-              <svg viewBox="0 0 68 48" width="56" height="40" style="opacity:0.9"><rect rx="10" ry="10" width="68" height="48" fill="#f00"/><polygon points="28,14 28,34 48,24" fill="#fff"/></svg>
-            </div>
-          </div>`;
-      } else {
-        // 其他連結 → 先顯示載入中，Worker 抓 OG metadata
-        preview.innerHTML = `<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;">讀取中…</div>`;
-        fetchLinkMeta(fillUrl).then(meta => {
-          if (!meta) {
-            preview.innerHTML = `<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">🔗 連結書籤<br><span style="font-size:11px;word-break:break-all;opacity:0.6;">${esc(fillUrl)}</span></div>`;
-            return;
-          }
-          _ogMeta = meta;
-          // 填入標題（若空白）
-          const titleEl = box.querySelector('#_gal-title');
-          if (meta.title && !titleEl.value) titleEl.value = meta.title;
-          // 填入描述（若空白）
-          const descEl = box.querySelector('#_gal-desc');
-          if (meta.description && !descEl.value) descEl.value = meta.description.slice(0, 150);
-          // 預覽圖
-          if (meta.image) {
-            const proxied = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(meta.image)}`;
-            preview.innerHTML = `<img src="${esc(meta.image)}" style="width:100%;display:block;border-radius:6px;" loading="lazy" onerror="this.src='${esc(proxied)}';this.onerror=null;">`;
-          } else {
-            preview.innerHTML = `<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">🔗 ${esc(meta.title || fillUrl)}</div>`;
-          }
-        });
-      }
+      // 統一走 autoFetchOg（在 prefill 填完後呼叫）
+      setTimeout(() => autoFetchOg(fillUrl), 0);
     } else {
       preview.textContent = '（無附件）點擊可選擇圖片或影片';
     }
@@ -6432,6 +6378,76 @@ function openGalleryAddDialog(container, prefill = null) {
       preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
     }
   });
+
+  // URL 欄貼上或輸入完畢 → 自動讀取 OG metadata
+  const urlInp = box.querySelector('#_gal-url');
+
+  async function autoFetchOg(inputUrl) {
+    const trimmed = inputUrl.trim();
+    if (!trimmed || blob) return; // 已有附件時不觸發
+    if (!/^https?:\/\//i.test(trimmed)) return;
+
+    // YouTube 直接用縮圖，不需打 Worker
+    const ytId = extractYouTubeId(trimmed);
+    if (ytId) {
+      const thumbUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      _ogMeta = { image: thumbUrl, title: '', description: '' };
+      preview.innerHTML = `
+        <div style="position:relative;width:100%;">
+          <img src="${thumbUrl}" style="width:100%;display:block;border-radius:6px;">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+            <svg viewBox="0 0 68 48" width="56" height="40" style="opacity:0.9"><rect rx="10" ry="10" width="68" height="48" fill="#f00"/><polygon points="28,14 28,34 48,24" fill="#fff"/></svg>
+          </div>
+        </div>`;
+      // 抓頻道名填入描述
+      const apiKey = S.cfg.ytApiKey?.trim();
+      const descEl = box.querySelector('#_gal-desc');
+      const fillChannel = name => { if (name && !descEl.value) descEl.value = name; };
+      if (apiKey) {
+        fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ytId}&key=${apiKey}`)
+          .then(r => r.json()).then(d => fillChannel(d.items?.[0]?.snippet?.channelTitle))
+          .catch(() => fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(trimmed)}&format=json`).then(r=>r.json()).then(d=>fillChannel(d.author_name)).catch(()=>{}));
+      } else {
+        fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(trimmed)}&format=json`)
+          .then(r => r.json()).then(d => fillChannel(d.author_name)).catch(() => {});
+      }
+      return;
+    }
+
+    // 其他網址 → Worker OG
+    preview.innerHTML = `<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;">讀取中…</div>`;
+    const meta = await fetchLinkMeta(trimmed);
+    if (!meta) {
+      _showUploadFallback();
+      return;
+    }
+    _ogMeta = meta;
+    const titleEl = box.querySelector('#_gal-title');
+    const descEl  = box.querySelector('#_gal-desc');
+    if (meta.title && !titleEl.value) titleEl.value = meta.title;
+    if (meta.description && !descEl.value) descEl.value = meta.description.slice(0, 150);
+    if (meta.image) {
+      const proxied = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(meta.image)}`;
+      preview.innerHTML = `<img src="${esc(meta.image)}" style="width:100%;display:block;border-radius:6px;" onerror="this.src='${esc(proxied)}';this.onerror=function(){_showUploadFallback();};">`;
+    } else {
+      _showUploadFallback();
+    }
+  }
+
+  function _showUploadFallback() {
+    preview.innerHTML = `
+      <div style="padding:20px;text-align:center;">
+        <div style="color:rgba(255,255,255,0.35);font-size:12px;margin-bottom:10px;">無法自動取得圖片</div>
+        <button type="button" style="padding:8px 18px;border-radius:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;font-size:13px;cursor:pointer;" id="_gal-upload-fallback-btn">📷 上傳截圖</button>
+      </div>`;
+    preview.querySelector('#_gal-upload-fallback-btn').addEventListener('click', e => { e.stopPropagation(); fileInp.click(); });
+  }
+
+  urlInp.addEventListener('paste', e => {
+    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+    setTimeout(() => autoFetchOg(pasted || urlInp.value), 50);
+  });
+  urlInp.addEventListener('blur', () => { if (!blob && !_ogMeta) autoFetchOg(urlInp.value); });
 
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   btnRow.querySelector('#_gal-cancel').addEventListener('click', () => overlay.remove());
