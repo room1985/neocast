@@ -374,14 +374,32 @@ async function cloudGalleryPull() {
     const res = await fetch(CLOUD_API + '/gallery', { headers: _cloudHeaders() });
     if (!res.ok) return;
     const remote = await res.json();
-    if (!Array.isArray(remote) || !remote.length) return;
-    const localIds = new Set((S.gallery || []).map(g => g.id));
+    if (!Array.isArray(remote)) return;
+
+    const remoteIds = new Set(remote.map(g => g.id));
+    const localIds  = new Set((S.gallery || []).map(g => g.id));
     let changed = false;
+
+    // 新增：遠端有、本地沒有 → 加進來
     remote.forEach(item => {
       if (!localIds.has(item.id)) { S.gallery.push(item); changed = true; }
     });
-    if (changed) lsSaveLocal();
+
+    // 刪除：本地有、遠端沒有，且是雲端項目（有 mediaUrl 或 r2Key）→ 移除
+    S.gallery = S.gallery.filter(g => {
+      if (!g.mediaUrl && !g.r2Key) return true; // 純本地項目，不動
+      if (remoteIds.has(g.id)) return true;      // 雲端存在，保留
+      changed = true;
+      return false; // 雲端已刪除，本地跟著移除
+    });
+
+    if (changed) { lsSaveLocal(); renderGalleryIfVisible(); }
   } catch(_) {}
+}
+
+function renderGalleryIfVisible() {
+  const container = document.querySelector('.gallery-scroll')?.parentElement;
+  if (container) renderGalleryWidget(container);
 }
 
 function extractYouTubeId(url) {
@@ -611,6 +629,7 @@ async function gistAutoSync() {
     S.cfg._lastModified = remoteTs;
     lsSaveLocal();
     renderAll();
+    cloudGalleryPull();
     toast('已自動同步雲端資料 ✓');
   } catch(e) { toast('自動同步失敗：' + e.message, 'err'); }
   finally { _autoSyncBusy = false; }
@@ -6296,41 +6315,35 @@ function openGalleryAddDialog(container, prefill = null) {
 
   // 若是從分享進來，預先填入資料
   if (prefill) {
-    // 部分 app（如 YouTube）把連結放在 text 而非 url，自動修正
+    // 部分 app（如 YouTube）把連結夾在 text 裡，嘗試從 text 取出 URL
     let fillTitle = prefill.title || '';
-    let fillDesc  = prefill.text  || '';
+    let fillDesc  = '';               // 描述欄由後續邏輯填入，不採用 prefill.text
     let fillUrl   = prefill.url   || '';
-    if (!fillUrl && /^https?:\/\//.test(fillDesc.trim())) {
-      fillUrl  = fillDesc.trim();
-      fillDesc = '';
+    if (!fillUrl) {
+      const urlMatch = (prefill.text || '').match(/https?:\/\/\S+/);
+      if (urlMatch) fillUrl = urlMatch[0];
     }
     if (fillTitle) box.querySelector('#_gal-title').value = fillTitle;
-    if (fillDesc)  box.querySelector('#_gal-desc').value  = fillDesc;
     if (fillUrl)   box.querySelector('#_gal-url').value   = fillUrl;
 
-    // 非同步抓 YT 描述（不卡 UI）
+    // YT 連結：非同步抓頻道名稱填入描述欄
     if (fillUrl && !prefill.blob) {
       const ytId = extractYouTubeId(fillUrl);
       if (ytId) {
         const descEl = box.querySelector('#_gal-desc');
-        // 優先用 YouTube Data API 取真實說明（前 150 字）
         const apiKey = S.cfg.ytApiKey?.trim();
+        const fillChannel = name => { if (name) descEl.value = name; };
         if (apiKey) {
           fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ytId}&key=${apiKey}`)
             .then(r => r.json())
-            .then(data => {
-              const desc = data.items?.[0]?.snippet?.description?.trim() || '';
-              if (desc && !descEl.value) descEl.value = desc.slice(0, 150);
-            })
-            .catch(() => {});
+            .then(data => fillChannel(data.items?.[0]?.snippet?.channelTitle))
+            .catch(() =>
+              fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(fillUrl)}&format=json`)
+                .then(r => r.json()).then(d => fillChannel(d.author_name)).catch(() => {})
+            );
         } else {
-          // fallback：oEmbed 取頻道名稱
           fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(fillUrl)}&format=json`)
-            .then(r => r.json())
-            .then(data => {
-              if (data.author_name && !descEl.value) descEl.value = data.author_name;
-            })
-            .catch(() => {});
+            .then(r => r.json()).then(d => fillChannel(d.author_name)).catch(() => {});
         }
       }
     }
@@ -7438,7 +7451,7 @@ async function init() {
   // Buttons
   $('edit-btn').addEventListener('click', () => setEditMode(!S.editMode));
   $('sync-btn').addEventListener('click', async () => {
-    await gistPush();
+    await Promise.all([ gistPush(), cloudGalleryPush() ]);
   });
   $('settings-btn').addEventListener('click', openSettingsModal);
 
@@ -7463,7 +7476,7 @@ async function init() {
   $('cfg-ok').addEventListener('click', saveSettings);
   $('cfg-sync-now').addEventListener('click', async () => {
     if (confirm('從雲端還原？這會覆蓋你目前的本機設定。')) {
-      const ok = await gistPull();
+      const [ok] = await Promise.all([ gistPull(), cloudGalleryPull() ]);
       if (ok) toast('已從雲端還原設定 ✓');
     }
   });
