@@ -6248,8 +6248,15 @@ function buildGalleryTagEditor(box, initialTags) {
       const pill = el('button');
       pill.type = 'button';
       const on = selected.has(tag);
-      pill.style.cssText = `padding:5px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:1px solid ${on ? '#5865f2' : 'rgba(255,255,255,0.2)'};background:${on ? '#5865f2' : 'rgba(255,255,255,0.05)'};color:${on ? '#fff' : 'rgba(255,255,255,0.65)'};-webkit-tap-highlight-color:transparent;outline:none;transition:background .12s,border-color .12s;`;
-      pill.textContent = tag;
+      pill.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;font-size:12px;cursor:pointer;border:1px solid ${on ? '#5865f2' : 'rgba(255,255,255,0.2)'};background:${on ? '#5865f2' : 'rgba(255,255,255,0.05)'};color:${on ? '#fff' : 'rgba(255,255,255,0.65)'};-webkit-tap-highlight-color:transparent;outline:none;transition:background .12s,border-color .12s;`;
+      const label = document.createTextNode(tag);
+      pill.appendChild(label);
+      if (on) {
+        const x = el('span');
+        x.textContent = '×';
+        x.style.cssText = 'font-size:14px;line-height:1;opacity:0.8;pointer-events:none;';
+        pill.appendChild(x);
+      }
       pill.addEventListener('click', () => {
         if (selected.has(tag)) selected.delete(tag); else selected.add(tag);
         renderPills();
@@ -6399,7 +6406,8 @@ function openGalleryAddDialog(container, prefill = null) {
           if (meta.description && !descEl.value) descEl.value = meta.description.slice(0, 150);
           // 預覽圖
           if (meta.image) {
-            preview.innerHTML = `<img src="${esc(meta.image)}" style="width:100%;display:block;border-radius:6px;" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\\'padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;\\'>🔗 圖片無法顯示</div>'">`;
+            const proxied = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(meta.image)}`;
+            preview.innerHTML = `<img src="${esc(meta.image)}" style="width:100%;display:block;border-radius:6px;" loading="lazy" onerror="this.src='${esc(proxied)}';this.onerror=null;">`;
           } else {
             preview.innerHTML = `<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">🔗 ${esc(meta.title || fillUrl)}</div>`;
           }
@@ -6476,7 +6484,8 @@ function openGalleryAddDialog(container, prefill = null) {
       if (ytId) {
         mediaUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
       } else if (_ogMeta?.image) {
-        mediaUrl = _ogMeta.image;
+        // 用 imgproxy 確保跨來源圖片都能顯示
+        mediaUrl = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(_ogMeta.image)}`;
       }
     }
 
@@ -6661,6 +6670,8 @@ function openGalleryEditDialog(item, container) {
   box.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px;padding:20px;width:100%;max-width:380px;box-sizing:border-box;max-height:85vh;overflow-y:auto;';
   box.innerHTML = `
     <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">編輯書籤</div>
+    <div id="_gal-e-preview" style="width:100%;min-height:80px;border:1.5px dashed rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;"></div>
+    <input type="file" accept="image/*,video/*" id="_gal-e-file" style="display:none">
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標題（選填）</div>
     <input type="text" id="_gal-e-title" value="${esc(item.title||'')}" placeholder="輸入標題…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
@@ -6668,7 +6679,41 @@ function openGalleryEditDialog(item, container) {
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
     <input type="url" id="_gal-e-url" value="${esc(item.url||'')}" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">`;
 
-  // 標籤編輯器（帶入此項目現有標籤，全域標籤自動列出）
+  // 顯示現有圖片
+  const preview = box.querySelector('#_gal-e-preview');
+  const fileInp = box.querySelector('#_gal-e-file');
+  let newBlob = null;
+
+  const showPreview = (url, isVideo, needRevoke) => {
+    if (isVideo) {
+      preview.innerHTML = `<video src="${url}" style="width:100%;display:block;" muted playsinline></video>`;
+      if (needRevoke) preview.querySelector('video').oncanplay = () => URL.revokeObjectURL(url);
+    } else {
+      preview.innerHTML = `<img src="${url}" style="width:100%;display:block;">`;
+      if (needRevoke) preview.querySelector('img').onload = () => URL.revokeObjectURL(url);
+    }
+  };
+
+  if (item.mediaUrl) {
+    showPreview(item.mediaUrl, item.type === 'video', false);
+  } else if (item.imageId) {
+    idbGet(item.imageId).then(b => {
+      if (b) showPreview(URL.createObjectURL(b), item.type === 'video', true);
+      else preview.textContent = '點擊更換圖片';
+    });
+  } else {
+    preview.textContent = '點擊更換圖片';
+  }
+
+  preview.addEventListener('click', () => fileInp.click());
+  fileInp.addEventListener('change', () => {
+    const f = fileInp.files[0];
+    if (!f) return;
+    newBlob = f;
+    showPreview(URL.createObjectURL(f), f.type.startsWith('video/'), true);
+  });
+
+  // 標籤編輯器
   const tagEditor = buildGalleryTagEditor(box, item.tags || []);
 
   // 按鈕列
@@ -6683,11 +6728,40 @@ function openGalleryEditDialog(item, container) {
   document.body.appendChild(overlay);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   btnRow.querySelector('#_gal-e-cancel').addEventListener('click', () => overlay.remove());
-  btnRow.querySelector('#_gal-e-save').addEventListener('click', () => {
+  btnRow.querySelector('#_gal-e-save').addEventListener('click', async () => {
+    const saveBtn = btnRow.querySelector('#_gal-e-save');
+    saveBtn.disabled = true; saveBtn.textContent = '儲存中…';
+
+    // 有換圖才重新處理上傳
+    if (newBlob) {
+      const isVideo = newBlob.type.startsWith('video/');
+      try {
+        let uploadBlob = newBlob, uploadType = newBlob.type;
+        if (isVideo) {
+          const result = await processVideoBlob(newBlob);
+          if (result) { uploadBlob = result.blob; uploadType = result.type === 'video' ? 'video/webm' : 'image/jpeg'; item.type = result.type; }
+        } else {
+          uploadBlob = await compressImage(newBlob); uploadType = 'image/jpeg'; item.type = 'image';
+        }
+        // 刪舊 R2
+        if (item.r2Key) cloudDeleteItem(null, item.r2Key);
+        if (S.cfg.cloudToken) {
+          const up = await cloudUpload(uploadBlob, uploadType);
+          item.mediaUrl = up.url; item.r2Key = up.r2Key;
+        } else {
+          item.mediaUrl = null; item.r2Key = null;
+        }
+        const imageId = item.imageId || ('gallery_img_' + item.id);
+        await idbSet(imageId, uploadBlob);
+        item.imageId = imageId;
+      } catch(e) { /* 換圖失敗保留舊圖 */ }
+    }
+
     item.title       = box.querySelector('#_gal-e-title').value.trim();
     item.description = box.querySelector('#_gal-e-desc').value.trim();
     item.url         = box.querySelector('#_gal-e-url').value.trim();
     item.tags        = tagEditor.getSelected();
+    cloudGalleryPush();
     lsSave(); overlay.remove(); renderGalleryWidget(container);
   });
 }
