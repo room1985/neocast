@@ -281,46 +281,66 @@ async function processVideoBlob(blob) {
     const url = URL.createObjectURL(blob);
     const vid = document.createElement('video');
     vid.muted = true; vid.playsInline = true; vid.src = url;
-    const cleanup = () => URL.revokeObjectURL(url);
+    let settled = false;
+    const settle = v => { if (!settled) { settled = true; res(v); } };
+    const cleanup = () => { try { URL.revokeObjectURL(url); } catch(_) {} };
+
     vid.oncanplay = () => {
       let stream, recorder, chunks = [];
       try {
         stream = vid.captureStream?.() || vid.mozCaptureStream?.();
-        if (!stream) throw new Error('captureStream not supported');
-      } catch(e) { cleanup(); res(null); return; }
+        if (!stream) throw new Error('no captureStream');
+      } catch(e) { cleanup(); settle(null); return; }
       const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp8')
         ? 'video/webm;codecs=vp8' : 'video/webm';
       try { recorder = new MediaRecorder(stream, { mimeType: mime }); }
-      catch(e) { cleanup(); res(null); return; }
+      catch(e) { cleanup(); settle(null); return; }
       recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
-      recorder.onstop = () => { cleanup(); res(new Blob(chunks, { type: 'video/webm' })); };
-      recorder.start(); vid.play();
-      setTimeout(() => { try { recorder.stop(); vid.pause(); } catch(_) {} }, 3000);
+      recorder.onstop = () => {
+        cleanup();
+        const b = new Blob(chunks, { type: 'video/webm' });
+        settle(b.size > 5000 ? b : null); // 拒絕空白/損壞的 blob
+      };
+      recorder.start();
+      const playP = vid.play();
+      if (playP) playP.catch(() => { cleanup(); settle(null); }); // play() 被封鎖時 fallback
+      setTimeout(() => {
+        try { if (recorder.state === 'recording') { recorder.stop(); vid.pause(); } }
+        catch(_) {}
+      }, 3100);
     };
-    vid.onerror = () => { cleanup(); res(null); };
-    // 10 秒 timeout 防止卡住
-    setTimeout(() => { cleanup(); res(null); }, 10000);
+    vid.onerror = () => { cleanup(); settle(null); };
+    setTimeout(() => { cleanup(); settle(null); }, 12000); // 12s 硬 timeout
   });
   if (trimmed) return { blob: trimmed, type: 'video' };
 
-  // Step 2：擷取第一幀
+  // Step 2：擷取第一幀（修正版：metadata 載入後再 seek，確保尺寸不為 0）
   const frame = await new Promise(res => {
     const url = URL.createObjectURL(blob);
     const vid = document.createElement('video');
-    vid.muted = true; vid.playsInline = true; vid.src = url;
-    vid.onloadeddata = () => { vid.currentTime = 0.1; };
-    vid.onseeked = () => {
+    vid.muted = true; vid.playsInline = true; vid.preload = 'metadata'; vid.src = url;
+    let settled = false;
+    const settle = v => { if (!settled) { settled = true; res(v); } };
+    const cleanup = () => { try { URL.revokeObjectURL(url); } catch(_) {} };
+
+    const drawFrame = () => {
+      if (!vid.videoWidth || !vid.videoHeight) { cleanup(); settle(null); return; }
       try {
         const cvs = document.createElement('canvas');
-        cvs.width = Math.min(vid.videoWidth, 1200);
-        cvs.height = Math.round(vid.videoHeight * (cvs.width / vid.videoWidth));
+        const scale = Math.min(1, 1200 / vid.videoWidth);
+        cvs.width  = Math.round(vid.videoWidth  * scale);
+        cvs.height = Math.round(vid.videoHeight * scale);
         cvs.getContext('2d').drawImage(vid, 0, 0, cvs.width, cvs.height);
-        URL.revokeObjectURL(url);
-        cvs.toBlob(b => res(b), 'image/jpeg', 0.85);
-      } catch(e) { URL.revokeObjectURL(url); res(null); }
+        cleanup();
+        cvs.toBlob(b => settle(b && b.size > 500 ? b : null), 'image/jpeg', 0.85);
+      } catch(e) { cleanup(); settle(null); }
     };
-    vid.onerror = () => { URL.revokeObjectURL(url); res(null); };
-    setTimeout(() => { URL.revokeObjectURL(url); res(null); }, 8000);
+
+    vid.onloadedmetadata = () => { vid.currentTime = 0.5; };
+    vid.onseeked = drawFrame;
+    vid.onloadeddata  = () => { if (vid.readyState >= 2 && vid.videoWidth) drawFrame(); };
+    vid.onerror = () => { cleanup(); settle(null); };
+    setTimeout(() => { cleanup(); settle(null); }, 8000);
   });
   if (frame) return { blob: frame, type: 'image' };
 
@@ -362,6 +382,11 @@ async function cloudGalleryPull() {
     });
     if (changed) lsSaveLocal();
   } catch(_) {}
+}
+
+function extractYouTubeId(url) {
+  const m = (url || '').match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([a-zA-Z0-9_-]{11})/);
+  return m ? m[1] : null;
 }
 
 function cloudDeleteItem(id, r2Key) {
@@ -6271,9 +6296,17 @@ function openGalleryAddDialog(container, prefill = null) {
 
   // 若是從分享進來，預先填入資料
   if (prefill) {
-    if (prefill.title) box.querySelector('#_gal-title').value = prefill.title;
-    if (prefill.text)  box.querySelector('#_gal-desc').value  = prefill.text;
-    if (prefill.url)   box.querySelector('#_gal-url').value   = prefill.url;
+    // 部分 app（如 YouTube）把連結放在 text 而非 url，自動修正
+    let fillTitle = prefill.title || '';
+    let fillDesc  = prefill.text  || '';
+    let fillUrl   = prefill.url   || '';
+    if (!fillUrl && /^https?:\/\//.test(fillDesc.trim())) {
+      fillUrl  = fillDesc.trim();
+      fillDesc = '';
+    }
+    if (fillTitle) box.querySelector('#_gal-title').value = fillTitle;
+    if (fillDesc)  box.querySelector('#_gal-desc').value  = fillDesc;
+    if (fillUrl)   box.querySelector('#_gal-url').value   = fillUrl;
     if (prefill.blob) {
       blob = prefill.blob;
       const u = URL.createObjectURL(blob);
@@ -6283,6 +6316,20 @@ function openGalleryAddDialog(container, prefill = null) {
         v.oncanplay = () => URL.revokeObjectURL(u);
       } else {
         preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
+      }
+    } else if (fillUrl) {
+      // 偵測 YouTube 連結 → 顯示縮圖
+      const ytId = extractYouTubeId(fillUrl);
+      if (ytId) {
+        preview.innerHTML = `
+          <div style="position:relative;width:100%;">
+            <img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" style="width:100%;display:block;border-radius:6px;" loading="lazy">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+              <svg viewBox="0 0 68 48" width="56" height="40" style="opacity:0.9"><rect rx="10" ry="10" width="68" height="48" fill="#f00"/><polygon points="28,14 28,34 48,24" fill="#fff"/></svg>
+            </div>
+          </div>`;
+      } else {
+        preview.innerHTML = `<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">🔗 連結書籤<br><span style="font-size:11px;word-break:break-all;opacity:0.6;">${esc(fillUrl)}</span></div>`;
       }
     } else {
       preview.textContent = '（無附件）點擊可選擇圖片或影片';
