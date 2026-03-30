@@ -6025,7 +6025,14 @@ function renderGalleryWidget(container) {
           const blob = await idbGet(item.imageId).catch(() => null);
           if (blob) { url = URL.createObjectURL(blob); needRevoke = true; }
         }
-        if (!url) return;
+        if (!url) {
+          // 無圖片：顯示佔位區塊讓卡片有高度
+          const ph = el('div');
+          ph.style.cssText = 'width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:22px;';
+          ph.textContent = item.type === 'video' ? '🎬' : '🔗';
+          card.insertBefore(ph, card.firstChild);
+          return;
+        }
         if (item.type === 'video') {
           const vid = el('video');
           vid.style.cssText = 'width:100%;display:block;';
@@ -6039,6 +6046,18 @@ function renderGalleryWidget(container) {
           img.alt = ''; img.loading = 'lazy';
           img.src = url;
           if (needRevoke) img.onload = () => URL.revokeObjectURL(url);
+          img.onerror = () => {
+            // 嘗試 imgproxy，若仍失敗則顯示佔位
+            if (S.cfg.cloudToken && !img.dataset.proxied) {
+              img.dataset.proxied = '1';
+              img.src = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(url)}`;
+            } else {
+              const ph = el('div');
+              ph.style.cssText = 'width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:22px;';
+              ph.textContent = '🖼️';
+              img.replaceWith(ph);
+            }
+          };
           card.insertBefore(img, card.firstChild);
         }
       })();
@@ -6589,6 +6608,14 @@ function openGalleryDetail(item, container) {
       img.style.cssText = 'width:100%;display:block;max-height:58vh;object-fit:contain;';
       img.src = url;
       if (needRevoke) img.onload = () => URL.revokeObjectURL(url);
+      img.onerror = () => {
+        if (S.cfg.cloudToken && !img.dataset.proxied) {
+          img.dataset.proxied = '1';
+          img.src = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(url)}`;
+        } else {
+          mediaWrap.innerHTML = '<div style="padding:40px;text-align:center;color:rgba(255,255,255,0.25);font-size:32px;">🖼️</div>';
+        }
+      };
       mediaWrap.appendChild(img);
     }
   })();
