@@ -5757,7 +5757,7 @@ function renderGalleryWidget(container) {
     });
     scroll.appendChild(colWrap);
 
-    items.forEach((item, idx) => {
+    [...items].reverse().forEach((item, idx) => {
       const card = el('div', 'gallery-card');
       card.dataset.galid    = item.id;
       card.dataset.galtitle = item.title || '';
@@ -5948,6 +5948,74 @@ function _galApplyFilter(container) {
   });
 }
 
+/* ── 標籤編輯器（新增 / 編輯對話框共用） ── */
+function buildGalleryTagEditor(box, initialTags) {
+  // 從所有書籤收集全域標籤；initialTags 中有但全域沒有的也加入
+  const globalTags = [...new Set((S.gallery || []).flatMap(it => it.tags || []))].filter(Boolean);
+  (initialTags || []).forEach(t => { if (t && !globalTags.includes(t)) globalTags.push(t); });
+  const selected = new Set(initialTags || []);
+
+  const wrap = el('div');
+  wrap.style.cssText = 'margin-bottom:16px;';
+
+  const lbl = el('div');
+  lbl.style.cssText = 'font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:8px;';
+  lbl.textContent = '標籤（選填）';
+  wrap.appendChild(lbl);
+
+  const pillsArea = el('div');
+  pillsArea.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;';
+  wrap.appendChild(pillsArea);
+
+  function renderPills() {
+    pillsArea.innerHTML = '';
+    globalTags.forEach(tag => {
+      const pill = el('button');
+      pill.type = 'button';
+      const on = selected.has(tag);
+      pill.style.cssText = `padding:5px 12px;border-radius:99px;font-size:12px;cursor:pointer;border:1px solid ${on ? '#5865f2' : 'rgba(255,255,255,0.2)'};background:${on ? '#5865f2' : 'rgba(255,255,255,0.05)'};color:${on ? '#fff' : 'rgba(255,255,255,0.65)'};-webkit-tap-highlight-color:transparent;outline:none;transition:background .12s,border-color .12s;`;
+      pill.textContent = tag;
+      pill.addEventListener('click', () => {
+        if (selected.has(tag)) selected.delete(tag); else selected.add(tag);
+        renderPills();
+      });
+      pillsArea.appendChild(pill);
+    });
+  }
+  renderPills();
+
+  // 新標籤輸入列
+  const inpWrap = el('div');
+  inpWrap.style.cssText = 'display:flex;gap:8px;';
+  const inp = el('input');
+  inp.type = 'text';
+  inp.placeholder = '輸入新標籤，按 Enter 或 + 新增';
+  inp.style.cssText = 'flex:1;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:13px;outline:none;';
+
+  function commitInput() {
+    inp.value.split(',').map(v => v.trim()).filter(Boolean).forEach(t => {
+      if (!globalTags.includes(t)) globalTags.push(t);
+      selected.add(t);
+    });
+    inp.value = '';
+    renderPills();
+  }
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); commitInput(); } });
+
+  const addBtn = el('button');
+  addBtn.type = 'button';
+  addBtn.textContent = '+';
+  addBtn.style.cssText = 'width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:18px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;outline:none;';
+  addBtn.addEventListener('click', () => { if (inp.value.trim()) commitInput(); });
+
+  inpWrap.appendChild(inp);
+  inpWrap.appendChild(addBtn);
+  wrap.appendChild(inpWrap);
+  box.appendChild(wrap);
+
+  return { getSelected: () => [...selected] };
+}
+
 function openGalleryAddDialog(container) {
   const overlay = el('div', 'gallery-overlay');
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9900;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
@@ -5963,13 +6031,18 @@ function openGalleryAddDialog(container) {
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
     <textarea id="_gal-desc" placeholder="輸入描述…" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;margin-bottom:12px;"></textarea>
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
-    <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
-    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標籤（逗號分隔，選填）</div>
-    <input type="text" id="_gal-tags" placeholder="例：旅遊, 美食, 設計…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
-    <div style="display:flex;gap:10px;">
-      <button id="_gal-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
-      <button id="_gal-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>
-    </div>`;
+    <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">`;
+
+  // 標籤編輯器
+  const tagEditor = buildGalleryTagEditor(box, []);
+
+  // 按鈕列
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:10px;';
+  btnRow.innerHTML = `
+    <button id="_gal-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
+    <button id="_gal-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>`;
+  box.appendChild(btnRow);
 
   overlay.appendChild(box);
   document.body.appendChild(overlay);
@@ -5994,14 +6067,14 @@ function openGalleryAddDialog(container) {
   });
 
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  box.querySelector('#_gal-cancel').addEventListener('click', () => overlay.remove());
-  box.querySelector('#_gal-save').addEventListener('click', async () => {
+  btnRow.querySelector('#_gal-cancel').addEventListener('click', () => overlay.remove());
+  btnRow.querySelector('#_gal-save').addEventListener('click', async () => {
     if (!blob) return;
     const id = uid();
     const imageId = 'gallery_img_' + id;
     await idbSet(imageId, blob);
     if (!S.gallery) S.gallery = [];
-    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', title: box.querySelector('#_gal-title').value.trim(), description: box.querySelector('#_gal-desc').value.trim(), url: box.querySelector('#_gal-url').value.trim(), tags: box.querySelector('#_gal-tags').value.split(',').map(t=>t.trim()).filter(Boolean), addedAt: Date.now() });
+    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', title: box.querySelector('#_gal-title').value.trim(), description: box.querySelector('#_gal-desc').value.trim(), url: box.querySelector('#_gal-url').value.trim(), tags: tagEditor.getSelected(), addedAt: Date.now() });
     lsSave();
     overlay.remove();
     renderGalleryWidget(container);
@@ -6165,22 +6238,28 @@ function openGalleryEditDialog(item, container) {
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
     <textarea id="_gal-e-desc" rows="2" placeholder="輸入描述…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;margin-bottom:12px;">${esc(item.description||'')}</textarea>
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
-    <input type="url" id="_gal-e-url" value="${esc(item.url||'')}" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
-    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標籤（逗號分隔，選填）</div>
-    <input type="text" id="_gal-e-tags" value="${esc((item.tags||[]).join(', '))}" placeholder="例：旅遊, 美食, 設計…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
-    <div style="display:flex;gap:10px;">
-      <button id="_gal-e-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
-      <button id="_gal-e-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>
-    </div>`;
+    <input type="url" id="_gal-e-url" value="${esc(item.url||'')}" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">`;
+
+  // 標籤編輯器（帶入此項目現有標籤，全域標籤自動列出）
+  const tagEditor = buildGalleryTagEditor(box, item.tags || []);
+
+  // 按鈕列
+  const btnRow = document.createElement('div');
+  btnRow.style.cssText = 'display:flex;gap:10px;';
+  btnRow.innerHTML = `
+    <button id="_gal-e-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
+    <button id="_gal-e-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>`;
+  box.appendChild(btnRow);
+
   overlay.appendChild(box);
   document.body.appendChild(overlay);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  box.querySelector('#_gal-e-cancel').addEventListener('click', () => overlay.remove());
-  box.querySelector('#_gal-e-save').addEventListener('click', () => {
+  btnRow.querySelector('#_gal-e-cancel').addEventListener('click', () => overlay.remove());
+  btnRow.querySelector('#_gal-e-save').addEventListener('click', () => {
     item.title       = box.querySelector('#_gal-e-title').value.trim();
     item.description = box.querySelector('#_gal-e-desc').value.trim();
     item.url         = box.querySelector('#_gal-e-url').value.trim();
-    item.tags        = box.querySelector('#_gal-e-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
+    item.tags        = tagEditor.getSelected();
     lsSave(); overlay.remove(); renderGalleryWidget(container);
   });
 }
