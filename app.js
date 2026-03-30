@@ -271,22 +271,60 @@ async function compressImage(blob, maxW = 1200, quality = 0.82) {
   });
 }
 
-async function trimVideoTo3s(blob) {
-  return new Promise(res => {
+// 回傳 { blob, type } type = 'video'|'image'
+// 成功剪輯 → type:'video'（webm）
+// 剪輯失敗 → 擷取第一幀 → type:'image'（jpeg）
+// 全部失敗 → null
+async function processVideoBlob(blob) {
+  // Step 1：嘗試剪到 3 秒
+  const trimmed = await new Promise(res => {
     const url = URL.createObjectURL(blob);
     const vid = document.createElement('video');
     vid.muted = true; vid.playsInline = true; vid.src = url;
+    const cleanup = () => URL.revokeObjectURL(url);
     vid.oncanplay = () => {
       let stream, recorder, chunks = [];
-      try { stream = vid.captureStream(); } catch(e) { URL.revokeObjectURL(url); res(blob); return; }
-      recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      try {
+        stream = vid.captureStream?.() || vid.mozCaptureStream?.();
+        if (!stream) throw new Error('captureStream not supported');
+      } catch(e) { cleanup(); res(null); return; }
+      const mime = MediaRecorder.isTypeSupported('video/webm;codecs=vp8')
+        ? 'video/webm;codecs=vp8' : 'video/webm';
+      try { recorder = new MediaRecorder(stream, { mimeType: mime }); }
+      catch(e) { cleanup(); res(null); return; }
       recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
-      recorder.onstop = () => { URL.revokeObjectURL(url); res(new Blob(chunks, { type: 'video/webm' })); };
+      recorder.onstop = () => { cleanup(); res(new Blob(chunks, { type: 'video/webm' })); };
       recorder.start(); vid.play();
-      setTimeout(() => { recorder.stop(); vid.pause(); }, 3000);
+      setTimeout(() => { try { recorder.stop(); vid.pause(); } catch(_) {} }, 3000);
     };
-    vid.onerror = () => { URL.revokeObjectURL(url); res(blob); };
+    vid.onerror = () => { cleanup(); res(null); };
+    // 10 秒 timeout 防止卡住
+    setTimeout(() => { cleanup(); res(null); }, 10000);
   });
+  if (trimmed) return { blob: trimmed, type: 'video' };
+
+  // Step 2：擷取第一幀
+  const frame = await new Promise(res => {
+    const url = URL.createObjectURL(blob);
+    const vid = document.createElement('video');
+    vid.muted = true; vid.playsInline = true; vid.src = url;
+    vid.onloadeddata = () => { vid.currentTime = 0.1; };
+    vid.onseeked = () => {
+      try {
+        const cvs = document.createElement('canvas');
+        cvs.width = Math.min(vid.videoWidth, 1200);
+        cvs.height = Math.round(vid.videoHeight * (cvs.width / vid.videoWidth));
+        cvs.getContext('2d').drawImage(vid, 0, 0, cvs.width, cvs.height);
+        URL.revokeObjectURL(url);
+        cvs.toBlob(b => res(b), 'image/jpeg', 0.85);
+      } catch(e) { URL.revokeObjectURL(url); res(null); }
+    };
+    vid.onerror = () => { URL.revokeObjectURL(url); res(null); };
+    setTimeout(() => { URL.revokeObjectURL(url); res(null); }, 8000);
+  });
+  if (frame) return { blob: frame, type: 'image' };
+
+  return null;
 }
 
 async function cloudUpload(blob, contentType) {
@@ -337,33 +375,39 @@ function cloudDeleteItem(id, r2Key) {
 async function migrateGalleryToCloud() {
   if (!S.cfg.cloudToken) { toast('請先填入 Cloud Token', 'warn'); return; }
   const items = (S.gallery || []).filter(g => g.imageId && !g.mediaUrl);
-  if (!items.length) { toast('沒有需要遷移的書籤', 'warn'); return; }
-
+  const statusEl = $('cfg-migrate-status');
   const btn = $('cfg-migrate-btn');
-  if (btn) { btn.disabled = true; btn.textContent = `遷移中 0/${items.length}…`; }
 
-  let done = 0, failed = 0;
+  if (!items.length) {
+    if (statusEl) { statusEl.textContent = '沒有需要遷移的書籤'; statusEl.style.color = 'rgba(255,255,255,0.45)'; }
+    return;
+  }
+
+  if (btn) { btn.disabled = true; btn.textContent = `遷移中 0/${items.length}…`; }
+  if (statusEl) { statusEl.textContent = ''; statusEl.style.color = ''; }
+
+  let done = 0, failed = 0, asThumb = 0;
   for (const item of items) {
     try {
       const blob = await idbGet(item.imageId).catch(() => null);
       if (!blob) { failed++; continue; }
 
-      let uploadBlob = blob, uploadType = blob.type || 'image/jpeg';
+      let uploadBlob = blob, uploadType = 'image/jpeg';
       if (item.type === 'video') {
-        uploadBlob = await trimVideoTo3s(blob);
-        uploadType = 'video/webm';
+        const result = await processVideoBlob(blob);
+        if (!result) { failed++; continue; }
+        if (result.type === 'image') { item.type = 'image'; asThumb++; }
+        uploadBlob = result.blob;
+        uploadType = result.type === 'video' ? 'video/webm' : 'image/jpeg';
       } else {
         uploadBlob = await compressImage(blob);
-        uploadType = 'image/jpeg';
       }
 
-      const result = await cloudUpload(uploadBlob, uploadType);
-      item.mediaUrl = result.url;
-      item.r2Key    = result.r2Key;
-
+      const up = await cloudUpload(uploadBlob, uploadType);
+      item.mediaUrl = up.url;
+      item.r2Key    = up.r2Key;
       await idbDel(item.imageId).catch(() => {});
-      item.imageId = null;
-
+      item.imageId  = null;
       done++;
       if (btn) btn.textContent = `遷移中 ${done}/${items.length}…`;
     } catch(e) {
@@ -375,10 +419,17 @@ async function migrateGalleryToCloud() {
   await cloudGalleryPush();
 
   if (btn) { btn.disabled = false; btn.textContent = '一鍵遷移至雲端'; }
-  const msg = failed
-    ? `遷移完成：${done} 成功，${failed} 失敗`
-    : `已遷移 ${done} 個書籤 ✓`;
-  toast(msg, failed ? 'warn' : undefined);
+
+  // 持久狀態顯示
+  if (statusEl) {
+    if (failed) {
+      statusEl.textContent = `✅ ${done} 成功　⚠️ ${failed} 失敗${asThumb ? `　📷 ${asThumb} 部影片改存縮圖` : ''}`;
+      statusEl.style.color = '#fbbf24';
+    } else {
+      statusEl.textContent = `✅ 已遷移 ${done} 個書籤${asThumb ? `（${asThumb} 部影片改存縮圖）` : ''}`;
+      statusEl.style.color = '#4ade80';
+    }
+  }
 }
 
 /* ─────────────────────────────────────
@@ -6263,14 +6314,25 @@ function openGalleryAddDialog(container, prefill = null) {
     const id = uid();
     const imageId = 'gallery_img_' + id;
     let mediaUrl = null, r2Key = null;
+    let finalType = blob ? (blob.type.startsWith('video/') ? 'video' : 'image') : 'link';
     if (blob) {
       const isVideo = blob.type.startsWith('video/');
       try {
         let uploadBlob = blob, uploadType = blob.type;
         if (isVideo) {
-          saveBtn.textContent = '剪輯影片…';
-          uploadBlob = await trimVideoTo3s(blob);
-          uploadType = 'video/webm';
+          saveBtn.textContent = '處理影片…';
+          const result = await processVideoBlob(blob);
+          if (!result) {
+            toast('影片無法處理，取消儲存', 'err');
+            saveBtn.disabled = false; saveBtn.textContent = '儲存';
+            return;
+          }
+          if (result.type === 'image') {
+            toast('影片無法剪輯，已改存縮圖', 'warn');
+          }
+          uploadBlob = result.blob;
+          uploadType = result.type === 'video' ? 'video/webm' : 'image/jpeg';
+          finalType  = result.type;
         } else {
           saveBtn.textContent = '壓縮圖片…';
           uploadBlob = await compressImage(blob);
@@ -6278,8 +6340,8 @@ function openGalleryAddDialog(container, prefill = null) {
         }
         if (S.cfg.cloudToken) {
           saveBtn.textContent = '上傳中…';
-          const result = await cloudUpload(uploadBlob, uploadType);
-          mediaUrl = result.url; r2Key = result.r2Key;
+          const up = await cloudUpload(uploadBlob, uploadType);
+          mediaUrl = up.url; r2Key = up.r2Key;
         }
         await idbSet(imageId, uploadBlob);
       } catch(e) {
@@ -6290,7 +6352,7 @@ function openGalleryAddDialog(container, prefill = null) {
     S.gallery.push({
       id, imageId: blob ? imageId : null,
       mediaUrl, r2Key,
-      type: blob ? (blob.type.startsWith('video/') ? 'video' : 'image') : 'link',
+      type: finalType,
       title: box.querySelector('#_gal-title').value.trim(),
       description: box.querySelector('#_gal-desc').value.trim(),
       url: box.querySelector('#_gal-url').value.trim(),
