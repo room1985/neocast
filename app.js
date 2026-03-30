@@ -6447,7 +6447,19 @@ function openGalleryAddDialog(container, prefill = null) {
     if (meta.description && !descEl.value) descEl.value = meta.description.slice(0, 150);
     if (meta.image) {
       const proxied = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(meta.image)}`;
-      preview.innerHTML = `<img src="${esc(meta.image)}" style="width:100%;display:block;border-radius:6px;" onerror="this.src='${esc(proxied)}';this.onerror=function(){_showUploadFallback();};">`;
+      const imgEl = document.createElement('img');
+      imgEl.src = meta.image;
+      imgEl.style.cssText = 'width:100%;display:block;border-radius:6px;';
+      imgEl.onerror = () => {
+        if (!imgEl.dataset.proxied) {
+          imgEl.dataset.proxied = '1';
+          imgEl.src = proxied;
+        } else {
+          _showUploadFallback();
+        }
+      };
+      preview.innerHTML = '';
+      preview.appendChild(imgEl);
     } else {
       _showUploadFallback();
     }
@@ -6471,8 +6483,9 @@ function openGalleryAddDialog(container, prefill = null) {
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   btnRow.querySelector('#_gal-cancel').addEventListener('click', () => overlay.remove());
   btnRow.querySelector('#_gal-save').addEventListener('click', async () => {
-    // 從分享進來時允許無媒體（純文字/連結書籤）
-    if (!blob && !prefill) return;
+    // 有 blob、有 prefill、或有填連結，都允許儲存
+    const hasUrl = box.querySelector('#_gal-url').value.trim();
+    if (!blob && !prefill && !hasUrl) return;
     const saveBtn = btnRow.querySelector('#_gal-save');
     saveBtn.disabled = true; saveBtn.textContent = '處理中…';
     const id = uid();
