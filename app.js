@@ -6307,6 +6307,34 @@ function openGalleryAddDialog(container, prefill = null) {
     if (fillTitle) box.querySelector('#_gal-title').value = fillTitle;
     if (fillDesc)  box.querySelector('#_gal-desc').value  = fillDesc;
     if (fillUrl)   box.querySelector('#_gal-url').value   = fillUrl;
+
+    // 非同步抓 YT 描述（不卡 UI）
+    if (fillUrl && !prefill.blob) {
+      const ytId = extractYouTubeId(fillUrl);
+      if (ytId) {
+        const descEl = box.querySelector('#_gal-desc');
+        // 優先用 YouTube Data API 取真實說明（前 150 字）
+        const apiKey = S.cfg.ytApiKey?.trim();
+        if (apiKey) {
+          fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${ytId}&key=${apiKey}`)
+            .then(r => r.json())
+            .then(data => {
+              const desc = data.items?.[0]?.snippet?.description?.trim() || '';
+              if (desc && !descEl.value) descEl.value = desc.slice(0, 150);
+            })
+            .catch(() => {});
+        } else {
+          // fallback：oEmbed 取頻道名稱
+          fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(fillUrl)}&format=json`)
+            .then(r => r.json())
+            .then(data => {
+              if (data.author_name && !descEl.value) descEl.value = data.author_name;
+            })
+            .catch(() => {});
+        }
+      }
+    }
+
     if (prefill.blob) {
       blob = prefill.blob;
       const u = URL.createObjectURL(blob);
@@ -6395,6 +6423,13 @@ function openGalleryAddDialog(container, prefill = null) {
         await idbSet(imageId, blob);
       }
     }
+    // YouTube 連結：直接用 YT 縮圖作為 mediaUrl（不需上傳）
+    if (!blob) {
+      const linkUrl = box.querySelector('#_gal-url').value.trim();
+      const ytId = extractYouTubeId(linkUrl);
+      if (ytId) mediaUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+    }
+
     if (!S.gallery) S.gallery = [];
     S.gallery.push({
       id, imageId: blob ? imageId : null,
