@@ -5633,8 +5633,10 @@ function buildMobileWidgetContent(widgetType, container) {
 /* ─────────────────────────────────────
    GALLERY WIDGET — 視覺書籤
 ───────────────────────────────────── */
-let _galMultiActive = false;
-let _galSelected    = new Set();
+let _galMultiActive  = false;
+let _galSelected     = new Set();
+let _galSearchQuery  = '';
+let _galActiveTag    = '';
 
 function injectGalleryCSS() {
   if (document.getElementById('gallery-style')) return;
@@ -5669,7 +5671,7 @@ function renderGalleryWidget(container) {
     trashBtn.className = 'yt-icon-btn gallery-trash-btn';
     trashBtn.title = '刪除選取';
     trashBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>`;
-    const expandBtn = panelHead.querySelector('.expand-btn');
+    const expandBtn = panelHead.querySelector('.mobile-panel-expand-btn');
     if (expandBtn) panelHead.insertBefore(trashBtn, expandBtn);
     else panelHead.appendChild(trashBtn);
     trashBtn.addEventListener('click', async () => {
@@ -5697,6 +5699,55 @@ function renderGalleryWidget(container) {
     empty.textContent = '點擊 ＋ 新增視覺書籤';
     scroll.appendChild(empty);
   } else {
+    // ── 搜索欄 ──
+    const searchWrap = el('div');
+    searchWrap.style.cssText = 'display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border-radius:10px;padding:7px 10px;margin-bottom:8px;';
+    searchWrap.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.2" width="14" height="14" style="flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
+    const searchInput = el('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = '搜索標題、描述或標籤…';
+    searchInput.value = _galSearchQuery;
+    searchInput.style.cssText = 'flex:1;background:none;border:none;outline:none;color:#fff;font-size:13px;min-width:0;';
+    searchWrap.appendChild(searchInput);
+    if (_galSearchQuery) {
+      const clrBtn = el('button');
+      clrBtn.style.cssText = 'background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;padding:0;font-size:16px;line-height:1;flex-shrink:0;';
+      clrBtn.textContent = '×';
+      clrBtn.addEventListener('click', () => { _galSearchQuery = ''; searchInput.value = ''; _galApplyFilter(container); clrBtn.remove(); });
+      searchWrap.appendChild(clrBtn);
+    }
+    searchInput.addEventListener('input', () => { _galSearchQuery = searchInput.value; _galApplyFilter(container); });
+    scroll.appendChild(searchWrap);
+
+    // ── 標籤篩選列 ──
+    const allTags = [...new Set(items.flatMap(it => it.tags || []))].filter(Boolean);
+    if (allTags.length) {
+      const tagBar = el('div');
+      tagBar.className = 'gal-tag-bar';
+      tagBar.style.cssText = 'display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;-ms-overflow-style:none;';
+      allTags.forEach(tag => {
+        const btn = el('button');
+        btn.className = 'gal-tag-btn';
+        btn.dataset.galtag = tag;
+        btn.textContent = tag;
+        const isA = _galActiveTag === tag;
+        btn.style.cssText = `flex-shrink:0;padding:4px 10px;border-radius:99px;border:1px solid ${isA ? '#5865f2' : 'rgba(255,255,255,0.2)'};background:${isA ? '#5865f2' : 'transparent'};color:${isA ? '#fff' : 'rgba(255,255,255,0.65)'};font-size:11px;cursor:pointer;white-space:nowrap;-webkit-tap-highlight-color:transparent;outline:none;`;
+        btn.addEventListener('click', () => {
+          _galActiveTag = (_galActiveTag === tag) ? '' : tag;
+          container.querySelectorAll('.gal-tag-btn').forEach(b => {
+            const a = b.dataset.galtag === _galActiveTag;
+            b.style.background  = a ? '#5865f2' : 'transparent';
+            b.style.borderColor = a ? '#5865f2' : 'rgba(255,255,255,0.2)';
+            b.style.color       = a ? '#fff'    : 'rgba(255,255,255,0.65)';
+          });
+          _galApplyFilter(container);
+        });
+        tagBar.appendChild(btn);
+      });
+      scroll.appendChild(tagBar);
+    }
+
+    // ── 雙欄瀑布流 ──
     const colWrap = el('div');
     colWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
     const cols = [el('div'), el('div')];
@@ -5708,7 +5759,10 @@ function renderGalleryWidget(container) {
 
     items.forEach((item, idx) => {
       const card = el('div', 'gallery-card');
-      card.dataset.galid = item.id;
+      card.dataset.galid    = item.id;
+      card.dataset.galtitle = item.title || '';
+      card.dataset.galdesc  = item.description || '';
+      card.dataset.galtags  = (item.tags || []).join(',');
       const isSel = _galSelected.has(item.id);
       card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);box-shadow:0 0 0 1px rgba(255,255,255,0.08);';
       if (isSel) card.classList.add('gallery-selected');
@@ -5719,20 +5773,45 @@ function renderGalleryWidget(container) {
         const url = URL.createObjectURL(blob);
         if (item.type === 'video') {
           const vid = el('video');
-          vid.style.cssText = 'width:100%;display:block;border-radius:10px;';
+          vid.style.cssText = 'width:100%;display:block;';
           vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
           vid.src = url;
           vid.oncanplay = () => URL.revokeObjectURL(url);
-          card.appendChild(vid);
+          card.insertBefore(vid, card.firstChild);
         } else {
           const img = el('img');
-          img.style.cssText = 'width:100%;display:block;border-radius:10px;';
+          img.style.cssText = 'width:100%;display:block;';
           img.alt = ''; img.loading = 'lazy';
           img.src = url;
           img.onload = () => URL.revokeObjectURL(url);
-          card.appendChild(img);
+          card.insertBefore(img, card.firstChild);
         }
       });
+
+      // 標籤 chips（卡片底部）
+      if (item.tags?.length) {
+        const chipRow = el('div');
+        chipRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:3px;padding:5px 6px 6px;';
+        item.tags.forEach(tag => {
+          const chip = el('span');
+          const isA = _galActiveTag === tag;
+          chip.style.cssText = `display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;cursor:pointer;${isA ? 'background:#5865f2;color:#fff;' : 'background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.65);'}`;
+          chip.textContent = tag;
+          chip.addEventListener('click', e => {
+            e.stopPropagation();
+            _galActiveTag = (_galActiveTag === tag) ? '' : tag;
+            container.querySelectorAll('.gal-tag-btn').forEach(b => {
+              const a = b.dataset.galtag === _galActiveTag;
+              b.style.background  = a ? '#5865f2' : 'transparent';
+              b.style.borderColor = a ? '#5865f2' : 'rgba(255,255,255,0.2)';
+              b.style.color       = a ? '#fff'    : 'rgba(255,255,255,0.65)';
+            });
+            _galApplyFilter(container);
+          });
+          chipRow.appendChild(chip);
+        });
+        card.appendChild(chipRow);
+      }
 
       // 長按進入多選（震動與 UI 同步，不 re-render）
       let lpTimer = null, lpFired = false, startX = 0, startY = 0;
@@ -5767,6 +5846,9 @@ function renderGalleryWidget(container) {
 
       cols[idx % 2].appendChild(card);
     });
+
+    // 套用現有篩選條件（重開後保留搜索/標籤狀態）
+    if (_galSearchQuery || _galActiveTag) _galApplyFilter(container);
   }
 
   container.appendChild(scroll);
@@ -5852,6 +5934,20 @@ function _galToggleCardSelect(card, itemId, container) {
   if (tb) tb.style.display = _galMultiActive ? '' : 'none';
 }
 
+/* ── 搜索 / 標籤篩選（就地 DOM，不重新渲染） ── */
+function _galApplyFilter(container) {
+  const q   = _galSearchQuery.toLowerCase();
+  const tag = _galActiveTag;
+  container.querySelectorAll('.gallery-card').forEach(card => {
+    const title = (card.dataset.galtitle || '').toLowerCase();
+    const desc  = (card.dataset.galdesc  || '').toLowerCase();
+    const tags  = card.dataset.galtags   || '';
+    const matchQ   = !q   || title.includes(q) || desc.includes(q) || tags.toLowerCase().includes(q);
+    const matchTag = !tag || tags.split(',').map(t => t.trim()).includes(tag);
+    card.style.display = (matchQ && matchTag) ? '' : 'none';
+  });
+}
+
 function openGalleryAddDialog(container) {
   const overlay = el('div', 'gallery-overlay');
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9900;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
@@ -5867,7 +5963,9 @@ function openGalleryAddDialog(container) {
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
     <textarea id="_gal-desc" placeholder="輸入描述…" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;margin-bottom:12px;"></textarea>
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
-    <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
+    <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標籤（逗號分隔，選填）</div>
+    <input type="text" id="_gal-tags" placeholder="例：旅遊, 美食, 設計…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
     <div style="display:flex;gap:10px;">
       <button id="_gal-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
       <button id="_gal-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>
@@ -5903,7 +6001,7 @@ function openGalleryAddDialog(container) {
     const imageId = 'gallery_img_' + id;
     await idbSet(imageId, blob);
     if (!S.gallery) S.gallery = [];
-    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', title: box.querySelector('#_gal-title').value.trim(), description: box.querySelector('#_gal-desc').value.trim(), url: box.querySelector('#_gal-url').value.trim(), addedAt: Date.now() });
+    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', title: box.querySelector('#_gal-title').value.trim(), description: box.querySelector('#_gal-desc').value.trim(), url: box.querySelector('#_gal-url').value.trim(), tags: box.querySelector('#_gal-tags').value.split(',').map(t=>t.trim()).filter(Boolean), addedAt: Date.now() });
     lsSave();
     overlay.remove();
     renderGalleryWidget(container);
@@ -5983,9 +6081,21 @@ function openGalleryDetail(item, container) {
   }
   if (item.description) {
     const d = el('div');
-    d.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:14px;';
+    d.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5;margin-bottom:10px;';
     d.textContent = item.description;
     info.appendChild(d);
+  }
+
+  if (item.tags?.length) {
+    const tagRow = el('div');
+    tagRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;';
+    item.tags.forEach(tag => {
+      const chip = el('span');
+      chip.style.cssText = 'font-size:11px;padding:3px 9px;border-radius:99px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);';
+      chip.textContent = tag;
+      tagRow.appendChild(chip);
+    });
+    info.appendChild(tagRow);
   }
 
   // 單排按鈕：[✏][前往連結 ↗][×]
@@ -6055,7 +6165,9 @@ function openGalleryEditDialog(item, container) {
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
     <textarea id="_gal-e-desc" rows="2" placeholder="輸入描述…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;margin-bottom:12px;">${esc(item.description||'')}</textarea>
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
-    <input type="url" id="_gal-e-url" value="${esc(item.url||'')}" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
+    <input type="url" id="_gal-e-url" value="${esc(item.url||'')}" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
+    <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標籤（逗號分隔，選填）</div>
+    <input type="text" id="_gal-e-tags" value="${esc((item.tags||[]).join(', '))}" placeholder="例：旅遊, 美食, 設計…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">
     <div style="display:flex;gap:10px;">
       <button id="_gal-e-cancel" style="flex:1;padding:11px;border-radius:8px;background:rgba(255,255,255,0.08);color:#fff;border:none;font-size:14px;cursor:pointer;">取消</button>
       <button id="_gal-e-save" style="flex:1;padding:11px;border-radius:8px;background:var(--accent,#7c6af5);color:#fff;border:none;font-size:14px;font-weight:600;cursor:pointer;">儲存</button>
@@ -6068,6 +6180,7 @@ function openGalleryEditDialog(item, container) {
     item.title       = box.querySelector('#_gal-e-title').value.trim();
     item.description = box.querySelector('#_gal-e-desc').value.trim();
     item.url         = box.querySelector('#_gal-e-url').value.trim();
+    item.tags        = box.querySelector('#_gal-e-tags').value.split(',').map(t=>t.trim()).filter(Boolean);
     lsSave(); overlay.remove(); renderGalleryWidget(container);
   });
 }
