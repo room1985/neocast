@@ -5745,7 +5745,7 @@ function renderGalleryWidget(container) {
             lpFired = true;
             navigator.vibrate?.(50);
             _galEnterMultiSelect(container, item.id);
-          }, 800);
+          }, 500);
         }
       }, { passive: true });
       card.addEventListener('touchmove', e => {
@@ -5763,7 +5763,7 @@ function renderGalleryWidget(container) {
           openGalleryDetail(item, container);
         }
       });
-      card.addEventListener('contextmenu', e => e.preventDefault());
+      card.addEventListener('contextmenu', e => { e.preventDefault(); e.stopPropagation(); });
 
       cols[idx % 2].appendChild(card);
     });
