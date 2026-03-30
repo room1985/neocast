@@ -29,7 +29,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag">v1.10.33</span>
+      <span id="version-tag">v1.10.34</span>
       <button id="perf-btn" title="效能監控" aria-label="效能監控">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </button>
@@ -141,6 +141,15 @@
   <div id="m-cfg" class="modal hidden">
     <div class="mbox glass wide">
       <h3>⚙ 設定</h3>
+
+      <div class="cfg-sec">
+        <div class="cfg-sec-title">☁️ 視覺書籤雲端同步</div>
+        <label>
+          Cloud Token
+          <input id="cfg-cloud-token" type="password" autocomplete="new-password" placeholder="自訂密碼，與 Worker 環境變數一致" spellcheck="false">
+          <span class="hint">填入後圖片/影片自動上傳 Cloudflare，可跨瀏覽器同步</span>
+        </label>
+      </div>
 
       <div class="cfg-sec">
         <div class="cfg-sec-title">🔄 GitHub Gist 同步</div>

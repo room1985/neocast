@@ -37,6 +37,7 @@ async function toTW(text) {
 }
 const NEWS_CACHE_MS = 4 * 60 * 60 * 1000; // 4 小時
 const NEWSDATA_PROXY = 'https://autumn-sunset-863b.heineken6may.workers.dev/';
+const CLOUD_API      = 'https://neocast-api.heineken6may.workers.dev';
 const RSS2JSON = 'https://api.rss2json.com/v1/api.json?rss_url='; // fallback
 const NEWS_DEFAULT_IMG = 'https://cnews.com.tw/wp-content/uploads/2023/08/2023-08-30_18-34-44_686542.jpg';
 
@@ -76,7 +77,8 @@ let S = {
     weatherLat:  null,
     weatherLon:  null,
     ytApiKey:    '',
-    newsdataApiKey: ''
+    newsdataApiKey: '',
+    cloudToken:  ''
   },
   yt: { channels: [], fetchedAt: 0, items: [], groups: [], watched: [], liked: [], oauthToken: null, oauthExpiry: 0 },
   widgetTitles: {},
@@ -241,6 +243,95 @@ function idbDel(key) {
     tx.objectStore(IDB_ST).delete(key);
     tx.oncomplete = res; tx.onerror = rej;
   });
+}
+
+/* ─────────────────────────────────────
+   CLOUD — Cloudflare Worker API
+───────────────────────────────────── */
+function _cloudHeaders() {
+  return { 'Authorization': 'Bearer ' + (S.cfg.cloudToken || '') };
+}
+
+async function compressImage(blob, maxW = 1200, quality = 0.82) {
+  return new Promise(res => {
+    const img = new Image();
+    const url = URL.createObjectURL(blob);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxW / img.width);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const cvs = document.createElement('canvas');
+      cvs.width = w; cvs.height = h;
+      cvs.getContext('2d').drawImage(img, 0, 0, w, h);
+      cvs.toBlob(b => res(b || blob), 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); res(blob); };
+    img.src = url;
+  });
+}
+
+async function trimVideoTo3s(blob) {
+  return new Promise(res => {
+    const url = URL.createObjectURL(blob);
+    const vid = document.createElement('video');
+    vid.muted = true; vid.playsInline = true; vid.src = url;
+    vid.oncanplay = () => {
+      let stream, recorder, chunks = [];
+      try { stream = vid.captureStream(); } catch(e) { URL.revokeObjectURL(url); res(blob); return; }
+      recorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+      recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data); };
+      recorder.onstop = () => { URL.revokeObjectURL(url); res(new Blob(chunks, { type: 'video/webm' })); };
+      recorder.start(); vid.play();
+      setTimeout(() => { recorder.stop(); vid.pause(); }, 3000);
+    };
+    vid.onerror = () => { URL.revokeObjectURL(url); res(blob); };
+  });
+}
+
+async function cloudUpload(blob, contentType) {
+  const res = await fetch(CLOUD_API + '/upload', {
+    method: 'POST',
+    headers: { ..._cloudHeaders(), 'Content-Type': contentType },
+    body: blob,
+  });
+  if (!res.ok) throw new Error('Upload failed: ' + res.status);
+  return await res.json(); // { url, r2Key }
+}
+
+async function cloudGalleryPush() {
+  if (!S.cfg.cloudToken) return;
+  try {
+    await fetch(CLOUD_API + '/gallery', {
+      method: 'POST',
+      headers: { ..._cloudHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(S.gallery || []),
+    });
+  } catch(_) {}
+}
+
+async function cloudGalleryPull() {
+  if (!S.cfg.cloudToken) return;
+  try {
+    const res = await fetch(CLOUD_API + '/gallery', { headers: _cloudHeaders() });
+    if (!res.ok) return;
+    const remote = await res.json();
+    if (!Array.isArray(remote) || !remote.length) return;
+    const localIds = new Set((S.gallery || []).map(g => g.id));
+    let changed = false;
+    remote.forEach(item => {
+      if (!localIds.has(item.id)) { S.gallery.push(item); changed = true; }
+    });
+    if (changed) lsSaveLocal();
+  } catch(_) {}
+}
+
+function cloudDeleteItem(id, r2Key) {
+  if (!S.cfg.cloudToken) return;
+  fetch(CLOUD_API + '/gallery/' + encodeURIComponent(id), {
+    method: 'DELETE',
+    headers: _cloudHeaders(),
+  }).catch(() => {});
 }
 
 /* ─────────────────────────────────────
@@ -3026,6 +3117,7 @@ function doMove(scId, gid) {
 }
 
 function openSettingsModal() {
+  $('cfg-cloud-token').value = S.cfg.cloudToken || '';
   $('cfg-tok').value        = S.cfg.token;
   $('cfg-gid').value        = S.cfg.gistId;
   $('cfg-nickname').value   = S.cfg.nickname || '';
@@ -3060,6 +3152,7 @@ async function saveSettings() {
   const nickname   = $('cfg-nickname').value.trim();
   const city       = $('cfg-city').value.trim();
 
+  S.cfg.cloudToken   = $('cfg-cloud-token').value.trim();
   S.cfg.token        = token;
   S.cfg.gistId       = gistId;
   S.cfg.nickname     = nickname;
@@ -5682,7 +5775,9 @@ function renderGalleryWidget(container) {
       _galSelected.clear();
       _galMultiActive = false;
       lsSave();
-      await Promise.all(toDelete.map(g => idbDel(g.imageId)));
+      await Promise.all(toDelete.map(g => g.imageId ? idbDel(g.imageId).catch(() => {}) : Promise.resolve()));
+      toDelete.forEach(g => cloudDeleteItem(g.id, g.r2Key));
+      cloudGalleryPush();
       renderGalleryWidget(container);
     });
   }
@@ -5768,25 +5863,29 @@ function renderGalleryWidget(container) {
       if (isSel) card.classList.add('gallery-selected');
       if (_galMultiActive) _galAddSelDot(card, isSel);
 
-      idbGet(item.imageId).then(blob => {
-        if (!blob) return;
-        const url = URL.createObjectURL(blob);
+      (async () => {
+        let url = item.mediaUrl || null, needRevoke = false;
+        if (!url && item.imageId) {
+          const blob = await idbGet(item.imageId).catch(() => null);
+          if (blob) { url = URL.createObjectURL(blob); needRevoke = true; }
+        }
+        if (!url) return;
         if (item.type === 'video') {
           const vid = el('video');
           vid.style.cssText = 'width:100%;display:block;';
           vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
           vid.src = url;
-          vid.oncanplay = () => URL.revokeObjectURL(url);
+          if (needRevoke) vid.oncanplay = () => URL.revokeObjectURL(url);
           card.insertBefore(vid, card.firstChild);
         } else {
           const img = el('img');
           img.style.cssText = 'width:100%;display:block;';
           img.alt = ''; img.loading = 'lazy';
           img.src = url;
-          img.onload = () => URL.revokeObjectURL(url);
+          if (needRevoke) img.onload = () => URL.revokeObjectURL(url);
           card.insertBefore(img, card.firstChild);
         }
-      });
+      })();
 
       // 標籤 chips（卡片底部）
       if (item.tags?.length) {
@@ -6111,12 +6210,38 @@ function openGalleryAddDialog(container, prefill = null) {
   btnRow.querySelector('#_gal-save').addEventListener('click', async () => {
     // 從分享進來時允許無媒體（純文字/連結書籤）
     if (!blob && !prefill) return;
+    const saveBtn = btnRow.querySelector('#_gal-save');
+    saveBtn.disabled = true; saveBtn.textContent = '處理中…';
     const id = uid();
     const imageId = 'gallery_img_' + id;
-    if (blob) await idbSet(imageId, blob);
+    let mediaUrl = null, r2Key = null;
+    if (blob) {
+      const isVideo = blob.type.startsWith('video/');
+      try {
+        let uploadBlob = blob, uploadType = blob.type;
+        if (isVideo) {
+          saveBtn.textContent = '剪輯影片…';
+          uploadBlob = await trimVideoTo3s(blob);
+          uploadType = 'video/webm';
+        } else {
+          saveBtn.textContent = '壓縮圖片…';
+          uploadBlob = await compressImage(blob);
+          uploadType = 'image/jpeg';
+        }
+        if (S.cfg.cloudToken) {
+          saveBtn.textContent = '上傳中…';
+          const result = await cloudUpload(uploadBlob, uploadType);
+          mediaUrl = result.url; r2Key = result.r2Key;
+        }
+        await idbSet(imageId, uploadBlob);
+      } catch(e) {
+        await idbSet(imageId, blob);
+      }
+    }
     if (!S.gallery) S.gallery = [];
     S.gallery.push({
       id, imageId: blob ? imageId : null,
+      mediaUrl, r2Key,
       type: blob ? (blob.type.startsWith('video/') ? 'video' : 'image') : 'link',
       title: box.querySelector('#_gal-title').value.trim(),
       description: box.querySelector('#_gal-desc').value.trim(),
@@ -6125,6 +6250,7 @@ function openGalleryAddDialog(container, prefill = null) {
       addedAt: Date.now()
     });
     lsSave();
+    cloudGalleryPush();
     overlay.remove();
     // 清理 URL 參數（避免重新整理再次觸發）
     if (location.search.includes('share')) history.replaceState(null, '', location.pathname);
@@ -6157,7 +6283,9 @@ function showGalleryCardMenu(item, container) {
   });
   sheet.querySelector('#_gal-del').addEventListener('click', async () => {
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
-    await idbDel(item.imageId);
+    if (item.imageId) await idbDel(item.imageId).catch(() => {});
+    cloudDeleteItem(item.id, item.r2Key);
+    cloudGalleryPush();
     lsSave();
     overlay.remove();
     renderGalleryWidget(container);
@@ -6175,24 +6303,28 @@ function openGalleryDetail(item, container) {
   // 媒體區
   const mediaWrap = el('div');
   mediaWrap.style.cssText = 'width:100%;overflow:hidden;border-radius:20px 20px 0 0;background:#000;';
-  idbGet(item.imageId).then(blob => {
-    if (!blob) return;
-    const url = URL.createObjectURL(blob);
+  (async () => {
+    let url = item.mediaUrl || null, needRevoke = false;
+    if (!url && item.imageId) {
+      const blob = await idbGet(item.imageId).catch(() => null);
+      if (blob) { url = URL.createObjectURL(blob); needRevoke = true; }
+    }
+    if (!url) return;
     if (item.type === 'video') {
       const vid = el('video');
       vid.style.cssText = 'width:100%;display:block;max-height:58vh;object-fit:contain;';
       vid.muted = true; vid.loop = true; vid.playsInline = true; vid.controls = true;
       vid.src = url;
-      vid.oncanplay = () => URL.revokeObjectURL(url);
+      if (needRevoke) vid.oncanplay = () => URL.revokeObjectURL(url);
       mediaWrap.appendChild(vid);
     } else {
       const img = el('img');
       img.style.cssText = 'width:100%;display:block;max-height:58vh;object-fit:contain;';
       img.src = url;
-      img.onload = () => URL.revokeObjectURL(url);
+      if (needRevoke) img.onload = () => URL.revokeObjectURL(url);
       mediaWrap.appendChild(img);
     }
-  });
+  })();
   card.appendChild(mediaWrap);
 
   // 文字 + 按鈕區
@@ -6247,7 +6379,9 @@ function openGalleryDetail(item, container) {
   delBtn.addEventListener('click', async () => {
     if (!confirm('確定刪除這個書籤？')) return;
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
-    await idbDel(item.imageId);
+    if (item.imageId) await idbDel(item.imageId).catch(() => {});
+    cloudDeleteItem(item.id, item.r2Key);
+    cloudGalleryPush();
     lsSave(); doClose(); renderGalleryWidget(container);
   });
 
@@ -7090,6 +7224,7 @@ async function init() {
   await idbOpen().catch(()=>{});
   await loadVideo().catch(()=>{});
   await checkShareTarget().catch(()=>{});
+  cloudGalleryPull().catch(() => {});
 
   // Build widgets (only if visible, undefined counts as visible)
   if (S.widgets.clock?.visible     !== false) buildClockWidget();
