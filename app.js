@@ -407,6 +407,19 @@ function extractYouTubeId(url) {
   return m ? m[1] : null;
 }
 
+async function fetchLinkMeta(targetUrl) {
+  if (!S.cfg.cloudToken) return null;
+  try {
+    const res = await fetch(
+      `${CLOUD_API}/og?url=${encodeURIComponent(targetUrl)}`,
+      { headers: _cloudHeaders() }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    return (data.title || data.image || data.description) ? data : null;
+  } catch(_) { return null; }
+}
+
 function cloudDeleteItem(id, r2Key) {
   if (!S.cfg.cloudToken) return;
   fetch(CLOUD_API + '/gallery/' + encodeURIComponent(id), {
@@ -6309,7 +6322,7 @@ function openGalleryAddDialog(container, prefill = null) {
   overlay.appendChild(box);
   document.body.appendChild(overlay);
 
-  let blob = null;
+  let blob = null, _ogMeta = null;
   const preview = box.querySelector('#_gal-preview');
   const fileInp = box.querySelector('#_gal-file');
 
@@ -6359,9 +6372,9 @@ function openGalleryAddDialog(container, prefill = null) {
         preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
       }
     } else if (fillUrl) {
-      // 偵測 YouTube 連結 → 顯示縮圖
       const ytId = extractYouTubeId(fillUrl);
       if (ytId) {
+        // YouTube 縮圖
         preview.innerHTML = `
           <div style="position:relative;width:100%;">
             <img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" style="width:100%;display:block;border-radius:6px;" loading="lazy">
@@ -6370,7 +6383,27 @@ function openGalleryAddDialog(container, prefill = null) {
             </div>
           </div>`;
       } else {
-        preview.innerHTML = `<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">🔗 連結書籤<br><span style="font-size:11px;word-break:break-all;opacity:0.6;">${esc(fillUrl)}</span></div>`;
+        // 其他連結 → 先顯示載入中，Worker 抓 OG metadata
+        preview.innerHTML = `<div style="padding:20px;text-align:center;color:rgba(255,255,255,0.3);font-size:13px;">讀取中…</div>`;
+        fetchLinkMeta(fillUrl).then(meta => {
+          if (!meta) {
+            preview.innerHTML = `<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">🔗 連結書籤<br><span style="font-size:11px;word-break:break-all;opacity:0.6;">${esc(fillUrl)}</span></div>`;
+            return;
+          }
+          _ogMeta = meta;
+          // 填入標題（若空白）
+          const titleEl = box.querySelector('#_gal-title');
+          if (meta.title && !titleEl.value) titleEl.value = meta.title;
+          // 填入描述（若空白）
+          const descEl = box.querySelector('#_gal-desc');
+          if (meta.description && !descEl.value) descEl.value = meta.description.slice(0, 150);
+          // 預覽圖
+          if (meta.image) {
+            preview.innerHTML = `<img src="${esc(meta.image)}" style="width:100%;display:block;border-radius:6px;" loading="lazy" onerror="this.parentElement.innerHTML='<div style=\\'padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;\\'>🔗 圖片無法顯示</div>'">`;
+          } else {
+            preview.innerHTML = `<div style="padding:16px;text-align:center;color:rgba(255,255,255,0.4);font-size:13px;">🔗 ${esc(meta.title || fillUrl)}</div>`;
+          }
+        });
       }
     } else {
       preview.textContent = '（無附件）點擊可選擇圖片或影片';
@@ -6436,11 +6469,15 @@ function openGalleryAddDialog(container, prefill = null) {
         await idbSet(imageId, blob);
       }
     }
-    // YouTube 連結：直接用 YT 縮圖作為 mediaUrl（不需上傳）
+    // 連結書籤：設定 mediaUrl（不需上傳）
     if (!blob) {
       const linkUrl = box.querySelector('#_gal-url').value.trim();
       const ytId = extractYouTubeId(linkUrl);
-      if (ytId) mediaUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      if (ytId) {
+        mediaUrl = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+      } else if (_ogMeta?.image) {
+        mediaUrl = _ogMeta.image;
+      }
     }
 
     if (!S.gallery) S.gallery = [];
