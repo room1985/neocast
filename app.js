@@ -6270,16 +6270,21 @@ function buildGalleryTagEditor(box, initialTags) {
       pill.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;font-size:12px;cursor:pointer;border:1px solid ${on ? '#5865f2' : 'rgba(255,255,255,0.2)'};background:${on ? '#5865f2' : 'rgba(255,255,255,0.05)'};color:${on ? '#fff' : 'rgba(255,255,255,0.65)'};-webkit-tap-highlight-color:transparent;outline:none;transition:background .12s,border-color .12s;`;
       const label = document.createTextNode(tag);
       pill.appendChild(label);
-      if (on) {
-        const x = el('span');
-        x.textContent = '×';
-        x.style.cssText = 'font-size:14px;line-height:1;opacity:0.8;pointer-events:none;';
-        pill.appendChild(x);
-      }
       pill.addEventListener('click', () => {
         if (selected.has(tag)) selected.delete(tag); else selected.add(tag);
         renderPills();
       });
+      if (on) {
+        const x = el('span');
+        x.textContent = '×';
+        x.style.cssText = 'font-size:14px;line-height:1;opacity:0.8;margin-left:2px;';
+        x.addEventListener('click', e => {
+          e.stopPropagation();
+          selected.delete(tag);
+          renderPills();
+        });
+        pill.appendChild(x);
+      }
       pillsArea.appendChild(pill);
     });
   }
@@ -6356,13 +6361,21 @@ function openGalleryAddDialog(container, prefill = null) {
   if (prefill) {
     // 部分 app（如 YouTube）把連結夾在 text 裡，嘗試從 text 取出 URL
     let fillTitle = prefill.title || '';
-    let fillDesc  = '';               // 描述欄由後續邏輯填入，不採用 prefill.text
+    let fillDesc  = '';
     let fillUrl   = prefill.url   || '';
+    // 從 text 欄取出 URL（YouTube 等 app 把連結夾在 text 裡）
     if (!fillUrl) {
       const urlMatch = (prefill.text || '').match(/https?:\/\/\S+/);
       if (urlMatch) fillUrl = urlMatch[0];
     }
+    // 取 text 欄非 URL 部分（蝦皮等 app 把商品名稱放在 text 裡）
+    const textSnippet = (prefill.text || '').replace(/https?:\/\/\S+/g, '').trim();
+    if (textSnippet) {
+      if (!fillTitle) fillTitle = textSnippet.slice(0, 100);
+      else            fillDesc  = textSnippet.slice(0, 150);
+    }
     if (fillTitle) box.querySelector('#_gal-title').value = fillTitle;
+    if (fillDesc)  box.querySelector('#_gal-desc').value  = fillDesc;
     if (fillUrl)   box.querySelector('#_gal-url').value   = fillUrl;
 
     if (prefill.blob) {
