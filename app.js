@@ -5948,6 +5948,26 @@ function _galApplyFilter(container) {
   });
 }
 
+/* ── Web Share Target：啟動時讀取 SW 存入的分享資料 ── */
+async function checkShareTarget() {
+  const pending = await idbGet('_share_pending').catch(() => null);
+  if (!pending) return;
+  await idbDel('_share_pending').catch(() => {});
+  // 清理 URL（?share=1 只是觸發器，清掉避免重整再觸發）
+  if (location.search.includes('share')) history.replaceState(null, '', location.pathname);
+  // 若有視覺書籤頁，切換過去
+  const galIdx = (S.mobilePages || []).findIndex(p => p.widget === 'gallery');
+  if (galIdx >= 0 && galIdx !== S.mobilePageIdx) {
+    S.mobilePageIdx = galIdx;
+    if (typeof renderPages === 'function') renderPages();
+  }
+  // 稍等一個 tick 讓 DOM 穩定，再開對話框
+  setTimeout(() => {
+    const container = document.querySelector('.gallery-fab')?.parentElement || null;
+    openGalleryAddDialog(container, pending);
+  }, 80);
+}
+
 /* ── 標籤編輯器（新增 / 編輯對話框共用） ── */
 function buildGalleryTagEditor(box, initialTags) {
   // 從所有書籤收集全域標籤；initialTags 中有但全域沒有的也加入
@@ -6016,14 +6036,14 @@ function buildGalleryTagEditor(box, initialTags) {
   return { getSelected: () => [...selected] };
 }
 
-function openGalleryAddDialog(container) {
+function openGalleryAddDialog(container, prefill = null) {
   const overlay = el('div', 'gallery-overlay');
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9900;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
 
   const box = el('div');
   box.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px;padding:20px;width:100%;max-width:380px;box-sizing:border-box;max-height:85vh;overflow-y:auto;';
   box.innerHTML = `
-    <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">新增視覺書籤</div>
+    <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">${prefill ? '儲存分享內容' : '新增視覺書籤'}</div>
     <div id="_gal-preview" style="width:100%;min-height:90px;border:1.5px dashed rgba(255,255,255,0.25);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.35);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;">點擊選擇圖片或影片</div>
     <input type="file" accept="image/*,video/*" id="_gal-file" style="display:none">
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標題（選填）</div>
@@ -6051,6 +6071,26 @@ function openGalleryAddDialog(container) {
   const preview = box.querySelector('#_gal-preview');
   const fileInp = box.querySelector('#_gal-file');
 
+  // 若是從分享進來，預先填入資料
+  if (prefill) {
+    if (prefill.title) box.querySelector('#_gal-title').value = prefill.title;
+    if (prefill.text)  box.querySelector('#_gal-desc').value  = prefill.text;
+    if (prefill.url)   box.querySelector('#_gal-url').value   = prefill.url;
+    if (prefill.blob) {
+      blob = prefill.blob;
+      const u = URL.createObjectURL(blob);
+      if (prefill.fileType?.startsWith('video/')) {
+        preview.innerHTML = `<video src="${u}" style="width:100%;display:block;" muted playsinline></video>`;
+        const v = preview.querySelector('video');
+        v.oncanplay = () => URL.revokeObjectURL(u);
+      } else {
+        preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
+      }
+    } else {
+      preview.textContent = '（無附件）點擊可選擇圖片或影片';
+    }
+  }
+
   preview.addEventListener('click', () => fileInp.click());
   fileInp.addEventListener('change', () => {
     const f = fileInp.files[0];
@@ -6069,15 +6109,27 @@ function openGalleryAddDialog(container) {
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   btnRow.querySelector('#_gal-cancel').addEventListener('click', () => overlay.remove());
   btnRow.querySelector('#_gal-save').addEventListener('click', async () => {
-    if (!blob) return;
+    // 從分享進來時允許無媒體（純文字/連結書籤）
+    if (!blob && !prefill) return;
     const id = uid();
     const imageId = 'gallery_img_' + id;
-    await idbSet(imageId, blob);
+    if (blob) await idbSet(imageId, blob);
     if (!S.gallery) S.gallery = [];
-    S.gallery.push({ id, imageId, type: blob.type.startsWith('video/') ? 'video' : 'image', title: box.querySelector('#_gal-title').value.trim(), description: box.querySelector('#_gal-desc').value.trim(), url: box.querySelector('#_gal-url').value.trim(), tags: tagEditor.getSelected(), addedAt: Date.now() });
+    S.gallery.push({
+      id, imageId: blob ? imageId : null,
+      type: blob ? (blob.type.startsWith('video/') ? 'video' : 'image') : 'link',
+      title: box.querySelector('#_gal-title').value.trim(),
+      description: box.querySelector('#_gal-desc').value.trim(),
+      url: box.querySelector('#_gal-url').value.trim(),
+      tags: tagEditor.getSelected(),
+      addedAt: Date.now()
+    });
     lsSave();
     overlay.remove();
-    renderGalleryWidget(container);
+    // 清理 URL 參數（避免重新整理再次觸發）
+    if (location.search.includes('share')) history.replaceState(null, '', location.pathname);
+    const c = container || document.querySelector('.gallery-fab')?.parentElement;
+    if (c) renderGalleryWidget(c);
   });
 }
 
@@ -7037,6 +7089,7 @@ async function init() {
   // IndexedDB + video
   await idbOpen().catch(()=>{});
   await loadVideo().catch(()=>{});
+  await checkShareTarget().catch(()=>{});
 
   // Build widgets (only if visible, undefined counts as visible)
   if (S.widgets.clock?.visible     !== false) buildClockWidget();
