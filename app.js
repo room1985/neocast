@@ -334,6 +334,53 @@ function cloudDeleteItem(id, r2Key) {
   }).catch(() => {});
 }
 
+async function migrateGalleryToCloud() {
+  if (!S.cfg.cloudToken) { toast('請先填入 Cloud Token', 'warn'); return; }
+  const items = (S.gallery || []).filter(g => g.imageId && !g.mediaUrl);
+  if (!items.length) { toast('沒有需要遷移的書籤', 'warn'); return; }
+
+  const btn = $('cfg-migrate-btn');
+  if (btn) { btn.disabled = true; btn.textContent = `遷移中 0/${items.length}…`; }
+
+  let done = 0, failed = 0;
+  for (const item of items) {
+    try {
+      const blob = await idbGet(item.imageId).catch(() => null);
+      if (!blob) { failed++; continue; }
+
+      let uploadBlob = blob, uploadType = blob.type || 'image/jpeg';
+      if (item.type === 'video') {
+        uploadBlob = await trimVideoTo3s(blob);
+        uploadType = 'video/webm';
+      } else {
+        uploadBlob = await compressImage(blob);
+        uploadType = 'image/jpeg';
+      }
+
+      const result = await cloudUpload(uploadBlob, uploadType);
+      item.mediaUrl = result.url;
+      item.r2Key    = result.r2Key;
+
+      await idbDel(item.imageId).catch(() => {});
+      item.imageId = null;
+
+      done++;
+      if (btn) btn.textContent = `遷移中 ${done}/${items.length}…`;
+    } catch(e) {
+      failed++;
+    }
+  }
+
+  lsSaveLocal();
+  await cloudGalleryPush();
+
+  if (btn) { btn.disabled = false; btn.textContent = '一鍵遷移至雲端'; }
+  const msg = failed
+    ? `遷移完成：${done} 成功，${failed} 失敗`
+    : `已遷移 ${done} 個書籤 ✓`;
+  toast(msg, failed ? 'warn' : undefined);
+}
+
 /* ─────────────────────────────────────
    GITHUB GIST SYNC
 ───────────────────────────────────── */
@@ -3118,6 +3165,7 @@ function doMove(scId, gid) {
 
 function openSettingsModal() {
   $('cfg-cloud-token').value = S.cfg.cloudToken || '';
+  $('cfg-migrate-btn').onclick = () => migrateGalleryToCloud();
   $('cfg-tok').value        = S.cfg.token;
   $('cfg-gid').value        = S.cfg.gistId;
   $('cfg-nickname').value   = S.cfg.nickname || '';
