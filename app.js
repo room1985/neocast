@@ -5648,13 +5648,25 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       if (onVideoChange && playlist[curIdx]) onVideoChange(playlist[curIdx]);
       lastPos = -1; lastPosTime = Date.now();
       clearTimeout(stuckTimer); stuckTimer = null;
+      clearInterval(watchdogInterval); watchdogInterval = null;
       clearTimeout(countdownTimer); clearInterval(countdownInterval);
       nextBar.style.display = 'none';
-      try {
-        // 切換影片前先卸載字幕模組，避免前一部影片字幕殘留
-        ytPlayer?.unloadModule?.('captions');
-        ytPlayer?.loadVideoById(playlist[curIdx].videoId);
-      } catch(_) {}
+      playerInitialized = false;
+
+      // 完全銷毀並重建 player，確保字幕、快取、UI 狀態徹底清除
+      try { ytPlayer?.destroy(); } catch(_) {}
+      ytPlayer = null;
+      window._ytActivePlayer = null;
+
+      // 用全新容器取代舊容器（徹底清除 iframe 殘留 DOM）
+      const newContainer = document.createElement('div');
+      newContainer.id = 'yt-api-player-' + Date.now();
+      newContainer.style.cssText = 'width:100%;height:100%;';
+      ytContainerEl.replaceWith(newContainer);
+      ytContainerEl = newContainer;
+
+      // 初始化全新 player 並直接播放目標影片
+      initYtPlayer(playlist[curIdx].videoId);
     };
 
     const skipToNext = () => {
@@ -5666,14 +5678,15 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
 
     const skipToPrev = () => goToIdx(curIdx - 1);
 
-    const initYtPlayer = () => {
+    // vid 預設為首支影片 videoId，切換時傳入新的 id
+    const initYtPlayer = (vid = videoId) => {
       ytPlayer = window._ytActivePlayer = new YT.Player(ytContainerEl.id, {
         width: '100%',
         height: '100%',
         playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
         events: {
           onReady: (e) => {
-            e.target.loadVideoById(videoId);
+            e.target.loadVideoById(vid);
             setTimeout(() => {
               try { if (e.target.getPlayerState() !== 1) e.target.playVideo(); } catch(_) {}
               playerInitialized = true;
@@ -5703,8 +5716,6 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               nextBar.style.display = 'none';
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
-              // 新影片開始播放後重新載入字幕模組（讓新影片字幕正常顯示）
-              try { ytPlayer?.loadModule?.('captions'); } catch(_) {}
             }
             if (e.data === 3) {
               clearTimeout(stuckTimer); stuckTimer = null;
