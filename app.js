@@ -6722,8 +6722,47 @@ function openGalleryDetail(item, container) {
     lsSave(); doClose(); renderGalleryWidget(container);
   });
 
+  // 分享媒體按鈕（有 mediaUrl 或本地 imageId 才顯示）
+  const hasMedia = !!(item.mediaUrl || item.imageId);
+  const shareImgBtn = el('button');
+  shareImgBtn.style.cssText = `flex:1;padding:9px 12px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;display:${hasMedia ? 'flex' : 'none'};align-items:center;justify-content:center;gap:5px;`;
+  shareImgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>&nbsp;分享`;
+  shareImgBtn.title = '分享圖片';
+  shareImgBtn.addEventListener('click', async () => {
+    if (!navigator.share) { toast('此裝置不支援分享', 'err'); return; }
+    shareImgBtn.disabled = true;
+    const orig = shareImgBtn.innerHTML;
+    shareImgBtn.textContent = '取得中…';
+    try {
+      let blob = null;
+      if (item.imageId)  blob = await idbGet(item.imageId).catch(() => null);
+      if (!blob && item.mediaUrl) {
+        const r = await fetch(item.mediaUrl).catch(() => null);
+        if (r?.ok) blob = await r.blob().catch(() => null);
+      }
+      if (!blob) throw new Error('no media');
+      const mime = blob.type || 'image/jpeg';
+      const ext  = mime.includes('webm') ? 'webm' : mime.includes('mp4') ? 'mp4' : mime.includes('png') ? 'png' : 'jpg';
+      const file = new File([blob], `media.${ext}`, { type: mime });
+      if (navigator.canShare?.({ files: [file] })) {
+        await navigator.share({ files: [file], title: item.title || '', text: item.description || '' });
+      } else {
+        await navigator.share({ url: item.url || item.mediaUrl || '', title: item.title || '' });
+      }
+    } catch(e) {
+      if (e?.name !== 'AbortError') toast('分享失敗', 'err');
+    } finally {
+      shareImgBtn.disabled = false;
+      shareImgBtn.innerHTML = orig;
+    }
+  });
+
+  // 前往連結寬度調整：有 shareImgBtn 時各佔一半
+  if (hasMedia) linkBtn.style.flex = '1';
+
   actions.appendChild(editBtn);
   actions.appendChild(linkBtn);
+  if (hasMedia) actions.appendChild(shareImgBtn);
   actions.appendChild(delBtn);
   info.appendChild(actions);
   card.appendChild(info);
