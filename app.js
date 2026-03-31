@@ -5616,7 +5616,9 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       if (!playlist || curIdx < 0) return;
       const next = playlist[curIdx + 1];
       if (!next) return;
-      let secs = 3;
+      // Cancel any previously running countdown before starting a new one
+      clearTimeout(countdownTimer); clearInterval(countdownInterval);
+      let secs = 2;
       nextBar.innerHTML = '';
       const msg = el('span', '', `下一則：${next.title || ''}`);
       const cancelBtn = el('button', 'yt-next-cancel', `取消 (${secs})`);
@@ -5637,7 +5639,7 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       countdownTimer = setTimeout(() => {
         nextBar.style.display = 'none';
         skipToNext();
-      }, 3000);
+      }, 2000);
     };
 
     const goToIdx = (idx) => {
