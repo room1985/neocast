@@ -5909,7 +5909,7 @@ function injectGalleryCSS() {
 
 function renderGalleryWidget(container) {
   injectGalleryCSS();
-  container.querySelectorAll('.gallery-scroll, .gallery-fab').forEach(e => e.remove());
+  container.querySelectorAll('.gallery-scroll, .gallery-fab, .gallery-search-head').forEach(e => e.remove());
 
   // ── panelHead trash button（建立一次，保留跨渲染）──
   const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
@@ -5944,6 +5944,10 @@ function renderGalleryWidget(container) {
 
   const items = S.gallery || [];
 
+  // ── 搜索欄 + 標籤篩選（固定在頂部，不隨卡片捲動）──
+  const galHead = el('div', 'gallery-search-head');
+  galHead.style.cssText = 'flex-shrink:0;padding:6px 8px 0;';
+
   if (!items.length) {
     const empty = el('div');
     empty.style.cssText = 'text-align:center;padding:60px 16px;color:rgba(255,255,255,0.3);font-size:14px;';
@@ -5952,7 +5956,7 @@ function renderGalleryWidget(container) {
   } else {
     // ── 搜索欄 ──
     const searchWrap = el('div');
-    searchWrap.style.cssText = 'display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border-radius:10px;padding:7px 10px;margin-bottom:8px;';
+    searchWrap.style.cssText = 'display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border-radius:10px;padding:7px 10px;margin-bottom:6px;';
     searchWrap.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2.2" width="14" height="14" style="flex-shrink:0"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
     const searchInput = el('input');
     searchInput.type = 'text';
@@ -5968,7 +5972,7 @@ function renderGalleryWidget(container) {
       searchWrap.appendChild(clrBtn);
     }
     searchInput.addEventListener('input', () => { _galSearchQuery = searchInput.value; _galApplyFilter(container); });
-    scroll.appendChild(searchWrap);
+    galHead.appendChild(searchWrap);
 
     // ── 標籤篩選列 ──
     const allTags = [...new Set(items.flatMap(it => it.tags || []))].filter(Boolean);
@@ -5995,7 +5999,7 @@ function renderGalleryWidget(container) {
         });
         tagBar.appendChild(btn);
       });
-      scroll.appendChild(tagBar);
+      galHead.appendChild(tagBar);
     }
 
     // ── 雙欄瀑布流 ──
@@ -6125,6 +6129,7 @@ function renderGalleryWidget(container) {
     if (_galSearchQuery || _galActiveTag) _galApplyFilter(container);
   }
 
+  container.appendChild(galHead);
   container.appendChild(scroll);
 
   // FAB（多選模式下隱藏）
@@ -6339,6 +6344,111 @@ function buildGalleryTagEditor(box, initialTags) {
   return { getSelected: () => [...selected] };
 }
 
+/* ── 簡易裁切對話框 ── */
+function showCropDialog(file) {
+  return new Promise(resolve => {
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:#08081a;z-index:99999;display:flex;flex-direction:column;touch-action:none;-webkit-user-select:none;user-select:none;';
+    const topBar = document.createElement('div');
+    topBar.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:12px 16px;flex-shrink:0;';
+    topBar.innerHTML = `
+      <button id="_cc" style="background:rgba(255,255,255,0.1);border:none;color:#fff;font-size:13px;cursor:pointer;padding:7px 14px;border-radius:8px;">取消</button>
+      <span style="color:#fff;font-weight:600;font-size:15px;">裁切圖片</span>
+      <button id="_co" style="background:#5865f2;border:none;color:#fff;font-size:13px;font-weight:600;cursor:pointer;padding:7px 16px;border-radius:8px;">完成裁切</button>`;
+    const stEl = document.createElement('div');
+    stEl.style.cssText = 'flex:1;position:relative;overflow:hidden;';
+    const cv = document.createElement('canvas');
+    cv.style.cssText = 'display:block;width:100%;height:100%;';
+    stEl.appendChild(cv);
+    ov.appendChild(topBar); ov.appendChild(stEl);
+    document.body.appendChild(ov);
+
+    const img = new Image();
+    const ou = URL.createObjectURL(file);
+    img.src = ou;
+    img.onload = () => {
+      const W = stEl.offsetWidth, H = stEl.offsetHeight;
+      cv.width = W; cv.height = H;
+      const ctx = cv.getContext('2d');
+      const sc = Math.min(W / img.naturalWidth, H / img.naturalHeight, 1);
+      const iw = img.naturalWidth * sc, ih = img.naturalHeight * sc;
+      const ix = (W - iw) / 2, iy = (H - ih) / 2;
+      let cx = ix, cy = iy, cw = iw, ch = ih;
+      const HR = 20, MIN = 40, HS = 24;
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        ctx.drawImage(img, ix, iy, iw, ih);
+        ctx.fillStyle = 'rgba(0,0,0,0.58)';
+        ctx.fillRect(0, 0, W, cy);
+        ctx.fillRect(0, cy + ch, W, H - cy - ch);
+        ctx.fillRect(0, cy, cx, ch);
+        ctx.fillRect(cx + cw, cy, W - cx - cw, ch);
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5;
+        ctx.strokeRect(cx, cy, cw, ch);
+        ctx.strokeStyle = 'rgba(255,255,255,0.22)'; ctx.lineWidth = 0.6;
+        for (let i = 1; i < 3; i++) {
+          ctx.beginPath();
+          ctx.moveTo(cx + cw*i/3, cy); ctx.lineTo(cx + cw*i/3, cy+ch);
+          ctx.moveTo(cx, cy + ch*i/3); ctx.lineTo(cx+cw, cy+ch*i/3);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = '#fff'; ctx.lineWidth = 3;
+        [[cx,cy,1,1],[cx+cw,cy,-1,1],[cx,cy+ch,1,-1],[cx+cw,cy+ch,-1,-1]].forEach(([x,y,dx,dy]) => {
+          ctx.beginPath(); ctx.moveTo(x+dx*HS,y); ctx.lineTo(x,y); ctx.lineTo(x,y+dy*HS); ctx.stroke();
+        });
+      }
+      draw();
+
+      let drag=-1, sx,sy,scx,scy,scw,sch;
+      function hit(px,py) {
+        const cs=[[cx,cy],[cx+cw,cy],[cx,cy+ch],[cx+cw,cy+ch]];
+        for(let i=0;i<4;i++) if(Math.abs(px-cs[i][0])<HR+6&&Math.abs(py-cs[i][1])<HR+6) return i;
+        if(px>=cx&&px<=cx+cw&&py>=cy&&py<=cy+ch) return 4; return -1;
+      }
+      function gpos(e){ const r=cv.getBoundingClientRect(),t=e.touches?.[0]??e; return [(t.clientX-r.left)*(W/r.width),(t.clientY-r.top)*(H/r.height)]; }
+      function clamp(){
+        if(cw<MIN)cw=MIN; if(ch<MIN)ch=MIN;
+        if(cx<ix){cw-=ix-cx;cx=ix;} if(cy<iy){ch-=iy-cy;cy=iy;}
+        if(cx+cw>ix+iw)cw=ix+iw-cx; if(cy+ch>iy+ih)ch=iy+ih-cy;
+      }
+      function onStart(e){e.preventDefault();[sx,sy]=gpos(e);drag=hit(sx,sy);scx=cx;scy=cy;scw=cw;sch=ch;}
+      function onMove(e){
+        if(drag<0)return; e.preventDefault();
+        const[px,py]=gpos(e),ddx=px-sx,ddy=py-sy;
+        if(drag===0){cx=scx+ddx;cy=scy+ddy;cw=scw-ddx;ch=sch-ddy;}
+        else if(drag===1){cy=scy+ddy;cw=scw+ddx;ch=sch-ddy;}
+        else if(drag===2){cx=scx+ddx;cw=scw-ddx;ch=sch+ddy;}
+        else if(drag===3){cw=scw+ddx;ch=sch+ddy;}
+        else if(drag===4){cx=scx+ddx;cy=scy+ddy;}
+        clamp(); draw();
+      }
+      function onEnd(){drag=-1;}
+      cv.addEventListener('mousedown',onStart);
+      window.addEventListener('mousemove',onMove);
+      window.addEventListener('mouseup',onEnd);
+      cv.addEventListener('touchstart',onStart,{passive:false});
+      window.addEventListener('touchmove',onMove,{passive:false});
+      window.addEventListener('touchend',onEnd,{passive:true});
+
+      function cleanup(){
+        window.removeEventListener('mousemove',onMove); window.removeEventListener('mouseup',onEnd);
+        window.removeEventListener('touchmove',onMove); window.removeEventListener('touchend',onEnd);
+        URL.revokeObjectURL(ou); ov.remove();
+      }
+      topBar.querySelector('#_cc').addEventListener('click',()=>{cleanup();resolve(null);});
+      topBar.querySelector('#_co').addEventListener('click',()=>{
+        const oc=document.createElement('canvas');
+        const sw2=(cx-ix)/sc, sh2=(cy-iy)/sc, ssw=cw/sc, ssh=ch/sc;
+        const maxW=1200; oc.width=Math.min(ssw,maxW); oc.height=ssh*(oc.width/ssw);
+        oc.getContext('2d').drawImage(img,sw2,sh2,ssw,ssh,0,0,oc.width,oc.height);
+        oc.toBlob(b=>{cleanup();resolve(b);},'image/jpeg',0.88);
+      });
+    };
+    img.onerror=()=>{URL.revokeObjectURL(ou);ov.remove();resolve(null);};
+  });
+}
+
 function openGalleryAddDialog(container, prefill = null) {
   const overlay = el('div', 'gallery-overlay');
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.72);z-index:9900;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
@@ -6414,17 +6524,21 @@ function openGalleryAddDialog(container, prefill = null) {
   }
 
   preview.addEventListener('click', () => fileInp.click());
-  fileInp.addEventListener('change', () => {
+  fileInp.addEventListener('change', async () => {
     const f = fileInp.files[0];
     if (!f) return;
-    blob = f;
-    const u = URL.createObjectURL(f);
-    if (f.type.startsWith('video/')) {
-      preview.innerHTML = `<video src="${u}" style="width:100%;display:block;" muted playsinline></video>`;
-      const v = preview.querySelector('video');
-      v.oncanplay = () => URL.revokeObjectURL(u);
-    } else {
+    if (f.type.startsWith('image/')) {
+      const cropped = await showCropDialog(f);
+      fileInp.value = '';
+      if (!cropped) return;
+      blob = cropped;
+      const u = URL.createObjectURL(cropped);
       preview.innerHTML = `<img src="${u}" style="width:100%;display:block;" onload="URL.revokeObjectURL(this.src)">`;
+    } else {
+      blob = f;
+      const u = URL.createObjectURL(f);
+      preview.innerHTML = `<video src="${u}" style="width:100%;display:block;" muted playsinline></video>`;
+      preview.querySelector('video').oncanplay = () => URL.revokeObjectURL(u);
     }
   });
 
@@ -6505,7 +6619,23 @@ function openGalleryAddDialog(container, prefill = null) {
   }
 
   urlInp.addEventListener('paste', e => {
-    const pasted = (e.clipboardData || window.clipboardData).getData('text');
+    const pasted = ((e.clipboardData || window.clipboardData).getData('text') || '').trim();
+    // 偵測複合格式：【APP名】URL TOKEN 商品名稱（如淘寶、蝦皮短文字分享）
+    const urlInPaste = pasted.match(/https?:\/\/\S+/);
+    if (urlInPaste && pasted !== urlInPaste[0]) {
+      e.preventDefault();
+      const extractedUrl = urlInPaste[0];
+      const afterUrl = pasted.slice(pasted.indexOf(extractedUrl) + extractedUrl.length).trim();
+      // 去掉行首的短代碼（如 HU108、a3tL5X 等）
+      const productText = afterUrl.replace(/^[A-Za-z0-9]{2,12}\s+/, '').trim();
+      urlInp.value = extractedUrl;
+      if (productText) {
+        const titleEl = box.querySelector('#_gal-title');
+        if (!titleEl.value) titleEl.value = productText.slice(0, 100);
+      }
+      setTimeout(() => autoFetchOg(extractedUrl), 50);
+      return;
+    }
     setTimeout(() => autoFetchOg(pasted || urlInp.value), 50);
   });
   urlInp.addEventListener('blur', () => { if (!blob && !_ogMeta) autoFetchOg(urlInp.value); });
@@ -6725,9 +6855,9 @@ function openGalleryDetail(item, container) {
   // 分享媒體按鈕（有 mediaUrl 或本地 imageId 才顯示）
   const hasMedia = !!(item.mediaUrl || item.imageId);
   const shareImgBtn = el('button');
-  shareImgBtn.style.cssText = `flex:1;padding:9px 12px;border-radius:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.85);font-size:13px;font-weight:600;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;display:${hasMedia ? 'flex' : 'none'};align-items:center;justify-content:center;gap:5px;`;
-  shareImgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="14" height="14"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>&nbsp;分享`;
-  shareImgBtn.title = '分享圖片';
+  shareImgBtn.style.cssText = `flex:1;padding:9px 12px;border-radius:8px;background:#EE4D2D;border:none;color:#fff;font-size:12px;font-weight:700;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent;display:${hasMedia ? 'flex' : 'none'};align-items:center;justify-content:center;gap:4px;letter-spacing:0.01em;`;
+  shareImgBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="13" height="13"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>以圖搜圖`;
+  shareImgBtn.title = '以圖搜圖';
   shareImgBtn.addEventListener('click', async () => {
     if (!navigator.share) { toast('此裝置不支援分享', 'err'); return; }
     shareImgBtn.disabled = true;
@@ -6831,11 +6961,19 @@ function openGalleryEditDialog(item, container) {
   }
 
   preview.addEventListener('click', () => fileInp.click());
-  fileInp.addEventListener('change', () => {
+  fileInp.addEventListener('change', async () => {
     const f = fileInp.files[0];
     if (!f) return;
-    newBlob = f;
-    showPreview(URL.createObjectURL(f), f.type.startsWith('video/'), true);
+    if (f.type.startsWith('image/')) {
+      const cropped = await showCropDialog(f);
+      fileInp.value = '';
+      if (!cropped) return;
+      newBlob = cropped;
+      showPreview(URL.createObjectURL(cropped), false, true);
+    } else {
+      newBlob = f;
+      showPreview(URL.createObjectURL(f), true, true);
+    }
   });
 
   // 標籤編輯器
