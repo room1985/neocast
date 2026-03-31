@@ -5650,7 +5650,11 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
       clearTimeout(stuckTimer); stuckTimer = null;
       clearTimeout(countdownTimer); clearInterval(countdownInterval);
       nextBar.style.display = 'none';
-      try { ytPlayer?.loadVideoById(playlist[curIdx].videoId); } catch(_) {}
+      try {
+        // 切換影片前先卸載字幕模組，避免前一部影片字幕殘留
+        ytPlayer?.unloadModule?.('captions');
+        ytPlayer?.loadVideoById(playlist[curIdx].videoId);
+      } catch(_) {}
     };
 
     const skipToNext = () => {
@@ -5699,6 +5703,8 @@ function showYtPlayer(videoId, onClose, playlist, startIdx, onVideoChange) {
               nextBar.style.display = 'none';
               clearTimeout(countdownTimer);
               clearInterval(countdownInterval);
+              // 新影片開始播放後重新載入字幕模組（讓新影片字幕正常顯示）
+              try { ytPlayer?.loadModule?.('captions'); } catch(_) {}
             }
             if (e.data === 3) {
               clearTimeout(stuckTimer); stuckTimer = null;
