@@ -6270,19 +6270,36 @@ function buildGalleryTagEditor(box, initialTags) {
       pill.style.cssText = `display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:99px;font-size:12px;cursor:pointer;border:1px solid ${on ? '#5865f2' : 'rgba(255,255,255,0.2)'};background:${on ? '#5865f2' : 'rgba(255,255,255,0.05)'};color:${on ? '#fff' : 'rgba(255,255,255,0.65)'};-webkit-tap-highlight-color:transparent;outline:none;transition:background .12s,border-color .12s;`;
       const label = document.createTextNode(tag);
       pill.appendChild(label);
+      // 單擊：切換選取／取消選取
       pill.addEventListener('click', () => {
         if (selected.has(tag)) selected.delete(tag); else selected.add(tag);
         renderPills();
       });
+      // 長按：重新命名標籤（並同步更新所有書籤）
+      let _pt = null;
+      pill.addEventListener('touchstart', () => {
+        _pt = setTimeout(() => {
+          _pt = null;
+          const newName = prompt(`重新命名標籤「${tag}」`, tag);
+          if (!newName || !newName.trim() || newName.trim() === tag) return;
+          const t = newName.trim();
+          const gi = globalTags.indexOf(tag);
+          if (gi >= 0) globalTags[gi] = t;
+          if (selected.has(tag)) { selected.delete(tag); selected.add(t); }
+          (S.gallery || []).forEach(it => {
+            if (!it.tags) return;
+            const ti = it.tags.indexOf(tag);
+            if (ti >= 0) it.tags[ti] = t;
+          });
+          lsSave(); cloudGalleryPush(); renderPills();
+        }, 600);
+      }, { passive: true });
+      pill.addEventListener('touchend',  () => { if (_pt) { clearTimeout(_pt); _pt = null; } }, { passive: true });
+      pill.addEventListener('touchmove', () => { if (_pt) { clearTimeout(_pt); _pt = null; } }, { passive: true });
       if (on) {
         const x = el('span');
-        x.textContent = '×';
-        x.style.cssText = 'font-size:14px;line-height:1;opacity:0.8;margin-left:2px;';
-        x.addEventListener('click', e => {
-          e.stopPropagation();
-          selected.delete(tag);
-          renderPills();
-        });
+        x.textContent = ' ×';
+        x.style.cssText = 'font-size:13px;opacity:0.75;';
         pill.appendChild(x);
       }
       pillsArea.appendChild(pill);
@@ -6739,7 +6756,7 @@ function openGalleryEditDialog(item, container) {
   box.style.cssText = 'background:var(--bg-card,#1a1a2e);border-radius:16px;padding:20px;width:100%;max-width:380px;box-sizing:border-box;max-height:85vh;overflow-y:auto;';
   box.innerHTML = `
     <div style="font-size:15px;font-weight:600;color:#fff;margin-bottom:14px;">編輯書籤</div>
-    <div id="_gal-e-preview" style="width:100%;min-height:80px;border:1.5px dashed rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;"></div>
+    <div id="_gal-e-preview" style="width:100%;height:160px;border:1.5px dashed rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.3);font-size:13px;margin-bottom:12px;cursor:pointer;overflow:hidden;background:rgba(0,0,0,0.2);"></div>
     <input type="file" accept="image/*,video/*" id="_gal-e-file" style="display:none">
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">標題（選填）</div>
     <input type="text" id="_gal-e-title" value="${esc(item.title||'')}" placeholder="輸入標題…" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:12px;">
@@ -6755,10 +6772,10 @@ function openGalleryEditDialog(item, container) {
 
   const showPreview = (url, isVideo, needRevoke) => {
     if (isVideo) {
-      preview.innerHTML = `<video src="${url}" style="width:100%;display:block;" muted playsinline></video>`;
+      preview.innerHTML = `<video src="${url}" style="width:100%;height:160px;object-fit:contain;display:block;" muted playsinline></video>`;
       if (needRevoke) preview.querySelector('video').oncanplay = () => URL.revokeObjectURL(url);
     } else {
-      preview.innerHTML = `<img src="${url}" style="width:100%;display:block;">`;
+      preview.innerHTML = `<img src="${url}" style="width:100%;height:160px;object-fit:contain;display:block;">`;
       if (needRevoke) preview.querySelector('img').onload = () => URL.revokeObjectURL(url);
     }
   };
