@@ -6464,7 +6464,7 @@ function openGalleryAddDialog(container, prefill = null) {
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">描述（選填）</div>
     <textarea id="_gal-desc" placeholder="輸入描述…" rows="2" style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;resize:vertical;margin-bottom:12px;"></textarea>
     <div style="font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:4px;">點擊連結（選填）</div>
-    <input type="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">`;
+    <input type="text" inputmode="url" id="_gal-url" placeholder="https://..." style="width:100%;box-sizing:border-box;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:#fff;font-size:14px;outline:none;margin-bottom:16px;">`;
 
   // 標籤編輯器
   const tagEditor = buildGalleryTagEditor(box, []);
@@ -6618,25 +6618,38 @@ function openGalleryAddDialog(container, prefill = null) {
     preview.querySelector('#_gal-upload-fallback-btn').addEventListener('click', e => { e.stopPropagation(); fileInp.click(); });
   }
 
+  // 解析複合格式：【APP名】URL TOKEN 商品名稱 → 提取 URL 填入欄位，商品名稱填入標題
+  function _parseMixedUrl(raw) {
+    const trimmed = raw.trim();
+    if (!trimmed) return false;
+    const urlM = trimmed.match(/https?:\/\/\S+/);
+    if (!urlM || trimmed === urlM[0]) return false; // 純 URL 不需處理
+    const extractedUrl = urlM[0];
+    const afterUrl = trimmed.slice(trimmed.indexOf(extractedUrl) + extractedUrl.length).trim();
+    // 去掉行首短代碼（HU108、a3tL 等純英數 ≤12字）
+    const productText = afterUrl.replace(/^[A-Za-z0-9]{2,12}\s+/, '').trim();
+    urlInp.value = extractedUrl;
+    if (productText) {
+      const titleEl = box.querySelector('#_gal-title');
+      if (!titleEl.value) titleEl.value = productText.slice(0, 100);
+    }
+    autoFetchOg(extractedUrl);
+    return true;
+  }
+
+  // paste：先嘗試從 clipboardData 取（桌面端可靠）；Android type=text 貼上後 input 事件接手
   urlInp.addEventListener('paste', e => {
     const pasted = ((e.clipboardData || window.clipboardData).getData('text') || '').trim();
-    // 偵測複合格式：【APP名】URL TOKEN 商品名稱（如淘寶、蝦皮短文字分享）
-    const urlInPaste = pasted.match(/https?:\/\/\S+/);
-    if (urlInPaste && pasted !== urlInPaste[0]) {
-      e.preventDefault();
-      const extractedUrl = urlInPaste[0];
-      const afterUrl = pasted.slice(pasted.indexOf(extractedUrl) + extractedUrl.length).trim();
-      // 去掉行首的短代碼（如 HU108、a3tL5X 等）
-      const productText = afterUrl.replace(/^[A-Za-z0-9]{2,12}\s+/, '').trim();
-      urlInp.value = extractedUrl;
-      if (productText) {
-        const titleEl = box.querySelector('#_gal-title');
-        if (!titleEl.value) titleEl.value = productText.slice(0, 100);
-      }
-      setTimeout(() => autoFetchOg(extractedUrl), 50);
-      return;
+    if (pasted && _parseMixedUrl(pasted)) { e.preventDefault(); return; }
+    setTimeout(() => autoFetchOg(urlInp.value || pasted), 60);
+  });
+  // input：Android 貼上後 value 已更新，這裡作為可靠的主要路徑
+  urlInp.addEventListener('input', () => {
+    const val = urlInp.value;
+    if (!_parseMixedUrl(val)) {
+      // 普通 URL 輸入：清掉舊 OG 資料讓 blur 重抓
+      if (val && !/^https?:\/\//i.test(val.trim())) return;
     }
-    setTimeout(() => autoFetchOg(pasted || urlInp.value), 50);
   });
   urlInp.addEventListener('blur', () => { if (!blob && !_ogMeta) autoFetchOg(urlInp.value); });
 
