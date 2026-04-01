@@ -6075,6 +6075,10 @@ function renderGalleryWidget(container) {
     _galRenderedCount = 0;
     if (_galIObs) { _galIObs.disconnect(); _galIObs = null; }
 
+    // ★ 必須先把 scroll 掛進 container，_galRenderNextPage 才能 querySelector 到 .gal-col
+    container.appendChild(galHead);
+    container.appendChild(scroll);
+
     // 套用現有篩選條件（重開後保留搜索/標籤狀態）
     if (_galSearchQuery || _galActiveTag) {
       _galApplyFilter(container);
@@ -6083,6 +6087,7 @@ function renderGalleryWidget(container) {
       _galSetupIObs(container, sentinel);
       _galRenderNextPage(container);
     }
+    return; // 已提前 appendChild，跳過函數末尾的重複插入
   }
 
   container.appendChild(galHead);
