@@ -4226,23 +4226,18 @@ body.widgets-hidden #mobile-layout { display: none !important; }
 /* ══════════════════════════════
    VIEW TRANSITIONS (mobile page swipe)
 ══════════════════════════════ */
+/* 純 CSS class 動畫（不使用 View Transitions API，避免 backdrop-filter 閃爍 bug）*/
 @keyframes vt-in-left {
-  from { opacity:0; transform: translateX(36px); }
+  from { opacity:0; transform: translateX(32px); }
   to   { opacity:1; transform: translateX(0); }
 }
 @keyframes vt-in-right {
-  from { opacity:0; transform: translateX(-36px); }
+  from { opacity:0; transform: translateX(-32px); }
   to   { opacity:1; transform: translateX(0); }
 }
-@keyframes vt-out-left {
-  from { opacity:1; transform: translateX(0); }
-  to   { opacity:0; transform: translateX(-36px); }
+.mobile-swipe-area.vt-anim {
+  animation: vt-in-left .26s cubic-bezier(.25,.46,.45,.94) both;
 }
-@keyframes vt-out-right {
-  from { opacity:1; transform: translateX(0); }
-  to   { opacity:0; transform: translateX(36px); }
+:root[data-vt-dir=right] .mobile-swipe-area.vt-anim {
+  animation: vt-in-right .26s cubic-bezier(.25,.46,.45,.94) both;
 }
-:root[data-vt-dir=left]  ::view-transition-old(mobile-swipe) { animation: vt-out-left  .28s ease both; }
-:root[data-vt-dir=left]  ::view-transition-new(mobile-swipe) { animation: vt-in-left   .28s ease both; }
-:root[data-vt-dir=right] ::view-transition-old(mobile-swipe) { animation: vt-out-right .28s ease both; }
-:root[data-vt-dir=right] ::view-transition-new(mobile-swipe) { animation: vt-in-right  .28s ease both; }

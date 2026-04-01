@@ -7525,211 +7525,221 @@ function startMobileTitleEdit(titleEl, wid, defaultLabel, icon) {
 }
 
 /* ─────────────────────────────────────
-   OMNI-SEARCH COMMAND PALETTE
+   OMNI-SEARCH COMMAND PALETTE (Fuse.js)
 ───────────────────────────────────── */
-let _omniOpen      = false;
-let _omniResults   = [];
-let _omniActiveIdx = -1;
-
-/* 簡單 HTML 跳脫 */
-function _omniEsc(s) {
-  return String(s || '')
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
-/* 高亮 query 在 text 中出現的位置（回傳安全 HTML） */
-function _omniHl(text, query) {
-  if (!query) return _omniEsc(text);
-  const safe = _omniEsc(text);
-  const safeQ = _omniEsc(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return safe.replace(new RegExp(`(${safeQ})`, 'gi'), '<mark>$1</mark>');
-}
-
-/* 計算匹配分數 (0 = 不匹配) */
-function _omniScore(text, q) {
-  if (!text || !q) return 0;
-  const t = text.toLowerCase();
-  const lq = q.toLowerCase();
-  if (t.includes(lq)) return lq.length * 3;  // 完整包含，最高分
-  const words = lq.split(/\s+/).filter(Boolean);
-  if (!words.length) return 0;
-  const hit = words.filter(w => t.includes(w));
-  if (!hit.length) return 0;
-  return hit.reduce((s, w) => s + w.length, 0);
-}
-
-/* 搜尋所有資料來源，回傳排序結果陣列 */
-function _omniSearch(query) {
-  const q = (query || '').trim();
-  if (!q) return [];
-  const out = [];
-
-  // 捷徑
-  (S.shortcuts || []).forEach(sc => {
-    const sc_score = _omniScore((sc.name || '') + ' ' + (sc.url || ''), q);
-    if (sc_score) out.push({ type:'shortcut', icon:'📌', title: sc.name || sc.url, sub: _omniTruncUrl(sc.url), url: sc.url, _score: sc_score });
-  });
-
-  // 新聞
-  (S.news?.items || []).slice(0, 80).forEach(item => {
-    const sc_score = _omniScore((item.title || '') + ' ' + (item.source || ''), q);
-    if (sc_score) out.push({ type:'news', icon:'📰', title: item.title, sub: item.source || '新聞', url: item.link, _score: sc_score });
-  });
-
-  // YouTube
-  (S.yt?.items || []).slice(0, 120).forEach(item => {
-    const sc_score = _omniScore((item.title || '') + ' ' + (item.channelName || ''), q);
-    if (sc_score) out.push({ type:'yt', icon:'🎬', title: item.title, sub: item.channelName || 'YouTube', url: `https://www.youtube.com/watch?v=${item.videoId}`, _score: sc_score });
-  });
-
-  // 便利貼
-  (S.stickies || []).forEach(s => {
-    const txt = s.text || '';
-    const sc_score = _omniScore(txt + ' ' + (s.tag || ''), q);
-    if (sc_score) out.push({ type:'sticky', icon:'📝', title: txt.slice(0, 90), sub: s.tag || '便利貼', url: null, _score: sc_score });
-  });
-
-  // 動漫追蹤
-  (S.animeState?.tracked || []).forEach(name => {
-    const sc_score = _omniScore(name, q);
-    if (sc_score) out.push({ type:'anime', icon:'🎌', title: name, sub: '動漫追蹤', url: null, _score: sc_score });
-  });
-
-  // 圖庫書籤
-  (S.gallery || []).forEach(item => {
-    const sc_score = _omniScore((item.title || '') + ' ' + (item.description || '') + ' ' + (item.tags || []).join(' '), q);
-    if (sc_score) out.push({ type:'gallery', icon:'🖼', title: item.title || '(無標題)', sub: _omniTruncUrl(item.url), url: item.url, _score: sc_score });
-  });
-
-  return out.sort((a, b) => b._score - a._score).slice(0, 40);
-}
+let _omniOpen = false;
+let _omniCurrentResults = [];  // 閉包安全：作用域在 initOmniSearch 內
+let _omniFuse = null;
 
 function _omniTruncUrl(u) {
   if (!u) return '';
   try { return new URL(u).hostname; } catch (_) { return String(u).slice(0, 40); }
 }
 
-/* 重新渲染結果清單 */
-function _omniRenderResults(query) {
-  const res = $('omni-results');
-  if (!res) return;
-  _omniResults = _omniSearch(query);
-  _omniActiveIdx = -1;
+function _omniBuildIndex() {
+  const data = [];
 
-  if (!(query || '').trim()) {
-    res.innerHTML = `<div class="omni-hint">
-      輸入關鍵字搜尋所有內容<br>
-      <div class="omni-nav-hint">
-        <kbd>↑</kbd><kbd>↓</kbd>&nbsp;導航&nbsp;&nbsp;
-        <kbd>Enter</kbd>&nbsp;開啟&nbsp;&nbsp;
-        <kbd>Esc</kbd>&nbsp;關閉
-      </div>
-    </div>`;
-    return;
-  }
-  if (!_omniResults.length) {
-    res.innerHTML = `<div class="omni-empty">找不到「${_omniEsc(query)}」的相關內容</div>`;
-    return;
-  }
-
-  // 依 type 分組
-  const TYPE_LABEL = { shortcut:'捷徑', news:'新聞', yt:'YouTube', sticky:'便利貼', anime:'動漫', gallery:'圖庫' };
-  const groups = {};
-  _omniResults.forEach((r, i) => {
-    (groups[r.type] = groups[r.type] || []).push({ ...r, _i: i });
+  // 捷徑
+  (S.shortcuts || []).forEach(sc => {
+    data.push({ type:'shortcut', icon:'📌', title: sc.name || sc.url || '', sub: _omniTruncUrl(sc.url), url: sc.url });
   });
 
-  let html = '';
-  Object.keys(TYPE_LABEL).forEach(type => {
-    if (!groups[type]?.length) return;
-    html += `<div class="omni-section-title">${TYPE_LABEL[type]}</div>`;
-    groups[type].forEach(r => {
-      html += `<div class="omni-item" data-omni-idx="${r._i}">
-        <span class="omni-item-icon">${r.icon}</span>
-        <span class="omni-item-body">
-          <div class="omni-item-title">${_omniHl(r.title, query)}</div>
-          ${r.sub ? `<div class="omni-item-sub">${_omniEsc(r.sub)}</div>` : ''}
-        </span>
-        ${r.url ? '<span class="omni-item-arrow">↗</span>' : ''}
-      </div>`;
+  // 新聞（最近 80 筆）
+  (S.news?.items || []).slice(0, 80).forEach(item => {
+    data.push({ type:'news', icon:'📰', title: item.title || '', sub: item.source || '新聞', url: item.link });
+  });
+
+  // YouTube（最近 120 筆）
+  (S.yt?.items || []).slice(0, 120).forEach(item => {
+    data.push({ type:'yt', icon:'🎬', title: item.title || '', sub: item.channelName || 'YouTube', url: `https://www.youtube.com/watch?v=${item.videoId}` });
+  });
+
+  // 便利貼
+  (S.stickies || []).forEach(s => {
+    const txt = (s.text || '').slice(0, 100);
+    data.push({ type:'sticky', icon:'📝', title: txt, sub: s.tag || '便利貼', url: null, rawId: s.id });
+  });
+
+  // 動漫追蹤（trackedData 含完整名稱，fallback 到 tracked 陣列）
+  const trackedIds = S.animeState?.tracked || [];
+  trackedIds.forEach(id => {
+    const a = S.animeState?.trackedData?.[id];
+    const name = S.animeState?.customNames?.[id] || a?.name_cn || a?.name || String(id);
+    const url  = a ? `https://anilist.co/anime/${a.id - 10_000_000}` : null;
+    data.push({ type:'anime', icon:'🎌', title: name, sub: '動漫追蹤', url });
+  });
+
+  // 圖庫書籤
+  (S.gallery || []).forEach(item => {
+    data.push({ type:'gallery', icon:'🖼', title: item.title || '(無標題)', sub: item.description || _omniTruncUrl(item.url), url: item.url });
+  });
+
+  // 建立 Fuse 索引（Fuse.js 已由 CDN 載入）
+  if (typeof Fuse !== 'undefined') {
+    _omniFuse = new Fuse(data, {
+      keys: [
+        { name: 'title', weight: 0.7 },
+        { name: 'sub',   weight: 0.3 }
+      ],
+      threshold: 0.42,
+      includeScore: false,
+      minMatchCharLength: 1
     });
-  });
-  res.innerHTML = html;
-
-  // 點擊啟動
-  res.querySelectorAll('.omni-item').forEach(el => {
-    el.addEventListener('click', () => _omniActivate(+el.dataset.omniIdx));
-  });
-}
-
-/* 鍵盤導航 */
-function _omniNavigate(dir) {
-  const items = $('omni-results')?.querySelectorAll('.omni-item');
-  if (!items?.length) return;
-  items[_omniActiveIdx]?.classList.remove('omni-active');
-  _omniActiveIdx = Math.max(0, Math.min(items.length - 1, _omniActiveIdx + dir));
-  items[_omniActiveIdx]?.classList.add('omni-active');
-  items[_omniActiveIdx]?.scrollIntoView({ block: 'nearest' });
-}
-
-/* 執行選中項目 */
-function _omniActivate(idx) {
-  const r = _omniResults[idx];
-  if (!r) return;
-  if (r.url) {
-    window.open(r.url, '_blank', 'noopener,noreferrer');
-  } else if (r.type === 'sticky') {
-    const el = document.querySelector('.widget[data-wid="stickies"]') ||
-               document.querySelector('#mobile-layout .stickies-inner');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  } else if (r.type === 'anime') {
-    const el = document.querySelector('.widget[data-wid="anime"]') ||
-               document.querySelector('#mobile-layout .anime-inner');
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    // Fuse 未載入時 fallback：簡單包含搜尋
+    _omniFuse = {
+      search: q => data
+        .filter(d => (d.title + ' ' + (d.sub||'')).toLowerCase().includes(q.toLowerCase()))
+        .map(item => ({ item }))
+    };
   }
-  closeOmniSearch();
 }
 
 function openOmniSearch() {
   const ov = $('omni-overlay');
   if (!ov) return;
+  _omniBuildIndex();
   ov.classList.remove('hidden');
   _omniOpen = true;
   const inp = $('omni-input');
-  if (inp) { inp.value = ''; inp.focus(); }
-  _omniRenderResults('');
+  if (inp) {
+    inp.value = '';
+    // 稍微延遲 focus，避免行動端鍵盤遮住結果
+    setTimeout(() => inp.focus(), 80);
+  }
+  const res = $('omni-results');
+  if (res) res.innerHTML = `<div class="omni-hint">
+    輸入關鍵字搜尋捷徑、新聞、影片、便利貼…<br>
+    <div class="omni-nav-hint">
+      <kbd>↑</kbd><kbd>↓</kbd>&nbsp;導航&nbsp;&nbsp;
+      <kbd>Enter</kbd>&nbsp;開啟&nbsp;&nbsp;
+      <kbd>Esc</kbd>&nbsp;關閉
+    </div>
+  </div>`;
 }
 
 function closeOmniSearch() {
   $('omni-overlay')?.classList.add('hidden');
   _omniOpen = false;
+  _omniCurrentResults = [];
 }
 
 function initOmniSearch() {
-  if (!$('omni-overlay')) return;
+  const ov = $('omni-overlay');
+  if (!ov) return;
 
   const inp = $('omni-input');
+  const res = $('omni-results');
+  let activeIdx = -1;
+
+  /* ── 執行結果項目動作 ── */
+  const activate = (idx) => {
+    const r = _omniCurrentResults[idx];
+    if (!r) return;
+    if (r.url) {
+      window.open(r.url, '_blank', 'noopener,noreferrer');
+    } else if (r.type === 'sticky') {
+      const card = document.querySelector(`.sticky-card[data-id="${r.rawId}"]`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (r.type === 'anime') {
+      const panel = document.querySelector('#mobile-layout .anime-inner') ||
+                    document.querySelector('.widget[data-wid="anime"] .w-body');
+      if (panel) panel.scrollIntoView({ behavior: 'smooth' });
+    }
+    closeOmniSearch();
+  };
+
+  /* ── 渲染搜尋結果 ── */
+  const renderResults = (query) => {
+    activeIdx = -1;
+    const q = (query || '').trim();
+    if (!res) return;
+
+    if (!q) {
+      _omniCurrentResults = [];
+      res.innerHTML = `<div class="omni-hint">
+        輸入關鍵字搜尋捷徑、新聞、影片、便利貼…<br>
+        <div class="omni-nav-hint">
+          <kbd>↑</kbd><kbd>↓</kbd>&nbsp;導航&nbsp;&nbsp;
+          <kbd>Enter</kbd>&nbsp;開啟&nbsp;&nbsp;
+          <kbd>Esc</kbd>&nbsp;關閉
+        </div>
+      </div>`;
+      return;
+    }
+
+    _omniCurrentResults = (_omniFuse?.search(q) || []).map(r => r.item).slice(0, 30);
+
+    if (!_omniCurrentResults.length) {
+      res.innerHTML = `<div class="omni-empty">找不到「${esc(q)}」的相關內容</div>`;
+      return;
+    }
+
+    const TYPE_LABEL = { shortcut:'捷徑', news:'新聞', yt:'YouTube', sticky:'便利貼', anime:'動漫', gallery:'圖庫' };
+    const groups = {};
+    _omniCurrentResults.forEach((r, i) => {
+      (groups[r.type] = groups[r.type] || []).push({ r, i });
+    });
+
+    let html = '';
+    Object.keys(TYPE_LABEL).forEach(type => {
+      if (!groups[type]?.length) return;
+      html += `<div class="omni-section-title">${TYPE_LABEL[type]}</div>`;
+      groups[type].forEach(({ r, i }) => {
+        // 關鍵字高亮（不含 HTML 注入）
+        const safeQ = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const hlTitle = esc(r.title || '').replace(new RegExp(`(${esc(safeQ)})`, 'gi'), '<mark>$1</mark>');
+        html += `<div class="omni-item" data-idx="${i}">
+          <span class="omni-item-icon">${r.icon}</span>
+          <span class="omni-item-body">
+            <div class="omni-item-title">${hlTitle}</div>
+            ${r.sub ? `<div class="omni-item-sub">${esc(r.sub)}</div>` : ''}
+          </span>
+          ${r.url ? '<span class="omni-item-arrow">↗</span>' : ''}
+        </div>`;
+      });
+    });
+    res.innerHTML = html;
+    res.querySelectorAll('.omni-item').forEach(el => {
+      el.addEventListener('click', () => activate(+el.dataset.idx));
+    });
+  };
+
+  /* ── 鍵盤導航 ── */
+  const navigate = (dir) => {
+    const items = res?.querySelectorAll('.omni-item');
+    if (!items?.length) return;
+    items[activeIdx]?.classList.remove('omni-active');
+    activeIdx = Math.max(0, Math.min(items.length - 1, activeIdx + dir));
+    items[activeIdx]?.classList.add('omni-active');
+    items[activeIdx]?.scrollIntoView({ block: 'nearest' });
+  };
+
   if (inp) {
-    inp.addEventListener('input', () => _omniRenderResults(inp.value));
+    // 輸入即時搜尋
+    inp.addEventListener('input', () => renderResults(inp.value));
+
+    // 鍵盤：桌機 ↑↓Enter + Esc
     inp.addEventListener('keydown', e => {
-      if (e.key === 'ArrowDown')  { e.preventDefault(); _omniNavigate(1); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); _omniNavigate(-1); }
+      if (e.key === 'ArrowDown')  { e.preventDefault(); navigate(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); navigate(-1); }
       else if (e.key === 'Enter') {
-        if (_omniActiveIdx >= 0) _omniActivate(_omniActiveIdx);
-        else if (_omniResults.length) _omniActivate(0);
+        e.preventDefault();
+        if (activeIdx >= 0) activate(activeIdx);
+        else if (_omniCurrentResults.length) activate(0);
       }
       else if (e.key === 'Escape') closeOmniSearch();
     });
+
+    // 行動端虛擬鍵盤「前往/搜尋」按鈕：觸發 search 事件
+    inp.addEventListener('search', () => {
+      if (_omniCurrentResults.length) activate(0);
+    });
   }
 
-  // Esc 按鈕
+  // Esc 按鈕 + 背景點擊關閉
   $('omni-esc-kbd')?.addEventListener('click', closeOmniSearch);
-
-  // 背景點擊關閉
-  $('omni-overlay').addEventListener('click', e => {
-    if (e.target === $('omni-overlay')) closeOmniSearch();
-  });
+  ov.addEventListener('click', e => { if (e.target === ov) closeOmniSearch(); });
 
   // 全域快捷鍵 Ctrl+K / Cmd+K
   document.addEventListener('keydown', e => {
@@ -7745,14 +7755,16 @@ function initOmniSearch() {
   $('omni-btn')?.addEventListener('click', openOmniSearch);
 }
 
-/* ── View Transition 輔助：帶方向的 renderPages 包裝 ── */
+/* ── 換頁動畫：純 CSS class，不使用 View Transitions API（避免 backdrop-filter 閃爍 bug） ── */
 function _vtRenderPages(renderFn, dir) {
   document.documentElement.dataset.vtDir = dir || 'left';
-  if (document.startViewTransition) {
-    document.startViewTransition(() => renderFn());
-  } else {
-    renderFn();
-  }
+  renderFn();
+  // 對新渲染的 swipeArea 加上動畫 class，強制 reflow 後套用
+  const sa = document.querySelector('.mobile-swipe-area');
+  if (!sa) return;
+  sa.classList.remove('vt-anim');
+  void sa.offsetWidth; // force reflow
+  sa.classList.add('vt-anim');
 }
 
 function initMobileLayout() {
@@ -7780,7 +7792,6 @@ function initMobileLayout() {
 
   // ── Swipe area ──
   const swipeArea = el('div', 'mobile-swipe-area');
-  swipeArea.style.viewTransitionName = 'mobile-swipe'; // View Transitions API
   container.appendChild(swipeArea);
 
   // ── Dots + add button ──
