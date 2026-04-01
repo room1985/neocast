@@ -7644,7 +7644,7 @@ function initOmniSearch() {
     return true;
   };
 
-  /* ── 執行結果項目動作 ── */
+  /* ── 執行結果項目動作（直接呼叫函數，繞過 DOM 幽靈陷阱） ── */
   const activate = (idx) => {
     const r = _omniCurrentResults[idx];
     if (!r) return;
@@ -7661,43 +7661,58 @@ function initOmniSearch() {
         window.open(r.url, '_blank', 'noopener,noreferrer');
         break;
 
-      // ── YouTube：切到 yt 頁，模擬點擊對應卡片 ──
+      // ── YouTube：切頁後直接呼叫 showYtSheet（不靠 DOM）──
       case 'yt': {
         goToWidget('youtube');
         setTimeout(() => {
-          const card = document.querySelector(`.yt-card[data-vid="${r.raw?.videoId}"]`);
-          if (card) card.click();
-        }, 400);
+          if (r.raw && typeof showYtSheet === 'function') showYtSheet(r.raw);
+        }, 120);
         break;
       }
 
-      // ── 便利貼：切到 stickies 頁，滾動到對應卡片 ──
+      // ── 便利貼：切頁 → 確保 tag 篩選正確 → 滾動 + 高亮 ──
       case 'sticky': {
         goToWidget('stickies');
         setTimeout(() => {
-          const card = document.querySelector(`.sticky-card[data-id="${r.rawId}"]`);
-          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 400);
+          // 若便利貼屬於某個 tag，先切換 tag 讓它出現在 DOM
+          const stickyData = (S.stickies || []).find(s => s.id === r.rawId);
+          if (stickyData?.tag && S.activeStickyTag !== stickyData.tag && S.activeStickyTag !== 'all') {
+            S.activeStickyTag = stickyData.tag;
+            lsSave();
+            const body = document.querySelector('#mobile-layout .stickies-inner') ||
+                         document.querySelector('.widget[data-wid="stickies"] .stickies-inner');
+            if (body) renderStickiesWidget(body);
+          }
+          // 等 renderStickiesWidget 完成後再定位
+          setTimeout(() => {
+            const card = document.querySelector(`.sticky-card[data-id="${r.rawId}"]`);
+            if (card) {
+              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              // 短暫高亮提示
+              card.style.transition = 'box-shadow .3s';
+              card.style.boxShadow = '0 0 0 3px rgba(56,189,248,0.7)';
+              setTimeout(() => { card.style.boxShadow = ''; }, 900);
+            }
+          }, 120);
+        }, 120);
         break;
       }
 
-      // ── 動漫：切到 anime 頁，模擬點擊對應卡片 ──
+      // ── 動漫：切頁後直接呼叫 showAnimeSheet（不靠 DOM）──
       case 'anime': {
         goToWidget('anime');
         setTimeout(() => {
-          const card = document.querySelector(`.anime-card[data-id="${r.raw?.id}"]`);
-          if (card) card.click();
-        }, 400);
+          if (r.raw && typeof showAnimeSheet === 'function') showAnimeSheet(r.raw);
+        }, 120);
         break;
       }
 
-      // ── 圖庫：切到 gallery 頁，模擬點擊對應卡片 ──
+      // ── 圖庫：切頁後直接呼叫 openGalleryDetail（不靠 DOM）──
       case 'gallery': {
         goToWidget('gallery');
         setTimeout(() => {
-          const card = document.querySelector(`.gallery-card[data-galid="${r.raw?.id}"]`);
-          if (card) card.click();
-        }, 400);
+          if (r.raw && typeof openGalleryDetail === 'function') openGalleryDetail(r.raw, null);
+        }, 120);
         break;
       }
 
