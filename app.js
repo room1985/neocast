@@ -5938,11 +5938,12 @@ let _galMultiActive  = false;
 let _galSelected     = new Set();
 let _galSearchQuery  = '';
 let _galActiveTag    = '';
-let _galAllItems     = [];     // 完整列表（反序），每次 renderGalleryWidget 刷新
+let _galAllItems      = [];     // 完整列表（反序），每次 renderGalleryWidget 刷新
 let _galFilteredItems = null;  // null = 不篩選，Array = 篩選後結果
 let _galRenderedCount = 0;     // 已渲染張數
 let _galIObs          = null;  // IntersectionObserver 實例
 const GAL_PAGE_SIZE   = 20;    // 每頁載入張數
+let _galActiveBlobUrls = [];   // 追蹤所有 createObjectURL 產生的 blob URL，供切換頁面時統一釋放
 
 function injectGalleryCSS() {
   if (document.getElementById('gallery-style')) return;
@@ -5969,8 +5970,16 @@ function injectGalleryCSS() {
   document.head.appendChild(s);
 }
 
+/* ── 釋放所有待回收的 Gallery blob URL（離開頁面或重新渲染時呼叫） ── */
+function _galRevokeBlobUrls() {
+  _galActiveBlobUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch(_) {} });
+  _galActiveBlobUrls = [];
+}
+
 function renderGalleryWidget(container) {
   injectGalleryCSS();
+  // 清理前先釋放所有未消化的 blob URL，防止重渲染時記憶體累積
+  _galRevokeBlobUrls();
   container.querySelectorAll('.gallery-scroll, .gallery-fab, .gallery-search-head').forEach(e => e.remove());
 
   // ── panelHead trash button（建立一次，保留跨渲染）──
@@ -6140,6 +6149,8 @@ function _buildGalleryCard(item, container) {
         const blob = await idbGet(item.imageId).catch(() => null);
         if (blob) { url = URL.createObjectURL(blob); needRevoke = true; }
       }
+      // 追蹤 blob URL，供頁面切換時統一 revoke
+      if (needRevoke) _galActiveBlobUrls.push(url);
     }
     if (!url) {
       const ph = el('div');
@@ -6148,21 +6159,27 @@ function _buildGalleryCard(item, container) {
       card.insertBefore(ph, card.firstChild);
       return;
     }
+    const _trackRevoke = () => {
+      _galActiveBlobUrls = _galActiveBlobUrls.filter(u => u !== url);
+      URL.revokeObjectURL(url);
+    };
     if (item.type === 'video') {
       const vid = el('video');
       vid.style.cssText = 'width:100%;display:block;';
       vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
       vid.src = url;
-      if (needRevoke) vid.oncanplay = () => URL.revokeObjectURL(url);
+      if (needRevoke) vid.oncanplay = _trackRevoke;
       card.insertBefore(vid, card.firstChild);
     } else {
       const img = el('img');
       img.style.cssText = 'width:100%;display:block;';
       img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
       img.src = url;
-      if (needRevoke) img.onload = () => URL.revokeObjectURL(url);
+      if (needRevoke) img.onload = _trackRevoke;
       img.onerror = () => {
-        if (S.cfg.cloudToken && !img.dataset.proxied) {
+        // blob URL 失敗：直接釋放並顯示佔位（imgproxy 無法代理 blob URL）
+        if (needRevoke) { _trackRevoke(); needRevoke = false; }
+        if (S.cfg.cloudToken && !img.dataset.proxied && !url.startsWith('blob:')) {
           img.dataset.proxied = '1';
           img.src = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(url)}`;
         } else {
@@ -6352,7 +6369,8 @@ function _galApplyFilter(container) {
     return matchQ && matchTag;
   });
 
-  // 清空已渲染的卡片
+  // 清空已渲染的卡片前先釋放 blob URL
+  _galRevokeBlobUrls();
   container.querySelectorAll('.gal-col').forEach(col => {
     [...col.querySelectorAll('.gallery-card')].forEach(c => c.remove());
   });
@@ -6593,13 +6611,20 @@ function showCropDialog(file) {
         window.removeEventListener('touchmove',onMove); window.removeEventListener('touchend',onEnd);
         URL.revokeObjectURL(ou); ov.remove();
       }
-      topBar.querySelector('#_cc').addEventListener('click',()=>{cleanup();resolve(null);});
+      topBar.querySelector('#_cc').addEventListener('click',()=>{
+        cv.width=0; cv.height=0; // 釋放畫布像素緩衝區
+        cleanup(); resolve(null);
+      });
       topBar.querySelector('#_co').addEventListener('click',()=>{
         const oc=document.createElement('canvas');
         const sw2=(cx-ix)/sc, sh2=(cy-iy)/sc, ssw=cw/sc, ssh=ch/sc;
         const maxW=1200; oc.width=Math.min(ssw,maxW); oc.height=ssh*(oc.width/ssw);
         oc.getContext('2d').drawImage(img,sw2,sh2,ssw,ssh,0,0,oc.width,oc.height);
-        oc.toBlob(b=>{cleanup();resolve(b);},'image/jpeg',0.88);
+        oc.toBlob(b=>{
+          cv.width=0; cv.height=0; // 釋放主畫布像素緩衝區
+          oc.width=0; oc.height=0; // 釋放輸出畫布像素緩衝區
+          cleanup(); resolve(b);
+        },'image/jpeg',0.88);
       });
     };
     img.onerror=()=>{URL.revokeObjectURL(ou);ov.remove();resolve(null);};
