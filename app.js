@@ -271,6 +271,26 @@ async function compressImage(blob, maxW = 1200, quality = 0.82) {
   });
 }
 
+/* ── 縮圖生成（gallery 預覽用，320px JPEG） ── */
+async function generateThumb(blob, maxW = 320, quality = 0.75) {
+  return new Promise(res => {
+    const img = new Image();
+    const url = URL.createObjectURL(blob);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxW / img.width);
+      const w = Math.round(img.width * scale);
+      const h = Math.round(img.height * scale);
+      const cvs = document.createElement('canvas');
+      cvs.width = w; cvs.height = h;
+      cvs.getContext('2d').drawImage(img, 0, 0, w, h);
+      cvs.toBlob(b => res(b || blob), 'image/jpeg', quality);
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); res(blob); };
+    img.src = url;
+  });
+}
+
 // 回傳 { blob, type } type = 'video'|'image'
 // 成功剪輯 → type:'video'（webm）
 // 剪輯失敗 → 擷取第一幀 → type:'image'（jpeg）
@@ -5905,13 +5925,23 @@ let _galMultiActive  = false;
 let _galSelected     = new Set();
 let _galSearchQuery  = '';
 let _galActiveTag    = '';
+let _galAllItems     = [];     // 完整列表（反序），每次 renderGalleryWidget 刷新
+let _galFilteredItems = null;  // null = 不篩選，Array = 篩選後結果
+let _galRenderedCount = 0;     // 已渲染張數
+let _galIObs          = null;  // IntersectionObserver 實例
+const GAL_PAGE_SIZE   = 20;    // 每頁載入張數
 
 function injectGalleryCSS() {
   if (document.getElementById('gallery-style')) return;
   const s = document.createElement('style');
   s.id = 'gallery-style';
   s.textContent = `
-    .gallery-card { transition: transform 0.15s ease, filter 0.15s ease; position: relative; }
+    .gallery-card {
+      transition: transform 0.15s ease, filter 0.15s ease;
+      position: relative;
+      content-visibility: auto;
+      contain-intrinsic-size: auto 250px;
+    }
     .gallery-card:active { transform: scale(0.96); filter: brightness(0.82); }
     .gallery-card.gallery-selected { box-shadow: 0 0 0 2px #5865f2 !important; }
     .gallery-detail-overlay { opacity: 0; transition: opacity 0.25s ease; }
@@ -5950,7 +5980,10 @@ function renderGalleryWidget(container) {
       _galSelected.clear();
       _galMultiActive = false;
       lsSave();
-      await Promise.all(toDelete.map(g => g.imageId ? idbDel(g.imageId).catch(() => {}) : Promise.resolve()));
+      await Promise.all(toDelete.flatMap(g => [
+        g.imageId ? idbDel(g.imageId).catch(() => {}) : Promise.resolve(),
+        g.thumbId ? idbDel(g.thumbId).catch(() => {}) : Promise.resolve(),
+      ]));
       toDelete.forEach(g => cloudDeleteItem(g.id, g.r2Key));
       cloudGalleryPush();
       renderGalleryWidget(container);
@@ -6025,127 +6058,31 @@ function renderGalleryWidget(container) {
     const colWrap = el('div');
     colWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
     const cols = [el('div'), el('div')];
-    cols.forEach(c => {
+    cols.forEach((c, i) => {
+      c.className = 'gal-col';
+      c.dataset.colidx = i;
       c.style.cssText = 'flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;';
       colWrap.appendChild(c);
     });
+    // 哨兵節點：滑到底部時觸發下一頁載入
+    const sentinel = el('div', 'gal-load-sentinel');
+    sentinel.style.cssText = 'height:1px;flex-shrink:0;';
     scroll.appendChild(colWrap);
+    scroll.appendChild(sentinel);
 
-    [...items].reverse().forEach((item, idx) => {
-      const card = el('div', 'gallery-card');
-      card.dataset.galid    = item.id;
-      card.dataset.galtitle = item.title || '';
-      card.dataset.galdesc  = item.description || '';
-      card.dataset.galtags  = (item.tags || []).join(',');
-      const isSel = _galSelected.has(item.id);
-      card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);box-shadow:0 0 0 1px rgba(255,255,255,0.08);';
-      if (isSel) card.classList.add('gallery-selected');
-      if (_galMultiActive) _galAddSelDot(card, isSel);
-
-      (async () => {
-        let url = item.mediaUrl || null, needRevoke = false;
-        if (!url && item.imageId) {
-          const blob = await idbGet(item.imageId).catch(() => null);
-          if (blob) { url = URL.createObjectURL(blob); needRevoke = true; }
-        }
-        if (!url) {
-          // 無圖片：顯示佔位區塊讓卡片有高度
-          const ph = el('div');
-          ph.style.cssText = 'width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:22px;';
-          ph.textContent = item.type === 'video' ? '🎬' : '🔗';
-          card.insertBefore(ph, card.firstChild);
-          return;
-        }
-        if (item.type === 'video') {
-          const vid = el('video');
-          vid.style.cssText = 'width:100%;display:block;';
-          vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
-          vid.src = url;
-          if (needRevoke) vid.oncanplay = () => URL.revokeObjectURL(url);
-          card.insertBefore(vid, card.firstChild);
-        } else {
-          const img = el('img');
-          img.style.cssText = 'width:100%;display:block;';
-          img.alt = ''; img.loading = 'lazy';
-          img.src = url;
-          if (needRevoke) img.onload = () => URL.revokeObjectURL(url);
-          img.onerror = () => {
-            // 嘗試 imgproxy，若仍失敗則顯示佔位
-            if (S.cfg.cloudToken && !img.dataset.proxied) {
-              img.dataset.proxied = '1';
-              img.src = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(url)}`;
-            } else {
-              const ph = el('div');
-              ph.style.cssText = 'width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:22px;';
-              ph.textContent = '🖼️';
-              img.replaceWith(ph);
-            }
-          };
-          card.insertBefore(img, card.firstChild);
-        }
-      })();
-
-      // 標籤 chips（卡片底部）
-      if (item.tags?.length) {
-        const chipRow = el('div');
-        chipRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:3px;padding:5px 6px 6px;';
-        item.tags.forEach(tag => {
-          const chip = el('span');
-          const isA = _galActiveTag === tag;
-          chip.style.cssText = `display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;cursor:pointer;${isA ? 'background:#5865f2;color:#fff;' : 'background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.65);'}`;
-          chip.textContent = tag;
-          chip.addEventListener('click', e => {
-            e.stopPropagation();
-            _galActiveTag = (_galActiveTag === tag) ? '' : tag;
-            container.querySelectorAll('.gal-tag-btn').forEach(b => {
-              const a = b.dataset.galtag === _galActiveTag;
-              b.style.background  = a ? '#5865f2' : 'transparent';
-              b.style.borderColor = a ? '#5865f2' : 'rgba(255,255,255,0.2)';
-              b.style.color       = a ? '#fff'    : 'rgba(255,255,255,0.65)';
-            });
-            _galApplyFilter(container);
-          });
-          chipRow.appendChild(chip);
-        });
-        card.appendChild(chipRow);
-      }
-
-      // 長按進入多選（震動與 UI 同步，不 re-render）
-      let lpTimer = null, lpFired = false, startX = 0, startY = 0;
-      card.addEventListener('touchstart', e => {
-        lpFired = false;
-        startX = e.touches[0].clientX;
-        startY = e.touches[0].clientY;
-        if (!_galMultiActive) {
-          lpTimer = setTimeout(() => {
-            lpFired = true;
-            navigator.vibrate?.(50);
-            _galEnterMultiSelect(container, item.id);
-          }, 500);
-        }
-      }, { passive: true });
-      card.addEventListener('touchmove', e => {
-        if (Math.hypot(e.touches[0].clientX - startX, e.touches[0].clientY - startY) > 10)
-          clearTimeout(lpTimer);
-      }, { passive: true });
-      card.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
-
-      // 點擊：多選模式就地切換，不 re-render
-      card.addEventListener('click', () => {
-        if (lpFired) return;
-        if (_galMultiActive) {
-          _galToggleCardSelect(card, item.id, container);
-        } else {
-          openGalleryDetail(item, container);
-        }
-      });
-      card.addEventListener('contextmenu', e => { e.preventDefault(); e.stopPropagation(); });
-
-      cols[idx % 2].appendChild(card);
-    });
+    // 初始化分頁狀態
+    _galAllItems = [...items].reverse();
+    _galRenderedCount = 0;
+    if (_galIObs) { _galIObs.disconnect(); _galIObs = null; }
 
     // 套用現有篩選條件（重開後保留搜索/標籤狀態）
-    if (_galSearchQuery || _galActiveTag) _galApplyFilter(container);
+    if (_galSearchQuery || _galActiveTag) {
+      _galApplyFilter(container);
+    } else {
+      _galFilteredItems = null;
+      _galSetupIObs(container, sentinel);
+      _galRenderNextPage(container);
+    }
   }
 
   container.appendChild(galHead);
@@ -6158,6 +6095,156 @@ function renderGalleryWidget(container) {
     fab.style.cssText = 'position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:var(--accent,#7c6af5);color:#fff;font-size:24px;line-height:1;border:none;cursor:pointer;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;';
     fab.addEventListener('click', () => openGalleryAddDialog(container));
     container.appendChild(fab);
+  }
+}
+
+/* ── 分頁：建立單張卡片 DOM ── */
+function _buildGalleryCard(item, container) {
+  const card = el('div', 'gallery-card');
+  card.dataset.galid    = item.id;
+  card.dataset.galtitle = item.title || '';
+  card.dataset.galdesc  = item.description || '';
+  card.dataset.galtags  = (item.tags || []).join(',');
+  const isSel = _galSelected.has(item.id);
+  card.style.cssText = 'border-radius:10px;overflow:hidden;cursor:pointer;background:rgba(255,255,255,0.04);box-shadow:0 0 0 1px rgba(255,255,255,0.08);';
+  if (isSel) card.classList.add('gallery-selected');
+  if (_galMultiActive) _galAddSelDot(card, isSel);
+
+  // 非同步載入圖片（優先縮圖 thumbId，退而 imageId，再退 mediaUrl）
+  (async () => {
+    let url = item.mediaUrl || null, needRevoke = false;
+    if (!url) {
+      if (item.thumbId) {
+        const blob = await idbGet(item.thumbId).catch(() => null);
+        if (blob) { url = URL.createObjectURL(blob); needRevoke = true; }
+      }
+      if (!url && item.imageId) {
+        const blob = await idbGet(item.imageId).catch(() => null);
+        if (blob) { url = URL.createObjectURL(blob); needRevoke = true; }
+      }
+    }
+    if (!url) {
+      const ph = el('div');
+      ph.style.cssText = 'width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:22px;';
+      ph.textContent = item.type === 'video' ? '🎬' : '🔗';
+      card.insertBefore(ph, card.firstChild);
+      return;
+    }
+    if (item.type === 'video') {
+      const vid = el('video');
+      vid.style.cssText = 'width:100%;display:block;';
+      vid.muted = true; vid.loop = true; vid.playsInline = true; vid.autoplay = true;
+      vid.src = url;
+      if (needRevoke) vid.oncanplay = () => URL.revokeObjectURL(url);
+      card.insertBefore(vid, card.firstChild);
+    } else {
+      const img = el('img');
+      img.style.cssText = 'width:100%;display:block;';
+      img.alt = ''; img.loading = 'lazy'; img.decoding = 'async';
+      img.src = url;
+      if (needRevoke) img.onload = () => URL.revokeObjectURL(url);
+      img.onerror = () => {
+        if (S.cfg.cloudToken && !img.dataset.proxied) {
+          img.dataset.proxied = '1';
+          img.src = `${CLOUD_API}/imgproxy?url=${encodeURIComponent(url)}`;
+        } else {
+          const ph = el('div');
+          ph.style.cssText = 'width:100%;height:80px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.2);font-size:22px;';
+          ph.textContent = '🖼️';
+          img.replaceWith(ph);
+        }
+      };
+      card.insertBefore(img, card.firstChild);
+    }
+  })();
+
+  // 標籤 chips（卡片底部）
+  if (item.tags?.length) {
+    const chipRow = el('div');
+    chipRow.style.cssText = 'display:flex;flex-wrap:wrap;gap:3px;padding:5px 6px 6px;';
+    item.tags.forEach(tag => {
+      const chip = el('span');
+      const isA = _galActiveTag === tag;
+      chip.style.cssText = `display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;cursor:pointer;${isA ? 'background:#5865f2;color:#fff;' : 'background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.65);'}`;
+      chip.textContent = tag;
+      chip.addEventListener('click', e => {
+        e.stopPropagation();
+        _galActiveTag = (_galActiveTag === tag) ? '' : tag;
+        container.querySelectorAll('.gal-tag-btn').forEach(b => {
+          const a = b.dataset.galtag === _galActiveTag;
+          b.style.background  = a ? '#5865f2' : 'transparent';
+          b.style.borderColor = a ? '#5865f2' : 'rgba(255,255,255,0.2)';
+          b.style.color       = a ? '#fff'    : 'rgba(255,255,255,0.65)';
+        });
+        _galApplyFilter(container);
+      });
+      chipRow.appendChild(chip);
+    });
+    card.appendChild(chipRow);
+  }
+
+  // 長按進入多選（震動與 UI 同步，不 re-render）
+  let lpTimer = null, lpFired = false, startX = 0, startY = 0;
+  card.addEventListener('touchstart', e => {
+    lpFired = false;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    if (!_galMultiActive) {
+      lpTimer = setTimeout(() => {
+        lpFired = true;
+        navigator.vibrate?.(50);
+        _galEnterMultiSelect(container, item.id);
+      }, 500);
+    }
+  }, { passive: true });
+  card.addEventListener('touchmove', e => {
+    if (Math.hypot(e.touches[0].clientX - startX, e.touches[0].clientY - startY) > 10)
+      clearTimeout(lpTimer);
+  }, { passive: true });
+  card.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
+
+  card.addEventListener('click', () => {
+    if (lpFired) return;
+    if (_galMultiActive) {
+      _galToggleCardSelect(card, item.id, container);
+    } else {
+      openGalleryDetail(item, container);
+    }
+  });
+  card.addEventListener('contextmenu', e => { e.preventDefault(); e.stopPropagation(); });
+
+  return card;
+}
+
+/* ── 分頁：設定 IntersectionObserver ── */
+function _galSetupIObs(container, sentinel) {
+  if (_galIObs) _galIObs.disconnect();
+  _galIObs = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) _galRenderNextPage(container);
+  }, { rootMargin: '300px' });
+  _galIObs.observe(sentinel);
+}
+
+/* ── 分頁：渲染下一批卡片 ── */
+function _galRenderNextPage(container) {
+  const pool  = _galFilteredItems !== null ? _galFilteredItems : _galAllItems;
+  const start = _galRenderedCount;
+  const end   = Math.min(start + GAL_PAGE_SIZE, pool.length);
+  if (start >= pool.length) return;
+
+  const cols = container.querySelectorAll('.gal-col');
+  if (!cols.length) return;
+
+  for (let i = start; i < end; i++) {
+    const card = _buildGalleryCard(pool[i], container);
+    cols[i % 2].appendChild(card);
+  }
+  _galRenderedCount = end;
+
+  // 全部渲染完畢，移除哨兵
+  if (_galRenderedCount >= pool.length) {
+    if (_galIObs) { _galIObs.disconnect(); _galIObs = null; }
+    container.querySelector('.gal-load-sentinel')?.remove();
   }
 }
 
@@ -6232,18 +6319,51 @@ function _galToggleCardSelect(card, itemId, container) {
   if (tb) tb.style.display = _galMultiActive ? '' : 'none';
 }
 
-/* ── 搜索 / 標籤篩選（就地 DOM，不重新渲染） ── */
+/* ── 搜索 / 標籤篩選（記憶體篩選 + 重新分頁渲染） ── */
 function _galApplyFilter(container) {
   const q   = _galSearchQuery.toLowerCase();
   const tag = _galActiveTag;
-  container.querySelectorAll('.gallery-card').forEach(card => {
-    const title = (card.dataset.galtitle || '').toLowerCase();
-    const desc  = (card.dataset.galdesc  || '').toLowerCase();
-    const tags  = card.dataset.galtags   || '';
-    const matchQ   = !q   || title.includes(q) || desc.includes(q) || tags.toLowerCase().includes(q);
-    const matchTag = !tag || tags.split(',').map(t => t.trim()).includes(tag);
-    card.style.display = (matchQ && matchTag) ? '' : 'none';
+
+  // 在記憶體中篩選完整列表
+  _galFilteredItems = _galAllItems.filter(item => {
+    const title = (item.title || '').toLowerCase();
+    const desc  = (item.description || '').toLowerCase();
+    const tags  = (item.tags || []).join(',').toLowerCase();
+    const matchQ   = !q   || title.includes(q) || desc.includes(q) || tags.includes(q);
+    const matchTag = !tag || (item.tags || []).includes(tag);
+    return matchQ && matchTag;
   });
+
+  // 清空已渲染的卡片
+  container.querySelectorAll('.gal-col').forEach(col => {
+    [...col.querySelectorAll('.gallery-card')].forEach(c => c.remove());
+  });
+  _galRenderedCount = 0;
+  container.querySelector('.gal-no-results')?.remove();
+
+  const scroll = container.querySelector('.gallery-scroll');
+
+  // 無結果提示
+  if (!_galFilteredItems.length) {
+    if (scroll) {
+      const noRes = el('div', 'gal-no-results');
+      noRes.style.cssText = 'text-align:center;padding:40px 16px;color:rgba(255,255,255,0.3);font-size:13px;';
+      noRes.textContent = '找不到符合條件的書籤';
+      scroll.appendChild(noRes);
+    }
+    return;
+  }
+
+  // 確保哨兵存在
+  let sentinel = container.querySelector('.gal-load-sentinel');
+  if (!sentinel && scroll) {
+    sentinel = el('div', 'gal-load-sentinel');
+    sentinel.style.cssText = 'height:1px;flex-shrink:0;';
+    scroll.appendChild(sentinel);
+  }
+
+  _galSetupIObs(container, sentinel);
+  _galRenderNextPage(container);
 }
 
 /* ── Web Share Target：啟動時讀取 SW 存入的分享資料 ── */
@@ -6713,6 +6833,13 @@ function openGalleryAddDialog(container, prefill = null) {
           mediaUrl = up.url; r2Key = up.r2Key;
         }
         await idbSet(imageId, uploadBlob);
+        // 同步生成縮圖（僅圖片類型）
+        if (!isVideo) {
+          try {
+            const thumbBlob = await generateThumb(uploadBlob);
+            await idbSet('gallery_thumb_' + id, thumbBlob);
+          } catch(_) {}
+        }
       } catch(e) {
         await idbSet(imageId, blob);
       }
@@ -6732,6 +6859,7 @@ function openGalleryAddDialog(container, prefill = null) {
     if (!S.gallery) S.gallery = [];
     S.gallery.push({
       id, imageId: blob ? imageId : null,
+      thumbId: (blob && !blob.type.startsWith('video/')) ? ('gallery_thumb_' + id) : null,
       mediaUrl, r2Key,
       type: finalType,
       title: box.querySelector('#_gal-title').value.trim(),
@@ -6775,6 +6903,7 @@ function showGalleryCardMenu(item, container) {
   sheet.querySelector('#_gal-del').addEventListener('click', async () => {
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
     if (item.imageId) await idbDel(item.imageId).catch(() => {});
+    if (item.thumbId) await idbDel(item.thumbId).catch(() => {});
     cloudDeleteItem(item.id, item.r2Key);
     cloudGalleryPush();
     lsSave();
@@ -6879,6 +7008,7 @@ function openGalleryDetail(item, container) {
     if (!confirm('確定刪除這個書籤？')) return;
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
     if (item.imageId) await idbDel(item.imageId).catch(() => {});
+    if (item.thumbId) await idbDel(item.thumbId).catch(() => {});
     cloudDeleteItem(item.id, item.r2Key);
     cloudGalleryPush();
     lsSave(); doClose(); renderGalleryWidget(container);
@@ -7049,6 +7179,15 @@ function openGalleryEditDialog(item, container) {
         const imageId = item.imageId || ('gallery_img_' + item.id);
         await idbSet(imageId, uploadBlob);
         item.imageId = imageId;
+        // 重新生成縮圖
+        if (!isVideo) {
+          const thumbId = 'gallery_thumb_' + item.id;
+          try {
+            const thumbBlob = await generateThumb(uploadBlob);
+            await idbSet(thumbId, thumbBlob);
+            item.thumbId = thumbId;
+          } catch(_) {}
+        }
       } catch(e) { /* 換圖失敗保留舊圖 */ }
     }
 
