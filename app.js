@@ -4600,7 +4600,7 @@ function clearYtQuotaExceeded() {
   localStorage.removeItem('yt_quota_exceeded_until');
 }
 
-async function fetchYoutubeFeed(force = false) {
+async function fetchYoutubeFeed(force = false, onProgress = null) {
   const CACHE_MIN = 30;
   // 配額超限時不再嘗試（直到明天台灣時間 08:00）
   if (!force && Date.now() < ytQuotaExceededUntil()) return S.yt.items || [];
@@ -4610,29 +4610,42 @@ async function fetchYoutubeFeed(force = false) {
   const key = S.cfg.ytApiKey?.trim();
   if (!key || !S.yt.channels?.length) return [];
 
-  const results = await Promise.allSettled(
-    S.yt.channels.map(ch => fetchChannelVideos(ch.id, key))
-  );
+  // 分批抓取：每 5 個頻道一組，抓完一批立即更新畫面
+  const CHUNK = 5;
+  let newItems = [];
 
-  // 檢查是否有 403 配額超限
-  const has403 = results.some(r => r.status === 'rejected' && r.reason?.message?.includes('403'));
-  if (has403) {
-    setYtQuotaExceeded();
-    console.warn('[NeoCast] YouTube API 配額超限，停止自動重試直到明天 08:00');
-    toast('YouTube API 配額已用完，台灣時間 08:00 後重置', 'warn');
-    return S.yt.items || [];
+  for (let i = 0; i < S.yt.channels.length; i += CHUNK) {
+    const chunk = S.yt.channels.slice(i, i + CHUNK);
+    const results = await Promise.allSettled(
+      chunk.map(ch => fetchChannelVideos(ch.id, key))
+    );
+
+    // 403 配額超限：立刻中止整批抓取
+    const has403 = results.some(r => r.status === 'rejected' && r.reason?.message?.includes('403'));
+    if (has403) {
+      setYtQuotaExceeded();
+      console.warn('[NeoCast] YouTube API 配額超限，停止自動重試直到明天 08:00');
+      toast('YouTube API 配額已用完，台灣時間 08:00 後重置', 'warn');
+      return S.yt.items || [];
+    }
+
+    const chunkItems = results
+      .filter(r => r.status === 'fulfilled')
+      .flatMap(r => r.value);
+
+    // 合併並重新排序，讓時間軸始終正確
+    newItems = [...newItems, ...chunkItems]
+      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+
+    // 每批抓完就立即更新全域狀態，並通知呼叫方重繪
+    S.yt.items = newItems;
+    if (onProgress) onProgress();
   }
-
-  const items = results
-    .filter(r => r.status === 'fulfilled')
-    .flatMap(r => r.value)
-    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
 
   clearYtQuotaExceeded();
   S.yt.fetchedAt = Date.now();
-  S.yt.items = items;
   lsSave();
-  return items;
+  return newItems;
 }
 
 function startYtGrpRename(wrap, tab, oldName) {
@@ -5135,7 +5148,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     const card = el('div', 'yt-card' + (watched ? ' yt-watched' : ''));
     const thumbWrap = el('div', 'yt-thumb');
     const img = el('img');
-    img.src = video.thumb; img.alt = video.title; img.loading = 'lazy';
+    img.src = video.thumb; img.alt = video.title; img.loading = 'lazy'; img.decoding = 'async';
     thumbWrap.appendChild(img);
 
     // Duration badge
@@ -5234,7 +5247,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   let spinning = false;
   refBtn.addEventListener('click', async () => {
     if (spinning) return; spinning = true; refBtn.classList.add('spin');
-    try { await fetchYoutubeFeed(true); renderFeed(); }
+    try { await fetchYoutubeFeed(true, () => renderFeed()); }
     catch(e) { feed.innerHTML = `<div class="yt-empty" style="color:#f66">${e.message}</div>`; }
     finally { spinning = false; refBtn.classList.remove('spin'); }
   });
