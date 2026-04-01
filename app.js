@@ -7632,21 +7632,81 @@ function initOmniSearch() {
   const res = $('omni-results');
   let activeIdx = -1;
 
+  /* ── 切換到指定 widget 的分頁（mobile layout），回傳是否真的切換了 ── */
+  const goToWidget = (widgetType) => {
+    const idx = (S.mobilePages || []).findIndex(p => p.widget === widgetType);
+    if (idx < 0) return false;
+    if (S.mobilePageIdx === idx) return true; // 已在該頁，不用切
+    const dir = idx > S.mobilePageIdx ? 'left' : 'right';
+    S.mobilePageIdx = idx;
+    _vtRenderPages(window._mobileRenderPages || (() => {}), dir);
+    return true;
+  };
+
   /* ── 執行結果項目動作 ── */
   const activate = (idx) => {
     const r = _omniCurrentResults[idx];
     if (!r) return;
-    if (r.url) {
-      window.open(r.url, '_blank', 'noopener,noreferrer');
-    } else if (r.type === 'sticky') {
-      const card = document.querySelector(`.sticky-card[data-id="${r.rawId}"]`);
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    } else if (r.type === 'anime') {
-      const panel = document.querySelector('#mobile-layout .anime-inner') ||
-                    document.querySelector('.widget[data-wid="anime"] .w-body');
-      if (panel) panel.scrollIntoView({ behavior: 'smooth' });
-    }
     closeOmniSearch();
+
+    switch (r.type) {
+      // ── 捷徑：直接新分頁開啟 ──
+      case 'shortcut':
+        window.open(r.url, '_blank', 'noopener,noreferrer');
+        break;
+
+      // ── 新聞：直接新分頁開啟 ──
+      case 'news':
+        window.open(r.url, '_blank', 'noopener,noreferrer');
+        break;
+
+      // ── YouTube：切到 yt 頁，再展開 sheet ──
+      case 'yt': {
+        const didSwitch = goToWidget('youtube');
+        const doSheet = () => {
+          if (typeof showYtSheet === 'function') showYtSheet(r.raw);
+        };
+        didSwitch ? setTimeout(doSheet, 320) : doSheet();
+        break;
+      }
+
+      // ── 便利貼：切到 stickies 頁，再滾動到對應卡片 ──
+      case 'sticky': {
+        goToWidget('stickies');
+        setTimeout(() => {
+          const card = document.querySelector(`.sticky-card[data-id="${r.rawId}"]`);
+          if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 380);
+        break;
+      }
+
+      // ── 動漫：切到 anime 頁，再展開 sheet ──
+      case 'anime': {
+        const didSwitch = goToWidget('anime');
+        const doAnime = () => {
+          if (r.raw && typeof showAnimeSheet === 'function') showAnimeSheet(r.raw);
+        };
+        didSwitch ? setTimeout(doAnime, 320) : doAnime();
+        break;
+      }
+
+      // ── 圖庫：切到 gallery 頁，再展開 detail ──
+      case 'gallery': {
+        const didSwitch = goToWidget('gallery');
+        const doGallery = () => {
+          const container = document.querySelector('#mobile-layout .gallery-scroll') ||
+                            document.querySelector('.widget[data-wid="gallery"] .w-body');
+          if (r.raw && typeof openGalleryDetail === 'function')
+            openGalleryDetail(r.raw, container);
+        };
+        didSwitch ? setTimeout(doGallery, 380) : doGallery();
+        break;
+      }
+
+      default:
+        if (r.url) window.open(r.url, '_blank', 'noopener,noreferrer');
+        break;
+    }
   };
 
   /* ── 渲染搜尋結果 ── */
@@ -7765,6 +7825,8 @@ function _vtRenderPages(renderFn, dir) {
   sa.classList.remove('vt-anim');
   void sa.offsetWidth; // force reflow
   sa.classList.add('vt-anim');
+  // 動畫結束後立刻移除 class，防止 transform context 殘留破壞 backdrop-filter
+  sa.addEventListener('animationend', () => sa.classList.remove('vt-anim'), { once: true });
 }
 
 function initMobileLayout() {
