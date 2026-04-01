@@ -704,8 +704,31 @@ function dismissToast(t) {
    VIDEO BACKGROUND
 ───────────────────────────────────── */
 let videoBlobUrl    = null;
-let pageVideoBlobUrl = null; // per-page video blob URL（切換時 revoke 釋放記憶體）
+let pageVideoBlobUrl = null; // per-page bg blob URL（切換時 revoke 釋放記憶體）
 let _pvGen           = 0;   // generation counter，防止多個 async load 競爭
+
+/* ── 套用全局背景媒體（blob 可為影片或圖片） ── */
+function _applyBgBlob(blob, blobUrl) {
+  const vid  = $('bg-video');
+  const img  = $('bg-img');
+  const orbs = $('bg-orbs');
+  if (!blob) {
+    // 清除：顯示預設光球
+    if (vid) { vid.src = ''; vid.style.display = ''; }
+    if (img) { img.src = ''; img.style.display = 'none'; }
+    if (orbs) orbs.style.display = '';
+    return;
+  }
+  const isImg = blob.type.startsWith('image/');
+  if (isImg) {
+    if (vid) { vid.src = ''; vid.style.display = 'none'; }
+    if (img) { img.src = blobUrl; img.style.display = ''; }
+  } else {
+    if (img) { img.src = ''; img.style.display = 'none'; }
+    if (vid) { vid.src = blobUrl; vid.style.display = ''; vid.load(); }
+  }
+  if (orbs) orbs.style.display = 'none';
+}
 
 async function loadVideo() {
   try {
@@ -713,9 +736,7 @@ async function loadVideo() {
     if (!blob) return;
     if (videoBlobUrl) URL.revokeObjectURL(videoBlobUrl);
     videoBlobUrl = URL.createObjectURL(blob);
-    const v = $('bg-video');
-    v.src = videoBlobUrl;
-    $('bg-orbs').style.display = 'none';
+    _applyBgBlob(blob, videoBlobUrl);
   } catch(_) {}
 }
 
@@ -723,21 +744,20 @@ async function saveVideo(file) {
   try {
     await idbSet(VID_KEY, file);
     await loadVideo();
-    toast('背景影片已設定 ✓');
-  } catch(_) { toast('影片儲存失敗','err'); }
+    toast(file.type.startsWith('image/') ? '背景圖片已設定 ✓' : '背景影片已設定 ✓');
+  } catch(_) { toast('背景設定失敗','err'); }
 }
 
 async function removeVideo() {
   try {
     await idbDel(VID_KEY);
-    const v = $('bg-video'); v.src = '';
     if (videoBlobUrl) { URL.revokeObjectURL(videoBlobUrl); videoBlobUrl = null; }
-    $('bg-orbs').style.display = '';
-    toast('已移除背景影片');
+    _applyBgBlob(null, null);
+    toast('已移除背景');
   } catch(_) {}
 }
 
-// 切換至指定分頁的背景影片（優先分頁設定，否則 fallback 全局影片）
+// 切換至指定分頁的背景（優先分頁設定，否則 fallback 全局）
 async function switchPageVideo(pageId) {
   const gen = ++_pvGen;
   // 釋放前一個分頁的 blob URL，防止記憶體累積
@@ -745,21 +765,18 @@ async function switchPageVideo(pageId) {
     URL.revokeObjectURL(pageVideoBlobUrl);
     pageVideoBlobUrl = null;
   }
-  const v = $('bg-video');
-  if (!v) return;
   try {
     const blob = await idbGet(PAGE_VID_KEY(pageId));
     if (gen !== _pvGen) return; // 已被更新的呼叫取代，中止
     if (blob) {
       pageVideoBlobUrl = URL.createObjectURL(blob);
-      v.src = pageVideoBlobUrl;
-      $('bg-orbs').style.display = 'none';
+      _applyBgBlob(blob, pageVideoBlobUrl);
     } else {
-      // 此分頁無獨立設定 → 使用全局影片
-      v.src = videoBlobUrl || '';
-      $('bg-orbs').style.display = videoBlobUrl ? 'none' : '';
+      // 此分頁無獨立設定 → 使用全局媒體（需重新讀取 blob type）
+      const globalBlob = await idbGet(VID_KEY).catch(() => null);
+      if (gen !== _pvGen) return;
+      _applyBgBlob(globalBlob || null, videoBlobUrl || null);
     }
-    v.load();
   } catch (_) {}
 }
 
@@ -7488,9 +7505,9 @@ function initMobileLayout() {
 
   // Render pages and dots
   function renderPages() {
-    // 切換頁面前先暫停背景影片，防止切換期間音訊殘留
+    // 切換頁面前先暫停背景影片（若目前是影片模式），防止切換期間音訊殘留
     const _bgVid = $('bg-video');
-    if (_bgVid && !_bgVid.paused) _bgVid.pause();
+    if (_bgVid && _bgVid.style.display !== 'none' && !_bgVid.paused) _bgVid.pause();
 
     swipeArea.innerHTML = '';
     dotsBar.innerHTML   = '';
@@ -7907,26 +7924,23 @@ function openMobileWidgetPicker(pageIdx) {
 
   const bgSetItem = el('div', 'mobile-picker-item');
   bgSetItem.style.cssText = 'border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:10px;padding-bottom:12px;';
-  bgSetItem.innerHTML = `<span class="awp-icon">🎬</span><span>為此分頁設定獨立背景</span>`;
+  bgSetItem.innerHTML = `<span class="awp-icon">🖼</span><span>為此分頁設定獨立背景（圖片或影片）</span>`;
   bgSetItem.addEventListener('click', () => {
     const fi = document.createElement('input');
-    fi.type = 'file'; fi.accept = 'video/mp4,video/webm,video/*';
+    fi.type = 'file'; fi.accept = 'image/*,video/mp4,video/webm,video/*';
     fi.addEventListener('change', async () => {
       const file = fi.files[0];
       if (!file) return;
       try {
         await idbSet(PAGE_VID_KEY(pageId), file);
-        // 若目前正在這個分頁，立即切換
+        // 若目前正在這個分頁，立即套用
         if (S.mobilePages[S.mobilePageIdx]?.id === pageId) {
           _pvGen++;
           if (pageVideoBlobUrl) { URL.revokeObjectURL(pageVideoBlobUrl); pageVideoBlobUrl = null; }
-          const v = $('bg-video');
           pageVideoBlobUrl = URL.createObjectURL(file);
-          v.src = pageVideoBlobUrl;
-          $('bg-orbs').style.display = 'none';
-          v.load();
+          _applyBgBlob(file, pageVideoBlobUrl);
         }
-        toast('分頁背景已設定 ✓');
+        toast(file.type.startsWith('image/') ? '分頁背景圖片已設定 ✓' : '分頁背景影片已設定 ✓');
       } catch (_) { toast('設定失敗', 'err'); }
     });
     fi.click();
