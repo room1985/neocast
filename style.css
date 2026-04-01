@@ -945,6 +945,8 @@ body.widgets-hidden #mobile-layout { display: none !important; }
 }
 
 .news-card {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 90px; /* 估計高度，防止捲軸跳動 */
   padding: 10px 12px;
   border-radius: 9px;
   border: 1px solid var(--bd);

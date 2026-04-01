@@ -7463,6 +7463,10 @@ function initMobileLayout() {
 
   // Render pages and dots
   function renderPages() {
+    // 切換頁面前先暫停背景影片，防止切換期間音訊殘留
+    const _bgVid = $('bg-video');
+    if (_bgVid && !_bgVid.paused) _bgVid.pause();
+
     swipeArea.innerHTML = '';
     dotsBar.innerHTML   = '';
 
@@ -7651,10 +7655,12 @@ function initMobileLayout() {
         panel.appendChild(panelHead);
         panel.appendChild(inner);
         swipeArea.appendChild(panel); // 先掛載到 DOM
-        renderYoutubeWidget(inner, ytAddBtn, ytRefBtn);
-        // 隱藏 renderYoutubeWidget 建立的 mHead（因為已整合到 panelHead）
-        const mHead = inner.querySelector('.yt-mobile-head');
-        if (mHead) mHead.style.display = 'none';
+        // 只渲染當前可見的頁面，非 active 頁面留空殼節省 CPU/RAM
+        if (idx === S.mobilePageIdx) {
+          renderYoutubeWidget(inner, ytAddBtn, ytRefBtn);
+          const mHead = inner.querySelector('.yt-mobile-head');
+          if (mHead) mHead.style.display = 'none';
+        }
         const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
         dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
         if (idx > 0) {
@@ -7692,7 +7698,9 @@ function initMobileLayout() {
         const inner = el('div', 'mobile-news-inner');
         panel.appendChild(inner);
         swipeArea.appendChild(panel); // 先掛載到 DOM
-        renderMobileNews(inner, newsSettingsBtn, newsLangBtn, newsRefBtn);
+        if (idx === S.mobilePageIdx) {
+          renderMobileNews(inner, newsSettingsBtn, newsLangBtn, newsRefBtn);
+        }
         const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
         dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
         if (idx > 0) {
@@ -7729,7 +7737,9 @@ function initMobileLayout() {
         inner.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;';
         panel.appendChild(inner);
         swipeArea.appendChild(panel);
-        renderAnimeWidget(inner, animeCfgBtn);
+        if (idx === S.mobilePageIdx) {
+          renderAnimeWidget(inner, animeCfgBtn);
+        }
         const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
         dot.title = idx === 0 ? '捷徑（不可刪除）' : '長按刪除';
         if (idx > 0) {
@@ -7746,7 +7756,9 @@ function initMobileLayout() {
       // Widget content
       panel.appendChild(panelHead);
       swipeArea.appendChild(panel); // 先掛載到 DOM，確保 container.closest('#mobile-layout') 能正確偵測
-      buildMobileWidgetContent(page.widget, panel);
+      if (idx === S.mobilePageIdx) {
+        buildMobileWidgetContent(page.widget, panel);
+      }
 
       // Dot
       const dot = el('div', 'mobile-dot' + (idx === S.mobilePageIdx ? ' active' : ''));
