@@ -7524,6 +7524,237 @@ function startMobileTitleEdit(titleEl, wid, defaultLabel, icon) {
   });
 }
 
+/* ─────────────────────────────────────
+   OMNI-SEARCH COMMAND PALETTE
+───────────────────────────────────── */
+let _omniOpen      = false;
+let _omniResults   = [];
+let _omniActiveIdx = -1;
+
+/* 簡單 HTML 跳脫 */
+function _omniEsc(s) {
+  return String(s || '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+/* 高亮 query 在 text 中出現的位置（回傳安全 HTML） */
+function _omniHl(text, query) {
+  if (!query) return _omniEsc(text);
+  const safe = _omniEsc(text);
+  const safeQ = _omniEsc(query).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return safe.replace(new RegExp(`(${safeQ})`, 'gi'), '<mark>$1</mark>');
+}
+
+/* 計算匹配分數 (0 = 不匹配) */
+function _omniScore(text, q) {
+  if (!text || !q) return 0;
+  const t = text.toLowerCase();
+  const lq = q.toLowerCase();
+  if (t.includes(lq)) return lq.length * 3;  // 完整包含，最高分
+  const words = lq.split(/\s+/).filter(Boolean);
+  if (!words.length) return 0;
+  const hit = words.filter(w => t.includes(w));
+  if (!hit.length) return 0;
+  return hit.reduce((s, w) => s + w.length, 0);
+}
+
+/* 搜尋所有資料來源，回傳排序結果陣列 */
+function _omniSearch(query) {
+  const q = (query || '').trim();
+  if (!q) return [];
+  const out = [];
+
+  // 捷徑
+  (S.shortcuts || []).forEach(sc => {
+    const sc_score = _omniScore((sc.name || '') + ' ' + (sc.url || ''), q);
+    if (sc_score) out.push({ type:'shortcut', icon:'📌', title: sc.name || sc.url, sub: _omniTruncUrl(sc.url), url: sc.url, _score: sc_score });
+  });
+
+  // 新聞
+  (S.news?.items || []).slice(0, 80).forEach(item => {
+    const sc_score = _omniScore((item.title || '') + ' ' + (item.source || ''), q);
+    if (sc_score) out.push({ type:'news', icon:'📰', title: item.title, sub: item.source || '新聞', url: item.link, _score: sc_score });
+  });
+
+  // YouTube
+  (S.yt?.items || []).slice(0, 120).forEach(item => {
+    const sc_score = _omniScore((item.title || '') + ' ' + (item.channelName || ''), q);
+    if (sc_score) out.push({ type:'yt', icon:'🎬', title: item.title, sub: item.channelName || 'YouTube', url: `https://www.youtube.com/watch?v=${item.videoId}`, _score: sc_score });
+  });
+
+  // 便利貼
+  (S.stickies || []).forEach(s => {
+    const txt = s.text || '';
+    const sc_score = _omniScore(txt + ' ' + (s.tag || ''), q);
+    if (sc_score) out.push({ type:'sticky', icon:'📝', title: txt.slice(0, 90), sub: s.tag || '便利貼', url: null, _score: sc_score });
+  });
+
+  // 動漫追蹤
+  (S.animeState?.tracked || []).forEach(name => {
+    const sc_score = _omniScore(name, q);
+    if (sc_score) out.push({ type:'anime', icon:'🎌', title: name, sub: '動漫追蹤', url: null, _score: sc_score });
+  });
+
+  // 圖庫書籤
+  (S.gallery || []).forEach(item => {
+    const sc_score = _omniScore((item.title || '') + ' ' + (item.description || '') + ' ' + (item.tags || []).join(' '), q);
+    if (sc_score) out.push({ type:'gallery', icon:'🖼', title: item.title || '(無標題)', sub: _omniTruncUrl(item.url), url: item.url, _score: sc_score });
+  });
+
+  return out.sort((a, b) => b._score - a._score).slice(0, 40);
+}
+
+function _omniTruncUrl(u) {
+  if (!u) return '';
+  try { return new URL(u).hostname; } catch (_) { return String(u).slice(0, 40); }
+}
+
+/* 重新渲染結果清單 */
+function _omniRenderResults(query) {
+  const res = $('omni-results');
+  if (!res) return;
+  _omniResults = _omniSearch(query);
+  _omniActiveIdx = -1;
+
+  if (!(query || '').trim()) {
+    res.innerHTML = `<div class="omni-hint">
+      輸入關鍵字搜尋所有內容<br>
+      <div class="omni-nav-hint">
+        <kbd>↑</kbd><kbd>↓</kbd>&nbsp;導航&nbsp;&nbsp;
+        <kbd>Enter</kbd>&nbsp;開啟&nbsp;&nbsp;
+        <kbd>Esc</kbd>&nbsp;關閉
+      </div>
+    </div>`;
+    return;
+  }
+  if (!_omniResults.length) {
+    res.innerHTML = `<div class="omni-empty">找不到「${_omniEsc(query)}」的相關內容</div>`;
+    return;
+  }
+
+  // 依 type 分組
+  const TYPE_LABEL = { shortcut:'捷徑', news:'新聞', yt:'YouTube', sticky:'便利貼', anime:'動漫', gallery:'圖庫' };
+  const groups = {};
+  _omniResults.forEach((r, i) => {
+    (groups[r.type] = groups[r.type] || []).push({ ...r, _i: i });
+  });
+
+  let html = '';
+  Object.keys(TYPE_LABEL).forEach(type => {
+    if (!groups[type]?.length) return;
+    html += `<div class="omni-section-title">${TYPE_LABEL[type]}</div>`;
+    groups[type].forEach(r => {
+      html += `<div class="omni-item" data-omni-idx="${r._i}">
+        <span class="omni-item-icon">${r.icon}</span>
+        <span class="omni-item-body">
+          <div class="omni-item-title">${_omniHl(r.title, query)}</div>
+          ${r.sub ? `<div class="omni-item-sub">${_omniEsc(r.sub)}</div>` : ''}
+        </span>
+        ${r.url ? '<span class="omni-item-arrow">↗</span>' : ''}
+      </div>`;
+    });
+  });
+  res.innerHTML = html;
+
+  // 點擊啟動
+  res.querySelectorAll('.omni-item').forEach(el => {
+    el.addEventListener('click', () => _omniActivate(+el.dataset.omniIdx));
+  });
+}
+
+/* 鍵盤導航 */
+function _omniNavigate(dir) {
+  const items = $('omni-results')?.querySelectorAll('.omni-item');
+  if (!items?.length) return;
+  items[_omniActiveIdx]?.classList.remove('omni-active');
+  _omniActiveIdx = Math.max(0, Math.min(items.length - 1, _omniActiveIdx + dir));
+  items[_omniActiveIdx]?.classList.add('omni-active');
+  items[_omniActiveIdx]?.scrollIntoView({ block: 'nearest' });
+}
+
+/* 執行選中項目 */
+function _omniActivate(idx) {
+  const r = _omniResults[idx];
+  if (!r) return;
+  if (r.url) {
+    window.open(r.url, '_blank', 'noopener,noreferrer');
+  } else if (r.type === 'sticky') {
+    const el = document.querySelector('.widget[data-wid="stickies"]') ||
+               document.querySelector('#mobile-layout .stickies-inner');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  } else if (r.type === 'anime') {
+    const el = document.querySelector('.widget[data-wid="anime"]') ||
+               document.querySelector('#mobile-layout .anime-inner');
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }
+  closeOmniSearch();
+}
+
+function openOmniSearch() {
+  const ov = $('omni-overlay');
+  if (!ov) return;
+  ov.classList.remove('hidden');
+  _omniOpen = true;
+  const inp = $('omni-input');
+  if (inp) { inp.value = ''; inp.focus(); }
+  _omniRenderResults('');
+}
+
+function closeOmniSearch() {
+  $('omni-overlay')?.classList.add('hidden');
+  _omniOpen = false;
+}
+
+function initOmniSearch() {
+  if (!$('omni-overlay')) return;
+
+  const inp = $('omni-input');
+  if (inp) {
+    inp.addEventListener('input', () => _omniRenderResults(inp.value));
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'ArrowDown')  { e.preventDefault(); _omniNavigate(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); _omniNavigate(-1); }
+      else if (e.key === 'Enter') {
+        if (_omniActiveIdx >= 0) _omniActivate(_omniActiveIdx);
+        else if (_omniResults.length) _omniActivate(0);
+      }
+      else if (e.key === 'Escape') closeOmniSearch();
+    });
+  }
+
+  // Esc 按鈕
+  $('omni-esc-kbd')?.addEventListener('click', closeOmniSearch);
+
+  // 背景點擊關閉
+  $('omni-overlay').addEventListener('click', e => {
+    if (e.target === $('omni-overlay')) closeOmniSearch();
+  });
+
+  // 全域快捷鍵 Ctrl+K / Cmd+K
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      _omniOpen ? closeOmniSearch() : openOmniSearch();
+      return;
+    }
+    if (e.key === 'Escape' && _omniOpen) closeOmniSearch();
+  });
+
+  // Header 按鈕
+  $('omni-btn')?.addEventListener('click', openOmniSearch);
+}
+
+/* ── View Transition 輔助：帶方向的 renderPages 包裝 ── */
+function _vtRenderPages(renderFn, dir) {
+  document.documentElement.dataset.vtDir = dir || 'left';
+  if (document.startViewTransition) {
+    document.startViewTransition(() => renderFn());
+  } else {
+    renderFn();
+  }
+}
+
 function initMobileLayout() {
   const container = $('mobile-layout');
   if (!container) return;
@@ -7549,6 +7780,7 @@ function initMobileLayout() {
 
   // ── Swipe area ──
   const swipeArea = el('div', 'mobile-swipe-area');
+  swipeArea.style.viewTransitionName = 'mobile-swipe'; // View Transitions API
   container.appendChild(swipeArea);
 
   // ── Dots + add button ──
@@ -7886,8 +8118,9 @@ function initMobileLayout() {
       }
 
       dot.addEventListener('click', () => {
+        const dir = idx > S.mobilePageIdx ? 'left' : 'right';
         S.mobilePageIdx = idx;
-        renderPages();
+        _vtRenderPages(renderPages, dir);
       });
 
       dotsBar.appendChild(dot);
@@ -7939,9 +8172,10 @@ function initMobileLayout() {
     // Only switch page if horizontal movement is dominant and significant
     if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
     const n = S.mobilePages.length;
+    const dir = dx < 0 ? 'left' : 'right';
     if (dx < 0) S.mobilePageIdx = (S.mobilePageIdx + 1) % n;
     else        S.mobilePageIdx = (S.mobilePageIdx - 1 + n) % n;
-    renderPages();
+    _vtRenderPages(renderPages, dir);
   }, { passive: true });
 
   renderPages();
@@ -8112,6 +8346,7 @@ async function init() {
   initSearch();
   initLockBtn();
   initWeather();
+  initOmniSearch();
 
   // Context menu
   initCtx();
