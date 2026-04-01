@@ -7542,23 +7542,23 @@ function _omniBuildIndex() {
 
   // 捷徑
   (S.shortcuts || []).forEach(sc => {
-    data.push({ type:'shortcut', icon:'📌', title: sc.name || sc.url || '', sub: _omniTruncUrl(sc.url), url: sc.url });
+    data.push({ type:'shortcut', icon:'📌', title: sc.name || sc.url || '', sub: _omniTruncUrl(sc.url), url: sc.url, raw: sc });
   });
 
   // 新聞（最近 80 筆）
   (S.news?.items || []).slice(0, 80).forEach(item => {
-    data.push({ type:'news', icon:'📰', title: item.title || '', sub: item.source || '新聞', url: item.link });
+    data.push({ type:'news', icon:'📰', title: item.title || '', sub: item.source || '新聞', url: item.link, raw: item });
   });
 
   // YouTube（最近 120 筆）
   (S.yt?.items || []).slice(0, 120).forEach(item => {
-    data.push({ type:'yt', icon:'🎬', title: item.title || '', sub: item.channelName || 'YouTube', url: `https://www.youtube.com/watch?v=${item.videoId}` });
+    data.push({ type:'yt', icon:'🎬', title: item.title || '', sub: item.channelName || 'YouTube', url: `https://www.youtube.com/watch?v=${item.videoId}`, raw: item });
   });
 
   // 便利貼
   (S.stickies || []).forEach(s => {
     const txt = (s.text || '').slice(0, 100);
-    data.push({ type:'sticky', icon:'📝', title: txt, sub: s.tag || '便利貼', url: null, rawId: s.id });
+    data.push({ type:'sticky', icon:'📝', title: txt, sub: s.tag || '便利貼', url: null, rawId: s.id, raw: s });
   });
 
   // 動漫追蹤（trackedData 含完整名稱，fallback 到 tracked 陣列）
@@ -7567,12 +7567,12 @@ function _omniBuildIndex() {
     const a = S.animeState?.trackedData?.[id];
     const name = S.animeState?.customNames?.[id] || a?.name_cn || a?.name || String(id);
     const url  = a ? `https://anilist.co/anime/${a.id - 10_000_000}` : null;
-    data.push({ type:'anime', icon:'🎌', title: name, sub: '動漫追蹤', url });
+    data.push({ type:'anime', icon:'🎌', title: name, sub: '動漫追蹤', url, raw: a || null });
   });
 
   // 圖庫書籤
   (S.gallery || []).forEach(item => {
-    data.push({ type:'gallery', icon:'🖼', title: item.title || '(無標題)', sub: item.description || _omniTruncUrl(item.url), url: item.url });
+    data.push({ type:'gallery', icon:'🖼', title: item.title || '(無標題)', sub: item.description || _omniTruncUrl(item.url), url: item.url, raw: item });
   });
 
   // 建立 Fuse 索引（Fuse.js 已由 CDN 載入）
