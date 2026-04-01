@@ -263,8 +263,8 @@
         "name": "乐乐便利店",
         "name_cn": "乐乐便利店",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/65/96/467711_1I1i2.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/65/96/467711_1I1i2.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/65/96/467711_YYLt2.jpg"
         },
         "rating": {
           "score": 7
@@ -384,6 +384,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 10021828,
+        "name": "小女ラムネ",
+        "name_cn": "小女ラムネ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21828-3KDKm3Zu2DyX.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第7話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       },
       {
         "id": 10112936,
@@ -771,26 +791,6 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
-      },
-      {
-        "id": 10021828,
-        "name": "小女ラムネ",
-        "name_cn": "小女ラムネ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21828-3KDKm3Zu2DyX.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
       },
       {
         "id": 10132203,
@@ -1193,15 +1193,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10172218,
-        "name": "夢見ル乙女",
-        "name_cn": "夢見ル乙女",
+        "id": 10185506,
+        "name": "野々原柚花のヒミツのハイシン",
+        "name_cn": "野々原柚花のヒミツのハイシン",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185506-e6BT2M2TFz3i.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1213,15 +1213,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10185506,
-        "name": "野々原柚花のヒミツのハイシン",
-        "name_cn": "野々原柚花のヒミツのハイシン",
+        "id": 10172218,
+        "name": "夢見ル乙女",
+        "name_cn": "夢見ル乙女",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185506-e6BT2M2TFz3i.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1253,15 +1253,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184810,
-        "name": "インモラルーティーン The Animation",
-        "name_cn": "インモラルーティーン The Animation",
+        "id": 10168946,
+        "name": "Sweet and Hot",
+        "name_cn": "Sweet and Hot",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184810-BJhp0LMwWKpP.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx168946-ueSFYB6Ym1FC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx168946-ueSFYB6Ym1FC.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1273,15 +1273,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10168946,
-        "name": "Sweet and Hot",
-        "name_cn": "Sweet and Hot",
+        "id": 10184810,
+        "name": "インモラルーティーン The Animation",
+        "name_cn": "インモラルーティーン The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx168946-ueSFYB6Ym1FC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx168946-ueSFYB6Ym1FC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184810-BJhp0LMwWKpP.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1781,7 +1781,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2001,7 +2001,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2475,7 +2475,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/a8/a9/456159_423P3.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.6
         },
         "eps": 26,
         "air_weekday": 7,
