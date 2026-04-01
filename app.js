@@ -5215,6 +5215,7 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
   const makeVideoCard = (video) => {
     const watched = (S.yt.watched||[]).includes(video.videoId);
     const card = el('div', 'yt-card' + (watched ? ' yt-watched' : ''));
+    card.dataset.vid = video.videoId; // omni-search 用來定位卡片
     const thumbWrap = el('div', 'yt-thumb');
     const img = el('img');
     img.src = video.thumb; img.alt = video.title; img.loading = 'lazy'; img.decoding = 'async';
@@ -7660,46 +7661,43 @@ function initOmniSearch() {
         window.open(r.url, '_blank', 'noopener,noreferrer');
         break;
 
-      // ── YouTube：切到 yt 頁，再展開 sheet ──
+      // ── YouTube：切到 yt 頁，模擬點擊對應卡片 ──
       case 'yt': {
-        const didSwitch = goToWidget('youtube');
-        const doSheet = () => {
-          if (typeof showYtSheet === 'function') showYtSheet(r.raw);
-        };
-        didSwitch ? setTimeout(doSheet, 320) : doSheet();
+        goToWidget('youtube');
+        setTimeout(() => {
+          const card = document.querySelector(`.yt-card[data-vid="${r.raw?.videoId}"]`);
+          if (card) card.click();
+        }, 400);
         break;
       }
 
-      // ── 便利貼：切到 stickies 頁，再滾動到對應卡片 ──
+      // ── 便利貼：切到 stickies 頁，滾動到對應卡片 ──
       case 'sticky': {
         goToWidget('stickies');
         setTimeout(() => {
           const card = document.querySelector(`.sticky-card[data-id="${r.rawId}"]`);
           if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 380);
+        }, 400);
         break;
       }
 
-      // ── 動漫：切到 anime 頁，再展開 sheet ──
+      // ── 動漫：切到 anime 頁，模擬點擊對應卡片 ──
       case 'anime': {
-        const didSwitch = goToWidget('anime');
-        const doAnime = () => {
-          if (r.raw && typeof showAnimeSheet === 'function') showAnimeSheet(r.raw);
-        };
-        didSwitch ? setTimeout(doAnime, 320) : doAnime();
+        goToWidget('anime');
+        setTimeout(() => {
+          const card = document.querySelector(`.anime-card[data-id="${r.raw?.id}"]`);
+          if (card) card.click();
+        }, 400);
         break;
       }
 
-      // ── 圖庫：切到 gallery 頁，再展開 detail ──
+      // ── 圖庫：切到 gallery 頁，模擬點擊對應卡片 ──
       case 'gallery': {
-        const didSwitch = goToWidget('gallery');
-        const doGallery = () => {
-          const container = document.querySelector('#mobile-layout .gallery-scroll') ||
-                            document.querySelector('.widget[data-wid="gallery"] .w-body');
-          if (r.raw && typeof openGalleryDetail === 'function')
-            openGalleryDetail(r.raw, container);
-        };
-        didSwitch ? setTimeout(doGallery, 380) : doGallery();
+        goToWidget('gallery');
+        setTimeout(() => {
+          const card = document.querySelector(`.gallery-card[data-galid="${r.raw?.id}"]`);
+          if (card) card.click();
+        }, 400);
         break;
       }
 
@@ -7815,18 +7813,9 @@ function initOmniSearch() {
   $('omni-btn')?.addEventListener('click', openOmniSearch);
 }
 
-/* ── 換頁動畫：純 CSS class，不使用 View Transitions API（避免 backdrop-filter 閃爍 bug） ── */
-function _vtRenderPages(renderFn, dir) {
-  document.documentElement.dataset.vtDir = dir || 'left';
+/* ── 換頁切換：瞬間切換，完全不附加動畫 class，保護毛玻璃 backdrop-filter ── */
+function _vtRenderPages(renderFn, _dir) {
   renderFn();
-  // 對新渲染的 swipeArea 加上動畫 class，強制 reflow 後套用
-  const sa = document.querySelector('.mobile-swipe-area');
-  if (!sa) return;
-  sa.classList.remove('vt-anim');
-  void sa.offsetWidth; // force reflow
-  sa.classList.add('vt-anim');
-  // 動畫結束後立刻移除 class，防止 transform context 殘留破壞 backdrop-filter
-  sa.addEventListener('animationend', () => sa.classList.remove('vt-anim'), { once: true });
 }
 
 function initMobileLayout() {
