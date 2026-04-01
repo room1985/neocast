@@ -714,18 +714,18 @@ function _applyBgBlob(blob, blobUrl) {
   const orbs = $('bg-orbs');
   if (!blob) {
     // 清除：顯示預設光球
-    if (vid) { vid.src = ''; vid.style.display = ''; }
+    if (vid) { vid.pause(); vid.src = ''; vid.style.display = 'block'; }
     if (img) { img.src = ''; img.style.display = 'none'; }
     if (orbs) orbs.style.display = '';
     return;
   }
   const isImg = blob.type.startsWith('image/');
   if (isImg) {
-    if (vid) { vid.src = ''; vid.style.display = 'none'; }
-    if (img) { img.src = blobUrl; img.style.display = ''; }
+    if (vid) { vid.pause(); vid.src = ''; vid.style.display = 'none'; }
+    if (img) { img.src = blobUrl; img.style.display = 'block'; }
   } else {
     if (img) { img.src = ''; img.style.display = 'none'; }
-    if (vid) { vid.src = blobUrl; vid.style.display = ''; vid.load(); }
+    if (vid) { vid.style.display = 'block'; vid.src = blobUrl; vid.load(); }
   }
   if (orbs) orbs.style.display = 'none';
 }
