@@ -3626,7 +3626,7 @@ function renderAnimeWidget(container, cfgBtn) {
     const img = el('img', 'anime-cover');
     img.src = anime.images?.large || anime.images?.common || '';
     img.alt = anime.name_cn || anime.name;
-    img.loading = 'lazy';
+    img.loading = 'lazy'; img.decoding = 'async';
 
     const info = el('div', 'anime-info');
     const displayTitle = S.animeState.customNames?.[anime.id] || anime.name_cn || anime.name;
