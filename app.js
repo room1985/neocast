@@ -707,11 +707,27 @@ let videoBlobUrl    = null;
 let pageVideoBlobUrl = null; // per-page bg blob URL（切換時 revoke 釋放記憶體）
 let _pvGen           = 0;   // generation counter，防止多個 async load 競爭
 
+/* ── 圖片類型判斷（含 extension fallback） ── */
+function _isImgBlob(blob) {
+  if (!blob) return false;
+  const t = (blob.type || '').toLowerCase();
+  if (t) return t.startsWith('image/');
+  // type 為空時，嘗試從檔名推斷（File 物件才有 name）
+  const n = (blob.name || '').toLowerCase();
+  return /\.(jpe?g|jpg|png|webp|gif|avif|bmp|svg|heic|heif)$/.test(n);
+}
+
 /* ── 套用全局背景媒體（blob 可為影片或圖片） ── */
 function _applyBgBlob(blob, blobUrl) {
   const vid  = $('bg-video');
   const img  = $('bg-img');
   const orbs = $('bg-orbs');
+
+  // 清除 body fallback
+  document.body.style.backgroundImage    = '';
+  document.body.style.backgroundSize     = '';
+  document.body.style.backgroundPosition = '';
+
   if (!blob) {
     // 清除：顯示預設光球
     if (vid) { vid.pause(); vid.src = ''; vid.style.display = 'block'; }
@@ -719,12 +735,26 @@ function _applyBgBlob(blob, blobUrl) {
     if (orbs) orbs.style.display = '';
     return;
   }
-  const isImg = blob.type.startsWith('image/');
+
+  // 儲存此次媒體類型到 localStorage，供重啟時快速偵測
+  try { localStorage.setItem('_bgMediaIsImg', _isImgBlob(blob) ? '1' : '0'); } catch(_) {}
+
+  const isImg = _isImgBlob(blob);
   if (isImg) {
     if (vid) { vid.pause(); vid.src = ''; vid.style.display = 'none'; }
-    if (img) { img.src = blobUrl; img.style.display = 'block'; }
+    if (img) {
+      // 主路徑：#bg-img 存在
+      img.src = blobUrl;
+      img.style.setProperty('display', 'block', 'important');
+    } else {
+      // Fallback：若 #bg-img 不在 DOM（舊快取 HTML），改用 body background
+      document.body.style.backgroundImage    = `url(${blobUrl})`;
+      document.body.style.backgroundSize     = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    }
   } else {
     if (img) { img.src = ''; img.style.display = 'none'; }
+    document.body.style.backgroundImage = '';
     if (vid) { vid.style.display = 'block'; vid.src = blobUrl; vid.load(); }
   }
   if (orbs) orbs.style.display = 'none';
@@ -734,27 +764,47 @@ async function loadVideo() {
   try {
     const blob = await idbGet(VID_KEY);
     if (!blob) return;
+    // 若 IDB 返回的 blob 沒有 type（部分瀏覽器/PWA 會遺失），
+    // 用 localStorage hint 補上，確保 _isImgBlob 正確判斷
+    let typedBlob = blob;
+    if (!blob.type) {
+      const hint = localStorage.getItem('_bgMediaIsImg');
+      const guessType = hint === '1' ? 'image/jpeg' : (hint === '0' ? 'video/mp4' : '');
+      if (guessType) typedBlob = new Blob([blob], { type: guessType });
+    }
     if (videoBlobUrl) URL.revokeObjectURL(videoBlobUrl);
-    videoBlobUrl = URL.createObjectURL(blob);
-    _applyBgBlob(blob, videoBlobUrl);
+    videoBlobUrl = URL.createObjectURL(typedBlob);
+    _applyBgBlob(typedBlob, videoBlobUrl);
   } catch(_) {}
 }
 
 async function saveVideo(file) {
   try {
+    // 先存媒體類型 hint，確保 loadVideo 能正確偵測圖片 vs 影片
+    try { localStorage.setItem('_bgMediaIsImg', _isImgBlob(file) ? '1' : '0'); } catch(_) {}
     await idbSet(VID_KEY, file);
     await loadVideo();
-    toast(file.type.startsWith('image/') ? '背景圖片已設定 ✓' : '背景影片已設定 ✓');
+    toast(_isImgBlob(file) ? '背景圖片已設定 ✓' : '背景影片已設定 ✓');
   } catch(_) { toast('背景設定失敗','err'); }
 }
 
 async function removeVideo() {
   try {
     await idbDel(VID_KEY);
+    try { localStorage.removeItem('_bgMediaIsImg'); } catch(_) {}
     if (videoBlobUrl) { URL.revokeObjectURL(videoBlobUrl); videoBlobUrl = null; }
     _applyBgBlob(null, null);
     toast('已移除背景');
   } catch(_) {}
+}
+
+/* ── 讓 IDB 取回的 blob 帶上正確 type（避免部分瀏覽器遺失 MIME） ── */
+function _enrichBlob(blob, lsHintKey) {
+  if (!blob || blob.type) return blob;
+  const hint = localStorage.getItem(lsHintKey);
+  if (!hint) return blob;
+  const guessType = hint === '1' ? 'image/jpeg' : 'video/mp4';
+  return new Blob([blob], { type: guessType });
 }
 
 // 切換至指定分頁的背景（優先分頁設定，否則 fallback 全局）
@@ -766,15 +816,17 @@ async function switchPageVideo(pageId) {
     pageVideoBlobUrl = null;
   }
   try {
-    const blob = await idbGet(PAGE_VID_KEY(pageId));
+    const rawBlob = await idbGet(PAGE_VID_KEY(pageId));
     if (gen !== _pvGen) return; // 已被更新的呼叫取代，中止
-    if (blob) {
+    if (rawBlob) {
+      const blob = _enrichBlob(rawBlob, '_bgPageIsImg_' + pageId);
       pageVideoBlobUrl = URL.createObjectURL(blob);
       _applyBgBlob(blob, pageVideoBlobUrl);
     } else {
       // 此分頁無獨立設定 → 使用全局媒體（需重新讀取 blob type）
-      const globalBlob = await idbGet(VID_KEY).catch(() => null);
+      const rawGlobal = await idbGet(VID_KEY).catch(() => null);
       if (gen !== _pvGen) return;
+      const globalBlob = rawGlobal ? _enrichBlob(rawGlobal, '_bgMediaIsImg') : null;
       _applyBgBlob(globalBlob || null, videoBlobUrl || null);
     }
   } catch (_) {}
@@ -7932,6 +7984,8 @@ function openMobileWidgetPicker(pageIdx) {
       const file = fi.files[0];
       if (!file) return;
       try {
+        // 儲存類型 hint（防止 IDB 遺失 MIME type）
+        try { localStorage.setItem('_bgPageIsImg_' + pageId, _isImgBlob(file) ? '1' : '0'); } catch(_) {}
         await idbSet(PAGE_VID_KEY(pageId), file);
         // 若目前正在這個分頁，立即套用
         if (S.mobilePages[S.mobilePageIdx]?.id === pageId) {
@@ -7940,7 +7994,7 @@ function openMobileWidgetPicker(pageIdx) {
           pageVideoBlobUrl = URL.createObjectURL(file);
           _applyBgBlob(file, pageVideoBlobUrl);
         }
-        toast(file.type.startsWith('image/') ? '分頁背景圖片已設定 ✓' : '分頁背景影片已設定 ✓');
+        toast(_isImgBlob(file) ? '分頁背景圖片已設定 ✓' : '分頁背景影片已設定 ✓');
       } catch (_) { toast('設定失敗', 'err'); }
     });
     fi.click();
