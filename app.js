@@ -7537,7 +7537,7 @@ function _omniTruncUrl(u) {
   try { return new URL(u).hostname; } catch (_) { return String(u).slice(0, 40); }
 }
 
-function _omniBuildIndex() {
+async function _omniBuildIndex() {
   const data = [];
 
   // 捷徑
@@ -7561,14 +7561,19 @@ function _omniBuildIndex() {
     data.push({ type:'sticky', icon:'📝', title: txt, sub: s.tag || '便利貼', url: null, rawId: s.id, raw: s });
   });
 
-  // 動漫追蹤（trackedData 含完整名稱，fallback 到 tracked 陣列）
+  // 動漫追蹤
+  // name_cn 來自 bgm.tv，為簡體中文；用 toTW() 轉為繁體後再建索引，
+  // 同時保留原始簡體與日文原名於 extra 欄位，讓搜尋更全面
   const trackedIds = S.animeState?.tracked || [];
-  trackedIds.forEach(id => {
-    const a = S.animeState?.trackedData?.[id];
-    const name = S.animeState?.customNames?.[id] || a?.name_cn || a?.name || String(id);
-    const url  = a ? `https://anilist.co/anime/${a.id - 10_000_000}` : null;
-    data.push({ type:'anime', icon:'🎌', title: name, sub: '動漫追蹤', url, raw: a || null });
-  });
+  await Promise.all(trackedIds.map(async id => {
+    const a        = S.animeState?.trackedData?.[id];
+    const rawName  = S.animeState?.customNames?.[id] || a?.name_cn || a?.name || String(id);
+    const titleTW  = await toTW(rawName);   // 簡→繁，若 OpenCC 未載入則原樣回傳
+    // extra：日文原名 + 簡體中文原名，作為補充搜尋文字
+    const extra    = [a?.name || '', a?.name_cn || ''].filter(Boolean).join(' ');
+    const url      = a ? `https://anilist.co/anime/${a.id - 10_000_000}` : null;
+    data.push({ type:'anime', icon:'🎌', title: titleTW, sub: '動漫追蹤', url, raw: a || null, extra });
+  }));
 
   // 圖庫書籤
   (S.gallery || []).forEach(item => {
@@ -7587,10 +7592,11 @@ function _omniBuildIndex() {
 
       return data
         .map(item => {
-          // 建立搜尋文字池（title 權重高，sub 次之）
+          // 建立搜尋文字池（title 權重高，sub 次之，extra 補充）
           const titleLow = (item.title || '').toLowerCase();
           const subLow   = (item.sub   || '').toLowerCase();
-          const pool     = titleLow + ' ' + subLow;
+          const extraLow = (item.extra || '').toLowerCase();
+          const pool     = titleLow + ' ' + subLow + ' ' + extraLow;
 
           // 所有 term 都必須出現在 pool 中
           const allMatch = terms.every(t => pool.includes(t));
@@ -7604,6 +7610,7 @@ function _omniBuildIndex() {
             if (ti === 0)       score += 100; // title 開頭完全命中
             else if (ti > 0)    score += 60;  // title 中間命中
             else if (si >= 0)   score += 30;  // sub 命中
+            else                score += 10;  // extra 命中（日文/簡體備援）
           });
           // 完整字串與 query 相同給最高分
           if (titleLow === query) score += 200;
@@ -7619,10 +7626,10 @@ function _omniBuildIndex() {
   };
 }
 
-function openOmniSearch() {
+async function openOmniSearch() {
   const ov = $('omni-overlay');
   if (!ov) return;
-  _omniBuildIndex();
+  await _omniBuildIndex();
   ov.classList.remove('hidden');
   _omniOpen = true;
   const inp = $('omni-input');
