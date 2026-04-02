@@ -4112,6 +4112,7 @@ function renderAnimeWidget(container, cfgBtn) {
             fetchGuomanData()
           ]);
           calendarCache = bgmData;
+          _animeCalendarCache = calendarCache;   // 讓全局搜尋可存取
           S.animeState.nsfwCalendar = {};
           if (guomanData.length) mergeGuomanIntoCalendar(calendarCache, guomanData);
         }
@@ -7531,6 +7532,7 @@ function startMobileTitleEdit(titleEl, wid, defaultLabel, icon) {
 let _omniOpen = false;
 let _omniCurrentResults = [];  // 閉包安全：作用域在 initOmniSearch 內
 let _omniFuse = null;
+let _animeCalendarCache = null;  // 本季新番快取（供 _omniBuildIndex 存取）
 
 function _omniTruncUrl(u) {
   if (!u) return '';
@@ -7571,19 +7573,34 @@ async function _omniBuildIndex() {
     data.push({ type:'sticky', icon:'📝', title: txt, sub: s.tag || '便利貼', url: null, rawId: s.id, raw: s });
   });
 
-  // 動漫追蹤
+  // 動漫收藏（tracked）
   // name_cn 來自 bgm.tv，為簡體中文；用 toTW() 轉為繁體後再建索引，
   // 同時保留原始簡體與日文原名於 extra 欄位，讓搜尋更全面
   const trackedIds = S.animeState?.tracked || [];
+  const trackedSet = new Set(trackedIds);
   await Promise.all(trackedIds.map(async id => {
     const a        = S.animeState?.trackedData?.[id];
     const rawName  = S.animeState?.customNames?.[id] || a?.name_cn || a?.name || String(id);
     const titleTW  = await toTW(rawName);   // 簡→繁，若 OpenCC 未載入則原樣回傳
     // extra：日文原名 + 簡體中文原名，作為補充搜尋文字
     const extra    = [a?.name || '', a?.name_cn || ''].filter(Boolean).join(' ');
-    const url      = a ? `https://anilist.co/anime/${a.id - 10_000_000}` : null;
-    data.push({ type:'anime', icon:'🎌', title: titleTW, sub: '動漫追蹤', url, raw: a || null, extra });
+    const url      = a ? `https://bgm.tv/subject/${a.id}` : null;
+    data.push({ type:'anime', icon:'🎌', title: titleTW, sub: '動漫收藏', url, raw: a || null, extra });
   }));
+
+  // 本季新番（calendarCache，不重複收藏已有的）
+  // 使用者進入動漫頁面後才有快取，未開啟前這段跳過
+  if (_animeCalendarCache) {
+    const calItems = _animeCalendarCache.flatMap(d => d.items || []);
+    await Promise.all(calItems.map(async item => {
+      if (trackedSet.has(item.id)) return;  // 已在收藏中，跳過避免重複
+      const rawName = item.name_cn || item.name || String(item.id);
+      const titleTW = await toTW(rawName);
+      const extra   = [item.name || '', item.name_cn || ''].filter(Boolean).join(' ');
+      const url     = `https://bgm.tv/subject/${item.id}`;
+      data.push({ type:'anime', icon:'🎌', title: titleTW, sub: '本季新番', url, raw: item, extra });
+    }));
+  }
 
   // 圖庫書籤
   (S.gallery || []).forEach(item => {
