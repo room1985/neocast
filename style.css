@@ -4262,6 +4262,8 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+  /* 讓 tap-highlight 交給 #omni-fab 自行處理 */
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* ── Main glass ball ── */
@@ -4282,7 +4284,22 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   transition: background .3s, box-shadow .25s, transform .12s;
   /* 防止手機系統長按彈出「儲存圖片」原生選單 */
   -webkit-touch-callout: none;
+  /* 關閉系統預設方形 highlight，改用 ::after 圓形效果 */
+  -webkit-tap-highlight-color: transparent;
 }
+/* 圓形點擊反饋覆蓋層 */
+#omni-fab::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(56,189,248,0.22);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+  z-index: 10;
+}
+#fab-wrap.fab-pressing #omni-fab::after { opacity: 1; }
 /* Press feedback (class-based, no CSS :active to avoid ghost state) */
 #fab-wrap.fab-pressing #omni-fab { transform: scale(0.89); }
 /* Active state: darken ball when sub-menu is open */
@@ -4303,6 +4320,7 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   object-fit: cover;
   border-radius: 50%;
   pointer-events: none;
+  transition: opacity 0.28s ease;
 }
 
 .fab-icon {
@@ -4316,6 +4334,7 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   z-index: 1;
   pointer-events: none;
   text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+  transition: opacity 0.2s ease;
 }
 
 /* ── Sub-buttons (fan out from ball centre) ── */
@@ -4343,8 +4362,21 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
               opacity   0.28s ease;
   z-index: 2;
+  -webkit-tap-highlight-color: transparent;
+}
+/* 圓形點擊反饋覆蓋層 */
+.fab-sub::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(56,189,248,0.22);
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
 }
 .fab-sub:active { filter: brightness(1.35); }
+.fab-sub:active::after { opacity: 1; }
 
 /* Fan positions when active */
 #fab-wrap.fab-active #fab-sub-transfer {
