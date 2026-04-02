@@ -1031,17 +1031,19 @@ const WIDGET_META = {
   news:      { label: 'AI新聞',  icon: '📰' },
   stickies:  { label: '便利貼',  icon: '📝' },
   anime:     { label: '動畫追蹤', icon: '🎌' },
-  youtube:   { label: 'YouTube 訂閱', icon: '▶️' }
+  youtube:   { label: 'YouTube 訂閱', icon: '▶️' },
+  gallery:   { label: '視覺書籤', icon: '🖼️' }
 };
 
 /* Default positions for when a widget is re-added */
 const WIDGET_DEFAULT = {
-  clock:     { col:0,  row:0, w:6,  h:2, visible:true },
-  shortcuts: { col:6,  row:2, w:6,  h:5, visible:true },
-  news:      { col:0,  row:2, w:6,  h:5, visible:true },
-  stickies:  { col:12, row:0, w:6,  h:6, visible:true },
-  anime:     { col:18, row:0, w:6,  h:8, visible:true },
-  youtube:   { col:12, row:6, w:6,  h:8, visible:true }
+  clock:     { col:0,  row:0, w:6,  h:2,  visible:true },
+  shortcuts: { col:6,  row:2, w:6,  h:5,  visible:true },
+  news:      { col:0,  row:2, w:6,  h:5,  visible:true },
+  stickies:  { col:12, row:0, w:6,  h:6,  visible:true },
+  anime:     { col:18, row:0, w:6,  h:8,  visible:true },
+  youtube:   { col:12, row:6, w:6,  h:8,  visible:true },
+  gallery:   { col:18, row:8, w:6,  h:10, visible:false }
 };
 
 function renderAddWidgetPanel() {
@@ -1092,6 +1094,7 @@ function buildWidgetById(wid) {
   if (wid === 'stickies')  buildStickiesWidget();
   if (wid === 'anime')     buildAnimeWidget();
   if (wid === 'youtube')   buildYoutubeWidget();
+  if (wid === 'gallery')   buildGalleryDesktopWidget();
 }
 
 /* ─────────────────────────────────────
@@ -1104,7 +1107,8 @@ const WIDGET_DEFAULT_TITLES = {
   news:      '即時新聞',
   stickies:  '便利貼',
   anime:     '動畫追蹤',
-  youtube:   '訂閱更新'
+  youtube:   '訂閱更新',
+  gallery:   '視覺書籤'
 };
 
 function getWidgetTitle(wid, fallback) {
@@ -4910,6 +4914,43 @@ function buildYoutubeWidget() {
   if (mHead) mHead.style.display = 'none';
 }
 
+function buildGalleryDesktopWidget() {
+  const body = el('div', 'gal-desktop-body');
+  body.style.cssText = 'display:flex;flex-direction:column;flex:1;overflow:hidden;min-height:0;position:relative;';
+  const w = makeWidget('gallery', '視覺書籤', body, '');
+
+  // 在 w-head 中插入垃圾桶按鈕（多選刪除，平常隱藏）
+  const wHead = w.querySelector('.w-head');
+  const pencilBtn = wHead?.querySelector('.w-pencil-btn');
+  const trashBtn = document.createElement('button');
+  trashBtn.className = 'yt-icon-btn gallery-trash-btn';
+  trashBtn.title = '刪除選取';
+  trashBtn.style.display = 'none';
+  trashBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>`;
+  trashBtn.addEventListener('click', async () => {
+    if (!_galSelected.size) return;
+    const ids = [..._galSelected];
+    const toDelete = (S.gallery || []).filter(g => ids.includes(g.id));
+    S.gallery = (S.gallery || []).filter(g => !ids.includes(g.id));
+    if (!S.galleryDeletedIds) S.galleryDeletedIds = [];
+    ids.forEach(id => { if (!S.galleryDeletedIds.includes(id)) S.galleryDeletedIds.push(id); });
+    _galSelected.clear();
+    _galMultiActive = false;
+    lsSave();
+    await Promise.all(toDelete.flatMap(g => [
+      g.imageId ? idbDel(g.imageId).catch(() => {}) : Promise.resolve(),
+      g.thumbId ? idbDel(g.thumbId).catch(() => {}) : Promise.resolve(),
+    ]));
+    toDelete.forEach(g => cloudDeleteItem(g.id, g.r2Key));
+    cloudGalleryPush();
+    renderGalleryWidget(body);
+  });
+  if (wHead && pencilBtn) wHead.insertBefore(trashBtn, pencilBtn);
+  else if (wHead) wHead.appendChild(trashBtn);
+
+  renderGalleryWidget(body);
+}
+
 function applyYtFontSize() {
   const listSize = (S.cfg.ytFontSizeList || 100) / 100;
   const sheetSize = (S.cfg.ytFontSizeSheet || 100) / 100;
@@ -6067,15 +6108,16 @@ function renderGalleryWidget(container) {
 
   // ── panelHead trash button（建立一次，保留跨渲染）──
   const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
-                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+                 || container.parentElement?.querySelector?.('.mobile-panel-head')
+                 || container.closest?.('.widget')?.querySelector('.w-head');
   let trashBtn = panelHead?.querySelector('.gallery-trash-btn');
   if (panelHead && !trashBtn) {
     trashBtn = document.createElement('button');
     trashBtn.className = 'yt-icon-btn gallery-trash-btn';
     trashBtn.title = '刪除選取';
     trashBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>`;
-    const expandBtn = panelHead.querySelector('.mobile-panel-expand-btn');
-    if (expandBtn) panelHead.insertBefore(trashBtn, expandBtn);
+    const refBtn = panelHead.querySelector('.mobile-panel-expand-btn') || panelHead.querySelector('.w-pencil-btn');
+    if (refBtn) panelHead.insertBefore(trashBtn, refBtn);
     else panelHead.appendChild(trashBtn);
     trashBtn.addEventListener('click', async () => {
       if (!_galSelected.size) return;
@@ -6162,15 +6204,17 @@ function renderGalleryWidget(container) {
       galHead.appendChild(tagBar);
     }
 
-    // ── 雙欄瀑布流 ──
+    // ── 動態欄數瀑布流（最少 2 欄，依容器寬度自動增加）──
     const colWrap = el('div');
     colWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
-    const cols = [el('div'), el('div')];
-    cols.forEach((c, i) => {
+    const colCount = Math.max(2, Math.floor((container.offsetWidth || 300) / 160));
+    const cols = Array.from({ length: colCount }, (_, i) => {
+      const c = el('div');
       c.className = 'gal-col';
       c.dataset.colidx = i;
       c.style.cssText = 'flex:1;min-width:0;display:flex;flex-direction:column;gap:8px;';
       colWrap.appendChild(c);
+      return c;
     });
     // 哨兵節點：滑到底部時觸發下一頁載入
     const sentinel = el('div', 'gal-load-sentinel');
@@ -6335,6 +6379,24 @@ function _buildGalleryCard(item, container) {
   }, { passive: true });
   card.addEventListener('touchend', () => clearTimeout(lpTimer), { passive: true });
 
+  // 桌機長按（mousedown 持續 500ms 觸發多選）
+  card.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    lpFired = false;
+    startX = e.clientX; startY = e.clientY;
+    if (!_galMultiActive) {
+      lpTimer = setTimeout(() => {
+        lpFired = true;
+        _galEnterMultiSelect(container, item.id);
+      }, 500);
+    }
+  });
+  card.addEventListener('mousemove', e => {
+    if (Math.hypot(e.clientX - startX, e.clientY - startY) > 10) clearTimeout(lpTimer);
+  });
+  card.addEventListener('mouseup', () => clearTimeout(lpTimer));
+  card.addEventListener('mouseleave', () => clearTimeout(lpTimer));
+
   card.addEventListener('click', () => {
     if (lpFired) return;
     if (_galMultiActive) {
@@ -6369,7 +6431,7 @@ function _galRenderNextPage(container) {
 
   for (let i = start; i < end; i++) {
     const card = _buildGalleryCard(pool[i], container);
-    cols[i % 2].appendChild(card);
+    cols[i % cols.length].appendChild(card);
   }
   _galRenderedCount = end;
 
@@ -6403,7 +6465,8 @@ function _galEnterMultiSelect(container, firstItemId) {
   container.querySelector('.gallery-fab')?.remove();
   // 顯示垃圾桶
   const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
-                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+                 || container.parentElement?.querySelector?.('.mobile-panel-head')
+                 || container.closest?.('.widget')?.querySelector('.w-head');
   const tb = panelHead?.querySelector('.gallery-trash-btn');
   if (tb) tb.style.display = '';
 }
@@ -6424,7 +6487,8 @@ function _galExitMultiSelect(container) {
   }
   // 隱藏垃圾桶
   const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
-                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+                 || container.parentElement?.querySelector?.('.mobile-panel-head')
+                 || container.closest?.('.widget')?.querySelector('.w-head');
   const tb = panelHead?.querySelector('.gallery-trash-btn');
   if (tb) tb.style.display = 'none';
 }
@@ -6446,7 +6510,8 @@ function _galToggleCardSelect(card, itemId, container) {
   }
   // 同步垃圾桶可見性
   const panelHead = container.closest?.('.mobile-panel')?.querySelector('.mobile-panel-head')
-                 || container.parentElement?.querySelector?.('.mobile-panel-head');
+                 || container.parentElement?.querySelector?.('.mobile-panel-head')
+                 || container.closest?.('.widget')?.querySelector('.w-head');
   const tb = panelHead?.querySelector('.gallery-trash-btn');
   if (tb) tb.style.display = _galMultiActive ? '' : 'none';
 }
@@ -9042,6 +9107,7 @@ async function init() {
   if (S.widgets.stickies?.visible  === true)  buildStickiesWidget();
   if (S.widgets.anime?.visible     === true)  buildAnimeWidget();
   if (S.widgets.youtube?.visible   === true)  buildYoutubeWidget();
+  if (S.widgets.gallery?.visible   === true)  buildGalleryDesktopWidget();
   initMobileLayout();
 
   // Search + voice
