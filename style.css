@@ -177,7 +177,7 @@ a { color:inherit; text-decoration:none; }
   -webkit-tap-highlight-color: transparent;
   transition: color .2s, text-shadow .3s, background .2s;
 }
-#version-tag:hover { color: var(--txm); background: rgba(255,255,255,.06); }
+#version-tag:hover { color: var(--txm); }
 /* 解鎖後：科技藍發光 */
 #version-tag.unlocked {
   color: var(--ac);
@@ -4399,16 +4399,23 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   cursor: pointer;
   height: 4px;
 }
+.fab-sp-media-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 2px;
+}
+.fab-sp-media-row .fab-sp-btn { flex: 1; }
 .fab-sp-btn {
   background: rgba(255,255,255,0.08);
   border: 1px solid rgba(255,255,255,0.18);
   border-radius: 9px;
   color: var(--tx);
-  font-size: 12px;
-  padding: 7px 10px;
+  font-size: 11px;
+  padding: 7px 8px;
   cursor: pointer;
   text-align: center;
   transition: background .15s;
   font-family: inherit;
+  white-space: nowrap;
 }
 .fab-sp-btn:hover { background: rgba(255,255,255,0.15); }

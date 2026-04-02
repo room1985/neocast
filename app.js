@@ -7594,8 +7594,9 @@ function _omniNormalize(str) {
 async function _omniBuildIndex() {
   const data = [];
 
-  // 捷徑
+  // 捷徑（私人群組需解鎖才顯示）
   (S.shortcuts || []).forEach(sc => {
+    if (sc.groupId === PRIVATE_GROUP_ID && !S.privateUnlocked) return;
     data.push({ type:'shortcut', icon:'📌', title: sc.name || sc.url || '', sub: _omniTruncUrl(sc.url), url: sc.url, raw: sc });
   });
 
@@ -7609,8 +7610,9 @@ async function _omniBuildIndex() {
     data.push({ type:'yt', icon:'🎬', title: item.title || '', sub: item.channelName || 'YouTube', url: `https://www.youtube.com/watch?v=${item.videoId}`, raw: item });
   });
 
-  // 便利貼
+  // 便利貼（私人 tag 需解鎖才顯示）
   (S.stickies || []).forEach(s => {
+    if (s.tag === PRIVATE_STICKY_TAG && !S.privateUnlocked) return;
     const txt = (s.text || '').slice(0, 100);
     data.push({ type:'sticky', icon:'📝', title: txt, sub: s.tag || '便利貼', url: null, rawId: s.id, raw: s });
   });
@@ -7618,13 +7620,16 @@ async function _omniBuildIndex() {
   // 動漫收藏（tracked）
   // name_cn 來自 bgm.tv，為簡體中文；用 toTW() 轉為繁體後再建索引，
   // 同時保留原始簡體與日文原名於 extra 欄位，讓搜尋更全面
+  // 裏番（is_nsfw / AniList id）需解鎖才顯示
   const trackedIds = S.animeState?.tracked || [];
   const trackedSet = new Set(trackedIds);
   await Promise.all(trackedIds.map(async id => {
-    const a        = S.animeState?.trackedData?.[id];
+    const a = S.animeState?.trackedData?.[id];
+    if (!a) return;
+    if ((a.is_nsfw || a.id >= 10_000_000) && !S.privateUnlocked) return; // 裏番鎖定時隱藏
     const rawName  = S.animeState?.customNames?.[id] || a?.name_cn || a?.name || String(id);
-    const titleTW  = await toTW(rawName);   // 簡→繁，若 OpenCC 未載入則原樣回傳
-    // extra：日文原名 + 簡體中文原名，作為補充搜尋文字
+    const titleTW  = await toTW(rawName);
+    // extra：日文原名 + 簡體中文原名，作為補充搜尋文字（支援日文搜索）
     const extra    = [a?.name || '', a?.name_cn || ''].filter(Boolean).join(' ');
     const url      = a ? `https://bgm.tv/subject/${a.id}` : null;
     data.push({ type:'anime', icon:'🎌', title: titleTW, sub: '動漫收藏', url, raw: a || null, extra });
@@ -7636,6 +7641,7 @@ async function _omniBuildIndex() {
     const calItems = _animeCalendarCache.flatMap(d => d.items || []);
     await Promise.all(calItems.map(async item => {
       if (trackedSet.has(item.id)) return;  // 已在收藏中，跳過避免重複
+      if (item.is_nsfw && !S.privateUnlocked) return; // 裏番鎖定時隱藏
       const rawName = item.name_cn || item.name || String(item.id);
       const titleTW = await toTW(rawName);
       const extra   = [item.name || '', item.name_cn || ''].filter(Boolean).join(' ');
@@ -7728,19 +7734,40 @@ function closeOmniSearch() {
 /* ─────────────────────────────────────────
    OMNI-FAB  Draggable floating search ball
 ───────────────────────────────────────── */
-const FAB_IDB_KEY = 'fab_media';
-let _fabBlobUrl = null;
+const FAB_IDB_KEY        = 'fab_media';
+const FAB_IDB_KEY_ACTIVE = 'fab_media_active';
+let _fabBlobUrl       = null;   // 平常時 Blob URL
+let _fabActiveBlobUrl = null;   // 展開時 Blob URL
+let _fabIdleBlob      = null;   // 平常時 Blob 實體
+let _fabActiveBlob    = null;   // 展開時 Blob 實體
 
-function _applyFabMedia(blob) {
-  if (!blob) return;
-  // Revoke previous blob URL to free memory
-  if (_fabBlobUrl) { URL.revokeObjectURL(_fabBlobUrl); _fabBlobUrl = null; }
-  const url  = URL.createObjectURL(blob);
-  _fabBlobUrl = url;
+/** 儲存 blob 並建立 Object URL（會釋放舊的） */
+function _storeFabBlob(blob, isActive) {
+  if (isActive) {
+    if (_fabActiveBlobUrl) { URL.revokeObjectURL(_fabActiveBlobUrl); _fabActiveBlobUrl = null; }
+    _fabActiveBlob    = blob;
+    _fabActiveBlobUrl = blob ? URL.createObjectURL(blob) : null;
+  } else {
+    if (_fabBlobUrl) { URL.revokeObjectURL(_fabBlobUrl); _fabBlobUrl = null; }
+    _fabIdleBlob = blob;
+    _fabBlobUrl  = blob ? URL.createObjectURL(blob) : null;
+  }
+}
+
+/** 根據展開狀態切換懸浮球媒體 */
+function _syncFabMedia(isActive) {
+  const blob = (isActive && _fabActiveBlob) ? _fabActiveBlob : _fabIdleBlob;
+  const url  = (isActive && _fabActiveBlobUrl) ? _fabActiveBlobUrl : _fabBlobUrl;
   const vid  = $('fab-media-vid');
   const img  = $('fab-media-img');
   const icon = document.querySelector('.fab-icon');
-  if (blob.type && blob.type.startsWith('video/')) {
+  if (!blob) {
+    if (vid)  { vid.classList.add('fab-hidden'); vid.src = ''; }
+    if (img)  { img.classList.add('fab-hidden'); img.src = ''; }
+    if (icon) icon.classList.remove('fab-hidden');
+    return;
+  }
+  if (blob.type?.startsWith('video/')) {
     if (vid) { vid.src = url; vid.classList.remove('fab-hidden'); }
     if (img) { img.classList.add('fab-hidden'); img.src = ''; }
   } else {
@@ -7751,15 +7778,17 @@ function _applyFabMedia(blob) {
 }
 
 function initOmniFab() {
-  const wrap      = $('fab-wrap');
-  const fab       = $('omni-fab');
-  const fileInput = $('fab-media-upload');
+  const wrap            = $('fab-wrap');
+  const fab             = $('omni-fab');
+  const fileInput       = $('fab-media-upload');
+  const fileInputActive = $('fab-media-active-upload');
   if (!wrap || !fab) return;
 
-  /* ── Helper: collapse sub-menu + settings panel ── */
+  /* ── Helper: collapse sub-menu + settings panel + 切回平常時媒體 ── */
   const closeFabMenu = () => {
     wrap.classList.remove('fab-active');
     $('fab-settings-panel')?.classList.add('fab-hidden');
+    _syncFabMedia(false);
   };
 
   /* ── Restore saved size ── */
@@ -7776,16 +7805,41 @@ function initOmniFab() {
     if (pos) { wrap.style.left = pos.x + 'px'; wrap.style.top = pos.y + 'px'; }
   } catch (_) {}
 
-  /* ── Restore saved media from IDB ── */
-  idbGet(FAB_IDB_KEY).then(blob => { if (blob) _applyFabMedia(blob); }).catch(() => {});
+  /* ── Restore saved media from IDB（雙模式） ── */
+  Promise.all([
+    idbGet(FAB_IDB_KEY).catch(() => null),
+    idbGet(FAB_IDB_KEY_ACTIVE).catch(() => null),
+  ]).then(([idleBlob, activeBlob]) => {
+    if (idleBlob)   _storeFabBlob(idleBlob, false);
+    if (activeBlob) _storeFabBlob(activeBlob, true);
+    _syncFabMedia(false); // 初始顯示平常時媒體
+  });
 
-  /* ── File picker handler ── */
+  /* ── File picker handler（平常時） ── */
   if (fileInput) {
     fileInput.addEventListener('change', async () => {
       const file = fileInput.files[0];
       if (!file) return;
-      try { await idbSet(FAB_IDB_KEY, file); _applyFabMedia(file); } catch (_) {}
+      try {
+        await idbSet(FAB_IDB_KEY, file);
+        _storeFabBlob(file, false);
+        _syncFabMedia(wrap.classList.contains('fab-active'));
+      } catch (_) {}
       fileInput.value = '';
+    });
+  }
+
+  /* ── File picker handler（展開時） ── */
+  if (fileInputActive) {
+    fileInputActive.addEventListener('change', async () => {
+      const file = fileInputActive.files[0];
+      if (!file) return;
+      try {
+        await idbSet(FAB_IDB_KEY_ACTIVE, file);
+        _storeFabBlob(file, true);
+        _syncFabMedia(wrap.classList.contains('fab-active'));
+      } catch (_) {}
+      fileInputActive.value = '';
     });
   }
 
@@ -7799,10 +7853,16 @@ function initOmniFab() {
     });
   }
 
-  /* ── Settings panel: media button ── */
+  /* ── Settings panel: 平常時媒體按鈕 ── */
   $('fab-sp-media-btn')?.addEventListener('click', e => {
     e.stopPropagation();
     fileInput?.click();
+  });
+
+  /* ── Settings panel: 展開時媒體按鈕 ── */
+  $('fab-sp-media-active-btn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    fileInputActive?.click();
   });
 
   /* ── Sub-button: 📡 Transfer ── */
@@ -7859,12 +7919,8 @@ function initOmniFab() {
         wrap.classList.remove('fab-pressing');
         const willOpen = !wrap.classList.contains('fab-active');
         wrap.classList.toggle('fab-active');
-        if (willOpen) {
-          navigator.vibrate?.(40);
-          $('fab-settings-panel')?.classList.add('fab-hidden'); // reset panel on open
-        } else {
-          $('fab-settings-panel')?.classList.add('fab-hidden');
-        }
+        $('fab-settings-panel')?.classList.add('fab-hidden'); // reset panel on open/close
+        _syncFabMedia(willOpen); // 依展開/收起切換媒體
       }
     }, 620);
   });
@@ -8725,8 +8781,17 @@ function initMobileLayout() {
     // Sync edit mode state after rebuild
     if (S.editMode) {
       document.querySelectorAll('.mobile-page-replace-btn').forEach(b => b.classList.remove('hidden'));
-      if (S.editMode) document.querySelectorAll('.mobile-panel-btns').forEach(b => b.classList.remove('hidden'));
+      document.querySelectorAll('.mobile-panel-btns').forEach(b => b.classList.remove('hidden'));
       addBtn.classList.remove('hidden');
+      // 【修復】切頁後重新附加發光邊框 overlay，確保每個 panel 都有
+      document.querySelectorAll('.mobile-page-panel').forEach(p => {
+        p.classList.add('mobile-editing');
+        if (!p.querySelector('.mobile-edit-overlay')) {
+          const ov = document.createElement('div');
+          ov.className = 'mobile-edit-overlay';
+          p.appendChild(ov);
+        }
+      });
     }
 
     // Scroll active page into view
