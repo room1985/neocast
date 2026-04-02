@@ -7575,25 +7575,48 @@ function _omniBuildIndex() {
     data.push({ type:'gallery', icon:'🖼', title: item.title || '(無標題)', sub: item.description || _omniTruncUrl(item.url), url: item.url, raw: item });
   });
 
-  // 建立 Fuse 索引（Fuse.js 已由 CDN 載入）
-  if (typeof Fuse !== 'undefined') {
-    _omniFuse = new Fuse(data, {
-      keys: [
-        { name: 'title', weight: 0.7 },
-        { name: 'sub',   weight: 0.3 }
-      ],
-      threshold: 0.42,
-      includeScore: false,
-      minMatchCharLength: 1
-    });
-  } else {
-    // Fuse 未載入時 fallback：簡單包含搜尋
-    _omniFuse = {
-      search: q => data
-        .filter(d => (d.title + ' ' + (d.sub||'')).toLowerCase().includes(q.toLowerCase()))
-        .map(item => ({ item }))
-    };
-  }
+  // 自製搜尋引擎：中英文雙模式，完全拋棄 Fuse.js
+  // Fuse.js 的 Levenshtein 演算法不適合中文，substring 搜尋才是正解
+  _omniFuse = {
+    search: (q) => {
+      const query = (q || '').trim().toLowerCase();
+      if (!query) return [];
+
+      // 將 query 拆成多個詞（空白分隔），所有詞都必須出現才算命中
+      const terms = query.split(/\s+/).filter(Boolean);
+
+      return data
+        .map(item => {
+          // 建立搜尋文字池（title 權重高，sub 次之）
+          const titleLow = (item.title || '').toLowerCase();
+          const subLow   = (item.sub   || '').toLowerCase();
+          const pool     = titleLow + ' ' + subLow;
+
+          // 所有 term 都必須出現在 pool 中
+          const allMatch = terms.every(t => pool.includes(t));
+          if (!allMatch) return null;
+
+          // 計算分數：越早出現、命中 title 分越高
+          let score = 0;
+          terms.forEach(t => {
+            const ti = titleLow.indexOf(t);
+            const si = subLow.indexOf(t);
+            if (ti === 0)       score += 100; // title 開頭完全命中
+            else if (ti > 0)    score += 60;  // title 中間命中
+            else if (si >= 0)   score += 30;  // sub 命中
+          });
+          // 完整字串與 query 相同給最高分
+          if (titleLow === query) score += 200;
+          // query 是 title 的前綴
+          if (titleLow.startsWith(query)) score += 80;
+
+          return { item, score };
+        })
+        .filter(Boolean)
+        .sort((a, b) => b.score - a.score)
+        .map(r => ({ item: r.item }));
+    }
+  };
 }
 
 function openOmniSearch() {
