@@ -7545,13 +7545,13 @@ async function _omniBuildIndex() {
     data.push({ type:'shortcut', icon:'📌', title: sc.name || sc.url || '', sub: _omniTruncUrl(sc.url), url: sc.url, raw: sc });
   });
 
-  // 新聞（最近 80 筆）
-  (S.news?.items || []).slice(0, 80).forEach(item => {
+  // 新聞（全部，不限筆數）
+  (S.news?.items || []).forEach(item => {
     data.push({ type:'news', icon:'📰', title: item.title || '', sub: item.source || '新聞', url: item.link, raw: item });
   });
 
-  // YouTube（最近 120 筆）
-  (S.yt?.items || []).slice(0, 120).forEach(item => {
+  // YouTube（全部，不限筆數）
+  (S.yt?.items || []).forEach(item => {
     data.push({ type:'yt', icon:'🎬', title: item.title || '', sub: item.channelName || 'YouTube', url: `https://www.youtube.com/watch?v=${item.videoId}`, raw: item });
   });
 
