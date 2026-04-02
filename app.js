@@ -7537,6 +7537,16 @@ function _omniTruncUrl(u) {
   try { return new URL(u).hostname; } catch (_) { return String(u).slice(0, 40); }
 }
 
+/* 搜尋字型正規化：統一 OpenCC 輸出與使用者慣用繁體字型之間的字型變體
+   例如 OpenCC(cn→twp) 固定輸出「回」，但使用者自然輸入「迴」或「廻」
+   兩邊用同一函式正規化後即可用 includes() 正確比對 */
+function _omniNormalize(str) {
+  return (str || '').toLowerCase()
+    .replace(/[迴廻]/g, '回')    // 輪迴/輪廻 → OpenCC 輸出 回 (U+56DE)
+    .replace(/衹|祇/g,  '只')    // 衹/祇 → 只
+    .replace(/説/g,     '說');   // 説(U+8AAC) → 說(U+8AAA)
+}
+
 async function _omniBuildIndex() {
   const data = [];
 
@@ -7587,35 +7597,36 @@ async function _omniBuildIndex() {
       const query = (q || '').trim().toLowerCase();
       if (!query) return [];
 
-      // 將 query 拆成多個詞（空白分隔），所有詞都必須出現才算命中
-      const terms = query.split(/\s+/).filter(Boolean);
+      // 正規化 query（迴→回 等字型變體），再拆詞
+      const queryNorm = _omniNormalize(query);
+      const terms = queryNorm.split(/\s+/).filter(Boolean);
 
       return data
         .map(item => {
-          // 建立搜尋文字池（title 權重高，sub 次之，extra 補充）
-          const titleLow = (item.title || '').toLowerCase();
-          const subLow   = (item.sub   || '').toLowerCase();
-          const extraLow = (item.extra || '').toLowerCase();
-          const pool     = titleLow + ' ' + subLow + ' ' + extraLow;
+          // 正規化 title / sub / extra，消除字型變體差異
+          const titleNorm = _omniNormalize(item.title || '');
+          const subNorm   = _omniNormalize(item.sub   || '');
+          const extraNorm = _omniNormalize(item.extra || '');
+          const pool      = titleNorm + ' ' + subNorm + ' ' + extraNorm;
 
-          // 所有 term 都必須出現在 pool 中
+          // 所有 term 都必須出現在正規化後的 pool 中
           const allMatch = terms.every(t => pool.includes(t));
           if (!allMatch) return null;
 
           // 計算分數：越早出現、命中 title 分越高
           let score = 0;
           terms.forEach(t => {
-            const ti = titleLow.indexOf(t);
-            const si = subLow.indexOf(t);
+            const ti = titleNorm.indexOf(t);
+            const si = subNorm.indexOf(t);
             if (ti === 0)       score += 100; // title 開頭完全命中
             else if (ti > 0)    score += 60;  // title 中間命中
             else if (si >= 0)   score += 30;  // sub 命中
             else                score += 10;  // extra 命中（日文/簡體備援）
           });
           // 完整字串與 query 相同給最高分
-          if (titleLow === query) score += 200;
+          if (titleNorm === queryNorm) score += 200;
           // query 是 title 的前綴
-          if (titleLow.startsWith(query)) score += 80;
+          if (titleNorm.startsWith(queryNorm)) score += 80;
 
           return { item, score };
         })
