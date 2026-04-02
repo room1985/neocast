@@ -176,7 +176,7 @@ function lsSave() {
     clearTimeout(_autoSyncTimer);
     _autoSyncTimer = setTimeout(() => {
       gistPush(true);
-    }, 10000);
+    }, 5000);
   }
 }
 
@@ -7650,6 +7650,21 @@ async function _omniBuildIndex() {
     }));
   }
 
+  // 裏番日曆（nsfwCalendar - 與一般日曆不同的資料來源，需解鎖才索引）
+  // ⚠️ 此資料不在 _animeCalendarCache，而在 S.animeState.nsfwCalendar，必須分開處理
+  if (S.privateUnlocked && S.animeState?.nsfwCalendar) {
+    const nsfwItems = Object.values(S.animeState.nsfwCalendar).flat();
+    await Promise.all(nsfwItems.map(async item => {
+      if (!item || trackedSet.has(item.id)) return; // 已收藏者跳過
+      const rawName = item.name_cn || item.name || String(item.id);
+      const titleTW = await toTW(rawName);
+      // extra 同時包含日文原名，支援日文關鍵字搜索
+      const extra   = [item.name || '', item.name_cn || ''].filter(Boolean).join(' ');
+      const url     = `https://bgm.tv/subject/${item.id}`;
+      data.push({ type:'anime', icon:'🔞', title: titleTW, sub: '裏番', url, raw: item, extra });
+    }));
+  }
+
   // 圖庫書籤
   (S.gallery || []).forEach(item => {
     data.push({ type:'gallery', icon:'🖼', title: item.title || '(無標題)', sub: item.description || _omniTruncUrl(item.url), url: item.url, raw: item });
@@ -7754,27 +7769,68 @@ function _storeFabBlob(blob, isActive) {
   }
 }
 
-/** 根據展開狀態切換懸浮球媒體 */
+/** 根據展開狀態切換懸浮球媒體（淡入淡出平滑過渡） */
 function _syncFabMedia(isActive) {
   const blob = (isActive && _fabActiveBlob) ? _fabActiveBlob : _fabIdleBlob;
   const url  = (isActive && _fabActiveBlobUrl) ? _fabActiveBlobUrl : _fabBlobUrl;
   const vid  = $('fab-media-vid');
   const img  = $('fab-media-img');
   const icon = document.querySelector('.fab-icon');
+  const FADE = 280; // ms — 與 CSS transition 一致
+
+  /* 淡出並隱藏元素 */
+  const fadeOut = el => {
+    if (!el || el.classList.contains('fab-hidden')) return;
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.classList.add('fab-hidden');
+      if (el.tagName === 'VIDEO') el.src = '';
+    }, FADE);
+  };
+
   if (!blob) {
-    if (vid)  { vid.classList.add('fab-hidden'); vid.src = ''; }
-    if (img)  { img.classList.add('fab-hidden'); img.src = ''; }
-    if (icon) icon.classList.remove('fab-hidden');
+    /* 沒有媒體 → 淡出影片/圖片，淡入圖示 */
+    fadeOut(vid);
+    fadeOut(img);
+    if (icon) {
+      icon.classList.remove('fab-hidden');
+      icon.style.opacity = '0';
+      requestAnimationFrame(() => requestAnimationFrame(() => { icon.style.opacity = '1'; }));
+    }
     return;
   }
-  if (blob.type?.startsWith('video/')) {
-    if (vid) { vid.src = url; vid.classList.remove('fab-hidden'); }
-    if (img) { img.classList.add('fab-hidden'); img.src = ''; }
-  } else {
-    if (img) { img.src = url; img.classList.remove('fab-hidden'); }
-    if (vid) { vid.classList.add('fab-hidden'); vid.src = ''; }
+
+  /* 有媒體 → 隱藏圖示 */
+  if (icon) {
+    icon.style.opacity = '0';
+    setTimeout(() => { icon.classList.add('fab-hidden'); }, FADE);
   }
-  if (icon) icon.classList.add('fab-hidden');
+
+  if (blob.type?.startsWith('video/')) {
+    fadeOut(img);
+    if (vid) {
+      const already = !vid.classList.contains('fab-hidden') && vid.src === url;
+      if (!already) {
+        vid.style.opacity = '0';
+        vid.classList.remove('fab-hidden');
+        vid.src = url;
+        const show = () => { vid.style.opacity = '1'; vid.removeEventListener('canplay', show); };
+        vid.addEventListener('canplay', show);
+      }
+    }
+  } else {
+    fadeOut(vid);
+    if (img) {
+      const already = !img.classList.contains('fab-hidden') && img.src === url;
+      if (!already) {
+        img.style.opacity = '0';
+        img.classList.remove('fab-hidden');
+        img.src = url;
+        const show = () => { img.style.opacity = '1'; img.removeEventListener('load', show); };
+        img.addEventListener('load', show);
+      }
+    }
+  }
 }
 
 function initOmniFab() {
