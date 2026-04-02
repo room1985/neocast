@@ -763,7 +763,16 @@ function _applyBgBlob(blob, blobUrl) {
   } else {
     if (img) { img.src = ''; img.style.display = 'none'; }
     document.body.style.backgroundImage = '';
-    if (vid) { vid.style.display = 'block'; vid.src = blobUrl; vid.load(); }
+    if (vid) {
+      vid.style.display = 'block';
+      // 已是同一支影片時只補播，避免 src 重設 + load() 造成切頁閃爍
+      if (vid.src === blobUrl) {
+        if (vid.paused) vid.play().catch(() => {});
+      } else {
+        vid.src = blobUrl;
+        vid.load();
+      }
+    }
   }
   if (orbs) orbs.style.display = 'none';
 }
@@ -4207,7 +4216,6 @@ async function showAnimeSheet(anime) {
   const sheet   = el('div', 'anime-sheet');
 
   const closeSheet = () => {
-    _resetThemeColor();
     sheet.classList.remove('open');
     setTimeout(() => overlay.remove(), 300);
   };
@@ -4217,8 +4225,6 @@ async function showAnimeSheet(anime) {
   const cover = el('img', 'anime-sheet-cover');
   const _animeCoverUrl = anime.images?.large || anime.images?.common || '';
   cover.src = _animeCoverUrl;
-  // 變色龍 UI：萃取封面主色並染色全域強調色
-  if (_animeCoverUrl) extractDominantColor(_animeCoverUrl, (c) => { if (c) _applyThemeColor(c); });
   cover.alt = anime.name_cn || anime.name;
   cover.addEventListener('click', e => {
     e.stopPropagation();
@@ -5459,7 +5465,6 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   let playerActive = false;
   const closeSheet = () => {
     if (playerActive) return; // don't close while player is open
-    _resetThemeColor();
     sheet.classList.remove('open');
     setTimeout(() => overlay.remove(), 300);
   };
@@ -5473,8 +5478,6 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   thumbImg.onerror = tryHq;
   thumbImg.onload = () => { if (thumbImg.naturalWidth <= 120) tryHq(); };
   thumbImg.src = maxRes;
-  // 變色龍 UI：萃取縮圖主色並染色全域強調色
-  if (vid) extractDominantColor(hqRes, (c) => { if (c) _applyThemeColor(c); });
   const playIcon = el('div', 'yt-play-icon', '▶');
   playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
 
@@ -7208,16 +7211,10 @@ function openGalleryDetail(item, container) {
   overlay.appendChild(card);
   document.body.appendChild(overlay);
 
-  // 變色龍 UI：萃取封面主色（僅圖片且有外部 URL 才處理，本地 blob 已由 async IIFE 管理）
-  if (item.mediaUrl && item.type !== 'video') {
-    extractDominantColor(item.mediaUrl, (c) => { if (c) _applyThemeColor(c); });
-  }
-
   // Spring in
   requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('show')));
 
   const doClose = () => {
-    _resetThemeColor();
     overlay.classList.remove('show');
     setTimeout(() => overlay.remove(), 380);
   };
@@ -7584,71 +7581,6 @@ let _rtcConn = null;             // 目前的 DataConnection
  * 遇到 CORS tainted canvas 時自動透過 imgproxy 重試一次。
  * 完成後呼叫 callback("rgb(r,g,b)")；失敗則靜默略過。
  */
-function extractDominantColor(imgUrl, callback) {
-  if (!imgUrl) return;
-  const SZ = 50; // 縮放尺寸（50×50 節省 CPU）
-  const _try = (src) => {
-    const canvas = document.createElement('canvas');
-    const ctx    = canvas.getContext('2d');
-    const img    = new Image();
-    canvas.width = SZ; canvas.height = SZ;
-    // ⚠️ 記憶體防禦：計算完成後立即釋放像素緩衝區
-    const _free = () => { canvas.width = 0; canvas.height = 0; };
-    img.crossOrigin = 'anonymous';
-    img.onload = () => {
-      try {
-        ctx.drawImage(img, 0, 0, SZ, SZ);
-        // 取中心 34×34 區域採樣，避免邊框干擾
-        const px = ctx.getImageData(8, 8, 34, 34).data;
-        let r = 0, g = 0, b = 0, n = 0;
-        for (let i = 0; i < px.length; i += 4) {
-          const pr = px[i], pg = px[i + 1], pb = px[i + 2];
-          const sum = pr + pg + pb;
-          if (sum < 40 || sum > 700) continue;              // 跳過純黑/純白
-          if (Math.max(pr, pg, pb) - Math.min(pr, pg, pb) < 28) continue; // 跳過灰階
-          r += pr; g += pg; b += pb; n++;
-        }
-        if (n < 5) {
-          // 圖片整體偏灰 fallback：取所有非黑像素的均值
-          n = 0;
-          for (let i = 0; i < px.length; i += 4) {
-            if (px[i] + px[i + 1] + px[i + 2] > 40) {
-              r += px[i]; g += px[i + 1]; b += px[i + 2]; n++;
-            }
-          }
-        }
-        _free();
-        if (n > 0) {
-          callback(`rgb(${Math.round(r / n)},${Math.round(g / n)},${Math.round(b / n)})`);
-        }
-      } catch (_e) {
-        _free();
-        // CORS taint → 透過 imgproxy 再試一次（僅原始 URL 時）
-        if (src === imgUrl && typeof CLOUD_API !== 'undefined') {
-          _try(`${CLOUD_API}/imgproxy?url=${encodeURIComponent(imgUrl)}`);
-        }
-      }
-    };
-    img.onerror = _free;
-    img.src = src;
-  };
-  _try(imgUrl);
-}
-
-/** 套用主題色到全域 CSS 變數 */
-function _applyThemeColor(rgb) {
-  if (!rgb) return;
-  document.documentElement.style.setProperty('--ac', rgb);
-  // 淡色版本作為毛玻璃表面微妙染色（透明度 0.15 不影響可讀性）
-  const tint = rgb.replace('rgb(', 'rgba(').replace(')', ', 0.15)');
-  document.documentElement.style.setProperty('--sf2', tint);
-}
-
-/** 關閉面板時還原主題色 */
-function _resetThemeColor() {
-  document.documentElement.style.removeProperty('--ac');
-  document.documentElement.style.removeProperty('--sf2');
-}
 
 function _omniTruncUrl(u) {
   if (!u) return '';
@@ -8050,7 +7982,8 @@ function initOmniSearch() {
         goToWidget('stickies');
         setTimeout(() => {
           // 若便利貼屬於某個 tag，先切換 tag 讓它出現在 DOM
-          const stickyData = (S.stickies || []).find(s => s.id === r.rawId);
+          const targetId = r.rawId || r.raw?.id;
+          const stickyData = (S.stickies || []).find(s => s.id === targetId);
           if (stickyData?.tag && S.activeStickyTag !== stickyData.tag && S.activeStickyTag !== 'all') {
             S.activeStickyTag = stickyData.tag;
             lsSave();
@@ -8058,18 +7991,19 @@ function initOmniSearch() {
                          document.querySelector('.widget[data-wid="stickies"] .stickies-inner');
             if (body) renderStickiesWidget(body);
           }
-          // 等 renderStickiesWidget 完成後再定位
+          // 等切頁動畫（260ms）+ 重繪完全結束後再定位（350ms 安全邊際）
           setTimeout(() => {
-            const card = document.querySelector(`.sticky-card[data-id="${r.rawId}"]`);
+            const card = document.querySelector(`.sticky-card[data-id="${targetId}"]`);
             if (card) {
               card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              // 短暫高亮提示
-              card.style.transition = 'box-shadow .3s';
-              card.style.boxShadow = '0 0 0 3px rgba(56,189,248,0.7)';
-              setTimeout(() => { card.style.boxShadow = ''; }, 900);
+              // 背景色閃爍高亮（不受 overflow:hidden 裁切）
+              card.style.transition = 'background 0.4s ease';
+              const oldBg = card.style.background;
+              card.style.background = 'rgba(56,189,248,0.35)';
+              setTimeout(() => { card.style.background = oldBg; }, 900);
             }
-          }, 120);
-        }, 120);
+          }, 350);
+        }, 50);
         break;
       }
 
@@ -8436,10 +8370,6 @@ function initMobileLayout() {
 
   // Render pages and dots
   function renderPages() {
-    // 切換頁面前先暫停背景影片（若目前是影片模式），防止切換期間音訊殘留
-    const _bgVid = $('bg-video');
-    if (_bgVid && _bgVid.style.display !== 'none' && !_bgVid.paused) _bgVid.pause();
-
     swipeArea.innerHTML = '';
     dotsBar.innerHTML   = '';
 

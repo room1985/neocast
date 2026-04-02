@@ -3,12 +3,6 @@
    Dark Glassmorphism · Flip Clock · Grid
    ═══════════════════════════════════════════ */
 
-/* @property 讓 --ac 可被 CSS 平滑 transition（Chrome 85+, Safari 15.4+） */
-@property --ac {
-  syntax: '<color>';
-  inherits: true;
-  initial-value: #38bdf8;
-}
 
 :root {
   --bg:      #070b14;
