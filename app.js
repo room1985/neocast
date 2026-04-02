@@ -7731,7 +7731,6 @@ async function openOmniSearch() {
   }
   const res = $('omni-results');
   if (res) res.innerHTML = `<div class="omni-hint">
-    輸入關鍵字搜尋捷徑、新聞、影片、便利貼…<br>
     <div class="omni-nav-hint">
       <kbd>↑</kbd><kbd>↓</kbd>&nbsp;導航&nbsp;&nbsp;
       <kbd>Enter</kbd>&nbsp;開啟&nbsp;&nbsp;
@@ -8158,7 +8157,6 @@ function initOmniSearch() {
     if (!q) {
       _omniCurrentResults = [];
       res.innerHTML = `<div class="omni-hint">
-        輸入關鍵字搜尋捷徑、新聞、影片、便利貼…<br>
         <div class="omni-nav-hint">
           <kbd>↑</kbd><kbd>↓</kbd>&nbsp;導航&nbsp;&nbsp;
           <kbd>Enter</kbd>&nbsp;開啟&nbsp;&nbsp;
