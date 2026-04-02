@@ -91,7 +91,8 @@ let S = {
   dragSc:         null,
   mobilePages:    [],
   mobilePageIdx:  0,
-  gallery:        []
+  gallery:           [],
+  galleryDeletedIds: []   // 刪除墓碑：防止 cloudGalleryPull 把已刪項目重新加回
 };
 
 /* ─────────────────────────────────────
@@ -127,7 +128,8 @@ function lsSaveLocal() {
       widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
       animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode },
-      gallery: S.gallery || []
+      gallery: S.gallery || [],
+      galleryDeletedIds: (S.galleryDeletedIds || []).slice(-200)
     });
     let json = JSON.stringify(buildPayload());
     while (new Blob([json]).size > MAX_BYTES && ytItems.length > 0) {
@@ -157,7 +159,8 @@ function lsSave() {
       widgetTitles: S.widgetTitles,
       mobilePages: S.mobilePages,
       animeState: { genre: S.animeState.genre, tracked: S.animeState.tracked, trackedData: S.animeState.trackedData, customNames: S.animeState.customNames, viewMode: S.animeState.viewMode },
-      gallery: S.gallery || []
+      gallery: S.gallery || [],
+      galleryDeletedIds: (S.galleryDeletedIds || []).slice(-200)  // 最多保留 200 筆，防止無限增長
     });
 
     let json = JSON.stringify(buildPayload());
@@ -201,7 +204,8 @@ function lsLoad() {
     if (d.widgetTitles)  Object.assign(S.widgetTitles, d.widgetTitles);
     if (d.mobilePages)   S.mobilePages = d.mobilePages;
     if (d.animeState)  Object.assign(S.animeState, { ...d.animeState, offset: 0 }); // always start at current season
-    if (d.gallery)     S.gallery = d.gallery;
+    if (d.gallery)            S.gallery = d.gallery;
+    if (d.galleryDeletedIds)  S.galleryDeletedIds = d.galleryDeletedIds;
   } catch(_) {}
 }
 
@@ -396,13 +400,17 @@ async function cloudGalleryPull() {
     const remote = await res.json();
     if (!Array.isArray(remote)) return;
 
-    const remoteIds = new Set(remote.map(g => g.id));
-    const localIds  = new Set((S.gallery || []).map(g => g.id));
+    const remoteIds   = new Set(remote.map(g => g.id));
+    const localIds    = new Set((S.gallery || []).map(g => g.id));
+    // 墓碑：本機已刪除的 ID，不允許雲端 pull 重新加回
+    const tombstoneIds = new Set(S.galleryDeletedIds || []);
     let changed = false;
 
-    // 新增：遠端有、本地沒有 → 加進來
+    // 新增：遠端有、本地沒有、且不在墓碑內 → 才加進來
     remote.forEach(item => {
-      if (!localIds.has(item.id)) { S.gallery.push(item); changed = true; }
+      if (!localIds.has(item.id) && !tombstoneIds.has(item.id)) {
+        S.gallery.push(item); changed = true;
+      }
     });
 
     // 刪除：本地有、遠端沒有，且是雲端項目（有 mediaUrl 或 r2Key）→ 移除
@@ -6077,6 +6085,9 @@ function renderGalleryWidget(container) {
       const ids = [..._galSelected];
       const toDelete = (S.gallery || []).filter(g => ids.includes(g.id));
       S.gallery = (S.gallery || []).filter(g => !ids.includes(g.id));
+      // 墓碑：記錄刪除 ID，防止 cloudGalleryPull 重新加回
+      if (!S.galleryDeletedIds) S.galleryDeletedIds = [];
+      ids.forEach(id => { if (!S.galleryDeletedIds.includes(id)) S.galleryDeletedIds.push(id); });
       _galSelected.clear();
       _galMultiActive = false;
       lsSave();
@@ -7034,6 +7045,8 @@ function showGalleryCardMenu(item, container) {
   });
   sheet.querySelector('#_gal-del').addEventListener('click', async () => {
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
+    if (!S.galleryDeletedIds) S.galleryDeletedIds = [];
+    if (!S.galleryDeletedIds.includes(item.id)) S.galleryDeletedIds.push(item.id);
     if (item.imageId) await idbDel(item.imageId).catch(() => {});
     if (item.thumbId) await idbDel(item.thumbId).catch(() => {});
     cloudDeleteItem(item.id, item.r2Key);
@@ -7139,6 +7152,8 @@ function openGalleryDetail(item, container) {
   delBtn.addEventListener('click', async () => {
     if (!confirm('確定刪除這個書籤？')) return;
     S.gallery = (S.gallery || []).filter(g => g.id !== item.id);
+    if (!S.galleryDeletedIds) S.galleryDeletedIds = [];
+    if (!S.galleryDeletedIds.includes(item.id)) S.galleryDeletedIds.push(item.id);
     if (item.imageId) await idbDel(item.imageId).catch(() => {});
     if (item.thumbId) await idbDel(item.thumbId).catch(() => {});
     cloudDeleteItem(item.id, item.r2Key);
@@ -8073,32 +8088,22 @@ function openWebRTCModal() {
       document.querySelectorAll('.stickies-inner').forEach(el => renderStickiesWidget(el));
       toast('已接收文字，存入便利貼 📝');
       setStatus('✅ 已接收文字訊息', true);
-    } else if (data instanceof ArrayBuffer || data instanceof Blob) {
-      // 檔案 → 存入圖庫
-      const blob    = data instanceof ArrayBuffer ? new Blob([data]) : data;
-      const id      = 'rtc_' + Date.now();
-      const imageId = 'gallery_img_' + id;
-      const thumbId = 'gallery_thumb_' + id;
+    } else if (typeof data === 'object' && data.type === 'file') {
+      // 檔案 → 瀏覽器原生下載（支援任意格式，不存入圖庫）
       try {
-        await idbSet(imageId, blob);
-        const isVid = blob.type?.startsWith('video/');
-        if (!isVid) {
-          try { await idbSet(thumbId, await generateThumb(blob)); } catch (_) {}
-        }
-        if (!S.gallery) S.gallery = [];
-        S.gallery.unshift({
-          id, imageId, thumbId: isVid ? null : thumbId, mediaUrl: null, r2Key: null,
-          type: isVid ? 'video' : 'image',
-          title: '傳入的' + (isVid ? '影片' : '圖片'),
-          description: '', url: '', tags: ['互傳'], addedAt: Date.now()
-        });
-        lsSave();
-        renderGalleryIfVisible();
-        toast('已接收檔案，存入圖庫 🖼');
-        setStatus('✅ 已接收檔案', true);
-      } catch (_e) {
-        toast('接收檔案失敗', 'err');
-        setStatus('❌ 接收失敗', false);
+        const blob = new Blob([data.data], { type: data.mime || 'application/octet-stream' });
+        const url  = URL.createObjectURL(blob);
+        const a    = document.createElement('a');
+        a.href = url;
+        a.download = data.filename || 'received-file';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+        toast('✅ 已下載：' + (data.filename || '檔案'));
+        setStatus('✅ 已下載：' + (data.filename || '檔案'), true);
+      } catch (err) {
+        toast('❌ 檔案下載失敗', 'err');
+        setStatus('❌ 下載失敗', false);
       }
     }
   };
@@ -8152,20 +8157,18 @@ function openWebRTCModal() {
   $b('_rtc-send-txt').onclick = sendText;
   $b('_rtc-txt').addEventListener('keydown', e => { if (e.key === 'Enter') sendText(); });
 
-  // ── 傳送檔案（選擇器） ──
+  // ── 傳送檔案（選擇器，任意格式） ──
   $b('_rtc-send-file').onclick = () => {
     if (!_rtcConn) { setStatus('請先建立連線', false); return; }
     const inp = document.createElement('input');
-    inp.type = 'file'; inp.accept = 'image/*,video/*';
+    inp.type = 'file'; // 不限制格式，支援任意檔案
     inp.onchange = () => {
       const file = inp.files?.[0];
       if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try { _rtcConn.send(reader.result); setStatus('✅ 已傳送：' + file.name, true); }
-        catch (_e) { setStatus('❌ 傳送失敗', false); }
-      };
-      reader.readAsArrayBuffer(file);
+      try {
+        _rtcConn.send({ type: 'file', filename: file.name, mime: file.type || 'application/octet-stream', data: file });
+        setStatus('✅ 已傳送：' + file.name, true);
+      } catch (_e) { setStatus('❌ 傳送失敗', false); }
     };
     inp.click();
   };
@@ -8185,12 +8188,10 @@ function openWebRTCModal() {
     if (!_rtcConn) { setStatus('請先建立連線再拖放', false); return; }
     const file = e.dataTransfer?.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try { _rtcConn.send(reader.result); setStatus('✅ 已傳送：' + file.name, true); }
-      catch (_e) { setStatus('❌ 傳送失敗', false); }
-    };
-    reader.readAsArrayBuffer(file);
+    try {
+      _rtcConn.send({ type: 'file', filename: file.name, mime: file.type || 'application/octet-stream', data: file });
+      setStatus('✅ 已傳送：' + file.name, true);
+    } catch (_e) { setStatus('❌ 傳送失敗', false); }
   };
   window.addEventListener('dragover', _dragOver);
   window.addEventListener('drop',     _drop);
