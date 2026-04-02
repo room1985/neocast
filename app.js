@@ -7774,7 +7774,7 @@ async function openOmniSearch() {
   const ov = $('omni-overlay');
   if (!ov) return;
   await _omniBuildIndex();
-  ov.classList.remove('hidden');
+  ov.classList.add('omni-active');
   _omniOpen = true;
   const inp = $('omni-input');
   if (inp) {
@@ -7794,7 +7794,7 @@ async function openOmniSearch() {
 }
 
 function closeOmniSearch() {
-  $('omni-overlay')?.classList.add('hidden');
+  $('omni-overlay')?.classList.remove('omni-active');
   _omniOpen = false;
   _omniCurrentResults = [];
 }
@@ -7899,6 +7899,9 @@ function initOmniFab() {
     }
   }, true);
 
+  /* ── 阻止系統「長按儲存圖片」原生選單攔截 pointer 事件 ── */
+  fab.addEventListener('contextmenu', e => e.preventDefault());
+
   /* ── Pointer-drag & tap / long-press logic ── */
   const isMainBall = t => t === wrap || t === fab || fab.contains(t);
 
@@ -7906,6 +7909,7 @@ function initOmniFab() {
   let startX, startY, startL, startT;
   let longPressTimer = null, rafId = null;
   let pendingX = 0, pendingY = 0;
+  let longPressJustFired = false; // 區分「長按剛展開」與「短按關閉」
 
   const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
 
@@ -7916,6 +7920,7 @@ function initOmniFab() {
     wrap.setPointerCapture(e.pointerId);
     dragging  = true;
     dragMoved = false;
+    longPressJustFired = false;
     startX = e.clientX; startY = e.clientY;
     startL = parseInt(wrap.style.left) || wrap.getBoundingClientRect().left;
     startT = parseInt(wrap.style.top)  || wrap.getBoundingClientRect().top;
@@ -7924,6 +7929,7 @@ function initOmniFab() {
     /* Long-press (620 ms) → toggle sub-menu */
     longPressTimer = setTimeout(() => {
       if (!dragMoved) {
+        longPressJustFired = true;   // 標記是長按觸發，pointerup 不應關閉選單
         wrap.classList.remove('fab-pressing');
         const willOpen = !wrap.classList.contains('fab-active');
         wrap.classList.toggle('fab-active');
@@ -7978,10 +7984,14 @@ function initOmniFab() {
         y: parseInt(wrap.style.top)  || 0,
       }));
     } else {
-      /* Short tap: if menu open → close; else → open Omni-Search */
-      if (wrap.classList.contains('fab-active')) {
+      if (longPressJustFired) {
+        /* 長按剛展開選單，鬆手時不做任何事，讓選單保持開啟 */
+        longPressJustFired = false;
+      } else if (wrap.classList.contains('fab-active')) {
+        /* 短按：選單已開 → 關閉 */
         closeFabMenu();
       } else {
+        /* 短按：選單未開 → 開啟全域搜尋 */
         openOmniSearch();
       }
     }

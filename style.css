@@ -4098,10 +4098,17 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   flex-direction: column;
   align-items: center;
   padding: 64px 16px 20px;
-  animation: omni-in .16s ease both;
+  /* 用 opacity/visibility 取代 display:none，讓 transition 能正常運作 */
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s;
 }
-#omni-overlay.hidden { display: none !important; }
-@keyframes omni-in { from { opacity:0; } to { opacity:1; } }
+#omni-overlay.omni-active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
 
 #omni-box {
   width: 100%;
@@ -4111,11 +4118,14 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   border-radius: 18px;
   overflow: hidden;
   box-shadow: 0 28px 80px rgba(0,0,0,.7);
-  animation: omni-box-in .2s cubic-bezier(.34,1.1,.64,1) both;
+  /* 彈簧縮放動畫：初始縮小 + 位移，用 CSS transition 做 */
+  transform: scale(0.85) translateY(15px);
+  opacity: 0;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
 }
-@keyframes omni-box-in {
-  from { transform: scale(.94) translateY(-14px); opacity:0; }
-  to   { transform: scale(1) translateY(0); opacity:1; }
+#omni-overlay.omni-active #omni-box {
+  transform: scale(1) translateY(0);
+  opacity: 1;
 }
 #omni-input-wrap {
   display: flex;
@@ -4284,6 +4294,8 @@ body.widgets-hidden #mobile-layout { display: none !important; }
     0 0 0 1px rgba(255,255,255,0.06) inset,
     0 1px 0   rgba(255,255,255,0.20) inset;
   transition: background .3s, box-shadow .25s, transform .12s;
+  /* 防止手機系統長按彈出「儲存圖片」原生選單 */
+  -webkit-touch-callout: none;
 }
 /* Press feedback (class-based, no CSS :active to avoid ghost state) */
 #fab-wrap.fab-pressing #omni-fab { transform: scale(0.89); }
