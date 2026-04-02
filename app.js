@@ -6180,13 +6180,24 @@ function renderGalleryWidget(container) {
       _galSetupIObs(container, sentinel);
       _galRenderNextPage(container);
     }
+
+    // FAB 必須在有書籤時也補回來（多選模式除外）
+    // ★ 原本放在函數末尾，但 else 分支會提前 return 而跑不到，導致每次
+    //   重新渲染後 FAB 消失，container 傳不進 openGalleryAddDialog → 新卡片不刷新
+    if (!_galMultiActive) {
+      const fab = el('button', 'gallery-fab');
+      fab.textContent = '+';
+      fab.style.cssText = 'position:absolute;right:14px;bottom:14px;width:46px;height:46px;border-radius:50%;background:var(--accent,#7c6af5);color:#fff;font-size:24px;line-height:1;border:none;cursor:pointer;z-index:10;box-shadow:0 4px 14px rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;';
+      fab.addEventListener('click', () => openGalleryAddDialog(container));
+      container.appendChild(fab);
+    }
     return; // 已提前 appendChild，跳過函數末尾的重複插入
   }
 
   container.appendChild(galHead);
   container.appendChild(scroll);
 
-  // FAB（多選模式下隱藏）
+  // FAB（items 為空時的初始狀態，多選模式下隱藏）
   if (!_galMultiActive) {
     const fab = el('button', 'gallery-fab');
     fab.textContent = '+';
