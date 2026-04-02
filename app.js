@@ -4199,6 +4199,7 @@ async function showAnimeSheet(anime) {
   const sheet   = el('div', 'anime-sheet');
 
   const closeSheet = () => {
+    _resetThemeColor();
     sheet.classList.remove('open');
     setTimeout(() => overlay.remove(), 300);
   };
@@ -4206,7 +4207,10 @@ async function showAnimeSheet(anime) {
   // Large centered cover
   const coverWrap = el('div', 'anime-sheet-cover-wrap');
   const cover = el('img', 'anime-sheet-cover');
-  cover.src = anime.images?.large || anime.images?.common || '';
+  const _animeCoverUrl = anime.images?.large || anime.images?.common || '';
+  cover.src = _animeCoverUrl;
+  // 變色龍 UI：萃取封面主色並染色全域強調色
+  if (_animeCoverUrl) extractDominantColor(_animeCoverUrl, (c) => { if (c) _applyThemeColor(c); });
   cover.alt = anime.name_cn || anime.name;
   cover.addEventListener('click', e => {
     e.stopPropagation();
@@ -5447,6 +5451,7 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   let playerActive = false;
   const closeSheet = () => {
     if (playerActive) return; // don't close while player is open
+    _resetThemeColor();
     sheet.classList.remove('open');
     setTimeout(() => overlay.remove(), 300);
   };
@@ -5460,6 +5465,8 @@ function showYtSheet(video, onUpdate, playlist, startIdx) {
   thumbImg.onerror = tryHq;
   thumbImg.onload = () => { if (thumbImg.naturalWidth <= 120) tryHq(); };
   thumbImg.src = maxRes;
+  // 變色龍 UI：萃取縮圖主色並染色全域強調色
+  if (vid) extractDominantColor(hqRes, (c) => { if (c) _applyThemeColor(c); });
   const playIcon = el('div', 'yt-play-icon', '▶');
   playerWrap.appendChild(thumbImg); playerWrap.appendChild(playIcon);
 
@@ -7186,10 +7193,16 @@ function openGalleryDetail(item, container) {
   overlay.appendChild(card);
   document.body.appendChild(overlay);
 
+  // 變色龍 UI：萃取封面主色（僅圖片且有外部 URL 才處理，本地 blob 已由 async IIFE 管理）
+  if (item.mediaUrl && item.type !== 'video') {
+    extractDominantColor(item.mediaUrl, (c) => { if (c) _applyThemeColor(c); });
+  }
+
   // Spring in
   requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('show')));
 
   const doClose = () => {
+    _resetThemeColor();
     overlay.classList.remove('show');
     setTimeout(() => overlay.remove(), 380);
   };
@@ -7544,6 +7557,83 @@ let _omniOpen = false;
 let _omniCurrentResults = [];  // 閉包安全：作用域在 initOmniSearch 內
 let _omniFuse = null;
 let _animeCalendarCache = null;  // 本季新番快取（供 _omniBuildIndex 存取）
+let _rtcPeer = null;             // PeerJS Peer 實例
+let _rtcConn = null;             // 目前的 DataConnection
+
+/* ─────────────────────────────────────
+   變色龍 UI — Canvas 圖片主題色萃取
+───────────────────────────────────── */
+
+/**
+ * 從圖片 URL 萃取主色調（非同步）。
+ * 遇到 CORS tainted canvas 時自動透過 imgproxy 重試一次。
+ * 完成後呼叫 callback("rgb(r,g,b)")；失敗則靜默略過。
+ */
+function extractDominantColor(imgUrl, callback) {
+  if (!imgUrl) return;
+  const SZ = 50; // 縮放尺寸（50×50 節省 CPU）
+  const _try = (src) => {
+    const canvas = document.createElement('canvas');
+    const ctx    = canvas.getContext('2d');
+    const img    = new Image();
+    canvas.width = SZ; canvas.height = SZ;
+    // ⚠️ 記憶體防禦：計算完成後立即釋放像素緩衝區
+    const _free = () => { canvas.width = 0; canvas.height = 0; };
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        ctx.drawImage(img, 0, 0, SZ, SZ);
+        // 取中心 34×34 區域採樣，避免邊框干擾
+        const px = ctx.getImageData(8, 8, 34, 34).data;
+        let r = 0, g = 0, b = 0, n = 0;
+        for (let i = 0; i < px.length; i += 4) {
+          const pr = px[i], pg = px[i + 1], pb = px[i + 2];
+          const sum = pr + pg + pb;
+          if (sum < 40 || sum > 700) continue;              // 跳過純黑/純白
+          if (Math.max(pr, pg, pb) - Math.min(pr, pg, pb) < 28) continue; // 跳過灰階
+          r += pr; g += pg; b += pb; n++;
+        }
+        if (n < 5) {
+          // 圖片整體偏灰 fallback：取所有非黑像素的均值
+          n = 0;
+          for (let i = 0; i < px.length; i += 4) {
+            if (px[i] + px[i + 1] + px[i + 2] > 40) {
+              r += px[i]; g += px[i + 1]; b += px[i + 2]; n++;
+            }
+          }
+        }
+        _free();
+        if (n > 0) {
+          callback(`rgb(${Math.round(r / n)},${Math.round(g / n)},${Math.round(b / n)})`);
+        }
+      } catch (_e) {
+        _free();
+        // CORS taint → 透過 imgproxy 再試一次（僅原始 URL 時）
+        if (src === imgUrl && typeof CLOUD_API !== 'undefined') {
+          _try(`${CLOUD_API}/imgproxy?url=${encodeURIComponent(imgUrl)}`);
+        }
+      }
+    };
+    img.onerror = _free;
+    img.src = src;
+  };
+  _try(imgUrl);
+}
+
+/** 套用主題色到全域 CSS 變數 */
+function _applyThemeColor(rgb) {
+  if (!rgb) return;
+  document.documentElement.style.setProperty('--ac', rgb);
+  // 淡色版本作為毛玻璃表面微妙染色（透明度 0.15 不影響可讀性）
+  const tint = rgb.replace('rgb(', 'rgba(').replace(')', ', 0.15)');
+  document.documentElement.style.setProperty('--sf2', tint);
+}
+
+/** 關閉面板時還原主題色 */
+function _resetThemeColor() {
+  document.documentElement.style.removeProperty('--ac');
+  document.documentElement.style.removeProperty('--sf2');
+}
 
 function _omniTruncUrl(u) {
   if (!u) return '';
@@ -7895,6 +7985,215 @@ function initOmniSearch() {
 
   // Header 按鈕
   $('omni-btn')?.addEventListener('click', openOmniSearch);
+}
+
+/* ─────────────────────────────────────
+   WebRTC 跨裝置傳送門 (PeerJS P2P)
+───────────────────────────────────── */
+function _rtcReset() {
+  try { _rtcPeer?.destroy(); } catch (_) {}
+  _rtcPeer = null;
+  _rtcConn = null;
+}
+
+function openWebRTCModal() {
+  if (document.getElementById('webrtc-modal')) return;
+  _rtcReset();
+
+  const pin    = String(Math.floor(1000 + Math.random() * 9000));
+  const overlay = document.createElement('div');
+  overlay.id = 'webrtc-modal';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:9998;display:flex;align-items:center;justify-content:center;padding:16px;box-sizing:border-box;';
+
+  const box = document.createElement('div');
+  box.style.cssText = 'background:rgba(13,20,33,0.96);border:1px solid rgba(255,255,255,0.14);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border-radius:20px;width:100%;max-width:360px;padding:20px;box-shadow:0 24px 60px rgba(0,0,0,0.6);color:#f0f4fb;box-sizing:border-box;';
+
+  let _escListener, _dragOver, _drop;
+  const closeModal = () => {
+    _rtcReset();
+    overlay.remove();
+    window.removeEventListener('keydown', _escListener);
+    window.removeEventListener('dragover', _dragOver);
+    window.removeEventListener('drop',     _drop);
+  };
+  _escListener = (e) => { if (e.key === 'Escape') closeModal(); };
+  window.addEventListener('keydown', _escListener);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+  // ── 建立 DOM ──
+  box.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+      <span style="font-size:15px;font-weight:700;">📡 跨裝置傳送門</span>
+      <button id="_rtc-x" style="background:none;border:none;color:rgba(255,255,255,0.45);font-size:22px;cursor:pointer;padding:0 2px;line-height:1;">×</button>
+    </div>
+    <div style="background:rgba(255,255,255,0.06);border-radius:12px;padding:14px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.38);margin-bottom:6px;letter-spacing:.05em;">本機連線碼</div>
+      <div id="_rtc-pin-disp" style="font-size:34px;font-weight:800;letter-spacing:8px;color:var(--ac,#38bdf8);">${pin}</div>
+      <div id="_rtc-peer-st" style="font-size:11px;color:rgba(255,255,255,0.35);margin-top:6px;">初始化中…</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <input id="_rtc-inp" type="text" inputmode="numeric" maxlength="4" placeholder="輸入對方連線碼"
+        style="flex:1;padding:10px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:10px;color:#fff;font-size:18px;letter-spacing:5px;text-align:center;outline:none;">
+      <button id="_rtc-conn-btn" style="padding:10px 16px;background:var(--ac,#38bdf8);border:none;border-radius:10px;color:#000;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;">連線</button>
+    </div>
+    <div id="_rtc-st" style="font-size:12px;color:rgba(255,255,255,0.42);min-height:16px;margin-bottom:10px;text-align:center;"></div>
+    <div id="_rtc-send" style="display:none;">
+      <div style="font-size:11px;color:rgba(255,255,255,0.38);margin-bottom:8px;">傳送給對方</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px;">
+        <input id="_rtc-txt" type="text" placeholder="輸入文字訊息…"
+          style="flex:1;padding:9px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.13);border-radius:10px;color:#fff;font-size:14px;outline:none;">
+        <button id="_rtc-send-txt" style="padding:9px 14px;background:rgba(56,189,248,0.18);border:1px solid rgba(56,189,248,0.38);border-radius:10px;color:#38bdf8;font-size:13px;font-weight:600;cursor:pointer;">傳</button>
+      </div>
+      <button id="_rtc-send-file" style="width:100%;padding:10px;background:rgba(167,139,250,0.14);border:1px solid rgba(167,139,250,0.32);border-radius:10px;color:#a78bfa;font-size:13px;cursor:pointer;">📎 選擇檔案傳送</button>
+    </div>
+    <div id="_rtc-drop" style="display:none;margin-top:10px;border:2px dashed rgba(255,255,255,0.2);border-radius:12px;padding:22px;text-align:center;color:rgba(255,255,255,0.35);font-size:12px;transition:border-color .2s,background .2s;">
+      🖱 可將檔案拖放至此視窗傳送給對方
+    </div>`;
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+  box.querySelector('#_rtc-x').onclick = closeModal;
+
+  // ── 簡易取 DOM ──
+  const $b = id => box.querySelector('#' + id);
+  const setStatus    = (msg, ok = null) => {
+    const el = $b('_rtc-st');
+    if (!el) return;
+    el.textContent = msg;
+    el.style.color = ok === true ? '#4ade80' : ok === false ? '#f87171' : 'rgba(255,255,255,0.42)';
+  };
+  const setPeerSt = msg => { const el = $b('_rtc-peer-st'); if (el) el.textContent = msg; };
+
+  // ── 收到資料處理 ──
+  const handleData = async (data) => {
+    if (typeof data === 'string') {
+      // 文字 → 新增便利貼
+      if (!S.stickies) S.stickies = [];
+      S.stickies.unshift({ id: 'rtc_' + Date.now(), text: data, tag: '互傳', addedAt: Date.now(), color: '' });
+      lsSave();
+      document.querySelectorAll('.stickies-inner').forEach(el => renderStickiesWidget(el));
+      toast('已接收文字，存入便利貼 📝');
+      setStatus('✅ 已接收文字訊息', true);
+    } else if (data instanceof ArrayBuffer || data instanceof Blob) {
+      // 檔案 → 存入圖庫
+      const blob    = data instanceof ArrayBuffer ? new Blob([data]) : data;
+      const id      = 'rtc_' + Date.now();
+      const imageId = 'gallery_img_' + id;
+      const thumbId = 'gallery_thumb_' + id;
+      try {
+        await idbSet(imageId, blob);
+        const isVid = blob.type?.startsWith('video/');
+        if (!isVid) {
+          try { await idbSet(thumbId, await generateThumb(blob)); } catch (_) {}
+        }
+        if (!S.gallery) S.gallery = [];
+        S.gallery.unshift({
+          id, imageId, thumbId: isVid ? null : thumbId, mediaUrl: null, r2Key: null,
+          type: isVid ? 'video' : 'image',
+          title: '傳入的' + (isVid ? '影片' : '圖片'),
+          description: '', url: '', tags: ['互傳'], addedAt: Date.now()
+        });
+        lsSave();
+        renderGalleryIfVisible();
+        toast('已接收檔案，存入圖庫 🖼');
+        setStatus('✅ 已接收檔案', true);
+      } catch (_e) {
+        toast('接收檔案失敗', 'err');
+        setStatus('❌ 接收失敗', false);
+      }
+    }
+  };
+
+  // ── 連線處理 ──
+  const wireConn = (conn) => {
+    _rtcConn = conn;
+    conn.on('open', () => {
+      setStatus('✅ 連線成功！', true);
+      $b('_rtc-send').style.display = '';
+      $b('_rtc-drop').style.display = '';
+    });
+    conn.on('data',  handleData);
+    conn.on('close', () => {
+      setStatus('⚠ 連線已中斷', false);
+      $b('_rtc-send').style.display = 'none';
+      $b('_rtc-drop').style.display = 'none';
+      _rtcConn = null;
+    });
+    conn.on('error', () => { setStatus('❌ 連線錯誤', false); _rtcConn = null; });
+  };
+
+  // ── 初始化 PeerJS ──
+  try {
+    _rtcPeer = new Peer('neocast-' + pin);
+    _rtcPeer.on('open',        () => setPeerSt('等待對方連線…'));
+    _rtcPeer.on('connection',  conn => { setStatus('有裝置連入…'); wireConn(conn); });
+    _rtcPeer.on('error',       err  => { setPeerSt('初始化失敗'); setStatus('❌ ' + (err.type || 'error'), false); });
+  } catch (_e) {
+    setPeerSt('PeerJS 未載入，請確認網路');
+  }
+
+  // ── 連線按鈕 ──
+  $b('_rtc-conn-btn').onclick = () => {
+    const target = $b('_rtc-inp').value.trim();
+    if (!/^\d{4}$/.test(target)) { setStatus('請輸入 4 位數連線碼', false); return; }
+    if (!_rtcPeer) { setStatus('PeerJS 未就緒', false); return; }
+    setStatus('連線中…');
+    try {
+      wireConn(_rtcPeer.connect('neocast-' + target, { reliable: true }));
+    } catch (_e) { setStatus('❌ 連線失敗', false); }
+  };
+
+  // ── 傳送文字 ──
+  const sendText = () => {
+    const txt = $b('_rtc-txt').value.trim();
+    if (!txt || !_rtcConn) return;
+    try { _rtcConn.send(txt); $b('_rtc-txt').value = ''; setStatus('✅ 已傳送文字', true); }
+    catch (_e) { setStatus('❌ 傳送失敗', false); }
+  };
+  $b('_rtc-send-txt').onclick = sendText;
+  $b('_rtc-txt').addEventListener('keydown', e => { if (e.key === 'Enter') sendText(); });
+
+  // ── 傳送檔案（選擇器） ──
+  $b('_rtc-send-file').onclick = () => {
+    if (!_rtcConn) { setStatus('請先建立連線', false); return; }
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*,video/*';
+    inp.onchange = () => {
+      const file = inp.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try { _rtcConn.send(reader.result); setStatus('✅ 已傳送：' + file.name, true); }
+        catch (_e) { setStatus('❌ 傳送失敗', false); }
+      };
+      reader.readAsArrayBuffer(file);
+    };
+    inp.click();
+  };
+
+  // ── Drag & Drop（全視窗拖放，連線後才接受） ──
+  const dropZone = $b('_rtc-drop');
+  _dragOver = (e) => {
+    e.preventDefault();
+    if (_rtcConn && dropZone) {
+      dropZone.style.borderColor = 'var(--ac,#38bdf8)';
+      dropZone.style.background  = 'rgba(56,189,248,0.07)';
+    }
+  };
+  _drop = (e) => {
+    e.preventDefault();
+    if (dropZone) { dropZone.style.borderColor = ''; dropZone.style.background = ''; }
+    if (!_rtcConn) { setStatus('請先建立連線再拖放', false); return; }
+    const file = e.dataTransfer?.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try { _rtcConn.send(reader.result); setStatus('✅ 已傳送：' + file.name, true); }
+      catch (_e) { setStatus('❌ 傳送失敗', false); }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+  window.addEventListener('dragover', _dragOver);
+  window.addEventListener('drop',     _drop);
 }
 
 /* ── 換頁切換：瞬間切換，完全不附加動畫 class，保護毛玻璃 backdrop-filter ── */
@@ -8493,6 +8792,7 @@ async function init() {
   initLockBtn();
   initWeather();
   initOmniSearch();
+  $('rtc-btn')?.addEventListener('click', openWebRTCModal);
 
   // Context menu
   initCtx();
