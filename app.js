@@ -1360,25 +1360,21 @@ const UNCLASSIFIED_ID    = '__unclassified__';
 let grpEditMode = false; // 捷徑分類管理模式
 
 function initLockBtn() {
-  const btn  = $('lock-btn');
-  const icon = $('lock-icon');
+  // 功能移至 version-tag：三連擊解鎖，解鎖後單擊鎖定，解鎖時發光
+  const btn = $('version-tag');
   if (!btn) return;
 
   let clickCount = 0;
   let clickTimer = null;
 
-  // Unlocked SVG path
-  const SVG_UNLOCKED = `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.4-1.3"/>`;
-  const SVG_LOCKED   = `<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>`;
-
   btn.addEventListener('click', () => {
-    // If already unlocked, clicking once locks it
+    // 已解鎖 → 單擊鎖定
     if (S.privateUnlocked) {
       lockPrivate();
       return;
     }
 
-    // Triple-click within 1.5s
+    // 三連擊（1.5s 內）解鎖
     clickCount++;
     clearTimeout(clickTimer);
     clickTimer = setTimeout(() => { clickCount = 0; }, 1500);
@@ -1392,8 +1388,7 @@ function initLockBtn() {
 
   function unlockPrivate() {
     S.privateUnlocked = true;
-    btn.classList.add('unlocked');
-    icon.innerHTML = SVG_UNLOCKED;
+    btn.classList.add('unlocked');          // 發光效果由 CSS 控制
     rerenderSc();
     // 更新所有便利貼 tagBar
     document.querySelectorAll('.sticky-tag-bar').forEach(bar => {
@@ -1409,9 +1404,8 @@ function initLockBtn() {
 
   function lockPrivate() {
     S.privateUnlocked = false;
-    btn.classList.remove('unlocked');
-    icon.innerHTML = SVG_LOCKED;
-    // If currently viewing private, switch to all
+    btn.classList.remove('unlocked');       // 關閉發光
+    // 若正在看私人群組，切回全部
     if (S.activeGroup === PRIVATE_GROUP_ID) {
       S.activeGroup = 'all';
     }
@@ -7981,26 +7975,38 @@ function initOmniSearch() {
       case 'sticky': {
         goToWidget('stickies');
         setTimeout(() => {
-          // 若便利貼屬於某個 tag，先切換 tag 讓它出現在 DOM
           const targetId = r.rawId || r.raw?.id;
           const stickyData = (S.stickies || []).find(s => s.id === targetId);
+
+          // 若便利貼屬於某個 tag，先切換 tag 讓它出現在 DOM
           if (stickyData?.tag && S.activeStickyTag !== stickyData.tag && S.activeStickyTag !== 'all') {
             S.activeStickyTag = stickyData.tag;
             lsSave();
-            const body = document.querySelector('#mobile-layout .stickies-inner') ||
-                         document.querySelector('.widget[data-wid="stickies"] .stickies-inner');
-            if (body) renderStickiesWidget(body);
+            // 【關鍵】只更新畫面上「真正可見」的 stickies-inner，
+            //  避免誤操作隱藏的桌機版 / 手機版 DOM
+            document.querySelectorAll('.stickies-inner').forEach(body => {
+              if (body.offsetParent !== null) {
+                if (typeof body._renderTagBar === 'function') body._renderTagBar();
+                if (typeof renderStickiesWidget === 'function') renderStickiesWidget(body);
+              }
+            });
           }
-          // 等切頁動畫（260ms）+ 重繪完全結束後再定位（350ms 安全邊際）
+
+          // 等切頁動畫完全結束後再定位（350ms 安全邊際）
           setTimeout(() => {
-            const card = document.querySelector(`.sticky-card[data-id="${targetId}"]`);
-            if (card) {
-              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // 【關鍵】找出畫面上真正可見的那張卡片
+            let visibleCard = null;
+            document.querySelectorAll(`.sticky-card[data-id="${targetId}"]`).forEach(c => {
+              if (c.offsetParent !== null) visibleCard = c;
+            });
+
+            if (visibleCard) {
+              visibleCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
               // 背景色閃爍高亮（不受 overflow:hidden 裁切）
-              card.style.transition = 'background 0.4s ease';
-              const oldBg = card.style.background;
-              card.style.background = 'rgba(56,189,248,0.35)';
-              setTimeout(() => { card.style.background = oldBg; }, 900);
+              visibleCard.style.transition = 'background 0.4s ease';
+              const oldBg = visibleCard.style.background;
+              visibleCard.style.background = 'rgba(56,189,248,0.35)';
+              setTimeout(() => { visibleCard.style.background = oldBg; }, 900);
             }
           }, 350);
         }, 50);

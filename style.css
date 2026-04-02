@@ -121,7 +121,7 @@ a { color:inherit; text-decoration:none; }
   background: transparent;
 }
 
-#hdr-left { display:flex; align-items:center; }
+#hdr-left { display:flex; align-items:center; gap: 4px; }
 
 /* 效能監控按鈕 */
 #perf-btn {
@@ -132,7 +132,6 @@ a { color:inherit; text-decoration:none; }
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   border-radius: 4px;
-  margin-left: 6px;
   flex-shrink: 0;
   outline: none;
   -webkit-tap-highlight-color: transparent;
@@ -169,10 +168,23 @@ a { color:inherit; text-decoration:none; }
   color: var(--txd);
   letter-spacing: .04em;
   font-family: 'JetBrains Mono', monospace;
-  margin-right: 2px;
+  /* 可點擊樣式 */
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: color .2s, text-shadow .3s, background .2s;
+}
+#version-tag:hover { color: var(--txm); background: rgba(255,255,255,.06); }
+/* 解鎖後：科技藍發光 */
+#version-tag.unlocked {
+  color: var(--ac);
+  text-shadow: 0 0 8px rgba(56,189,248,.65), 0 0 20px rgba(56,189,248,.3);
 }
 
-/* Lock button */
+/* 隱藏所有 Widget 按鈕 */
 #hide-all-btn {
   appearance: none;
   -webkit-appearance: none;
@@ -190,31 +202,11 @@ a { color:inherit; text-decoration:none; }
   border-radius: 50%;
   transition: color .2s, background .2s;
   flex-shrink: 0;
-  margin-left: 8px;
 }
 #hide-all-btn svg { width: 14px; height: 14px; }
 #hide-all-btn:hover { color: var(--txm); background: var(--sf); }
 body.widgets-hidden #wc,
 body.widgets-hidden #mobile-layout { display: none !important; }
-#lock-btn {
-  background: none;
-  border: none;
-  color: var(--txd);
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  border-radius: 50%;
-  transition: color .2s, background .2s;
-  flex-shrink: 0;
-  margin-left: 8px;
-}
-#lock-btn svg { width: 14px; height: 14px; }
-#lock-btn:hover { color: var(--txm); background: var(--sf); }
-#lock-btn.unlocked { color: var(--ac); }
-
 #search-wrap {
   display: flex;
   align-items: center;
@@ -225,7 +217,7 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   padding: 0 18px;
   height: 40px;
   transition: border-color .2s, background .2s, box-shadow .2s;
-  width: min(520px, 55vw);
+  width: min(480px, 52vw);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
 }
