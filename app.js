@@ -7825,20 +7825,35 @@ function _applyFabMedia(blob) {
 }
 
 function initOmniFab() {
+  const wrap      = $('fab-wrap');
   const fab       = $('omni-fab');
   const fileInput = $('fab-media-upload');
-  if (!fab) return;
+  if (!wrap || !fab) return;
+
+  /* ── Helper: collapse sub-menu + settings panel ── */
+  const closeFabMenu = () => {
+    wrap.classList.remove('fab-active');
+    $('fab-settings-panel')?.classList.add('fab-hidden');
+  };
+
+  /* ── Restore saved size ── */
+  const savedSize = parseInt(localStorage.getItem('fab_size')) || 54;
+  document.documentElement.style.setProperty('--fab-size', savedSize + 'px');
+  const slider  = $('fab-size-slider');
+  const sizeVal = $('fab-size-val');
+  if (slider)  slider.value = savedSize;
+  if (sizeVal) sizeVal.textContent = savedSize + 'px';
 
   /* ── Restore saved position ── */
   try {
     const pos = JSON.parse(localStorage.getItem('fab_pos') || 'null');
-    if (pos) { fab.style.left = pos.x + 'px'; fab.style.top = pos.y + 'px'; }
+    if (pos) { wrap.style.left = pos.x + 'px'; wrap.style.top = pos.y + 'px'; }
   } catch (_) {}
 
   /* ── Restore saved media from IDB ── */
   idbGet(FAB_IDB_KEY).then(blob => { if (blob) _applyFabMedia(blob); }).catch(() => {});
 
-  /* ── File picker (long-press) ── */
+  /* ── File picker handler ── */
   if (fileInput) {
     fileInput.addEventListener('change', async () => {
       const file = fileInput.files[0];
@@ -7848,7 +7863,45 @@ function initOmniFab() {
     });
   }
 
-  /* ── Pointer-drag logic ── */
+  /* ── Size slider: live preview + persist ── */
+  if (slider) {
+    slider.addEventListener('input', () => {
+      const sz = slider.value + 'px';
+      document.documentElement.style.setProperty('--fab-size', sz);
+      if (sizeVal) sizeVal.textContent = slider.value + 'px';
+      localStorage.setItem('fab_size', slider.value);
+    });
+  }
+
+  /* ── Settings panel: media button ── */
+  $('fab-sp-media-btn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    fileInput?.click();
+  });
+
+  /* ── Sub-button: 📡 Transfer ── */
+  $('fab-sub-transfer')?.addEventListener('click', e => {
+    e.stopPropagation();
+    closeFabMenu();
+    openWebRTCModal();
+  });
+
+  /* ── Sub-button: ⚙️ Settings → toggle panel ── */
+  $('fab-sub-settings')?.addEventListener('click', e => {
+    e.stopPropagation();
+    $('fab-settings-panel')?.classList.toggle('fab-hidden');
+  });
+
+  /* ── Close menu when tapping anywhere outside ── */
+  document.addEventListener('pointerdown', e => {
+    if (wrap.classList.contains('fab-active') && !wrap.contains(e.target)) {
+      closeFabMenu();
+    }
+  }, true);
+
+  /* ── Pointer-drag & tap / long-press logic ── */
+  const isMainBall = t => t === wrap || t === fab || fab.contains(t);
+
   let dragging = false, dragMoved = false;
   let startX, startY, startL, startT;
   let longPressTimer = null, rafId = null;
@@ -7856,36 +7909,52 @@ function initOmniFab() {
 
   const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
 
-  fab.addEventListener('pointerdown', e => {
+  wrap.addEventListener('pointerdown', e => {
+    if (!isMainBall(e.target)) return;           // ignore sub-buttons / panel
     if (e.button !== 0 && e.pointerType === 'mouse') return;
     e.preventDefault();
-    fab.setPointerCapture(e.pointerId);
+    wrap.setPointerCapture(e.pointerId);
     dragging  = true;
     dragMoved = false;
     startX = e.clientX; startY = e.clientY;
-    startL = parseInt(fab.style.left) || fab.getBoundingClientRect().left;
-    startT = parseInt(fab.style.top)  || fab.getBoundingClientRect().top;
-    /* Long-press → open file picker */
+    startL = parseInt(wrap.style.left) || wrap.getBoundingClientRect().left;
+    startT = parseInt(wrap.style.top)  || wrap.getBoundingClientRect().top;
+    wrap.classList.add('fab-pressing');
+
+    /* Long-press (620 ms) → toggle sub-menu */
     longPressTimer = setTimeout(() => {
-      if (!dragMoved) { fileInput?.click(); }
+      if (!dragMoved) {
+        wrap.classList.remove('fab-pressing');
+        const willOpen = !wrap.classList.contains('fab-active');
+        wrap.classList.toggle('fab-active');
+        if (willOpen) {
+          navigator.vibrate?.(40);
+          $('fab-settings-panel')?.classList.add('fab-hidden'); // reset panel on open
+        } else {
+          $('fab-settings-panel')?.classList.add('fab-hidden');
+        }
+      }
     }, 620);
   });
 
-  fab.addEventListener('pointermove', e => {
+  wrap.addEventListener('pointermove', e => {
     if (!dragging) return;
     const dx = e.clientX - startX, dy = e.clientY - startY;
     if (!dragMoved && Math.hypot(dx, dy) > 5) {
       dragMoved = true;
       clearTimeout(longPressTimer); longPressTimer = null;
+      wrap.classList.remove('fab-pressing');
+      closeFabMenu();                             // drag cancels any open menu
     }
     if (!dragMoved) return;
-    const maxX = window.innerWidth  - fab.offsetWidth;
-    const maxY = window.innerHeight - fab.offsetHeight;
+    const sz   = wrap.offsetWidth;
+    const maxX = window.innerWidth  - sz;
+    const maxY = window.innerHeight - sz;
     pendingX = clamp(startL + dx, 0, maxX);
     pendingY = clamp(startT + dy, 0, maxY);
     if (!rafId) rafId = requestAnimationFrame(() => {
-      fab.style.left = pendingX + 'px';
-      fab.style.top  = pendingY + 'px';
+      wrap.style.left = pendingX + 'px';
+      wrap.style.top  = pendingY + 'px';
       rafId = null;
     });
   });
@@ -7893,27 +7962,32 @@ function initOmniFab() {
   const _endDrag = () => {
     if (!dragging) return;
     dragging = false;
+    wrap.classList.remove('fab-pressing');
     clearTimeout(longPressTimer); longPressTimer = null;
     if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
   };
 
-  fab.addEventListener('pointerup', e => {
+  wrap.addEventListener('pointerup', e => {
     if (!dragging) return;
     const wasMoved = dragMoved;
     _endDrag();
     if (wasMoved) {
-      /* Persist final position */
+      /* Save final position */
       localStorage.setItem('fab_pos', JSON.stringify({
-        x: parseInt(fab.style.left) || 0,
-        y: parseInt(fab.style.top)  || 0,
+        x: parseInt(wrap.style.left) || 0,
+        y: parseInt(wrap.style.top)  || 0,
       }));
     } else {
-      /* Tap → open Omni-Search */
-      openOmniSearch();
+      /* Short tap: if menu open → close; else → open Omni-Search */
+      if (wrap.classList.contains('fab-active')) {
+        closeFabMenu();
+      } else {
+        openOmniSearch();
+      }
     }
   });
 
-  fab.addEventListener('pointercancel', _endDrag);
+  wrap.addEventListener('pointercancel', _endDrag);
 }
 
 function initOmniSearch() {

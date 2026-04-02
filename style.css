@@ -30,6 +30,7 @@
   --row:     78px;
   --cols:    24;
   --gap:     10px;
+  --fab-size: 54px;
 }
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -4250,24 +4251,30 @@ body.widgets-hidden #mobile-layout { display: none !important; }
 }
 
 /* ══════════════════════════════
-   OMNI-FAB (Draggable Floating Ball)
+   OMNI-FAB v2 (Draggable Ball + Sub-menu)
 ══════════════════════════════ */
 .fab-hidden { display: none !important; }
 
-#omni-fab {
+/* ── Wrapper: the draggable container ── */
+#fab-wrap {
   position: fixed;
   left: 80%;
   top: 80%;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
+  width: var(--fab-size, 54px);
+  height: var(--fab-size, 54px);
   z-index: 14000;
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
+}
+
+/* ── Main glass ball ── */
+#omni-fab {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
   cursor: pointer;
   overflow: hidden;
-  /* Glassmorphism */
   background: rgba(255,255,255,0.12);
   backdrop-filter: blur(20px) saturate(1.8);
   -webkit-backdrop-filter: blur(20px) saturate(1.8);
@@ -4276,9 +4283,18 @@ body.widgets-hidden #mobile-layout { display: none !important; }
     0 8px 32px rgba(0,0,0,0.38),
     0 0 0 1px rgba(255,255,255,0.06) inset,
     0 1px 0   rgba(255,255,255,0.20) inset;
-  transition: box-shadow .2s, transform .12s;
+  transition: background .3s, box-shadow .25s, transform .12s;
 }
-#omni-fab:active { transform: scale(0.91); }
+/* Press feedback (class-based, no CSS :active to avoid ghost state) */
+#fab-wrap.fab-pressing #omni-fab { transform: scale(0.89); }
+/* Active state: darken ball when sub-menu is open */
+#fab-wrap.fab-active #omni-fab {
+  background: rgba(6,14,34,0.82);
+  box-shadow:
+    0 12px 48px rgba(0,0,0,0.60),
+    0 0 28px rgba(56,189,248,0.14),
+    0 0 0 1.5px rgba(56,189,248,0.30);
+}
 
 #omni-fab video,
 #omni-fab img {
@@ -4301,6 +4317,100 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   line-height: 1;
   z-index: 1;
   pointer-events: none;
-  /* glass tint behind emoji */
   text-shadow: 0 1px 6px rgba(0,0,0,0.5);
 }
+
+/* ── Sub-buttons (fan out from ball centre) ── */
+.fab-sub {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 42px; height: 42px;
+  margin-top: -21px; margin-left: -21px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.22);
+  background: rgba(12,22,50,0.90);
+  backdrop-filter: blur(18px) saturate(1.6);
+  -webkit-backdrop-filter: blur(18px) saturate(1.6);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.45), 0 0 10px rgba(56,189,248,0.10);
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.3);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              opacity   0.28s ease;
+  z-index: 2;
+}
+.fab-sub:active { filter: brightness(1.35); }
+
+/* Fan positions when active */
+#fab-wrap.fab-active #fab-sub-transfer {
+  transform: translate(-70px, -20px) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+#fab-wrap.fab-active #fab-sub-settings {
+  transform: translate(-20px, -70px) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0.06s;
+}
+
+/* ── Settings panel (glass card above ball) ── */
+#fab-settings-panel {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  right: 0;
+  width: 210px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(8,16,40,0.92);
+  backdrop-filter: blur(28px) saturate(1.6);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fab-sp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.fab-sp-lbl {
+  font-size: 12px;
+  color: rgba(255,255,255,0.60);
+}
+.fab-sp-val {
+  font-size: 12px;
+  color: var(--ac);
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+}
+#fab-size-slider {
+  width: 100%;
+  accent-color: var(--ac);
+  cursor: pointer;
+  height: 4px;
+}
+.fab-sp-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 9px;
+  color: var(--tx);
+  font-size: 12px;
+  padding: 7px 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: background .15s;
+  font-family: inherit;
+}
+.fab-sp-btn:hover { background: rgba(255,255,255,0.15); }
