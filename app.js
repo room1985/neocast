@@ -7799,6 +7799,123 @@ function closeOmniSearch() {
   _omniCurrentResults = [];
 }
 
+/* ─────────────────────────────────────────
+   OMNI-FAB  Draggable floating search ball
+───────────────────────────────────────── */
+const FAB_IDB_KEY = 'fab_media';
+let _fabBlobUrl = null;
+
+function _applyFabMedia(blob) {
+  if (!blob) return;
+  // Revoke previous blob URL to free memory
+  if (_fabBlobUrl) { URL.revokeObjectURL(_fabBlobUrl); _fabBlobUrl = null; }
+  const url  = URL.createObjectURL(blob);
+  _fabBlobUrl = url;
+  const vid  = $('fab-media-vid');
+  const img  = $('fab-media-img');
+  const icon = document.querySelector('.fab-icon');
+  if (blob.type && blob.type.startsWith('video/')) {
+    if (vid) { vid.src = url; vid.classList.remove('fab-hidden'); }
+    if (img) { img.classList.add('fab-hidden'); img.src = ''; }
+  } else {
+    if (img) { img.src = url; img.classList.remove('fab-hidden'); }
+    if (vid) { vid.classList.add('fab-hidden'); vid.src = ''; }
+  }
+  if (icon) icon.classList.add('fab-hidden');
+}
+
+function initOmniFab() {
+  const fab       = $('omni-fab');
+  const fileInput = $('fab-media-upload');
+  if (!fab) return;
+
+  /* ── Restore saved position ── */
+  try {
+    const pos = JSON.parse(localStorage.getItem('fab_pos') || 'null');
+    if (pos) { fab.style.left = pos.x + 'px'; fab.style.top = pos.y + 'px'; }
+  } catch (_) {}
+
+  /* ── Restore saved media from IDB ── */
+  idbGet(FAB_IDB_KEY).then(blob => { if (blob) _applyFabMedia(blob); }).catch(() => {});
+
+  /* ── File picker (long-press) ── */
+  if (fileInput) {
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+      try { await idbSet(FAB_IDB_KEY, file); _applyFabMedia(file); } catch (_) {}
+      fileInput.value = '';
+    });
+  }
+
+  /* ── Pointer-drag logic ── */
+  let dragging = false, dragMoved = false;
+  let startX, startY, startL, startT;
+  let longPressTimer = null, rafId = null;
+  let pendingX = 0, pendingY = 0;
+
+  const clamp = (v, lo, hi) => Math.min(Math.max(v, lo), hi);
+
+  fab.addEventListener('pointerdown', e => {
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
+    e.preventDefault();
+    fab.setPointerCapture(e.pointerId);
+    dragging  = true;
+    dragMoved = false;
+    startX = e.clientX; startY = e.clientY;
+    startL = parseInt(fab.style.left) || fab.getBoundingClientRect().left;
+    startT = parseInt(fab.style.top)  || fab.getBoundingClientRect().top;
+    /* Long-press → open file picker */
+    longPressTimer = setTimeout(() => {
+      if (!dragMoved) { fileInput?.click(); }
+    }, 620);
+  });
+
+  fab.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    if (!dragMoved && Math.hypot(dx, dy) > 5) {
+      dragMoved = true;
+      clearTimeout(longPressTimer); longPressTimer = null;
+    }
+    if (!dragMoved) return;
+    const maxX = window.innerWidth  - fab.offsetWidth;
+    const maxY = window.innerHeight - fab.offsetHeight;
+    pendingX = clamp(startL + dx, 0, maxX);
+    pendingY = clamp(startT + dy, 0, maxY);
+    if (!rafId) rafId = requestAnimationFrame(() => {
+      fab.style.left = pendingX + 'px';
+      fab.style.top  = pendingY + 'px';
+      rafId = null;
+    });
+  });
+
+  const _endDrag = () => {
+    if (!dragging) return;
+    dragging = false;
+    clearTimeout(longPressTimer); longPressTimer = null;
+    if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+  };
+
+  fab.addEventListener('pointerup', e => {
+    if (!dragging) return;
+    const wasMoved = dragMoved;
+    _endDrag();
+    if (wasMoved) {
+      /* Persist final position */
+      localStorage.setItem('fab_pos', JSON.stringify({
+        x: parseInt(fab.style.left) || 0,
+        y: parseInt(fab.style.top)  || 0,
+      }));
+    } else {
+      /* Tap → open Omni-Search */
+      openOmniSearch();
+    }
+  });
+
+  fab.addEventListener('pointercancel', _endDrag);
+}
+
 function initOmniSearch() {
   const ov = $('omni-overlay');
   if (!ov) return;
@@ -8793,6 +8910,7 @@ async function init() {
   initLockBtn();
   initWeather();
   initOmniSearch();
+  initOmniFab();
   $('rtc-btn')?.addEventListener('click', openWebRTCModal);
 
   // Context menu
