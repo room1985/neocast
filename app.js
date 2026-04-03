@@ -1342,10 +1342,10 @@ async function geoLocate() {
       pos => res({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
       err => {
         if (err.code === 1) rej('定位權限被拒絕，請在瀏覽器允許位置存取');
-        else if (err.code === 2) rej('無法取得位置，請確認裝置已開啟定位');
-        else rej('定位逾時，請稍後再試');
+        else if (err.code === 2) rej('無法取得位置，請確認裝置已開啟定位服務');
+        else rej('定位逾時，請確認作業系統已開啟「位置」服務，或改為手動輸入城市');
       },
-      { timeout: 10000, maximumAge: 60000, enableHighAccuracy: false }
+      { timeout: 30000, maximumAge: 300000, enableHighAccuracy: false }
     );
   });
 }
