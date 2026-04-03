@@ -1336,18 +1336,33 @@ async function initWeather() {
 }
 
 async function geoLocate() {
-  return new Promise((res, rej) => {
-    if (!navigator.geolocation) { rej('瀏覽器不支援定位'); return; }
+  if (!navigator.geolocation) throw '瀏覽器不支援定位';
+
+  // 單次嘗試的包裝
+  const tryGet = (opts) => new Promise((res, rej) =>
     navigator.geolocation.getCurrentPosition(
       pos => res({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-      err => {
-        if (err.code === 1) rej('定位權限被拒絕，請在瀏覽器允許位置存取');
-        else if (err.code === 2) rej('無法取得位置，請確認裝置已開啟定位服務');
-        else rej('定位逾時，請確認作業系統已開啟「位置」服務，或改為手動輸入城市');
-      },
-      { timeout: 30000, maximumAge: 300000, enableHighAccuracy: false }
-    );
-  });
+      rej,
+      opts
+    )
+  );
+
+  let lastErr;
+  // 第一次：低精度 + 快取（Chrome / Edge 一般秒成功）
+  try {
+    return await tryGet({ timeout: 15000, maximumAge: 300000, enableHighAccuracy: false });
+  } catch(e) { lastErr = e; }
+
+  // 第二次：高精度（Firefox 有時需要走 GPS path 才能通過）
+  try {
+    return await tryGet({ timeout: 25000, maximumAge: 0, enableHighAccuracy: true });
+  } catch(e) { lastErr = e; }
+
+  // 翻譯最終錯誤
+  const code = lastErr?.code;
+  if (code === 1) throw '定位權限被拒絕，請在瀏覽器設定中允許位置存取';
+  if (code === 2) throw '無法取得位置，請確認裝置已開啟定位服務';
+  throw '定位逾時，請確認 OS「位置」服務已開啟，或改為手動輸入城市';
 }
 
 async function reverseGeocode(lat, lon) {
@@ -9267,8 +9282,25 @@ document.addEventListener('DOMContentLoaded', async () => {
       '展開所有 Widget',
     ];
     const applyState = (state) => {
-      document.body.classList.toggle('widgets-clock-only', state === 1);
-      document.body.classList.toggle('widgets-hidden',     state === 2);
+      // ── 第一段（僅時鐘）：JS 直接操控 inline style，完全繞過 CSS 優先權問題 ──
+      document.body.classList.remove('widgets-clock-only');
+      document.body.classList.toggle('widgets-hidden', state === 2);
+
+      const ml = document.getElementById('mobile-layout');
+      if (state === 1) {
+        // 逐一對桌機 widget 設定 display，只保留 clock
+        document.querySelectorAll('#wc > .widget').forEach(w => {
+          w.style.setProperty('display', w.dataset.wid === 'clock' ? '' : 'none', 'important');
+        });
+        if (ml) ml.style.setProperty('display', 'none', 'important');
+      } else {
+        // 恢復所有桌機 widget 的 inline display
+        document.querySelectorAll('#wc > .widget').forEach(w => {
+          w.style.removeProperty('display');
+        });
+        if (ml) ml.style.removeProperty('display');
+      }
+
       const icon = document.getElementById('hide-all-icon');
       if (icon) icon.innerHTML = STATE_ICONS[state];
       hideAllBtn.title = STATE_TITLES[state];
@@ -9278,7 +9310,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const cur = parseInt(localStorage.getItem(HIDE_KEY) || '0', 10);
       applyState((cur + 1) % 3);
     });
-    // 還原上次狀態（相容舊 key）
+    // 還原上次狀態
     const saved = parseInt(localStorage.getItem(HIDE_KEY) || '0', 10);
     if (saved > 0) applyState(saved);
   }
