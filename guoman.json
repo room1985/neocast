@@ -287,7 +287,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/f5/32/434759_mOk5s.jpg"
         },
         "rating": {
-          "score": 4.4
+          "score": 4.7
         },
         "eps": 24,
         "air_weekday": 3,
@@ -377,6 +377,26 @@
           "score": 0
         },
         "eps": 16,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 487522,
+        "name": "逆天邪神 年番",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/cf/94/487522_xkstx.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/cf/94/487522_xkstx.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -647,7 +667,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第14话",
+        "pub_index": "即将更新 第14话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
         "is_nsfw": false
