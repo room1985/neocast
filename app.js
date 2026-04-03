@@ -9308,20 +9308,29 @@ document.addEventListener('DOMContentLoaded', async () => {
             w.style.setProperty('display', 'none', 'important');
           }
         });
-        // 手機版整個收起（比逐一處理各 mobile-panel 輕便）
-        if (ml) ml.style.setProperty('display', 'none', 'important');
+        // 手機版：保留 #mobile-layout（含時鐘），只收起換頁區與點點列
+        if (ml) {
+          ml.querySelector('.mobile-swipe-area')?.style.setProperty('display', 'none', 'important');
+          ml.querySelector('.mobile-dots-bar')?.style.setProperty('display', 'none', 'important');
+        }
       } else {
         // 恢復所有桌機 widget 的 inline display
         document.querySelectorAll('#wc > .widget').forEach(w => {
           w.style.removeProperty('display');
         });
-        if (ml) ml.style.removeProperty('display');
+        // 手機版：恢復換頁區與點點列
+        if (ml) {
+          ml.querySelector('.mobile-swipe-area')?.style.removeProperty('display');
+          ml.querySelector('.mobile-dots-bar')?.style.removeProperty('display');
+        }
       }
 
       const icon = document.getElementById('hide-all-icon');
       if (icon) icon.innerHTML = STATE_ICONS[state];
       hideAllBtn.title = STATE_TITLES[state];
       localStorage.setItem(HIDE_KEY, String(state));
+      // 重新計算桌機 widget 尺寸（scrollbar 出現/消失會改變 #wc.clientWidth）
+      requestAnimationFrame(() => onResize());
     };
     hideAllBtn.addEventListener('click', () => {
       const cur = parseInt(localStorage.getItem(HIDE_KEY) || '0', 10);
