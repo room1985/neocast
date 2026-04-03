@@ -9194,17 +9194,31 @@ async function init() {
   $('cfg-locate').addEventListener('click', async () => {
     const statusEl = $('cfg-locate-status');
     statusEl.textContent = '定位中…';
+    let lat, lon, city = '';
     try {
-      const { lat, lon } = await geoLocate();
-      const city = await reverseGeocode(lat, lon);
-      S.cfg.weatherLat = lat;
-      S.cfg.weatherLon = lon;
-      $('cfg-city').value = city;
-      statusEl.textContent = `✓ ${city}`;
-      lsSave();
+      // 第一優先：瀏覽器 GPS / 網路定位
+      const pos = await geoLocate();
+      lat = pos.lat; lon = pos.lon;
+      city = await reverseGeocode(lat, lon);
     } catch(e) {
-      statusEl.textContent = typeof e === 'string' ? e : '定位失敗，請手動輸入';
+      // 後備：IP 定位（不需任何權限，Firefox / 任何瀏覽器皆可用）
+      try {
+        statusEl.textContent = '瀏覽器定位失敗，改用 IP 定位…';
+        const r = await fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(8000) });
+        const d = await r.json();
+        if (!d.latitude) throw new Error('no data');
+        lat = d.latitude; lon = d.longitude;
+        city = d.city || d.region || '';
+      } catch(_) {
+        statusEl.textContent = typeof e === 'string' ? e : '定位失敗，請手動輸入城市';
+        return;
+      }
     }
+    S.cfg.weatherLat = lat;
+    S.cfg.weatherLon = lon;
+    $('cfg-city').value = city;
+    statusEl.textContent = `✓ ${city}`;
+    lsSave();
   });
 
   // Cancel buttons (data-m attribute)
@@ -9288,10 +9302,13 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const ml = document.getElementById('mobile-layout');
       if (state === 1) {
-        // 逐一對桌機 widget 設定 display，只保留 clock
+        // 只對非 clock 的桌機 widget 設 display:none，完全不碰 clock
         document.querySelectorAll('#wc > .widget').forEach(w => {
-          w.style.setProperty('display', w.dataset.wid === 'clock' ? '' : 'none', 'important');
+          if (w.dataset.wid !== 'clock') {
+            w.style.setProperty('display', 'none', 'important');
+          }
         });
+        // 手機版整個收起（比逐一處理各 mobile-panel 輕便）
         if (ml) ml.style.setProperty('display', 'none', 'important');
       } else {
         // 恢復所有桌機 widget 的 inline display
