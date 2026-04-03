@@ -9251,25 +9251,36 @@ document.addEventListener('DOMContentLoaded', async () => {
   }, 30 * 60 * 1000);
 
   // ── 效能監控 ──
-  // 隱藏全部 Widget 按鈕
+  // 隱藏全部 Widget 按鈕（三段式：全顯 → 只留時鐘 → 全收 → 全顯）
   const hideAllBtn = document.getElementById('hide-all-btn');
   if (hideAllBtn) {
-    const HIDE_KEY = 'neocast_widgets_hidden';
-    const applyHidden = (hidden) => {
-      document.body.classList.toggle('widgets-hidden', hidden);
+    const HIDE_KEY = 'neocast_widgets_hide_state'; // 0=全顯 1=僅時鐘 2=全收
+    // 各狀態的圖示 SVG 內容
+    const STATE_ICONS = [
+      '<polyline points="4 15 12 7 20 15"/>',              // 0→上箭頭（可收起）
+      '<line x1="4" y1="12" x2="20" y2="12"/>',           // 1→橫線（再收時鐘）
+      '<polyline points="4 9 12 17 20 9"/>',               // 2→下箭頭（可展開）
+    ];
+    const STATE_TITLES = [
+      '收起所有 Widget（保留時鐘）',
+      '收起時鐘',
+      '展開所有 Widget',
+    ];
+    const applyState = (state) => {
+      document.body.classList.toggle('widgets-clock-only', state === 1);
+      document.body.classList.toggle('widgets-hidden',     state === 2);
       const icon = document.getElementById('hide-all-icon');
-      if (icon) {
-        icon.querySelector('polyline')?.setAttribute('points', hidden ? '4 9 12 17 20 9' : '4 15 12 7 20 15');
-      }
-      hideAllBtn.title = hidden ? '顯示所有 Widget' : '隱藏所有 Widget';
-      localStorage.setItem(HIDE_KEY, hidden ? '1' : '');
+      if (icon) icon.innerHTML = STATE_ICONS[state];
+      hideAllBtn.title = STATE_TITLES[state];
+      localStorage.setItem(HIDE_KEY, String(state));
     };
     hideAllBtn.addEventListener('click', () => {
-      const nowHidden = localStorage.getItem(HIDE_KEY) === '1';
-      applyHidden(!nowHidden);
+      const cur = parseInt(localStorage.getItem(HIDE_KEY) || '0', 10);
+      applyState((cur + 1) % 3);
     });
-    // 還原上次狀態
-    if (localStorage.getItem(HIDE_KEY) === '1') applyHidden(true);
+    // 還原上次狀態（相容舊 key）
+    const saved = parseInt(localStorage.getItem(HIDE_KEY) || '0', 10);
+    if (saved > 0) applyState(saved);
   }
 
   const perfBtn   = document.getElementById('perf-btn');
