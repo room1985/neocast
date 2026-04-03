@@ -4378,15 +4378,15 @@ body.widgets-hidden #mobile-layout { display: none !important; }
 .fab-sub:active { filter: brightness(1.35); }
 .fab-sub:active::after { opacity: 1; }
 
-/* Fan positions when active */
+/* Fan positions when active — 距離隨 --fab-size 等比縮放 */
 #fab-wrap.fab-active #fab-sub-transfer {
-  transform: translate(-70px, -20px) scale(1);
+  transform: translate(calc(-1.3 * var(--fab-size, 54px)), calc(-0.37 * var(--fab-size, 54px))) scale(1);
   opacity: 1;
   pointer-events: auto;
   transition-delay: 0s;
 }
 #fab-wrap.fab-active #fab-sub-settings {
-  transform: translate(-20px, -70px) scale(1);
+  transform: translate(calc(-0.37 * var(--fab-size, 54px)), calc(-1.3 * var(--fab-size, 54px))) scale(1);
   opacity: 1;
   pointer-events: auto;
   transition-delay: 0.06s;

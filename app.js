@@ -1043,7 +1043,7 @@ const WIDGET_DEFAULT = {
   stickies:  { col:12, row:0, w:6,  h:6,  visible:true },
   anime:     { col:18, row:0, w:6,  h:8,  visible:true },
   youtube:   { col:12, row:6, w:6,  h:8,  visible:true },
-  gallery:   { col:18, row:8, w:6,  h:10, visible:false }
+  gallery:   { col:18, row:8, w:6,  h:10, visible:true }
 };
 
 function renderAddWidgetPanel() {
@@ -1337,10 +1337,15 @@ async function initWeather() {
 
 async function geoLocate() {
   return new Promise((res, rej) => {
-    if (!navigator.geolocation) { rej('不支援定位'); return; }
+    if (!navigator.geolocation) { rej('瀏覽器不支援定位'); return; }
     navigator.geolocation.getCurrentPosition(
       pos => res({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-      () => rej('定位失敗')
+      err => {
+        if (err.code === 1) rej('定位權限被拒絕，請在瀏覽器允許位置存取');
+        else if (err.code === 2) rej('無法取得位置，請確認裝置已開啟定位');
+        else rej('定位逾時，請稍後再試');
+      },
+      { timeout: 10000, maximumAge: 60000, enableHighAccuracy: false }
     );
   });
 }
@@ -3429,7 +3434,7 @@ async function saveSettings() {
   closeModal('m-cfg');
   renderNewsKws();
   fetchNews(true);
-  if (city && S.cfg.weatherLat) initWeather();
+  if (S.cfg.weatherLat) initWeather();
   toast('設定已儲存 ✓');
 }
 
@@ -7491,18 +7496,18 @@ function renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn) {
   const renderKws = (editing) => {
     kws.innerHTML = '';
     const allTab = el('span', 'kw-tag' + (S.news.activeKw === 'all' ? ' on' : ''), '全部');
-    allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderMobileNews(container); });
+    allTab.addEventListener('click', () => { S.news.activeKw = 'all'; renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn); });
     kws.appendChild(allTab);
     S.news.keywords.forEach(kw => {
       const wrap = el('span', 'kw-tag-wrap' + (S.news.activeKw === kw ? ' on' : '') + (editing ? ' editing' : ''));
       const label = el('span', 'kw-label', esc(kw));
-      label.addEventListener('click', () => { if (!editing) { S.news.activeKw = kw; renderMobileNews(container); } });
+      label.addEventListener('click', () => { if (!editing) { S.news.activeKw = kw; renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn); } });
       const del = el('button', 'kw-del', '✕');
       del.addEventListener('click', e => {
         e.stopPropagation();
         S.news.keywords = S.news.keywords.filter(k => k !== kw);
         if (S.news.activeKw === kw) S.news.activeKw = 'all';
-        lsSave(); S.news.fetchedAt = 0; renderMobileNews(container); fetchNews(true);
+        lsSave(); S.news.fetchedAt = 0; renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn); fetchNews(true);
       });
       wrap.appendChild(label); wrap.appendChild(del);
       kws.appendChild(wrap);
@@ -7516,8 +7521,8 @@ function renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn) {
       addWrap.appendChild(inp); inp.focus();
       const doConfirm = () => {
         const val = inp.value.trim();
-        if (val && !S.news.keywords.includes(val)) { S.news.keywords.push(val); lsSave(); S.news.fetchedAt = 0; renderMobileNews(container); fetchNews(true); }
-        else { renderMobileNews(container); }
+        if (val && !S.news.keywords.includes(val)) { S.news.keywords.push(val); lsSave(); S.news.fetchedAt = 0; renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn); fetchNews(true); }
+        else { renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn); }
       };
       inp.addEventListener('blur', doConfirm);
       inp.addEventListener('keydown', e => { if (e.key==='Enter'){e.preventDefault();inp.blur();} if(e.key==='Escape'){inp.value='';inp.blur();} });
@@ -9183,7 +9188,7 @@ async function init() {
       statusEl.textContent = `✓ ${city}`;
       lsSave();
     } catch(e) {
-      statusEl.textContent = '定位失敗，請手動輸入';
+      statusEl.textContent = typeof e === 'string' ? e : '定位失敗，請手動輸入';
     }
   });
 
