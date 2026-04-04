@@ -112,26 +112,6 @@
         "is_nsfw": false
       },
       {
-        "id": 542324,
-        "name": "修罗武神 第2季",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/dd/ee/542324_AvX9o.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/dd/ee/542324_AvX9o.jpg"
-        },
-        "rating": {
-          "score": 5.2
-        },
-        "eps": 16,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 569761,
         "name": "熊出没·年年有熊",
         "name_cn": "",
@@ -2471,6 +2451,26 @@
           "score": 6.3
         },
         "eps": 26,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 577190,
+        "name": "遮天剧场版 背棺战王腾",
+        "name_cn": "遮天剧场版 背棺战王腾",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_sSD00.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
+        },
+        "rating": {
+          "score": 7
+        },
+        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
