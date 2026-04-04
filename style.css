@@ -853,6 +853,45 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   flex-shrink: 0;
 }
 
+/* ── 標籤列摺疊 ── */
+.tags-fold-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  position: relative;
+}
+.tags-fold-inner {
+  flex: 1;
+  max-height: 38px;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.tags-fold-inner.is-expanded {
+  max-height: 400px;
+}
+.tags-expand-btn {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--txm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.tags-expand-btn.is-expanded {
+  transform: rotate(180deg);
+  background: rgba(56,189,248,0.15);
+  color: var(--ac);
+  border-color: rgba(56,189,248,0.3);
+}
+
 .kw-tag {
   background: rgba(56,189,248,.08);
   border: 1px solid rgba(56,189,248,.2);

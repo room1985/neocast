@@ -104,6 +104,25 @@ const uid = () => Math.random().toString(36).slice(2)+Date.now().toString(36);
 const esc = s => String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const clamp = (v,a,b) => Math.max(a,Math.min(b,v));
 
+/* 將標籤列包入摺疊結構。innerEl 已是其父元素的子節點。
+   每次重繪後可呼叫 recheck() 更新展開按鈕可見性。 */
+function _initTagsFold(innerEl) {
+  if (!innerEl || innerEl.parentElement?.classList.contains('tags-fold-wrapper')) return;
+  const parent = innerEl.parentElement;
+  const wrapper = el('div', 'tags-fold-wrapper');
+  parent.insertBefore(wrapper, innerEl);
+  wrapper.appendChild(innerEl);
+  innerEl.classList.add('tags-fold-inner');
+  const btn = el('button', 'tags-expand-btn', '▼');
+  btn.setAttribute('aria-label', '展開標籤');
+  btn.style.display = 'none'; // 預設隱藏，recheck 後決定是否顯示
+  wrapper.appendChild(btn);
+  btn.addEventListener('click', () => {
+    innerEl.classList.toggle('is-expanded');
+    btn.classList.toggle('is-expanded');
+  });
+}
+
 /* ─────────────────────────────────────
    PERSISTENCE — localStorage
 ───────────────────────────────────── */
@@ -2150,6 +2169,7 @@ function buildNewsWidget() {
   kws.id = 'news-kws';
   outer.appendChild(kws);
   renderNewsKws();
+  _initTagsFold(kws);
 
   // List
   newsListEl = el('div', 'news-list');
@@ -2215,6 +2235,12 @@ function renderNewsKws() {
   });
   addWrap.appendChild(addBtn);
   kws.appendChild(addWrap);
+
+  // 重繪後更新展開按鈕可見性
+  requestAnimationFrame(() => {
+    const btn = kws?.closest('.tags-fold-wrapper')?.querySelector('.tags-expand-btn');
+    if (btn) btn.style.display = kws.scrollHeight > kws.clientHeight + 2 ? '' : 'none';
+  });
 }
 
 function renderNewsItems() {
@@ -5181,8 +5207,15 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
     // 管理模式下啟用拖曳排序
     if (grpEditMode) initYtGrpDrag(groupBar);
     groupBar._renderGroupBar = renderGroupBar;
+
+    // 重繪後更新展開按鈕可見性
+    requestAnimationFrame(() => {
+      const btn = groupBar.closest('.tags-fold-wrapper')?.querySelector('.tags-expand-btn');
+      if (btn) btn.style.display = groupBar.scrollHeight > groupBar.clientHeight + 2 ? '' : 'none';
+    });
   };
   renderGroupBar();
+  _initTagsFold(groupBar);
 
   // ── Duration filter bar ──
   const DUR_OPTS = [0, 5, 10, 15, 20, 25, 30]; // 0 = 不限
@@ -5199,8 +5232,15 @@ function renderYoutubeWidget(container, addBtnRef, refBtnRef) {
       btn.addEventListener('click', () => { activeDur = min; renderDurBar(); renderFeed(); });
       durBar.appendChild(btn);
     });
+
+    // 重繪後更新展開按鈕可見性
+    requestAnimationFrame(() => {
+      const btn = durBar.closest('.tags-fold-wrapper')?.querySelector('.tags-expand-btn');
+      if (btn) btn.style.display = durBar.scrollHeight > durBar.clientHeight + 2 ? '' : 'none';
+    });
   };
   renderDurBar();
+  _initTagsFold(durBar);
 
   // ── Manager panel ──
   const managerPanel = el('div', 'yt-manager');
@@ -7638,8 +7678,15 @@ function renderMobileNews(container, extSettingsBtn, extLangBtn, extRefBtn) {
     });
     addWrap.appendChild(addBtn);
     kws.appendChild(addWrap);
+
+    // 重繪後更新展開按鈕可見性
+    requestAnimationFrame(() => {
+      const btn = kws?.closest('.tags-fold-wrapper')?.querySelector('.tags-expand-btn');
+      if (btn) btn.style.display = kws.scrollHeight > kws.clientHeight + 2 ? '' : 'none';
+    });
   };
   renderKws(false);
+  _initTagsFold(kws);
 
   // News list
   const filtered = S.news.activeKw === 'all'
