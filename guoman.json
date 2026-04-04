@@ -197,26 +197,6 @@
         "pub_time": "11:00",
         "bilibili_season_id": 127272,
         "is_nsfw": false
-      },
-      {
-        "id": 434759,
-        "name": "搜神记",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/f5/32/434759_mOk5s.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f5/32/434759_mOk5s.jpg"
-        },
-        "rating": {
-          "score": 4.7
-        },
-        "eps": 24,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
       }
     ]
   },
@@ -941,7 +921,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176707-RWXgVpuxgPCf.png"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1693,15 +1673,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10177707,
-        "name": "リジネッタさんの冒険",
-        "name_cn": "リジネッタさんの冒険",
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "夏と箱",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177707-v3mFU4F2mJkI.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177707-v3mFU4F2mJkI.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1713,15 +1693,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188928,
-        "name": "夏と箱",
-        "name_cn": "夏と箱",
+        "id": 10177707,
+        "name": "リジネッタさんの冒険",
+        "name_cn": "リジネッタさんの冒険",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177707-v3mFU4F2mJkI.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177707-v3mFU4F2mJkI.png"
         },
         "rating": {
-          "score": 6.5
+          "score": 5.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1913,15 +1893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10193707,
-        "name": "無人駅 The Animation ",
-        "name_cn": "無人駅 The Animation ",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193707-kOyJ9fzeQPZC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193707-kOyJ9fzeQPZC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1933,15 +1913,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10193707,
+        "name": "無人駅 The Animation ",
+        "name_cn": "無人駅 The Animation ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193707-kOyJ9fzeQPZC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193707-kOyJ9fzeQPZC.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2053,15 +2033,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196540,
-        "name": "聖痕のアリア",
-        "name_cn": "聖痕のアリア",
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196540-bgmJs8Kou7zD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196540-bgmJs8Kou7zD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2073,15 +2053,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
+        "id": 10196540,
+        "name": "聖痕のアリア",
+        "name_cn": "聖痕のアリア",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196540-bgmJs8Kou7zD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196540-bgmJs8Kou7zD.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2431,6 +2411,26 @@
           "score": 6.3
         },
         "eps": 26,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 577190,
+        "name": "遮天剧场版 背棺战王腾",
+        "name_cn": "遮天剧场版 背棺战王腾",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_TVw9w.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_TVw9w.jpg"
+        },
+        "rating": {
+          "score": 6.9
+        },
+        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
