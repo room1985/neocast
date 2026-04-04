@@ -113,8 +113,12 @@ function _initTagsFold(innerEl) {
   parent.insertBefore(wrapper, innerEl);
   wrapper.appendChild(innerEl);
   innerEl.classList.add('tags-fold-inner');
-  const btn = el('button', 'tags-expand-btn', '▼');
+  const btn = el('button', 'tags-expand-btn');
   btn.setAttribute('aria-label', '展開標籤');
+  btn.innerHTML = '▼'; // arrow wrapped in span below for rotation
+  const arrow = el('span', 'tags-expand-arrow', '▼');
+  btn.textContent = '';
+  btn.appendChild(arrow);
   btn.style.display = 'none'; // 預設隱藏，recheck 後決定是否顯示
   wrapper.appendChild(btn);
   btn.addEventListener('click', () => {
@@ -2155,9 +2159,23 @@ function buildNewsWidget() {
     const open = settingsPanel.style.display !== 'none';
     settingsPanel.style.display = open ? 'none' : '';
     settingsBtn.classList.toggle('active', !open);
-    // 開啟設定 = 進入編輯模式；關閉設定 = 退出編輯模式
     newsEditingTags = !open;
     renderNewsKws();
+
+    // 設定開啟時隱藏展開鈕；設定關閉時恢復（recheck 決定是否顯示）
+    const foldBtn = kws.closest?.('.tags-fold-wrapper')?.querySelector('.tags-expand-btn');
+    if (foldBtn) {
+      if (!open) {
+        // 剛剛從 close → open，設定面板打開
+        foldBtn.style.display = 'none';
+      } else {
+        // 剛剛從 open → close，設定面板關閉，重新偵測
+        requestAnimationFrame(() => {
+          foldBtn.style.display = kws.scrollHeight > kws.clientHeight + 2 ? '' : 'none';
+        });
+      }
+    }
+
     if (!open) {
       settingsPanel.querySelector('#news-cfg-per-kw').value = S.news.perKeyword || 2;
       settingsPanel.querySelector('#news-cfg-cache').value = S.news.cacheMin || 25;
