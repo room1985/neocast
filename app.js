@@ -8734,7 +8734,7 @@ function _vtRenderPages(renderFn, _dir) {
 /* ─────────────────────────────────────
    AI CHAT — Ollama Streaming
 ───────────────────────────────────── */
-const OLLAMA_URL   = 'https://sanora-transpositive-unvicariously.ngrok-free.dev/api/chat';
+const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
 const OLLAMA_MODEL = 'neocast-soul';
 
 function initAiChat() {
@@ -8807,7 +8807,7 @@ function initAiChat() {
 
     } catch (err) {
       replyBubble.classList.remove('thinking');
-      replyBubble.textContent = '❌ 連線錯誤：請確認 Ngrok 已啟動且 Ollama 正在運行。';
+      replyBubble.textContent = '❌ 連線錯誤：請確認 ZeroTier 已連線且 Ollama 正在運行。';
       console.error('[AI Chat]', err);
     } finally {
       streaming = false;
