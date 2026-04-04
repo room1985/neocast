@@ -8783,8 +8783,7 @@ function initAiChat() {
       const res = await fetch(OLLAMA_URL, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'ngrok-skip-browser-warning': 'true'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ model: OLLAMA_MODEL, messages: aiHistory, stream: false })
       });
