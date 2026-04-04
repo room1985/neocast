@@ -8736,24 +8736,74 @@ function _vtRenderPages(renderFn, _dir) {
 ───────────────────────────────────── */
 const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
 const OLLAMA_MODEL = 'neocast-soul';
-const TTS_URL      = 'http://10.242.133.187:5050/tts';
+const TTS_URL  = 'http://10.242.133.187:5050/tts';
+let ttsRate    = '+0%';
+let ttsPitch   = '+0Hz';
+let ttsMuted   = false;
+let _ttsAudio  = null;
+let _ttsToggle = null;
+
+function _updateTtsBtn() {
+  if (!_ttsToggle) return;
+  if (ttsMuted) {
+    _ttsToggle.textContent = '🔇';
+    _ttsToggle.classList.add('tts-muted');
+    _ttsToggle.classList.remove('tts-playing');
+  } else if (_ttsAudio) {
+    _ttsToggle.textContent = '⏹';
+    _ttsToggle.classList.remove('tts-muted');
+    _ttsToggle.classList.add('tts-playing');
+  } else {
+    _ttsToggle.textContent = '🔊';
+    _ttsToggle.classList.remove('tts-muted', 'tts-playing');
+  }
+}
+
+function stopSpeaking() {
+  if (_ttsAudio) {
+    _ttsAudio.pause();
+    _ttsAudio.src = '';
+    _ttsAudio = null;
+  }
+  _updateTtsBtn();
+}
+
+function preprocessTtsText(text) {
+  return text
+    .replace(/\([^)]*\)/g, '')
+    .replace(/（[^）]*）/g, '')
+    .replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 async function speakAiReply(text) {
-  if (!text) return;
+  stopSpeaking();
+  const processed = preprocessTtsText(text);
+  if (!processed) return;
   try {
     const res = await fetch(TTS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text })
+      body: JSON.stringify({ text: processed, rate: ttsRate, pitch: ttsPitch })
     });
     if (!res.ok) return;
-    const blob = await res.blob();
-    const url  = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    audio.play();
-    audio.onended = () => URL.revokeObjectURL(url);
+    const blob  = await res.blob();
+    const url   = URL.createObjectURL(blob);
+    const audio = document.getElementById('ai-tts-audio') || new Audio();
+    audio.src   = url;
+    _ttsAudio   = audio;
+    _updateTtsBtn();
+    audio.play().catch(e => console.warn('[TTS play]', e));
+    audio.onended = () => {
+      URL.revokeObjectURL(url);
+      _ttsAudio = null;
+      _updateTtsBtn();
+    };
   } catch (err) {
     console.warn('[TTS]', err);
+    _ttsAudio = null;
+    _updateTtsBtn();
   }
 }
 
@@ -8767,16 +8817,39 @@ function initAiChat() {
 
   let aiHistory = [];
   let streaming  = false;
-  let ttsMuted   = false;
 
   closeBtn?.addEventListener('click', () => panel.classList.add('ai-hidden'));
 
-  const ttsToggle = $('ai-tts-toggle');
-  ttsToggle?.addEventListener('click', () => {
-    ttsMuted = !ttsMuted;
-    ttsToggle.textContent = ttsMuted ? '🔇' : '🔊';
-    ttsToggle.classList.toggle('tts-muted', ttsMuted);
+  _ttsToggle = $('ai-tts-toggle');
+  _updateTtsBtn();
+
+  _ttsToggle?.addEventListener('click', () => {
+    if (_ttsAudio) {
+      stopSpeaking();
+    } else {
+      ttsMuted = !ttsMuted;
+      _updateTtsBtn();
+    }
   });
+
+  $('ai-tts-settings-btn')?.addEventListener('click', () => {
+    $('ai-tts-settings')?.classList.toggle('ai-tts-settings-open');
+  });
+
+  $('tts-rate-slider')?.addEventListener('input', e => {
+    const v = parseInt(e.target.value);
+    ttsRate = (v >= 0 ? '+' : '') + v + '%';
+    const label = $('tts-rate-label');
+    if (label) label.textContent = ttsRate;
+  });
+
+  $('tts-pitch-slider')?.addEventListener('input', e => {
+    const v = parseInt(e.target.value);
+    ttsPitch = (v >= 0 ? '+' : '') + v + 'Hz';
+    const label = $('tts-pitch-label');
+    if (label) label.textContent = ttsPitch;
+  });
+
 
 
   function appendMsg(role, text) {
@@ -8791,6 +8864,12 @@ function initAiChat() {
   async function handleSend() {
     const text = input.value.trim();
     if (!text || streaming) return;
+
+    // 手機音頻解鎖：在使用者手勢事件內預先解鎖
+    if (!ttsMuted) {
+      const ttsEl = document.getElementById('ai-tts-audio');
+      if (ttsEl) ttsEl.play().then(() => ttsEl.pause()).catch(() => {});
+    }
 
     appendMsg('user', text);
     aiHistory.push({ role: 'user', content: text });

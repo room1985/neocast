@@ -4507,8 +4507,28 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   border-radius: 4px;
   transition: color .15s, opacity .15s;
 }
-#ai-chat-close:hover, #ai-tts-toggle:hover { color: var(--tx); }
+#ai-chat-close:hover, #ai-tts-toggle:hover, #ai-tts-settings-btn:hover { color: var(--tx); }
 #ai-tts-toggle.tts-muted { opacity: 0.35; }
+#ai-tts-toggle.tts-playing { color: var(--ac); }
+#ai-tts-settings {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  background: rgba(0,0,0,0.2);
+}
+#ai-tts-settings.ai-tts-settings-open { display: flex; }
+.tts-setting-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: var(--txm);
+}
+.tts-setting-row label { width: 26px; flex-shrink: 0; }
+.tts-setting-row input[type=range] { flex: 1; accent-color: var(--ac); }
+.tts-setting-row span { width: 40px; text-align: right; color: var(--tx); font-size: 0.75rem; }
 #ai-chat-messages {
   flex: 1;
   padding: 12px;

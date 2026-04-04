@@ -32,7 +32,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.11.4</span>
+      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.11.5</span>
       <button id="perf-btn" title="效能監控" aria-label="效能監控">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </button>
@@ -286,8 +286,21 @@
   <div id="ai-chat-panel" class="ai-hidden">
     <div class="ai-chat-header">
       <span>🤖 專屬管家 (neocast-soul)</span>
-      <button id="ai-tts-toggle" title="語音開關">🔊</button>
+      <button id="ai-tts-toggle" title="播放/停止/靜音">🔊</button>
+      <button id="ai-tts-settings-btn" title="語音設定">⚙️</button>
       <button id="ai-chat-close">✕</button>
+    </div>
+    <div id="ai-tts-settings">
+      <div class="tts-setting-row">
+        <label>語速</label>
+        <input type="range" id="tts-rate-slider" min="-50" max="100" value="0" step="5">
+        <span id="tts-rate-label">+0%</span>
+      </div>
+      <div class="tts-setting-row">
+        <label>音調</label>
+        <input type="range" id="tts-pitch-slider" min="-50" max="50" value="0" step="5">
+        <span id="tts-pitch-label">+0Hz</span>
+      </div>
     </div>
     <div id="ai-chat-messages"></div>
     <div class="ai-chat-input-area">
@@ -296,6 +309,7 @@
     </div>
   </div>
 
+  <audio id="ai-tts-audio" style="display:none"></audio>
   <div id="toast-container"></div>
   <!-- Honeypot: prevent browser password save prompts -->
   <input type="text" style="display:none" autocomplete="username">
