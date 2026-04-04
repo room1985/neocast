@@ -8736,6 +8736,26 @@ function _vtRenderPages(renderFn, _dir) {
 ───────────────────────────────────── */
 const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
 const OLLAMA_MODEL = 'neocast-soul';
+const TTS_URL      = 'http://10.242.133.187:5050/tts';
+
+async function speakAiReply(text) {
+  if (!text) return;
+  try {
+    const res = await fetch(TTS_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text })
+    });
+    if (!res.ok) return;
+    const blob = await res.blob();
+    const url  = URL.createObjectURL(blob);
+    const audio = new Audio(url);
+    audio.play();
+    audio.onended = () => URL.revokeObjectURL(url);
+  } catch (err) {
+    console.warn('[TTS]', err);
+  }
+}
 
 function initAiChat() {
   const panel      = $('ai-chat-panel');
@@ -8747,8 +8767,16 @@ function initAiChat() {
 
   let aiHistory = [];
   let streaming  = false;
+  let ttsMuted   = false;
 
   closeBtn?.addEventListener('click', () => panel.classList.add('ai-hidden'));
+
+  const ttsToggle = $('ai-tts-toggle');
+  ttsToggle?.addEventListener('click', () => {
+    ttsMuted = !ttsMuted;
+    ttsToggle.textContent = ttsMuted ? '🔇' : '🔊';
+    ttsToggle.classList.toggle('tts-muted', ttsMuted);
+  });
 
 
   function appendMsg(role, text) {
@@ -8807,8 +8835,12 @@ function initAiChat() {
         }
       }
 
-      if (fullReply) aiHistory.push({ role: 'assistant', content: fullReply });
-      else replyBubble.textContent = '（無回應）';
+      if (fullReply) {
+        aiHistory.push({ role: 'assistant', content: fullReply });
+        if (!ttsMuted) speakAiReply(fullReply);
+      } else {
+        replyBubble.textContent = '（無回應）';
+      }
 
     } catch (err) {
       replyBubble.classList.remove('thinking');

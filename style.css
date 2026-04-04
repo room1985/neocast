@@ -4496,7 +4496,7 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   color: var(--tx);
   flex-shrink: 0;
 }
-#ai-chat-close {
+#ai-chat-close, #ai-tts-toggle {
   background: none;
   border: none;
   color: var(--txm);
@@ -4505,9 +4505,10 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   line-height: 1;
   padding: 2px 4px;
   border-radius: 4px;
-  transition: color .15s;
+  transition: color .15s, opacity .15s;
 }
-#ai-chat-close:hover { color: var(--tx); }
+#ai-chat-close:hover, #ai-tts-toggle:hover { color: var(--tx); }
+#ai-tts-toggle.tts-muted { opacity: 0.35; }
 #ai-chat-messages {
   flex: 1;
   padding: 12px;
