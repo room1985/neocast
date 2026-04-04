@@ -8790,8 +8790,7 @@ async function speakAiReply(text) {
     if (!res.ok) return;
     const blob  = await res.blob();
     const url   = URL.createObjectURL(blob);
-    const audio = document.getElementById('ai-tts-audio') || new Audio();
-    audio.src   = url;
+    const audio = new Audio(url);
     _ttsAudio   = audio;
     _updateTtsBtn();
     audio.play().catch(e => console.warn('[TTS play]', e));
@@ -8833,7 +8832,9 @@ function initAiChat() {
   });
 
   $('ai-tts-settings-btn')?.addEventListener('click', () => {
-    $('ai-tts-settings')?.classList.toggle('ai-tts-settings-open');
+    const sp = $('ai-tts-settings');
+    if (!sp) return;
+    sp.style.display = (sp.style.display === 'flex') ? 'none' : 'flex';
   });
 
   $('tts-rate-slider')?.addEventListener('input', e => {
@@ -8864,12 +8865,6 @@ function initAiChat() {
   async function handleSend() {
     const text = input.value.trim();
     if (!text || streaming) return;
-
-    // 手機音頻解鎖：在使用者手勢事件內預先解鎖
-    if (!ttsMuted) {
-      const ttsEl = document.getElementById('ai-tts-audio');
-      if (ttsEl) ttsEl.play().then(() => ttsEl.pause()).catch(() => {});
-    }
 
     appendMsg('user', text);
     aiHistory.push({ role: 'user', content: text });
