@@ -8740,70 +8740,127 @@ const TTS_URL  = 'http://10.242.133.187:5050/tts';
 let ttsRate    = '+0%';
 let ttsPitch   = '+0Hz';
 let ttsMuted   = false;
+let _ttsState  = 'idle';   // 'idle' | 'loading' | 'playing' | 'paused'
 let _ttsAudio  = null;
 let _ttsToggle = null;
+let _ttsActBtn = null;     // 當前作用中的訊息播放按鈕
 
-function _updateTtsBtn() {
+const _SVG = {
+  play:   `<svg viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 13,8 4,14"/></svg>`,
+  pause:  `<svg viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/></svg>`,
+  replay: `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8a4 4 0 1 1-1.5-3.1M10.5 2v3h-3"/></svg>`,
+  spk:    `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h3l3-3v10L5 10H2V6z"/><path d="M11 4.5a5 5 0 0 1 0 7"/></svg>`,
+  mute:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h3l3-3v10L5 10H2V6z"/><path d="M12.5 5l-4 6M8.5 5l4 6"/></svg>`,
+  gear:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14M3.75 3.75l1.06 1.06M11.19 11.19l1.06 1.06M12.25 3.75l-1.06 1.06M4.81 11.19l-1.06 1.06"/></svg>`,
+  close:  `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg>`,
+};
+
+function _updateTtsMuteBtn() {
   if (!_ttsToggle) return;
-  if (ttsMuted) {
-    _ttsToggle.textContent = '🔇';
-    _ttsToggle.classList.add('tts-muted');
-    _ttsToggle.classList.remove('tts-playing');
-  } else if (_ttsAudio) {
-    _ttsToggle.textContent = '⏹';
-    _ttsToggle.classList.remove('tts-muted');
-    _ttsToggle.classList.add('tts-playing');
-  } else {
-    _ttsToggle.textContent = '🔊';
-    _ttsToggle.classList.remove('tts-muted', 'tts-playing');
+  _ttsToggle.innerHTML = ttsMuted ? _SVG.mute : _SVG.spk;
+  _ttsToggle.classList.toggle('tts-muted', ttsMuted);
+}
+
+function _setActBtn(btn, icon) {
+  if (_ttsActBtn && _ttsActBtn !== btn) {
+    _ttsActBtn.innerHTML = _SVG.play;
+    _ttsActBtn.disabled  = false;
   }
+  _ttsActBtn = btn;
+  if (btn) { btn.innerHTML = icon; btn.disabled = false; }
+  _updateTtsMuteBtn();
 }
 
 function stopSpeaking() {
-  if (_ttsAudio) {
-    _ttsAudio.pause();
-    _ttsAudio.src = '';
-    _ttsAudio = null;
+  if (_ttsAudio) { _ttsAudio.pause(); _ttsAudio = null; }
+  _ttsState = 'idle';
+  if (_ttsActBtn) { _ttsActBtn.innerHTML = _SVG.play; _ttsActBtn.disabled = false; }
+  _ttsActBtn = null;
+  _updateTtsMuteBtn();
+}
+
+function _handleMsgPlayBtn(text, btn) {
+  if (_ttsActBtn === btn) {
+    if (_ttsState === 'playing') {
+      _ttsAudio.pause();
+      _ttsState = 'paused';
+      btn.innerHTML = _SVG.play;
+    } else if (_ttsState === 'paused') {
+      _ttsAudio.play().catch(e => console.warn('[TTS resume]', e));
+      _ttsState = 'playing';
+      btn.innerHTML = _SVG.pause;
+    } else {
+      _speakWithBtn(text, btn);
+    }
+  } else {
+    _speakWithBtn(text, btn);
   }
-  _updateTtsBtn();
 }
 
 function preprocessTtsText(text) {
   return text
     .replace(/\([^)]*\)/g, '')
     .replace(/（[^）]*）/g, '')
+    .replace(/\*+/g, '')
     .replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]/gu, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
-async function speakAiReply(text) {
+async function _speakWithBtn(text, btn) {
   stopSpeaking();
   const processed = preprocessTtsText(text);
   if (!processed) return;
+  _ttsState  = 'loading';
+  _ttsActBtn = btn;
+  if (btn) { btn.innerHTML = _SVG.pause; btn.disabled = true; }
+  _updateTtsMuteBtn();
   try {
     const res = await fetch(TTS_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: processed, rate: ttsRate, pitch: ttsPitch })
     });
-    if (!res.ok) return;
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const blob  = await res.blob();
     const url   = URL.createObjectURL(blob);
     const audio = new Audio(url);
     _ttsAudio   = audio;
-    _updateTtsBtn();
+    _ttsState   = 'playing';
+    if (btn) btn.disabled = false;
+    _updateTtsMuteBtn();
     audio.play().catch(e => console.warn('[TTS play]', e));
     audio.onended = () => {
       URL.revokeObjectURL(url);
-      _ttsAudio = null;
-      _updateTtsBtn();
+      _ttsAudio  = null;
+      _ttsState  = 'idle';
+      if (_ttsActBtn === btn) {
+        if (btn) btn.innerHTML = _SVG.replay;
+        _ttsActBtn = null;
+      }
+      _updateTtsMuteBtn();
     };
   } catch (err) {
     console.warn('[TTS]', err);
-    _ttsAudio = null;
-    _updateTtsBtn();
+    _ttsAudio  = null;
+    _ttsState  = 'idle';
+    if (btn) { btn.innerHTML = _SVG.play; btn.disabled = false; }
+    _ttsActBtn = null;
+    _updateTtsMuteBtn();
   }
+}
+
+function _addMsgPlayBtn(msgDiv, text) {
+  const actDiv = document.createElement('div');
+  actDiv.className = 'ai-msg-actions';
+  const btn = document.createElement('button');
+  btn.className = 'ai-icon-btn ai-msg-play-btn';
+  btn.innerHTML = _SVG.play;
+  btn.title     = '朗讀此則訊息';
+  btn.addEventListener('click', () => _handleMsgPlayBtn(text, btn));
+  actDiv.appendChild(btn);
+  msgDiv.appendChild(actDiv);
+  return btn;
 }
 
 function initAiChat() {
@@ -8820,15 +8877,11 @@ function initAiChat() {
   closeBtn?.addEventListener('click', () => panel.classList.add('ai-hidden'));
 
   _ttsToggle = $('ai-tts-toggle');
-  _updateTtsBtn();
+  _updateTtsMuteBtn();
 
   _ttsToggle?.addEventListener('click', () => {
-    if (_ttsAudio) {
-      stopSpeaking();
-    } else {
-      ttsMuted = !ttsMuted;
-      _updateTtsBtn();
-    }
+    ttsMuted = !ttsMuted;
+    _updateTtsMuteBtn();
   });
 
   $('ai-tts-settings-btn')?.addEventListener('click', () => {
@@ -8849,6 +8902,11 @@ function initAiChat() {
     ttsPitch = (v >= 0 ? '+' : '') + v + 'Hz';
     const label = $('tts-pitch-label');
     if (label) label.textContent = ttsPitch;
+  });
+
+  $('ai-title-input')?.addEventListener('input', e => {
+    const t = $('ai-chat-title');
+    if (t) t.textContent = e.target.value.trim() || '專屬管家';
   });
 
 
@@ -8911,7 +8969,8 @@ function initAiChat() {
 
       if (fullReply) {
         aiHistory.push({ role: 'assistant', content: fullReply });
-        if (!ttsMuted) speakAiReply(fullReply);
+        const playBtn = _addMsgPlayBtn(replyBubble, fullReply);
+        if (!ttsMuted) _speakWithBtn(fullReply, playBtn);
       } else {
         replyBubble.textContent = '（無回應）';
       }

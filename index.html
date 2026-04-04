@@ -32,7 +32,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.11.6</span>
+      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.11.7</span>
       <button id="perf-btn" title="效能監控" aria-label="效能監控">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </button>
@@ -285,10 +285,18 @@
   <!-- ── AI Chat Panel ── -->
   <div id="ai-chat-panel" class="ai-hidden">
     <div class="ai-chat-header">
-      <span>🤖 專屬管家 (neocast-soul)</span>
-      <button id="ai-tts-toggle" title="播放/停止/靜音">🔊</button>
-      <button id="ai-tts-settings-btn" title="語音設定">⚙️</button>
-      <button id="ai-chat-close">✕</button>
+      <span id="ai-chat-title">專屬管家</span>
+      <div class="ai-header-btns">
+        <button id="ai-tts-toggle" class="ai-icon-btn" title="靜音／取消靜音">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h3l3-3v10L5 10H2V6z"/><path d="M11 4.5a5 5 0 0 1 0 7"/></svg>
+        </button>
+        <button id="ai-tts-settings-btn" class="ai-icon-btn" title="語音設定">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14M3.75 3.75l1.06 1.06M11.19 11.19l1.06 1.06M12.25 3.75l-1.06 1.06M4.81 11.19l-1.06 1.06"/></svg>
+        </button>
+        <button id="ai-chat-close" class="ai-icon-btn" title="關閉">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg>
+        </button>
+      </div>
     </div>
     <div id="ai-tts-settings" style="display:none">
       <div class="tts-setting-row">
@@ -300,6 +308,10 @@
         <label>音調</label>
         <input type="range" id="tts-pitch-slider" min="-50" max="50" value="0" step="5">
         <span id="tts-pitch-label">+0Hz</span>
+      </div>
+      <div class="tts-setting-row">
+        <label>標題</label>
+        <input type="text" id="ai-title-input" placeholder="自訂名稱..." maxlength="20">
       </div>
     </div>
     <div id="ai-chat-messages"></div>
