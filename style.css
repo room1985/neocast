@@ -4526,6 +4526,8 @@ body.widgets-hidden #mobile-layout { display: none !important; }
 .ai-msg-actions {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
   margin-top: 6px;
 }
 .ai-msg-play-btn { width: 22px; height: 22px; }
@@ -4571,7 +4573,7 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   max-width: 85%;
   padding: 9px 13px;
   border-radius: 12px;
-  font-size: 0.82rem;
+  font-size: var(--ai-msg-fs, 0.82rem);
   line-height: 1.5;
   color: var(--tx);
   word-break: break-word;

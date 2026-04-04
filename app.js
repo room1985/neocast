@@ -8737,13 +8737,16 @@ function _vtRenderPages(renderFn, _dir) {
 const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
 const OLLAMA_MODEL = 'neocast-soul';
 const TTS_URL  = 'http://10.242.133.187:5050/tts';
-let ttsRate    = '+0%';
-let ttsPitch   = '+0Hz';
-let ttsMuted   = false;
+let ttsRate      = '+0%';
+let ttsPitch     = '+0Hz';
+let ttsMuted     = false;
+let chatFontScale = 100;   // 對話字級百分比
 let _ttsState  = 'idle';   // 'idle' | 'loading' | 'playing' | 'paused'
 let _ttsAudio  = null;
 let _ttsToggle = null;
 let _ttsActBtn = null;     // 當前作用中的訊息播放按鈕
+
+const _TTS_STORAGE_KEY = 'neocast_tts_settings';
 
 const _SVG = {
   play:   `<svg viewBox="0 0 16 16" fill="currentColor"><polygon points="4,2 13,8 4,14"/></svg>`,
@@ -8753,7 +8756,31 @@ const _SVG = {
   mute:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h3l3-3v10L5 10H2V6z"/><path d="M12.5 5l-4 6M8.5 5l4 6"/></svg>`,
   gear:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="2.5"/><path d="M8 2v1.5M8 12.5V14M2 8h1.5M12.5 8H14M3.75 3.75l1.06 1.06M11.19 11.19l1.06 1.06M12.25 3.75l-1.06 1.06M4.81 11.19l-1.06 1.06"/></svg>`,
   close:  `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg>`,
+  copy:   `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="8" height="9" rx="1.5"/><path d="M3 11V3a1 1 0 0 1 1-1h6"/></svg>`,
+  check:  `<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,8 6.5,12 13,4"/></svg>`,
 };
+
+function _applyFontScale(scale) {
+  document.documentElement.style.setProperty('--ai-msg-fs', (scale * 0.82 / 100).toFixed(3) + 'rem');
+}
+
+function _saveTtsSettings() {
+  try {
+    localStorage.setItem(_TTS_STORAGE_KEY, JSON.stringify({
+      rate:     ttsRate,
+      pitch:    ttsPitch,
+      muted:    ttsMuted,
+      title:    $('ai-chat-title')?.textContent || '專屬管家',
+      fontSize: chatFontScale,
+    }));
+  } catch (_) {}
+}
+
+function _loadTtsSettings() {
+  try {
+    return JSON.parse(localStorage.getItem(_TTS_STORAGE_KEY) || '{}');
+  } catch (_) { return {}; }
+}
 
 function _updateTtsMuteBtn() {
   if (!_ttsToggle) return;
@@ -8802,7 +8829,9 @@ function preprocessTtsText(text) {
     .replace(/\([^)]*\)/g, '')
     .replace(/（[^）]*）/g, '')
     .replace(/\*+/g, '')
+    .replace(/#/g, '')
     .replace(/[\u{1F300}-\u{1FFFF}]|[\u{2600}-\u{27BF}]|[\u{FE00}-\u{FEFF}]/gu, '')
+    .replace(/[喔耶啦]/g, '')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -8853,11 +8882,27 @@ async function _speakWithBtn(text, btn) {
 function _addMsgPlayBtn(msgDiv, text) {
   const actDiv = document.createElement('div');
   actDiv.className = 'ai-msg-actions';
+
+  // ── 複製按鈕 ──
+  const copyBtn = document.createElement('button');
+  copyBtn.className = 'ai-icon-btn ai-msg-play-btn';
+  copyBtn.innerHTML = _SVG.copy;
+  copyBtn.title     = '複製此則訊息';
+  copyBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(text).then(() => {
+      copyBtn.innerHTML = _SVG.check;
+      setTimeout(() => { copyBtn.innerHTML = _SVG.copy; }, 1500);
+    }).catch(() => {});
+  });
+
+  // ── 播放按鈕 ──
   const btn = document.createElement('button');
   btn.className = 'ai-icon-btn ai-msg-play-btn';
   btn.innerHTML = _SVG.play;
   btn.title     = '朗讀此則訊息';
   btn.addEventListener('click', () => _handleMsgPlayBtn(text, btn));
+
+  actDiv.appendChild(copyBtn);
   actDiv.appendChild(btn);
   msgDiv.appendChild(actDiv);
   return btn;
@@ -8874,7 +8919,48 @@ function initAiChat() {
   let aiHistory = [];
   let streaming  = false;
 
-  closeBtn?.addEventListener('click', () => panel.classList.add('ai-hidden'));
+  // ── 載入並套用已儲存的設定 ──
+  {
+    const s = _loadTtsSettings();
+    if (s.rate)  ttsRate  = s.rate;
+    if (s.pitch) ttsPitch = s.pitch;
+    if (typeof s.muted === 'boolean') ttsMuted = s.muted;
+    if (s.fontSize) { chatFontScale = s.fontSize; _applyFontScale(chatFontScale); }
+    if (s.title) {
+      const t = $('ai-chat-title');
+      if (t) t.textContent = s.title;
+      const inp = $('ai-title-input');
+      if (inp) inp.value = s.title;
+    }
+    // 同步滑桿顯示
+    const rateSlider = $('tts-rate-slider');
+    if (rateSlider) {
+      const rv = parseInt(ttsRate);
+      rateSlider.value = rv;
+      const rl = $('tts-rate-label');
+      if (rl) rl.textContent = ttsRate;
+    }
+    const pitchSlider = $('tts-pitch-slider');
+    if (pitchSlider) {
+      const pv = parseInt(ttsPitch);
+      pitchSlider.value = pv;
+      const pl = $('tts-pitch-label');
+      if (pl) pl.textContent = ttsPitch;
+    }
+    const fsSlider = $('tts-font-slider');
+    if (fsSlider) {
+      fsSlider.value = chatFontScale;
+      const fl = $('tts-font-label');
+      if (fl) fl.textContent = chatFontScale + '%';
+    }
+  }
+
+  closeBtn?.addEventListener('click', () => {
+    stopSpeaking();
+    aiHistory.length = 0;
+    messages.innerHTML = '';
+    panel.classList.add('ai-hidden');
+  });
 
   _ttsToggle = $('ai-tts-toggle');
   _updateTtsMuteBtn();
@@ -8882,6 +8968,7 @@ function initAiChat() {
   _ttsToggle?.addEventListener('click', () => {
     ttsMuted = !ttsMuted;
     _updateTtsMuteBtn();
+    _saveTtsSettings();
   });
 
   $('ai-tts-settings-btn')?.addEventListener('click', () => {
@@ -8895,6 +8982,7 @@ function initAiChat() {
     ttsRate = (v >= 0 ? '+' : '') + v + '%';
     const label = $('tts-rate-label');
     if (label) label.textContent = ttsRate;
+    _saveTtsSettings();
   });
 
   $('tts-pitch-slider')?.addEventListener('input', e => {
@@ -8902,11 +8990,21 @@ function initAiChat() {
     ttsPitch = (v >= 0 ? '+' : '') + v + 'Hz';
     const label = $('tts-pitch-label');
     if (label) label.textContent = ttsPitch;
+    _saveTtsSettings();
+  });
+
+  $('tts-font-slider')?.addEventListener('input', e => {
+    chatFontScale = parseInt(e.target.value);
+    const label = $('tts-font-label');
+    if (label) label.textContent = chatFontScale + '%';
+    _applyFontScale(chatFontScale);
+    _saveTtsSettings();
   });
 
   $('ai-title-input')?.addEventListener('input', e => {
     const t = $('ai-chat-title');
     if (t) t.textContent = e.target.value.trim() || '專屬管家';
+    _saveTtsSettings();
   });
 
 
