@@ -276,16 +276,22 @@ async function exportBackup() {
     });
     zip.file('settings.json', JSON.stringify(settings));
 
-    // IndexedDB blobs
+    // IndexedDB blobs + MIME metadata
     const entries = await idbGetAll().catch(() => []);
+    const blobMeta = {};
     for (const { key, value } of entries) {
-      if (value instanceof Blob) zip.file('blobs/' + key, value);
+      if (value instanceof Blob) {
+        blobMeta[String(key)] = value.type || '';
+        zip.file('blobs/' + key, value);
+      }
     }
+    zip.file('blob_meta.json', JSON.stringify(blobMeta));
 
     const blob = await zip.generateAsync({ type: 'blob' });
+    const ver  = document.getElementById('version-tag')?.textContent?.trim() || 'backup';
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'NeoCast_Backup.zip';
+    a.download = `NeoCast_Backup_${ver}.zip`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 10000);
     toast('✅ 備份完成');
@@ -306,13 +312,19 @@ async function importBackup(file) {
       for (const [k, v] of Object.entries(settings)) localStorage.setItem(k, v);
     }
 
+    // 讀取 MIME metadata（還原 blob.type，讓影片/圖片能正確識別）
+    const metaFile = zip.file('blob_meta.json');
+    const blobMeta = metaFile ? JSON.parse(await metaFile.async('string')) : {};
+
     // IndexedDB blobs
     const blobFiles = [];
     zip.folder('blobs').forEach((relPath, zipObj) => {
       if (!zipObj.dir) blobFiles.push({ key: relPath, zipObj });
     });
     for (const { key, zipObj } of blobFiles) {
-      const blob = await zipObj.async('blob');
+      const raw      = await zipObj.async('blob');
+      const mimeType = blobMeta[key] || '';
+      const blob     = mimeType ? new Blob([raw], { type: mimeType }) : raw;
       await idbSet(key, blob).catch(() => {});
     }
 
