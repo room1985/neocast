@@ -8197,6 +8197,14 @@ function initOmniFab() {
     openWebRTCModal();
   });
 
+  /* ── Sub-button: 🤖 AI ── */
+  $('fab-sub-ai')?.addEventListener('click', e => {
+    e.stopPropagation();
+    closeFabMenu();
+    $('ai-chat-panel')?.classList.remove('ai-hidden');
+    setTimeout(() => $('ai-chat-input')?.focus(), 50);
+  });
+
   /* ── Sub-button: ⚙️ Settings → toggle panel ── */
   $('fab-sub-settings')?.addEventListener('click', e => {
     e.stopPropagation();
@@ -8721,6 +8729,112 @@ function openWebRTCModal() {
 /* ── 換頁切換：瞬間切換，完全不附加動畫 class，保護毛玻璃 backdrop-filter ── */
 function _vtRenderPages(renderFn, _dir) {
   renderFn();
+}
+
+/* ─────────────────────────────────────
+   AI CHAT — Ollama Streaming
+───────────────────────────────────── */
+const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
+const OLLAMA_MODEL = 'neocast-soul';
+
+function initAiChat() {
+  const panel      = $('ai-chat-panel');
+  const closeBtn   = $('ai-chat-close');
+  const messages   = $('ai-chat-messages');
+  const input      = $('ai-chat-input');
+  const sendBtn    = $('ai-chat-send');
+  if (!panel || !messages || !input || !sendBtn) return;
+
+  let aiHistory = [];
+  let streaming  = false;
+
+  closeBtn?.addEventListener('click', () => panel.classList.add('ai-hidden'));
+
+  // 點擊面板外部關閉
+  document.addEventListener('pointerdown', e => {
+    if (!panel.classList.contains('ai-hidden') && !panel.contains(e.target) && e.target.id !== 'fab-sub-ai') {
+      panel.classList.add('ai-hidden');
+    }
+  }, true);
+
+  function appendMsg(role, text) {
+    const div = document.createElement('div');
+    div.className = `ai-msg ${role}`;
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  async function handleSend() {
+    const text = input.value.trim();
+    if (!text || streaming) return;
+
+    appendMsg('user', text);
+    aiHistory.push({ role: 'user', content: text });
+    input.value = '';
+    input.style.height = '40px';
+
+    streaming = true;
+    sendBtn.disabled = true;
+    const replyBubble = appendMsg('assistant thinking', '⏳ 思考中...');
+
+    try {
+      const res = await fetch(OLLAMA_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model: OLLAMA_MODEL, messages: aiHistory, stream: true })
+      });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      replyBubble.textContent = '';
+      replyBubble.classList.remove('thinking');
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let fullReply = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const lines = decoder.decode(value, { stream: true }).split('\n');
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const json = JSON.parse(line);
+            if (json.message?.content) {
+              fullReply += json.message.content;
+              replyBubble.textContent = fullReply;
+              messages.scrollTop = messages.scrollHeight;
+            }
+          } catch (_) { /* 不完整的 chunk，略過 */ }
+        }
+      }
+
+      if (fullReply) aiHistory.push({ role: 'assistant', content: fullReply });
+      else replyBubble.textContent = '（無回應）';
+
+    } catch (err) {
+      replyBubble.classList.remove('thinking');
+      replyBubble.textContent = '❌ 連線錯誤：請確認 ZeroTier 已連線且 Ollama 正在運行。';
+      console.error('[AI Chat]', err);
+    } finally {
+      streaming = false;
+      sendBtn.disabled = false;
+      input.focus();
+    }
+  }
+
+  sendBtn.addEventListener('click', handleSend);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+  });
+
+  // 自動調整 textarea 高度
+  input.addEventListener('input', () => {
+    input.style.height = '40px';
+    input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+  });
 }
 
 function initMobileLayout() {
@@ -9418,6 +9532,9 @@ async function init() {
 
   // Window resize
   window.addEventListener('resize', onResize);
+
+  // AI Chat
+  initAiChat();
 
   // PWA
   registerSW();

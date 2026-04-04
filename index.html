@@ -32,7 +32,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.10.97</span>
+      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.10.98</span>
       <button id="perf-btn" title="效能監控" aria-label="效能監控">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </button>
@@ -255,6 +255,7 @@
       <div class="fab-icon">🔍</div>
     </div>
     <button id="fab-sub-transfer" class="fab-sub" title="跨裝置傳送門">📡</button>
+    <button id="fab-sub-ai" class="fab-sub" title="呼叫 AI 助理">🤖</button>
     <button id="fab-sub-settings" class="fab-sub" title="懸浮球設定">⚙️</button>
     <div id="fab-settings-panel" class="fab-hidden">
       <div class="fab-sp-row">
@@ -280,6 +281,19 @@
   </div>
   <input type="file" id="fab-media-upload" accept="image/*,video/*" class="fab-hidden">
   <input type="file" id="fab-media-active-upload" accept="image/*,video/*" class="fab-hidden">
+
+  <!-- ── AI Chat Panel ── -->
+  <div id="ai-chat-panel" class="ai-hidden">
+    <div class="ai-chat-header">
+      <span>🤖 專屬管家 (neocast-soul)</span>
+      <button id="ai-chat-close">✕</button>
+    </div>
+    <div id="ai-chat-messages"></div>
+    <div class="ai-chat-input-area">
+      <textarea id="ai-chat-input" placeholder="輸入指令... (Shift+Enter 換行)"></textarea>
+      <button id="ai-chat-send">發送</button>
+    </div>
+  </div>
 
   <div id="toast-container"></div>
   <!-- Honeypot: prevent browser password save prompts -->
