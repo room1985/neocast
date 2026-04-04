@@ -8734,7 +8734,7 @@ function _vtRenderPages(renderFn, _dir) {
 /* ─────────────────────────────────────
    AI CHAT — Ollama Streaming
 ───────────────────────────────────── */
-const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
+const OLLAMA_URL   = 'https://sanora-transpositive-unvicariously.ngrok-free.dev/api/chat';
 const OLLAMA_MODEL = 'neocast-soul';
 
 function initAiChat() {
@@ -8782,7 +8782,10 @@ function initAiChat() {
     try {
       const res = await fetch(OLLAMA_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true'
+        },
         body: JSON.stringify({ model: OLLAMA_MODEL, messages: aiHistory, stream: true })
       });
 
