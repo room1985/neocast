@@ -8750,12 +8750,6 @@ function initAiChat() {
 
   closeBtn?.addEventListener('click', () => panel.classList.add('ai-hidden'));
 
-  // 點擊面板外部關閉
-  document.addEventListener('pointerdown', e => {
-    if (!panel.classList.contains('ai-hidden') && !panel.contains(e.target) && e.target.id !== 'fab-sub-ai') {
-      panel.classList.add('ai-hidden');
-    }
-  }, true);
 
   function appendMsg(role, text) {
     const div = document.createElement('div');
@@ -8785,24 +8779,36 @@ function initAiChat() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ model: OLLAMA_MODEL, messages: aiHistory, stream: false })
+        body: JSON.stringify({ model: OLLAMA_MODEL, messages: aiHistory, stream: true })
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-      const data = await res.json();
-      const fullReply = data.message?.content || '';
-
       replyBubble.textContent = '';
       replyBubble.classList.remove('thinking');
+      const reader  = res.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let fullReply = '';
 
-      if (fullReply) {
-        replyBubble.textContent = fullReply;
-        messages.scrollTop = messages.scrollHeight;
-        aiHistory.push({ role: 'assistant', content: fullReply });
-      } else {
-        replyBubble.textContent = '（無回應）';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const lines = decoder.decode(value, { stream: true }).split('\n');
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const json = JSON.parse(line);
+            if (json.message?.content) {
+              fullReply += json.message.content;
+              replyBubble.textContent = fullReply;
+              messages.scrollTop = messages.scrollHeight;
+            }
+          } catch (_) { /* 不完整的 chunk，略過 */ }
+        }
       }
+
+      if (fullReply) aiHistory.push({ role: 'assistant', content: fullReply });
+      else replyBubble.textContent = '（無回應）';
 
     } catch (err) {
       replyBubble.classList.remove('thinking');
