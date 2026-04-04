@@ -33,7 +33,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_BTPPK.jpg"
         },
         "rating": {
-          "score": 7.5
+          "score": 7.4
         },
         "eps": 8,
         "air_weekday": 1,
@@ -123,26 +123,6 @@
           "score": 5.9
         },
         "eps": 1,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 624695,
-        "name": "喜羊羊与灰太狼之古古怪界有古怪番外篇",
-        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪番外篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/39/e3/624695_jg6sf.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/39/e3/624695_jg6sf.jpg"
-        },
-        "rating": {
-          "score": 7.8
-        },
-        "eps": 3,
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
@@ -357,26 +337,6 @@
           "score": 0
         },
         "eps": 16,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 487522,
-        "name": "逆天邪神 年番",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/cf/94/487522_xkstx.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/cf/94/487522_xkstx.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -701,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_N7dfm.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2440,6 +2400,26 @@
         "is_nsfw": false
       },
       {
+        "id": 607915,
+        "name": "凡人修仙传 第五季",
+        "name_cn": "凡人修仙传 第五季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ac/c9/607915_RBL8u.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ac/c9/607915_RBL8u.jpg"
+        },
+        "rating": {
+          "score": 8.7
+        },
+        "eps": 52,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 526975,
         "name": "择天记3D",
         "name_cn": "择天记",
@@ -2451,26 +2431,6 @@
           "score": 6.3
         },
         "eps": 26,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 577190,
-        "name": "遮天剧场版 背棺战王腾",
-        "name_cn": "遮天剧场版 背棺战王腾",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_sSD00.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
-        },
-        "rating": {
-          "score": 7
-        },
-        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
