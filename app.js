@@ -241,6 +241,88 @@ function idbGet(key) {
   });
 }
 
+function idbGetAll() {
+  return new Promise((res, rej) => {
+    const tx  = idb.transaction(IDB_ST, 'readonly');
+    const req = tx.objectStore(IDB_ST).openCursor();
+    const entries = [];
+    req.onsuccess = e => {
+      const cursor = e.target.result;
+      if (cursor) { entries.push({ key: cursor.key, value: cursor.value }); cursor.continue(); }
+      else res(entries);
+    };
+    req.onerror = rej;
+  });
+}
+
+/* ─────────────────────────────────────
+   BACKUP & RESTORE
+───────────────────────────────────── */
+const BACKUP_LS_KEYS = [
+  LS_KEY, '_bgMediaIsImg', 'yt_quota_exceeded_until',
+  'fab_size', 'fab_pos', 'neocast_widgets_hide_state'
+];
+
+async function exportBackup() {
+  toast('📦 正在打包資料，請稍候...');
+  try {
+    const zip = new JSZip();
+
+    // localStorage
+    const settings = {};
+    BACKUP_LS_KEYS.forEach(k => {
+      const v = localStorage.getItem(k);
+      if (v !== null) settings[k] = v;
+    });
+    zip.file('settings.json', JSON.stringify(settings));
+
+    // IndexedDB blobs
+    const entries = await idbGetAll().catch(() => []);
+    for (const { key, value } of entries) {
+      if (value instanceof Blob) zip.file('blobs/' + key, value);
+    }
+
+    const blob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'NeoCast_Backup.zip';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10000);
+    toast('✅ 備份完成');
+  } catch (e) {
+    toast('❌ 備份失敗：' + e.message);
+  }
+}
+
+async function importBackup(file) {
+  toast('📥 正在還原資料，請勿關閉視窗...');
+  try {
+    const zip = await JSZip.loadAsync(file);
+
+    // localStorage
+    const settingsFile = zip.file('settings.json');
+    if (settingsFile) {
+      const settings = JSON.parse(await settingsFile.async('string'));
+      for (const [k, v] of Object.entries(settings)) localStorage.setItem(k, v);
+    }
+
+    // IndexedDB blobs
+    const blobFiles = [];
+    zip.folder('blobs').forEach((relPath, zipObj) => {
+      if (!zipObj.dir) blobFiles.push({ key: relPath, zipObj });
+    });
+    for (const { key, zipObj } of blobFiles) {
+      const blob = await zipObj.async('blob');
+      await idbSet(key, blob).catch(() => {});
+    }
+
+    toast('✅ 還原成功，即將重新載入');
+    setTimeout(() => location.reload(), 1500);
+  } catch (e) {
+    toast('❌ 還原失敗：' + e.message);
+  }
+}
+
 function idbDel(key) {
   return new Promise((res, rej) => {
     const tx = idb.transaction(IDB_ST, 'readwrite');
@@ -8003,6 +8085,32 @@ function initOmniFab() {
   $('fab-sp-media-active-btn')?.addEventListener('click', e => {
     e.stopPropagation();
     fileInputActive?.click();
+  });
+
+  /* ── Settings panel: 備份與還原摺疊選單 ── */
+  const brToggle  = $('fab-sp-br-toggle');
+  const brActions = $('fab-sp-br-actions');
+  const brArrow   = $('fab-br-arrow');
+  if (brToggle && brActions) {
+    brToggle.addEventListener('click', e => {
+      e.stopPropagation();
+      const isHidden = brActions.style.display === 'none';
+      brActions.style.display = isHidden ? 'flex' : 'none';
+      if (brArrow) brArrow.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+  }
+  $('fab-sp-backup-btn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    exportBackup();
+  });
+  const backupUpload = $('fab-backup-upload');
+  $('fab-sp-restore-btn')?.addEventListener('click', e => {
+    e.stopPropagation();
+    backupUpload?.click();
+  });
+  backupUpload?.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) { importBackup(file); e.target.value = ''; }
   });
 
   /* ── Sub-button: 📡 Transfer ── */

@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/opencc-js@1.0.5/dist/umd/full.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 </head>
 <body>
 
@@ -31,7 +32,7 @@
   <!-- ── Header ── -->
   <header id="header">
     <div id="hdr-left">
-      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.10.93</span>
+      <span id="version-tag" role="button" title="三連擊解鎖私人群組／已解鎖時點一下鎖定" aria-label="版本號 / 私人群組鎖">v1.10.94</span>
       <button id="perf-btn" title="效能監控" aria-label="效能監控">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="11" height="11"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
       </button>
@@ -265,6 +266,16 @@
         <button id="fab-sp-media-btn" class="fab-sp-btn" title="設定靜止時的背景">🖼 平常時</button>
         <button id="fab-sp-media-active-btn" class="fab-sp-btn" title="設定選單展開時的背景">✨ 展開時</button>
       </div>
+      <div class="fab-sp-divider" style="height:1px;background:rgba(255,255,255,0.1);margin:6px 0;"></div>
+      <button id="fab-sp-br-toggle" class="fab-sp-btn" style="justify-content:space-between;">
+        <span>📦 系統備份與還原</span>
+        <span id="fab-br-arrow" style="transition:transform 0.3s;font-size:0.8em;">▼</span>
+      </button>
+      <div id="fab-sp-br-actions" style="display:none;gap:8px;margin-top:8px;">
+        <button id="fab-sp-backup-btn" class="fab-sp-btn" style="flex:1;font-size:0.8rem;justify-content:center;background:rgba(255,255,255,0.05);">導出 ZIP</button>
+        <button id="fab-sp-restore-btn" class="fab-sp-btn" style="flex:1;font-size:0.8rem;justify-content:center;background:rgba(248,113,113,0.1);color:#f87171;">讀取 ZIP</button>
+      </div>
+      <input type="file" id="fab-backup-upload" accept=".zip" style="display:none;">
     </div>
   </div>
   <input type="file" id="fab-media-upload" accept="image/*,video/*" class="fab-hidden">
