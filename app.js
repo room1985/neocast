@@ -8736,7 +8736,9 @@ function _vtRenderPages(renderFn, _dir) {
    AI CHAT — Ollama Streaming
 ───────────────────────────────────── */
 const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
-const OLLAMA_MODEL = 'neocast-soul';
+const OLLAMA_MODEL     = 'neocast-soul';
+const OLLAMA_MODEL_ALT = 'gemma4:e4b';
+let activeOllamaModel  = OLLAMA_MODEL; // 可透過按鈕切換
 const TTS_URL  = 'http://10.242.133.187:5050/tts';
 let aiHistory = []; // 模組作用域，供 _injectAiContext 與 initAiChat 共用
 let ttsRate      = '+0%';
@@ -8914,6 +8916,30 @@ function _addMsgPlayBtn(msgDiv, text) {
 /* ─────────────────────────────────────
    AI CONTEXT HELPERS
 ───────────────────────────────────── */
+
+// 從使用者訊息偵測「新增便利貼」意圖並提取內容（前端直接執行，不依賴模型輸出）
+function tryAddStickyFromMsg(text) {
+  const m = text.match(
+    /(?:幫我|請(?:幫我)?)?(?:新增|加(?:入)?|記(?:下)?|寫下)(?:一張|一條|一個)?(?:便利貼|筆記|note)[：:，,\s]*(.+)/i
+  ) || text.match(/^記下來[：:，,\s]*(.+)/i);
+  if (!m) return null;
+
+  let content = (m[1] || '').trim();
+  if (!content) return null;
+
+  // 嘗試從「放在/分類/標籤」提取標籤（僅接受已存在的 tag）
+  let tag = '';
+  const tagM = content.match(
+    /[，,]?\s*(?:放(?:在|到)|(?:分類|標籤|tag)[是為：:]?)\s*[「『【]?([^\s，,。！？」』】\d]+)[」』】]?/i
+  );
+  if (tagM) {
+    const candidate = tagM[1].trim();
+    if ((S.stickyTags || []).includes(candidate)) tag = candidate;
+    content = content.replace(tagM[0], '').trim();
+  }
+
+  return content ? { content, tag } : null;
+}
 
 // 對話開始時注入的精簡摘要 system context
 function buildAiSummaryContext() {
@@ -9134,6 +9160,21 @@ function initAiChat() {
     panel.classList.add('ai-hidden');
   });
 
+  // 模型切換按鈕
+  const modelToggleBtn = $('ai-model-toggle');
+  function _updateModelToggle() {
+    if (!modelToggleBtn) return;
+    const isAlt = activeOllamaModel === OLLAMA_MODEL_ALT;
+    modelToggleBtn.textContent = isAlt ? 'Gemma4' : 'Soul';
+    modelToggleBtn.classList.toggle('model-alt', isAlt);
+    modelToggleBtn.title = `目前：${activeOllamaModel}　點擊切換`;
+  }
+  modelToggleBtn?.addEventListener('click', () => {
+    activeOllamaModel = activeOllamaModel === OLLAMA_MODEL ? OLLAMA_MODEL_ALT : OLLAMA_MODEL;
+    _updateModelToggle();
+  });
+  _updateModelToggle();
+
   _ttsToggle = $('ai-tts-toggle');
   _updateTtsMuteBtn();
 
@@ -9195,7 +9236,20 @@ function initAiChat() {
     if (!text || streaming) return;
 
     appendMsg('user', text);
-    // 意圖偵測：若問到相關資料，注入詳細 context
+
+    // ① 前端便利貼偵測：直接從使用者訊息新增，不依賴模型輸出格式
+    const _stickyData = tryAddStickyFromMsg(text);
+    if (_stickyData) {
+      S.stickies.unshift({ id: uid(), text: _stickyData.content, color: '', pinned: false, tag: _stickyData.tag });
+      lsSave();
+      document.querySelectorAll('.stickies-inner').forEach(inner => {
+        const c = inner.closest('[data-widget="stickies"]') || inner.closest('.mobile-page-panel');
+        if (c) renderStickiesWidget(c);
+      });
+      toast(`📝 已新增便利貼：${_stickyData.content.slice(0, 20)}${_stickyData.content.length > 20 ? '…' : ''}`, 'ok');
+    }
+
+    // ② 意圖偵測：若問到相關資料，注入詳細 context
     const _intent = detectDataIntent(text);
     const _detailedCtx = buildDetailedContext(_intent, text);
     const _msgForAi = _detailedCtx
@@ -9215,7 +9269,7 @@ function initAiChat() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ model: OLLAMA_MODEL, messages: aiHistory, stream: true })
+        body: JSON.stringify({ model: activeOllamaModel, messages: aiHistory, stream: true })
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

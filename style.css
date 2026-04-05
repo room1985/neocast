@@ -4635,6 +4635,26 @@ body.widgets-hidden #mobile-layout { display: none !important; }
 #ai-chat-send:hover { opacity: 0.85; }
 #ai-chat-send:active { transform: scale(0.95); }
 #ai-chat-send:disabled { opacity: 0.4; cursor: not-allowed; }
+#ai-model-toggle {
+  background: rgba(255,255,255,0.08);
+  color: var(--tx);
+  border: 1px solid var(--bd);
+  border-radius: 8px;
+  padding: 0 10px;
+  height: 40px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .15s, color .15s;
+  letter-spacing: 0.02em;
+}
+#ai-model-toggle:hover { background: rgba(255,255,255,0.14); }
+#ai-model-toggle.model-alt {
+  background: rgba(var(--ac-rgb, 180,140,255), 0.15);
+  color: var(--ac);
+  border-color: var(--ac);
+}
 
 /* ── Settings panel (glass card above ball) ── */
 #fab-settings-panel {
