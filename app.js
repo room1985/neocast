@@ -9120,6 +9120,263 @@ function parseAndExecuteStickies(text) {
   return clean.trim();
 }
 
+// ══════════════════════════════════════════
+//  AI 意圖分類層（v1.11.19）
+// ══════════════════════════════════════════
+
+/* ── 導航：切換到指定 widget ── */
+function _aiGoToWidget(widgetType) {
+  const idx = (S.mobilePages || []).findIndex(p => p.widget === widgetType);
+  if (idx < 0) return false;
+  if (S.mobilePageIdx === idx) return true;
+  const dir = idx > S.mobilePageIdx ? 'left' : 'right';
+  S.mobilePageIdx = idx;
+  _vtRenderPages(window._mobileRenderPages || (() => {}), dir);
+  return true;
+}
+
+/* ── 導航：定位並高亮特定便利貼 ── */
+function _aiFocusStickyById(targetId) {
+  _aiGoToWidget('stickies');
+  setTimeout(() => {
+    const stickyData = (S.stickies || []).find(s => s.id === targetId);
+    if (stickyData?.tag && S.activeStickyTag !== stickyData.tag && S.activeStickyTag !== 'all') {
+      S.activeStickyTag = stickyData.tag;
+      lsSave();
+      document.querySelectorAll('.stickies-inner').forEach(body => {
+        if (body.offsetParent !== null) {
+          if (typeof body._renderTagBar === 'function') body._renderTagBar();
+          if (typeof renderStickiesWidget === 'function') renderStickiesWidget(body);
+        }
+      });
+    }
+    setTimeout(() => {
+      let visibleCard = null;
+      document.querySelectorAll(`.sticky-card[data-id="${targetId}"]`).forEach(c => {
+        if (c.offsetParent !== null) visibleCard = c;
+      });
+      if (visibleCard) {
+        visibleCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        visibleCard.style.transition = 'background 0.4s ease';
+        const oldBg = visibleCard.style.background;
+        visibleCard.style.background = 'rgba(56,189,248,0.35)';
+        setTimeout(() => { visibleCard.style.background = oldBg; }, 900);
+      }
+    }, 350);
+  }, 50);
+}
+
+/* ── 意圖偵測：回傳 { mode, action?, widget?, query?, domain? } ── */
+function detectAssistantIntent(text) {
+  const t = text.trim();
+
+  // 今日摘要
+  if (/今日摘要|今天.*摘要|幫我整理今天|來個摘要|今天.*狀況|給我今天|今天.*概況|總結今天|最近.*狀況|每日摘要/.test(t)) {
+    return { mode: 'summary' };
+  }
+
+  // 導航：開啟 widget
+  const widgetMap = {
+    stickies:  /便利貼|筆記本/i,
+    youtube:   /youtube|yt|影片|訂閱頻道/i,
+    news:      /新聞|news頁|新聞頁/i,
+    anime:     /動畫|番組|追番頁/i,
+    shortcuts: /捷徑|快速啟動/i,
+  };
+  if (/^(打開|開啟|切換到|前往|去看|帶我去|顯示)\s*[\u4e00-\u9fa5a-zA-Z]/.test(t)) {
+    for (const [widget, re] of Object.entries(widgetMap)) {
+      if (re.test(t)) return { mode: 'navigation', action: 'open_widget', widget };
+    }
+  }
+
+  // 導航：找便利貼
+  if (/找.*便利貼|便利貼.*找|幫我找.*便利貼|搜尋便利貼|查便利貼|找.*筆記/.test(t)) {
+    const q = t.replace(/找|便利貼|幫我|搜尋|查|筆記/g, '').trim();
+    return { mode: 'navigation', action: 'find_sticky', query: q };
+  }
+
+  // 導航：打開動畫詳情
+  if (/打開.*的動畫|顯示.*的動畫|查看.*的動畫|看.*動畫進度/.test(t)) {
+    const q = t.replace(/打開|顯示|查看|看|的動畫|動畫進度/g, '').trim();
+    return { mode: 'navigation', action: 'open_anime', query: q };
+  }
+
+  // 導航：打開 YT 影片
+  if (/打開.*影片|顯示.*影片|播放.*影片/.test(t)) {
+    const q = t.replace(/打開|顯示|播放|影片/g, '').trim();
+    return { mode: 'navigation', action: 'open_youtube', query: q };
+  }
+
+  // 資料問答：判斷領域
+  if (/新聞|報導|最新消息/.test(t) || (S.news.keywords || []).some(kw => t.includes(kw))) {
+    return { mode: 'query', domain: 'news' };
+  }
+  if (/youtube|yt|影片|頻道|訂閱/.test(t)) {
+    return { mode: 'query', domain: 'youtube' };
+  }
+  if (/動畫|番組|追番|幾集|最新集|播出/.test(t)) {
+    return { mode: 'query', domain: 'anime' };
+  }
+  if (/便利貼|筆記|待辦/.test(t)) {
+    return { mode: 'query', domain: 'stickies' };
+  }
+
+  return { mode: 'chat' };
+}
+
+/* ── 今日摘要：建立資料 payload ── */
+function buildSummaryPayload() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+
+  const stickies = (S.stickies || []).filter(s =>
+    s.tag === PRIVATE_STICKY_TAG ? S.privateUnlocked : true
+  );
+
+  const animeList = (S.animeState?.tracked || []).map(id => {
+    const d = S.animeState.trackedData?.[id];
+    if (!d) return null;
+    const name = S.animeState.customNames?.[id] || d.name_cn || d.name || String(id);
+    return { id, name, watched: d.watchedEp ?? 0, total: d.eps || null };
+  }).filter(Boolean);
+
+  const news = [...(S.news.items || [])]
+    .sort((a, b) => new Date(b.rawDate || 0) - new Date(a.rawDate || 0))
+    .slice(0, 8);
+
+  const yt = [...(S.yt.items || [])]
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+    .slice(0, 5);
+
+  return { dateStr, stickies, animeList, news, yt };
+}
+
+/* ── 今日摘要：格式化 Ollama prompt ── */
+function formatSummaryPrompt(payload, userText) {
+  const { dateStr, stickies, animeList, news, yt } = payload;
+  let ctx = `今天是 ${dateStr}。\n\n`;
+
+  if (stickies.length) {
+    ctx += `【便利貼】共 ${stickies.length} 張\n`;
+    stickies.slice(0, 20).forEach(s => {
+      ctx += `・[${s.tag || '無分類'}] ${s.text.slice(0, 100)}${s.text.length > 100 ? '…' : ''}\n`;
+    });
+    ctx += '\n';
+  }
+
+  if (animeList.length) {
+    ctx += `【動畫追蹤】\n`;
+    animeList.forEach(a => {
+      ctx += `・${a.name}：已看 ${a.watched} 集${a.total ? ` / 共 ${a.total} 集` : ''}\n`;
+    });
+    ctx += '\n';
+  }
+
+  if (news.length) {
+    ctx += `【最新新聞 — ${news.length} 則】\n`;
+    news.forEach((n, i) => {
+      ctx += `${i + 1}. 【${n.title}】（${n.source || ''}　${n.date || ''}）\n`;
+      if (n.desc) ctx += `   ${n.desc}\n`;
+    });
+    ctx += '\n';
+  }
+
+  if (yt.length) {
+    ctx += `【YouTube 最新影片】\n`;
+    yt.forEach(v => {
+      ctx += `・${v.channelName}：${v.title}（${fmtRelTime(v.publishedAt)}）\n`;
+    });
+    ctx += '\n';
+  }
+
+  return `[今日摘要請求]\n${ctx}\n使用者說：「${userText}」\n請用繁體中文，根據以上資料給一份精簡的今日概況整理。`;
+}
+
+/* ── 資料問答：搜尋特定領域的本地資料 ── */
+function searchLocalData(domain, userText) {
+  const userWords = userText.split(/[\s，。？！、「」]/g).filter(w => w.length > 1);
+  const kws = S.news.keywords || [];
+
+  switch (domain) {
+    case 'news': {
+      let items = (S.news.items || []).filter(item =>
+        kws.some(kw => item.kw === kw || item.title.includes(kw)) ||
+        userWords.some(w => item.title.includes(w) || (item.desc || '').includes(w))
+      );
+      if (!items.length) items = [...(S.news.items || [])];
+      return items.sort((a, b) => new Date(b.rawDate || 0) - new Date(a.rawDate || 0)).slice(0, 8);
+    }
+    case 'youtube': {
+      let items = (S.yt.items || []).filter(v =>
+        kws.some(kw => v.title.includes(kw) || v.channelName.includes(kw)) ||
+        userWords.some(w => v.title.includes(w) || v.channelName.includes(w))
+      );
+      if (!items.length) items = [...(S.yt.items || [])];
+      return items.sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt)).slice(0, 8);
+    }
+    case 'anime': {
+      return (S.animeState?.tracked || []).map(id => {
+        const d = S.animeState.trackedData?.[id];
+        if (!d) return null;
+        const name = S.animeState.customNames?.[id] || d.name_cn || d.name || String(id);
+        return { id, name, watched: d.watchedEp ?? 0, total: d.eps || null };
+      }).filter(Boolean);
+    }
+    case 'stickies': {
+      const all = (S.stickies || []).filter(s =>
+        s.tag === PRIVATE_STICKY_TAG ? S.privateUnlocked : true
+      );
+      if (!userWords.length) return all;
+      const matched = all.filter(s =>
+        userWords.some(w => s.text.includes(w) || (s.tag || '').includes(w))
+      );
+      return matched.length ? matched : all;
+    }
+    default:
+      return [];
+  }
+}
+
+/* ── 資料問答：格式化 Ollama prompt ── */
+function formatQueryPrompt(domain, items, userText) {
+  let ctx = '';
+
+  switch (domain) {
+    case 'news':
+      ctx += `[新聞資料 — ${items.length} 則]\n`;
+      items.forEach((n, i) => {
+        ctx += `${i + 1}. 【${n.title}】\n`;
+        ctx += `   來源：${n.source || '未知'}　時間：${n.date || '未知'}\n`;
+        if (n.desc) ctx += `   摘要：${n.desc}\n`;
+      });
+      break;
+    case 'youtube':
+      ctx += `[YouTube 影片資料 — ${items.length} 支]\n`;
+      items.forEach((v, i) => {
+        const views = v.viewCount ? `${Math.round(v.viewCount / 1000)}K 觀看` : '';
+        const likes = v.likeCount ? `${Math.round(v.likeCount / 1000)}K 讚` : '';
+        const stats = [views, likes].filter(Boolean).join('・');
+        ctx += `${i + 1}. 【${v.title}】\n`;
+        ctx += `   頻道：${v.channelName}　發布：${fmtRelTime(v.publishedAt)}${stats ? `　${stats}` : ''}\n`;
+      });
+      break;
+    case 'anime':
+      ctx += `[動畫追蹤清單]\n`;
+      items.forEach(a => {
+        ctx += `・${a.name}：已看 ${a.watched} 集${a.total ? ` / 共 ${a.total} 集` : ''}\n`;
+      });
+      break;
+    case 'stickies':
+      ctx += `[便利貼清單 — ${items.length} 張]\n`;
+      items.forEach(s => {
+        ctx += `・[${s.tag || '無分類'}] ${s.text}\n`;
+      });
+      break;
+  }
+
+  return `[資料查詢]\n${ctx}\n使用者問：「${userText}」\n請根據上方資料，用繁體中文簡潔回答。`;
+}
+
 // 初始化 / 重設 AI 對話歷史並注入精簡 context
 function _injectAiContext() {
   aiHistory.length = 0;
@@ -9259,8 +9516,10 @@ function initAiChat() {
     if (!text || streaming) return;
 
     appendMsg('user', text);
+    input.value = '';
+    input.style.height = '40px';
 
-    // ① 前端便利貼偵測：直接從使用者訊息新增，不依賴模型輸出格式
+    // ① 前端便利貼偵測：直接新增，靜態回覆，不呼叫 Ollama
     const _stickyData = tryAddStickyFromMsg(text);
     if (_stickyData) {
       S.stickies.unshift({ id: uid(), text: _stickyData.content, color: '', pinned: false, tag: _stickyData.tag });
@@ -9270,21 +9529,90 @@ function initAiChat() {
         if (c) renderStickiesWidget(c);
       });
       toast(`📝 已新增便利貼：${_stickyData.content.slice(0, 20)}${_stickyData.content.length > 20 ? '…' : ''}`, 'ok');
+      const confirmMsg = `好，已記下來${_stickyData.tag ? `（分類：${_stickyData.tag}）` : ''}：「${_stickyData.content.slice(0, 40)}${_stickyData.content.length > 40 ? '…' : ''}」`;
+      appendMsg('assistant', confirmMsg);
+      input.focus();
+      return;
     }
 
-    // ② 意圖偵測：若問到相關資料，注入詳細 context
-    const _intent = detectDataIntent(text);
-    const _detailedCtx = buildDetailedContext(_intent, text);
-    const _msgForAi = _detailedCtx
-      ? `[參考資料]\n${_detailedCtx}---\n${text}`
-      : text;
-    aiHistory.push({ role: 'user', content: _msgForAi });
-    input.value = '';
-    input.style.height = '40px';
+    // ② 意圖分類
+    const intent = detectAssistantIntent(text);
 
+    // ③ 導航型：純前端，不需 Ollama
+    if (intent.mode === 'navigation') {
+      const widgetNames = { stickies: '便利貼', youtube: 'YouTube', news: '新聞', anime: '動畫追蹤', shortcuts: '捷徑' };
+      let navMsg = '';
+
+      switch (intent.action) {
+        case 'open_widget': {
+          const ok = _aiGoToWidget(intent.widget);
+          navMsg = ok
+            ? `好，已切換到${widgetNames[intent.widget] || intent.widget}。`
+            : `找不到${widgetNames[intent.widget] || intent.widget}頁面，可能尚未加入。`;
+          break;
+        }
+        case 'find_sticky': {
+          const q = intent.query || '';
+          const matched = (S.stickies || [])
+            .filter(s => s.tag === PRIVATE_STICKY_TAG ? S.privateUnlocked : true)
+            .filter(s => !q || s.text.includes(q) || (s.tag || '').includes(q));
+          if (!matched.length) {
+            navMsg = q ? `找不到包含「${q}」的便利貼。` : '目前沒有便利貼。';
+          } else if (matched.length === 1) {
+            _aiFocusStickyById(matched[0].id);
+            navMsg = `找到了，幫你定位到：「${matched[0].text.slice(0, 40)}」`;
+          } else {
+            navMsg = `找到 ${matched.length} 張相關便利貼：\n` +
+              matched.slice(0, 5).map(s => `・[${s.tag || '無分類'}] ${s.text.slice(0, 40)}`).join('\n') +
+              (matched.length > 5 ? '\n…還有更多' : '');
+          }
+          break;
+        }
+        case 'open_anime': {
+          const q = (intent.query || '').trim();
+          const tracked = S.animeState?.tracked || [];
+          const matchId = tracked.find(id => {
+            const d = S.animeState.trackedData?.[id];
+            if (!d) return false;
+            const name = S.animeState.customNames?.[id] || d.name_cn || d.name || '';
+            return !q || name.includes(q);
+          });
+          if (matchId) {
+            const d = S.animeState.trackedData?.[matchId];
+            _aiGoToWidget('anime');
+            setTimeout(() => { if (d && typeof showAnimeSheet === 'function') showAnimeSheet(d); }, 150);
+            const name = S.animeState.customNames?.[matchId] || d?.name_cn || d?.name || '';
+            navMsg = `好，開啟「${name}」的動畫詳情。`;
+          } else {
+            navMsg = q ? `找不到「${q}」相關的動畫。` : '找不到符合的動畫。';
+          }
+          break;
+        }
+        case 'open_youtube': {
+          const q = (intent.query || '').trim();
+          const ytItems = [...(S.yt.items || [])].sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt));
+          const match = q ? ytItems.find(v => v.title.includes(q) || v.channelName.includes(q)) : ytItems[0];
+          if (match) {
+            _aiGoToWidget('youtube');
+            setTimeout(() => { if (typeof showYtSheet === 'function') showYtSheet(match); }, 150);
+            navMsg = `好，開啟「${match.title}」。`;
+          } else {
+            navMsg = q ? `找不到「${q}」相關的影片。` : '目前沒有 YouTube 影片。';
+          }
+          break;
+        }
+        default:
+          navMsg = '操作已完成。';
+      }
+
+      appendMsg('assistant', navMsg);
+      input.focus();
+      return;
+    }
+
+    // ④⑤⑥ 需要 Ollama：summary / query / chat
     streaming = true;
     abortController = new AbortController();
-    // 發送鍵切換為中止模式
     sendBtn.textContent = '⏹';
     sendBtn.classList.add('abort-mode');
     sendBtn.disabled = false;
@@ -9296,6 +9624,24 @@ function initAiChat() {
         '<span class="ai-thinking-bunny">🐰</span>' +
         '<span class="ai-thinking-shadow"></span>' +
       '</div>';
+
+    // 組裝本次 Ollama 訊息
+    let userMsgForAi = text;
+    if (intent.mode === 'summary') {
+      userMsgForAi = formatSummaryPrompt(buildSummaryPayload(), text);
+    } else if (intent.mode === 'query') {
+      const items = searchLocalData(intent.domain, text);
+      userMsgForAi = items.length
+        ? formatQueryPrompt(intent.domain, items, text)
+        : text; // 無資料 fallback chat
+    } else {
+      // chat fallback：保留舊的 detectDataIntent 補充 context
+      const _oldIntent = detectDataIntent(text);
+      const _oldCtx = buildDetailedContext(_oldIntent, text);
+      if (_oldCtx) userMsgForAi = `[參考資料]\n${_oldCtx}---\n${text}`;
+    }
+
+    aiHistory.push({ role: 'user', content: userMsgForAi });
 
     try {
       const res = await fetch(OLLAMA_URL, {
@@ -9336,7 +9682,7 @@ function initAiChat() {
       }
 
       if (fullReply) {
-        const cleanReply = _stickyData ? fullReply : parseAndExecuteStickies(fullReply);
+        const cleanReply = parseAndExecuteStickies(fullReply);
         replyBubble.textContent = cleanReply;
         aiHistory.push({ role: 'assistant', content: cleanReply });
         const playBtn = _addMsgPlayBtn(replyBubble, cleanReply);
@@ -9350,7 +9696,6 @@ function initAiChat() {
     } catch (err) {
       replyBubble.classList.remove('thinking');
       if (err.name === 'AbortError') {
-        // 使用者手動中止：保留已生成的內容
         if (replyBubble.innerHTML.includes('ai-thinking-wrap')) {
           replyBubble.innerHTML = '';
           replyBubble.textContent = '（已中止）';
@@ -9359,7 +9704,6 @@ function initAiChat() {
           abortNote.className = 'ai-aborted';
           abortNote.textContent = ' ⏹ 已中止';
           replyBubble.appendChild(abortNote);
-          // 已生成的部分存入歷史
           const partial = replyBubble.textContent.replace(' ⏹ 已中止', '').trim();
           if (partial) aiHistory.push({ role: 'assistant', content: partial });
         }
