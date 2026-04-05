@@ -9094,9 +9094,6 @@ function initAiChat() {
       let fullReply   = '';
       let sentenceBuf = '';   // TTS 緩衝
 
-      let fullReply   = '';
-      let sentenceBuf = '';   // TTS 緩衝
-
       // ── 分段策略：滿 MIN_LEN 字後，遇標點才切；超過 FORCE_MAX 強制切 ──
       const SPLIT_RE  = /[。！？；:，、\n]/;
       const MIN_LEN   = 40;   // 至少累積這麼多字才允許標點切段
