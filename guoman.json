@@ -641,7 +641,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_N7dfm.jpg"
         },
         "rating": {
-          "score": 5.8
+          "score": 6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2428,7 +2428,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.6
         },
         "eps": 1,
         "air_weekday": 6,
@@ -2481,7 +2481,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第77话",
+        "pub_index": "即将更新 第77话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
