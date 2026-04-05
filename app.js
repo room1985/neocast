@@ -8745,8 +8745,6 @@ let _ttsState       = 'idle';   // 'idle' | 'loading' | 'playing' | 'paused'
 let _ttsAudio       = null;
 let _ttsToggle      = null;
 let _ttsActBtn      = null;     // 當前作用中的訊息播放按鈕
-let _ttsQueue       = [];       // 串流分段 TTS 佇列
-let _ttsQueueActive = false;    // 佇列是否正在消費
 
 const _TTS_STORAGE_KEY = 'neocast_tts_settings';
 
@@ -8801,53 +8799,10 @@ function _setActBtn(btn, icon) {
 }
 
 function stopSpeaking() {
-  _ttsQueue.length = 0;          // 清除所有排隊的句子
-  _ttsQueueActive  = false;
   if (_ttsAudio) { _ttsAudio.pause(); _ttsAudio = null; }
   _ttsState = 'idle';
   if (_ttsActBtn) { _ttsActBtn.innerHTML = _SVG.play; _ttsActBtn.disabled = false; }
   _ttsActBtn = null;
-  _updateTtsMuteBtn();
-}
-
-// ── 串流分段 TTS：逐句取音檔並等待播完 ──
-async function _fetchAndPlayQueued(text) {
-  return new Promise(async (resolve) => {
-    const processed = preprocessTtsText(text);
-    if (!processed) return resolve();
-    _ttsState = 'loading';
-    try {
-      const res = await fetch(TTS_URL, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ text: processed, rate: ttsRate, pitch: ttsPitch }),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const url   = URL.createObjectURL(await res.blob());
-      const audio = new Audio(url);
-      _ttsAudio   = audio;
-      _ttsState   = 'playing';
-      _updateTtsMuteBtn();
-      audio.play().catch(e => console.warn('[TTS q play]', e));
-      audio.onended = () => { URL.revokeObjectURL(url); _ttsAudio = null; _ttsState = 'idle'; resolve(); };
-      audio.onerror = () => { URL.revokeObjectURL(url); _ttsAudio = null; _ttsState = 'idle'; resolve(); };
-    } catch (err) {
-      console.warn('[TTS queue]', err);
-      _ttsAudio = null; _ttsState = 'idle'; resolve();
-    }
-  });
-}
-
-async function _processQueue() {
-  if (_ttsQueueActive) return;
-  _ttsQueueActive = true;
-  while (_ttsQueue.length > 0) {
-    if (ttsMuted) { _ttsQueue.length = 0; break; }   // 靜音時清空佇列
-    const seg = _ttsQueue.shift();
-    await _fetchAndPlayQueued(seg);
-    if (!_ttsQueueActive) break;                      // stopSpeaking() 中途停止
-  }
-  _ttsQueueActive = false;
   _updateTtsMuteBtn();
 }
 
@@ -8882,6 +8837,7 @@ function preprocessTtsText(text) {
 }
 
 async function _speakWithBtn(text, btn) {
+  if (ttsMuted) return;          // 靜音時不送 TTS 請求
   stopSpeaking();
   const processed = preprocessTtsText(text);
   if (!processed) return;
@@ -9091,20 +9047,7 @@ function initAiChat() {
       replyBubble.classList.remove('thinking');
       const reader  = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
-      let fullReply   = '';
-      let sentenceBuf = '';   // TTS 緩衝
-
-      // ── 分段策略：滿 MIN_LEN 字後，遇標點才切；超過 FORCE_MAX 強制切 ──
-      const SPLIT_RE  = /[。！？；:，、\n]/;
-      const MIN_LEN   = 60;   // 至少累積這麼多字才允許標點切段
-      const FORCE_MAX = 100;  // 無標點時的強制上限
-
-      function _mayFlush() {
-        const seg = sentenceBuf.trim();
-        if (seg) { _ttsQueue.push(seg); _processQueue(); }
-        sentenceBuf = '';
-      }
-      // ──────────────────────────────────────────────────────────
+      let fullReply = '';
 
       while (true) {
         const { done, value } = await reader.read();
@@ -9115,29 +9058,18 @@ function initAiChat() {
           try {
             const json = JSON.parse(line);
             if (json.message?.content) {
-              const chunk = json.message.content;
-              fullReply   += chunk;
+              fullReply += json.message.content;
               replyBubble.textContent = fullReply;
               messages.scrollTop = messages.scrollHeight;
-
-              if (!ttsMuted) {
-                sentenceBuf += chunk;
-                const len = sentenceBuf.length;
-                if ((len >= MIN_LEN && SPLIT_RE.test(chunk)) || len >= FORCE_MAX) {
-                  _mayFlush();
-                }
-              }
             }
           } catch (_) { /* 不完整的 chunk，略過 */ }
         }
       }
 
-      // 沖出最後一段（無標點的結尾）
-      if (!ttsMuted) _mayFlush();
-
       if (fullReply) {
         aiHistory.push({ role: 'assistant', content: fullReply });
-        _addMsgPlayBtn(replyBubble, fullReply);   // 僅加按鈕，串流已分段播放
+        const playBtn = _addMsgPlayBtn(replyBubble, fullReply);
+        if (!ttsMuted) _speakWithBtn(fullReply, playBtn);
       } else {
         replyBubble.textContent = '（無回應）';
       }
