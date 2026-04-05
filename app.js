@@ -9137,7 +9137,8 @@ function initAiChat() {
   const sendBtn    = $('ai-chat-send');
   if (!panel || !messages || !input || !sendBtn) return;
 
-  let streaming  = false; // aiHistory 已在模組作用域宣告
+  let streaming       = false; // aiHistory 已在模組作用域宣告
+  let abortController = null;
 
   // ── 載入並套用已儲存的設定 ──
   {
@@ -9282,25 +9283,34 @@ function initAiChat() {
     input.style.height = '40px';
 
     streaming = true;
-    sendBtn.disabled = true;
-    const replyBubble = appendMsg('assistant thinking', '⏳ 思考中...');
+    abortController = new AbortController();
+    // 發送鍵切換為中止模式
+    sendBtn.textContent = '⏹';
+    sendBtn.classList.add('abort-mode');
+    sendBtn.disabled = false;
+
+    // 🐰 彈跳思考氣泡（等第一個 token 才移除）
+    const replyBubble = appendMsg('assistant thinking', '');
+    replyBubble.innerHTML =
+      '<div class="ai-thinking-wrap">' +
+        '<span class="ai-thinking-bunny">🐰</span>' +
+        '<span class="ai-thinking-shadow"></span>' +
+      '</div>';
 
     try {
       const res = await fetch(OLLAMA_URL, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
+        signal: abortController.signal,
         body: JSON.stringify({ model: activeOllamaModel, messages: aiHistory, stream: true })
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-      replyBubble.textContent = '';
-      replyBubble.classList.remove('thinking');
       const reader  = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
       let fullReply = '';
+      let firstToken = true;
 
       while (true) {
         const { done, value } = await reader.read();
@@ -9311,8 +9321,13 @@ function initAiChat() {
           try {
             const json = JSON.parse(line);
             if (json.message?.content) {
+              // 第一個 token 到才移除 🐰 動畫
+              if (firstToken) {
+                firstToken = false;
+                replyBubble.innerHTML = '';
+                replyBubble.classList.remove('thinking');
+              }
               fullReply += json.message.content;
-              // streaming 時隱藏便利貼指令 tag，避免顯示原始語法
               replyBubble.textContent = fullReply.replace(/\[\[STICKY\|[^|]*\|[^\]]*\]\]/g, '').trim();
               messages.scrollTop = messages.scrollHeight;
             }
@@ -9321,30 +9336,53 @@ function initAiChat() {
       }
 
       if (fullReply) {
-        // 若前端已處理便利貼則直接用回覆，否則解析備用指令格式
         const cleanReply = _stickyData ? fullReply : parseAndExecuteStickies(fullReply);
         replyBubble.textContent = cleanReply;
         aiHistory.push({ role: 'assistant', content: cleanReply });
         const playBtn = _addMsgPlayBtn(replyBubble, cleanReply);
         if (!ttsMuted) _speakWithBtn(cleanReply, playBtn);
       } else {
+        replyBubble.innerHTML = '';
+        replyBubble.classList.remove('thinking');
         replyBubble.textContent = '（無回應）';
       }
 
     } catch (err) {
       replyBubble.classList.remove('thinking');
-      replyBubble.textContent = '❌ 連線錯誤：請確認 ZeroTier 已連線且 Ollama 正在運行。';
-      console.error('[AI Chat]', err);
+      if (err.name === 'AbortError') {
+        // 使用者手動中止：保留已生成的內容
+        if (replyBubble.innerHTML.includes('ai-thinking-wrap')) {
+          replyBubble.innerHTML = '';
+          replyBubble.textContent = '（已中止）';
+        } else {
+          const abortNote = document.createElement('span');
+          abortNote.className = 'ai-aborted';
+          abortNote.textContent = ' ⏹ 已中止';
+          replyBubble.appendChild(abortNote);
+          // 已生成的部分存入歷史
+          const partial = replyBubble.textContent.replace(' ⏹ 已中止', '').trim();
+          if (partial) aiHistory.push({ role: 'assistant', content: partial });
+        }
+      } else {
+        replyBubble.innerHTML = '';
+        replyBubble.textContent = '❌ 連線錯誤：請確認 ZeroTier 已連線且 Ollama 正在運行。';
+        console.error('[AI Chat]', err);
+      }
     } finally {
       streaming = false;
+      abortController = null;
+      sendBtn.textContent = '發送';
+      sendBtn.classList.remove('abort-mode');
       sendBtn.disabled = false;
       input.focus();
     }
   }
 
-  sendBtn.addEventListener('click', handleSend);
+  sendBtn.addEventListener('click', () => {
+    if (streaming) { abortController?.abort(); } else { handleSend(); }
+  });
   input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!streaming) handleSend(); }
   });
 
   // 自動調整 textarea 高度
