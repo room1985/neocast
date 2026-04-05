@@ -8201,6 +8201,7 @@ function initOmniFab() {
   $('fab-sub-ai')?.addEventListener('click', e => {
     e.stopPropagation();
     closeFabMenu();
+    _injectAiContext(); // 每次開啟都重新注入最新資料
     $('ai-chat-panel')?.classList.remove('ai-hidden');
     setTimeout(() => $('ai-chat-input')?.focus(), 50);
   });
@@ -8737,6 +8738,7 @@ function _vtRenderPages(renderFn, _dir) {
 const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
 const OLLAMA_MODEL = 'neocast-soul';
 const TTS_URL  = 'http://10.242.133.187:5050/tts';
+let aiHistory = []; // 模組作用域，供 _injectAiContext 與 initAiChat 共用
 let ttsRate      = '+0%';
 let ttsPitch     = '+0Hz';
 let ttsMuted     = false;
@@ -8909,6 +8911,176 @@ function _addMsgPlayBtn(msgDiv, text) {
   return btn;
 }
 
+/* ─────────────────────────────────────
+   AI CONTEXT HELPERS
+───────────────────────────────────── */
+
+// 對話開始時注入的精簡摘要 system context
+function buildAiSummaryContext() {
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' });
+  let ctx = `今天是 ${dateStr}。\n\n`;
+
+  // 便利貼
+  const stickies = (S.stickies || []).filter(s =>
+    s.tag === PRIVATE_STICKY_TAG ? S.privateUnlocked : true
+  );
+  if (stickies.length) {
+    ctx += `【便利貼】共 ${stickies.length} 張\n`;
+    stickies.slice(0, 15).forEach(s => {
+      ctx += `・[${s.tag || '無分類'}] ${s.text.slice(0, 80)}${s.text.length > 80 ? '…' : ''}\n`;
+    });
+    ctx += '\n';
+  }
+
+  // 動畫追蹤
+  const tracked = S.animeState?.tracked || [];
+  if (tracked.length) {
+    ctx += `【動畫追蹤】\n`;
+    tracked.slice(0, 10).forEach(id => {
+      const d = S.animeState.trackedData?.[id];
+      if (!d) return;
+      const name = S.animeState.customNames?.[id] || d.name_cn || d.name || String(id);
+      ctx += `・${name}：已看 ${d.watchedEp ?? 0} 集${d.eps ? ` / 共 ${d.eps} 集` : ''}\n`;
+    });
+    ctx += '\n';
+  }
+
+  // 新聞關鍵字
+  const kws = S.news.keywords || [];
+  if (kws.length) {
+    ctx += `【追蹤中的新聞關鍵字】${kws.join('、')}\n\n`;
+  }
+
+  // YT 最新 5 支
+  const ytItems = [...(S.yt.items || [])]
+    .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+    .slice(0, 5);
+  if (ytItems.length) {
+    ctx += `【YouTube 最新影片】\n`;
+    ytItems.forEach(v => {
+      ctx += `・${v.channelName}：${v.title}（${fmtRelTime(v.publishedAt)}）\n`;
+    });
+    ctx += '\n';
+  }
+
+  return ctx;
+}
+
+// 偵測使用者訊息的資料意圖
+function detectDataIntent(text) {
+  const intent = { news: false, yt: false, anime: false, stickies: false };
+  const kws = S.news.keywords || [];
+  if (/新聞|報導|最新消息|最新|news/i.test(text) || kws.some(kw => text.includes(kw))) intent.news = true;
+  if (/youtube|yt|影片|頻道|訂閱|最新影片/i.test(text)) intent.yt = true;
+  if (/動畫|番組|追番|幾集|最新集|播出/i.test(text)) intent.anime = true;
+  if (/便利貼|筆記|待辦|note/i.test(text)) intent.stickies = true;
+  return intent;
+}
+
+// 根據意圖建立詳細資料 context（注入到使用者訊息前）
+function buildDetailedContext(intent, userText) {
+  let ctx = '';
+  const userWords = userText.split(/[\s，。？！、「」]/g).filter(w => w.length > 1);
+
+  if (intent.news) {
+    const kws = S.news.keywords || [];
+    let matched = (S.news.items || []).filter(item =>
+      kws.some(kw => item.kw === kw || item.title.includes(kw)) ||
+      userWords.some(w => item.title.includes(w) || item.kw === w)
+    );
+    matched = matched
+      .sort((a, b) => new Date(b.rawDate || 0) - new Date(a.rawDate || 0))
+      .slice(0, 5);
+    if (matched.length) {
+      ctx += `[新聞資料 — 最新 ${matched.length} 則]\n`;
+      matched.forEach(n => {
+        ctx += `・${n.title}（${n.source}，${n.date || ''}）\n  ${n.link}\n`;
+      });
+      ctx += '\n';
+    }
+  }
+
+  if (intent.news || intent.yt) {
+    const kws = S.news.keywords || [];
+    let ytMatched = (S.yt.items || []).filter(v =>
+      kws.some(kw => v.title.includes(kw) || v.channelName.includes(kw)) ||
+      userWords.some(w => w.length > 1 && (v.title.includes(w) || v.channelName.includes(w)))
+    );
+    ytMatched = ytMatched
+      .sort((a, b) => new Date(b.publishedAt) - new Date(a.publishedAt))
+      .slice(0, 5);
+    if (ytMatched.length) {
+      ctx += `[YouTube 相關影片]\n`;
+      ytMatched.forEach(v => {
+        ctx += `・${v.channelName}：${v.title}（${fmtRelTime(v.publishedAt)}）\n  https://youtube.com/watch?v=${v.videoId}\n`;
+      });
+      ctx += '\n';
+    }
+  }
+
+  if (intent.stickies) {
+    const stickies = (S.stickies || []).filter(s =>
+      s.tag === PRIVATE_STICKY_TAG ? S.privateUnlocked : true
+    );
+    if (stickies.length) {
+      ctx += `[便利貼完整列表]\n`;
+      stickies.forEach(s => {
+        ctx += `・[${s.tag || '無分類'}] ${s.text}\n`;
+      });
+      ctx += '\n';
+    }
+  }
+
+  if (intent.anime) {
+    const tracked = S.animeState?.tracked || [];
+    if (tracked.length) {
+      ctx += `[動畫追蹤詳情]\n`;
+      tracked.forEach(id => {
+        const d = S.animeState.trackedData?.[id];
+        if (!d) return;
+        const name = S.animeState.customNames?.[id] || d.name_cn || d.name || String(id);
+        ctx += `・${name}：已看 ${d.watchedEp ?? 0} 集${d.eps ? ` / 共 ${d.eps} 集` : ''}\n`;
+      });
+      ctx += '\n';
+    }
+  }
+
+  return ctx;
+}
+
+// 解析 Bonnie 回應中的 [[STICKY|tag|內容]] 指令並執行新增
+function parseAndExecuteStickies(text) {
+  const pattern = /\[\[STICKY\|([^|]*)\|([^\]]+)\]\]/g;
+  let executed = false;
+  const clean = text.replace(pattern, (_, tag, content) => {
+    const t = tag.trim();
+    const c = content.trim();
+    if (!c) return '';
+    S.stickies.unshift({ id: uid(), text: c, color: '', pinned: false, tag: t });
+    executed = true;
+    toast(`📝 已新增便利貼：${c.slice(0, 20)}${c.length > 20 ? '…' : ''}`, 'ok');
+    return '';
+  });
+  if (executed) {
+    lsSave();
+    document.querySelectorAll('.stickies-inner').forEach(inner => {
+      const container = inner.closest('[data-widget="stickies"]') || inner.closest('.mobile-page-panel');
+      if (container) renderStickiesWidget(container);
+    });
+  }
+  return clean.trim();
+}
+
+// 初始化 / 重設 AI 對話歷史並注入精簡 context
+function _injectAiContext() {
+  aiHistory.length = 0;
+  const ctx = buildAiSummaryContext();
+  const stickyInstruction = `【便利貼指令】若使用者要求新增便利貼，請在回應中加入 [[STICKY|分類|內容]] 指令（例如 [[STICKY|工作|寄信給 Kevin]]，無分類則 [[STICKY||內容]]），系統會自動執行新增。`;
+  aiHistory.push({ role: 'user', content: `[系統初始化]\n${ctx}\n${stickyInstruction}` });
+  aiHistory.push({ role: 'assistant', content: '好的，我已同步你目前的個人資料！有什麼想問我的嗎？' });
+}
+
 function initAiChat() {
   const panel      = $('ai-chat-panel');
   const closeBtn   = $('ai-chat-close');
@@ -8917,8 +9089,7 @@ function initAiChat() {
   const sendBtn    = $('ai-chat-send');
   if (!panel || !messages || !input || !sendBtn) return;
 
-  let aiHistory = [];
-  let streaming  = false;
+  let streaming  = false; // aiHistory 已在模組作用域宣告
 
   // ── 載入並套用已儲存的設定 ──
   {
@@ -9024,7 +9195,13 @@ function initAiChat() {
     if (!text || streaming) return;
 
     appendMsg('user', text);
-    aiHistory.push({ role: 'user', content: text });
+    // 意圖偵測：若問到相關資料，注入詳細 context
+    const _intent = detectDataIntent(text);
+    const _detailedCtx = buildDetailedContext(_intent, text);
+    const _msgForAi = _detailedCtx
+      ? `[參考資料]\n${_detailedCtx}---\n${text}`
+      : text;
+    aiHistory.push({ role: 'user', content: _msgForAi });
     input.value = '';
     input.style.height = '40px';
 
@@ -9059,7 +9236,8 @@ function initAiChat() {
             const json = JSON.parse(line);
             if (json.message?.content) {
               fullReply += json.message.content;
-              replyBubble.textContent = fullReply;
+              // streaming 時隱藏便利貼指令 tag，避免顯示原始語法
+              replyBubble.textContent = fullReply.replace(/\[\[STICKY\|[^|]*\|[^\]]*\]\]/g, '').trim();
               messages.scrollTop = messages.scrollHeight;
             }
           } catch (_) { /* 不完整的 chunk，略過 */ }
@@ -9067,9 +9245,12 @@ function initAiChat() {
       }
 
       if (fullReply) {
-        aiHistory.push({ role: 'assistant', content: fullReply });
-        const playBtn = _addMsgPlayBtn(replyBubble, fullReply);
-        if (!ttsMuted) _speakWithBtn(fullReply, playBtn);
+        // 解析並執行便利貼指令，回傳清理後的文字
+        const cleanReply = parseAndExecuteStickies(fullReply);
+        replyBubble.textContent = cleanReply;
+        aiHistory.push({ role: 'assistant', content: cleanReply });
+        const playBtn = _addMsgPlayBtn(replyBubble, cleanReply);
+        if (!ttsMuted) _speakWithBtn(cleanReply, playBtn);
       } else {
         replyBubble.textContent = '（無回應）';
       }
