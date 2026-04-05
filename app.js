@@ -9091,9 +9091,27 @@ function initAiChat() {
       replyBubble.classList.remove('thinking');
       const reader  = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
-      let fullReply     = '';
-      let sentenceBuf   = '';                                   // 句子緩衝
-      const SENT_RE     = /[。！？；…\n]/;                     // 句尾符號
+      let fullReply   = '';
+      let sentenceBuf = '';   // TTS 緩衝
+
+      // ── 混合分段策略 ──────────────────────────────────────────
+      // 強標點（。！？；…換行）：緩衝 ≥ HARD_MIN 字才切，避免 2 字短句
+      // 軟標點（，、）       ：緩衝 ≥ SOFT_MIN 字才切，把逗號當機會點
+      // 強制上限 FORCE_MAX   ：超過直接切，防止長句太晚開始播
+      const HARD_RE   = /[。！？；…\n]/;
+      const SOFT_RE   = /[，、]/;
+      const HARD_MIN  = 5;    // 強標點最少字數
+      const SOFT_MIN  = 15;   // 軟標點最少字數
+      const FORCE_MAX = 40;   // 強制分段上限（字）
+
+      function _mayFlush(force = false) {
+        const seg = sentenceBuf.trim();
+        if (!seg) return;
+        if (force || seg.length >= FORCE_MAX) {
+          _ttsQueue.push(seg); _processQueue(); sentenceBuf = '';
+        }
+      }
+      // ─────────────────────────────────────────────────────────
 
       while (true) {
         const { done, value } = await reader.read();
@@ -9109,25 +9127,21 @@ function initAiChat() {
               replyBubble.textContent = fullReply;
               messages.scrollTop = messages.scrollHeight;
 
-              // ── 句級 TTS 佇列 ──
+              // ── 混合分段 TTS 佇列 ──
               if (!ttsMuted) {
                 sentenceBuf += chunk;
-                if (SENT_RE.test(chunk)) {
-                  const seg = sentenceBuf.trim();
-                  if (seg) { _ttsQueue.push(seg); _processQueue(); }
-                  sentenceBuf = '';
-                }
+                const len = sentenceBuf.length;
+                if      (len >= FORCE_MAX)                           { _mayFlush(true); }
+                else if (HARD_RE.test(chunk) && len >= HARD_MIN)     { _mayFlush(true); }
+                else if (SOFT_RE.test(chunk) && len >= SOFT_MIN)     { _mayFlush(true); }
               }
             }
           } catch (_) { /* 不完整的 chunk，略過 */ }
         }
       }
 
-      // 沖出最後一段（無句尾標點的結尾）
-      if (!ttsMuted && sentenceBuf.trim()) {
-        _ttsQueue.push(sentenceBuf.trim());
-        _processQueue();
-      }
+      // 沖出最後一段（無標點的結尾）
+      if (!ttsMuted) _mayFlush(true);
 
       if (fullReply) {
         aiHistory.push({ role: 'assistant', content: fullReply });
