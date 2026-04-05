@@ -2331,6 +2331,14 @@ function renderNewsLoading() {
   }
 }
 
+function stripHtml(html) {
+  return (html || '')
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&#\d+;/g, '').replace(/\s+/g, ' ').trim();
+}
+
 function parseDate(raw) {
   try {
     const d = new Date(raw);
@@ -2417,6 +2425,7 @@ async function fetchNews(force = false) {
             image:   a.image_url || a.source_icon || NEWS_DEFAULT_IMG,
             rawDate: a.pubDate ? a.pubDate.replace(' ', 'T') + 'Z' : '',
             date:    a.pubDate ? parseDate(a.pubDate.replace(' ', 'T') + 'Z') : '',
+            desc:    stripHtml(a.description || a.content || '').slice(0, 180),
           };
           newsdataArticles.push(article);
           seenLinks.add(a.link);
@@ -2455,6 +2464,7 @@ async function fetchNews(force = false) {
                     image:   NEWS_DEFAULT_IMG,
                     rawDate: item.pubDate || '',
                     date:    item.pubDate ? parseDate(item.pubDate) : '',
+                    desc:    stripHtml(item.description || item.content || '').slice(0, 180),
                   };
                   rssArticles.push(article);
                   seenLinks.add(item.link);
@@ -2494,6 +2504,7 @@ async function fetchNews(force = false) {
             image:   NEWS_DEFAULT_IMG,
             rawDate: item.pubDate || '',
             date:    item.pubDate ? parseDate(item.pubDate) : '',
+            desc:    stripHtml(item.description || item.content || '').slice(0, 180),
           };
           articles.push(article);
           seenLinks.add(item.link);
@@ -8738,7 +8749,10 @@ function _vtRenderPages(renderFn, _dir) {
 const OLLAMA_URL   = 'http://10.242.133.187:11434/api/chat';
 const OLLAMA_MODEL     = 'neocast-soul';
 const OLLAMA_MODEL_ALT = 'gemma4:e4b';
-let activeOllamaModel  = OLLAMA_MODEL; // 可透過按鈕切換
+const _AI_MODEL_KEY = 'neocast_ai_model';
+let activeOllamaModel = (() => {
+  try { return localStorage.getItem(_AI_MODEL_KEY) || OLLAMA_MODEL; } catch(_) { return OLLAMA_MODEL; }
+})(); // 從 localStorage 讀取上次選擇，預設 neocast-soul
 const TTS_URL  = 'http://10.242.133.187:5050/tts';
 let aiHistory = []; // 模組作用域，供 _injectAiContext 與 initAiChat 共用
 let ttsRate      = '+0%';
@@ -9020,8 +9034,11 @@ function buildDetailedContext(intent, userText) {
       .slice(0, 5);
     if (matched.length) {
       ctx += `[新聞資料 — 最新 ${matched.length} 則]\n`;
-      matched.forEach(n => {
-        ctx += `・${n.title}（${n.source}，${n.date || ''}）\n  ${n.link}\n`;
+      matched.forEach((n, i) => {
+        ctx += `${i + 1}. 【${n.title}】\n`;
+        ctx += `   來源：${n.source || '未知'}　時間：${n.date || '未知'}\n`;
+        if (n.desc) ctx += `   摘要：${n.desc}\n`;
+        ctx += `   連結：${n.link}\n`;
       });
       ctx += '\n';
     }
@@ -9038,8 +9055,13 @@ function buildDetailedContext(intent, userText) {
       .slice(0, 5);
     if (ytMatched.length) {
       ctx += `[YouTube 相關影片]\n`;
-      ytMatched.forEach(v => {
-        ctx += `・${v.channelName}：${v.title}（${fmtRelTime(v.publishedAt)}）\n  https://youtube.com/watch?v=${v.videoId}\n`;
+      ytMatched.forEach((v, i) => {
+        const views = v.viewCount ? `${Math.round(v.viewCount / 1000)}K 觀看` : '';
+        const likes = v.likeCount ? `${Math.round(v.likeCount / 1000)}K 讚` : '';
+        const stats = [views, likes].filter(Boolean).join('・');
+        ctx += `${i + 1}. 【${v.title}】\n`;
+        ctx += `   頻道：${v.channelName}　發布：${fmtRelTime(v.publishedAt)}${stats ? `　${stats}` : ''}\n`;
+        ctx += `   連結：https://youtube.com/watch?v=${v.videoId}\n`;
       });
       ctx += '\n';
     }
@@ -9102,8 +9124,8 @@ function parseAndExecuteStickies(text) {
 function _injectAiContext() {
   aiHistory.length = 0;
   const ctx = buildAiSummaryContext();
-  const stickyInstruction = `【便利貼指令】若使用者要求新增便利貼，請在回應中加入 [[STICKY|分類|內容]] 指令（例如 [[STICKY|工作|寄信給 Kevin]]，無分類則 [[STICKY||內容]]），系統會自動執行新增。`;
-  aiHistory.push({ role: 'user', content: `[系統初始化]\n${ctx}\n${stickyInstruction}` });
+  const dataGuide = `【資料引導】當我提供你 [新聞資料] 或 [YouTube 相關影片] 時，請具體引用標題、來源、日期與摘要來回答，列出重點而非泛泛而談。便利貼的新增由系統自動處理，你只需自然確認即可。`;
+  aiHistory.push({ role: 'user', content: `[系統初始化]\n${ctx}\n${dataGuide}` });
   aiHistory.push({ role: 'assistant', content: '好的，我已同步你目前的個人資料！有什麼想問我的嗎？' });
 }
 
@@ -9166,11 +9188,11 @@ function initAiChat() {
     if (!modelToggleBtn) return;
     const isAlt = activeOllamaModel === OLLAMA_MODEL_ALT;
     modelToggleBtn.textContent = isAlt ? 'Gemma4' : 'Soul';
-    modelToggleBtn.classList.toggle('model-alt', isAlt);
     modelToggleBtn.title = `目前：${activeOllamaModel}　點擊切換`;
   }
   modelToggleBtn?.addEventListener('click', () => {
     activeOllamaModel = activeOllamaModel === OLLAMA_MODEL ? OLLAMA_MODEL_ALT : OLLAMA_MODEL;
+    try { localStorage.setItem(_AI_MODEL_KEY, activeOllamaModel); } catch(_) {}
     _updateModelToggle();
   });
   _updateModelToggle();
@@ -9299,8 +9321,8 @@ function initAiChat() {
       }
 
       if (fullReply) {
-        // 解析並執行便利貼指令，回傳清理後的文字
-        const cleanReply = parseAndExecuteStickies(fullReply);
+        // 若前端已處理便利貼則直接用回覆，否則解析備用指令格式
+        const cleanReply = _stickyData ? fullReply : parseAndExecuteStickies(fullReply);
         replyBubble.textContent = cleanReply;
         aiHistory.push({ role: 'assistant', content: cleanReply });
         const playBtn = _addMsgPlayBtn(replyBubble, cleanReply);

@@ -4650,11 +4650,6 @@ body.widgets-hidden #mobile-layout { display: none !important; }
   letter-spacing: 0.02em;
 }
 #ai-model-toggle:hover { background: rgba(255,255,255,0.14); }
-#ai-model-toggle.model-alt {
-  background: rgba(var(--ac-rgb, 180,140,255), 0.15);
-  color: var(--ac);
-  border-color: var(--ac);
-}
 
 /* ── Settings panel (glass card above ball) ── */
 #fab-settings-panel {
