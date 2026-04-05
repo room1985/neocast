@@ -8741,10 +8741,12 @@ let ttsRate      = '+0%';
 let ttsPitch     = '+0Hz';
 let ttsMuted     = false;
 let chatFontScale = 100;   // 對話字級百分比
-let _ttsState  = 'idle';   // 'idle' | 'loading' | 'playing' | 'paused'
-let _ttsAudio  = null;
-let _ttsToggle = null;
-let _ttsActBtn = null;     // 當前作用中的訊息播放按鈕
+let _ttsState       = 'idle';   // 'idle' | 'loading' | 'playing' | 'paused'
+let _ttsAudio       = null;
+let _ttsToggle      = null;
+let _ttsActBtn      = null;     // 當前作用中的訊息播放按鈕
+let _ttsQueue       = [];       // 串流分段 TTS 佇列
+let _ttsQueueActive = false;    // 佇列是否正在消費
 
 const _TTS_STORAGE_KEY = 'neocast_tts_settings';
 
@@ -8799,10 +8801,53 @@ function _setActBtn(btn, icon) {
 }
 
 function stopSpeaking() {
+  _ttsQueue.length = 0;          // 清除所有排隊的句子
+  _ttsQueueActive  = false;
   if (_ttsAudio) { _ttsAudio.pause(); _ttsAudio = null; }
   _ttsState = 'idle';
   if (_ttsActBtn) { _ttsActBtn.innerHTML = _SVG.play; _ttsActBtn.disabled = false; }
   _ttsActBtn = null;
+  _updateTtsMuteBtn();
+}
+
+// ── 串流分段 TTS：逐句取音檔並等待播完 ──
+async function _fetchAndPlayQueued(text) {
+  return new Promise(async (resolve) => {
+    const processed = preprocessTtsText(text);
+    if (!processed) return resolve();
+    _ttsState = 'loading';
+    try {
+      const res = await fetch(TTS_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ text: processed, rate: ttsRate, pitch: ttsPitch }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const url   = URL.createObjectURL(await res.blob());
+      const audio = new Audio(url);
+      _ttsAudio   = audio;
+      _ttsState   = 'playing';
+      _updateTtsMuteBtn();
+      audio.play().catch(e => console.warn('[TTS q play]', e));
+      audio.onended = () => { URL.revokeObjectURL(url); _ttsAudio = null; _ttsState = 'idle'; resolve(); };
+      audio.onerror = () => { URL.revokeObjectURL(url); _ttsAudio = null; _ttsState = 'idle'; resolve(); };
+    } catch (err) {
+      console.warn('[TTS queue]', err);
+      _ttsAudio = null; _ttsState = 'idle'; resolve();
+    }
+  });
+}
+
+async function _processQueue() {
+  if (_ttsQueueActive) return;
+  _ttsQueueActive = true;
+  while (_ttsQueue.length > 0) {
+    if (ttsMuted) { _ttsQueue.length = 0; break; }   // 靜音時清空佇列
+    const seg = _ttsQueue.shift();
+    await _fetchAndPlayQueued(seg);
+    if (!_ttsQueueActive) break;                      // stopSpeaking() 中途停止
+  }
+  _ttsQueueActive = false;
   _updateTtsMuteBtn();
 }
 
@@ -9046,7 +9091,9 @@ function initAiChat() {
       replyBubble.classList.remove('thinking');
       const reader  = res.body.getReader();
       const decoder = new TextDecoder('utf-8');
-      let fullReply = '';
+      let fullReply     = '';
+      let sentenceBuf   = '';                                   // 句子緩衝
+      const SENT_RE     = /[。！？；…\n]/;                     // 句尾符號
 
       while (true) {
         const { done, value } = await reader.read();
@@ -9057,18 +9104,34 @@ function initAiChat() {
           try {
             const json = JSON.parse(line);
             if (json.message?.content) {
-              fullReply += json.message.content;
+              const chunk = json.message.content;
+              fullReply   += chunk;
               replyBubble.textContent = fullReply;
               messages.scrollTop = messages.scrollHeight;
+
+              // ── 句級 TTS 佇列 ──
+              if (!ttsMuted) {
+                sentenceBuf += chunk;
+                if (SENT_RE.test(chunk)) {
+                  const seg = sentenceBuf.trim();
+                  if (seg) { _ttsQueue.push(seg); _processQueue(); }
+                  sentenceBuf = '';
+                }
+              }
             }
           } catch (_) { /* 不完整的 chunk，略過 */ }
         }
       }
 
+      // 沖出最後一段（無句尾標點的結尾）
+      if (!ttsMuted && sentenceBuf.trim()) {
+        _ttsQueue.push(sentenceBuf.trim());
+        _processQueue();
+      }
+
       if (fullReply) {
         aiHistory.push({ role: 'assistant', content: fullReply });
-        const playBtn = _addMsgPlayBtn(replyBubble, fullReply);
-        if (!ttsMuted) _speakWithBtn(fullReply, playBtn);
+        _addMsgPlayBtn(replyBubble, fullReply);   // 僅加按鈕，串流已分段播放
       } else {
         replyBubble.textContent = '（無回應）';
       }
