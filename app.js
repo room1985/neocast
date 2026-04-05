@@ -9096,8 +9096,8 @@ function initAiChat() {
 
       // ── 分段策略：滿 MIN_LEN 字後，遇標點才切；超過 FORCE_MAX 強制切 ──
       const SPLIT_RE  = /[。！？；:，、\n]/;
-      const MIN_LEN   = 40;   // 至少累積這麼多字才允許標點切段
-      const FORCE_MAX = 80;   // 無標點時的強制上限
+      const MIN_LEN   = 60;   // 至少累積這麼多字才允許標點切段
+      const FORCE_MAX = 100;  // 無標點時的強制上限
 
       function _mayFlush() {
         const seg = sentenceBuf.trim();
