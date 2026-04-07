@@ -106,9 +106,29 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第24话",
+        "pub_index": "即将更新 第24话",
         "pub_time": "11:00",
         "bilibili_season_id": 73971,
+        "is_nsfw": false
+      },
+      {
+        "id": 542324,
+        "name": "修罗武神 第2季",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/dd/ee/542324_AvX9o.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/dd/ee/542324_AvX9o.jpg"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 16,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
         "is_nsfw": false
       },
       {
@@ -156,26 +176,6 @@
         "pub_index": "第22话",
         "pub_time": "10:00",
         "bilibili_season_id": 73973,
-        "is_nsfw": false
-      },
-      {
-        "id": 637591,
-        "name": "遮天 第四季",
-        "name_cn": "遮天 第四季",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 7.3
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
         "is_nsfw": false
       },
       {
@@ -257,6 +257,26 @@
           "score": 0
         },
         "eps": 19,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 487522,
+        "name": "逆天邪神 年番",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/cf/94/487522_xkstx.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/cf/94/487522_xkstx.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
