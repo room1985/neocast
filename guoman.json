@@ -33,7 +33,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_BTPPK.jpg"
         },
         "rating": {
-          "score": 7.4
+          "score": 7.5
         },
         "eps": 8,
         "air_weekday": 1,
@@ -109,26 +109,6 @@
         "pub_index": "第24话",
         "pub_time": "11:00",
         "bilibili_season_id": 73971,
-        "is_nsfw": false
-      },
-      {
-        "id": 542324,
-        "name": "修罗武神 第2季",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/dd/ee/542324_AvX9o.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/dd/ee/542324_AvX9o.jpg"
-        },
-        "rating": {
-          "score": 5.1
-        },
-        "eps": 16,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
         "is_nsfw": false
       },
       {
@@ -277,26 +257,6 @@
           "score": 0
         },
         "eps": 19,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 487522,
-        "name": "逆天邪神 年番",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/cf/94/487522_xkstx.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/cf/94/487522_xkstx.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -644,6 +604,26 @@
           "score": 0
         },
         "eps": 12,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 491775,
+        "name": "大主宰 年番2",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f4/ef/491775_S18Yg.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f4/ef/491775_S18Yg.jpg"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1581,7 +1561,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1841,7 +1821,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1953,15 +1933,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10179722,
-        "name": "メカ技師リスタの大冒険",
-        "name_cn": "メカ技師リスタの大冒険",
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179722-rYsWrcrZRpGr.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179722-rYsWrcrZRpGr.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 4.7
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1973,15 +1953,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
+        "id": 10179722,
+        "name": "メカ技師リスタの大冒険",
+        "name_cn": "メカ技師リスタの大冒険",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179722-rYsWrcrZRpGr.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179722-rYsWrcrZRpGr.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 4.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2340,17 +2320,17 @@
         "is_nsfw": false
       },
       {
-        "id": 577190,
-        "name": "遮天剧场版 背棺战王腾",
-        "name_cn": "遮天剧场版 背棺战王腾",
+        "id": 526975,
+        "name": "择天记3D",
+        "name_cn": "择天记",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_sSD00.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/af/9c/526975_quBRr.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/af/9c/526975_quBRr.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.2
         },
-        "eps": 1,
+        "eps": 26,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
