@@ -106,7 +106,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第24话",
+        "pub_index": "第24话",
         "pub_time": "11:00",
         "bilibili_season_id": 73971,
         "is_nsfw": false
@@ -123,6 +123,26 @@
           "score": 5.1
         },
         "eps": 16,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 569761,
+        "name": "熊出没·年年有熊",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ce/5b/569761_t1r2N.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ce/5b/569761_t1r2N.jpg"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 1,
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
@@ -550,6 +570,26 @@
         "pub_index": "第15话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
+        "is_nsfw": false
+      },
+      {
+        "id": 572689,
+        "name": "开心锤锤世界",
+        "name_cn": "开心锤锤世界",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 30,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第49话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 96881,
         "is_nsfw": false
       },
       {
