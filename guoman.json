@@ -1973,15 +1973,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184824,
-        "name": "勇者ちゃんの冒険は終わってしまった！",
-        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1993,15 +1993,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
+        "id": 10184824,
+        "name": "勇者ちゃんの冒険は終わってしまった！",
+        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
