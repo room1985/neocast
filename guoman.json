@@ -5,26 +5,6 @@
     },
     "items": [
       {
-        "id": 515018,
-        "name": "宗门里除了我都是卧底",
-        "name_cn": "宗门里除了我都是卧底",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
-        },
-        "rating": {
-          "score": 5.9
-        },
-        "eps": 100,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第141话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
         "id": 405232,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
@@ -39,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第2话",
+        "pub_index": "第3话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
         "is_nsfw": false
@@ -557,6 +537,26 @@
           "score": 0
         },
         "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10206004,
+        "name": "ラブはギャルから始まる運命",
+        "name_cn": "ラブはギャルから始まる運命",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206004-gwD6l2pmSvCr.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206004-gwD6l2pmSvCr.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
@@ -2319,6 +2319,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 515018,
+        "name": "宗门里除了我都是卧底",
+        "name_cn": "宗门里除了我都是卧底",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 100,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第142话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 48518,
+        "is_nsfw": false
+      },
       {
         "id": 453314,
         "name": "永生之气壮山河",
