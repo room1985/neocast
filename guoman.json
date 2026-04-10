@@ -627,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第49话",
+        "pub_index": "第49话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -661,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_N7dfm.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -861,7 +861,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx170599-0aMEXpy9rak1.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1061,7 +1061,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
         },
         "rating": {
-          "score": 7.0
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1133,15 +1133,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10185506,
-        "name": "野々原柚花のヒミツのハイシン",
-        "name_cn": "野々原柚花のヒミツのハイシン",
+        "id": 10172218,
+        "name": "夢見ル乙女",
+        "name_cn": "夢見ル乙女",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185506-e6BT2M2TFz3i.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1153,15 +1153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10172218,
-        "name": "夢見ル乙女",
-        "name_cn": "夢見ル乙女",
+        "id": 10185506,
+        "name": "野々原柚花のヒミツのハイシン",
+        "name_cn": "野々原柚花のヒミツのハイシン",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185506-e6BT2M2TFz3i.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1441,7 +1441,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1613,6 +1613,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10198048,
+        "name": "夏妻",
+        "name_cn": "夏妻",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10167474,
         "name": "魔法闘姫リルスティア",
         "name_cn": "魔法闘姫リルスティア",
@@ -1633,12 +1653,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10198048,
-        "name": "夏妻",
-        "name_cn": "夏妻",
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "夏と箱",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
           "score": 6.5
@@ -1662,26 +1682,6 @@
         },
         "rating": {
           "score": 5.5
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10188928,
-        "name": "夏と箱",
-        "name_cn": "夏と箱",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
-        },
-        "rating": {
-          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1873,15 +1873,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10165439,
-        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
-        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1893,15 +1893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10165439,
+        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2181,7 +2181,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2388,7 +2388,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 8.7
+          "score": 8.4
         },
         "eps": 52,
         "air_weekday": 6,
