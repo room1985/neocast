@@ -13,7 +13,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/b0/e1/405232_bUuUk.jpg"
         },
         "rating": {
-          "score": 1
+          "score": 1.7
         },
         "eps": 16,
         "air_weekday": 1,
@@ -173,7 +173,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第22话",
+        "pub_index": "第23话",
         "pub_time": "10:00",
         "bilibili_season_id": 73973,
         "is_nsfw": false
@@ -661,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_N7dfm.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -677,8 +677,8 @@
         "name": "开拍啦！怪兽大电影！",
         "name_cn": "",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_fV9xR.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_fV9xR.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_U1G88.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_U1G88.jpg"
         },
         "rating": {
           "score": 0
