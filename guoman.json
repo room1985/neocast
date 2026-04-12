@@ -597,8 +597,8 @@
         "name": "深空彼岸",
         "name_cn": "深空彼岸",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/ef/2c/493777_G0G0p.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/ef/2c/493777_8lDOj.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/ef/2c/493777_8lDOj.jpg"
         },
         "rating": {
           "score": 5.7
@@ -641,7 +641,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_utzll.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.6
         },
         "eps": 26,
         "air_weekday": 5,
@@ -704,6 +704,26 @@
           "score": 6.1
         },
         "eps": 52,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 591580,
+        "name": "沧元图前传 东宁府的夏天",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/1d/63/591580_JEJ3x.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 3,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
