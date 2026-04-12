@@ -2505,6 +2505,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 641036,
+        "name": "牧神记 肆",
+        "name_cn": "牧神记4",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 26,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   }
