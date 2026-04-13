@@ -567,7 +567,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第57话",
+        "pub_index": "第58话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
         "is_nsfw": false
@@ -587,7 +587,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第15话",
+        "pub_index": "第16话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
         "is_nsfw": false
@@ -607,7 +607,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第49话",
+        "pub_index": "第50话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2317,26 +2317,6 @@
         "pub_index": "第142话",
         "pub_time": "09:00",
         "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
-        "id": 453314,
-        "name": "永生之气壮山河",
-        "name_cn": "永生 第三季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/af/22/453314_1vvwJ.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/af/22/453314_1vvwJ.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 16,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第75话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 35213,
         "is_nsfw": false
       },
       {
