@@ -1273,15 +1273,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10164240,
-        "name": "くノ一○○伝　紫陽花",
-        "name_cn": "くノ一○○伝　紫陽花",
+        "id": 10186058,
+        "name": "黒ギャルアラカルト",
+        "name_cn": "黒ギャルアラカルト",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1293,15 +1293,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10186058,
-        "name": "黒ギャルアラカルト",
-        "name_cn": "黒ギャルアラカルト",
+        "id": 10164240,
+        "name": "くノ一○○伝　紫陽花",
+        "name_cn": "くノ一○○伝　紫陽花",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1833,15 +1833,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196116,
-        "name": "ながちち永井さん THE ANIMATION",
-        "name_cn": "ながちち永井さん THE ANIMATION",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196116-3bli0EwyZlBM.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196116-3bli0EwyZlBM.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1853,15 +1853,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10196116,
+        "name": "ながちち永井さん THE ANIMATION",
+        "name_cn": "ながちち永井さん THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196116-3bli0EwyZlBM.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196116-3bli0EwyZlBM.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2451,8 +2451,8 @@
         "name": "成何体统 第二季",
         "name_cn": "",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/b5/82/521431_6BRB6.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b5/82/521431_6BRB6.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/b5/82/521431_15f1x.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b5/82/521431_15f1x.jpg"
         },
         "rating": {
           "score": 7.4
