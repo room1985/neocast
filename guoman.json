@@ -300,7 +300,7 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第1话~第12话",
+        "pub_index": "第1话~第12话",
         "pub_time": "19:00",
         "bilibili_season_id": 226692,
         "is_nsfw": false
@@ -753,6 +753,26 @@
         "is_nsfw": false
       },
       {
+        "id": 591580,
+        "name": "沧元图前传 东宁府的夏天",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/1d/63/591580_JEJ3x.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 3,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 545972,
         "name": "喜羊羊与灰太狼之古古怪界有古怪",
         "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
@@ -1113,15 +1133,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10177149,
-        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
-        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "id": 10196750,
+        "name": "シスターブリーダー",
+        "name_cn": "シスターブリーダー",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1133,15 +1153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196750,
-        "name": "シスターブリーダー",
-        "name_cn": "シスターブリーダー",
+        "id": 10177149,
+        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
         },
         "rating": {
-          "score": 7.0
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1241,7 +1261,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
         },
         "rating": {
-          "score": 7.0
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1361,7 +1381,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1413,12 +1433,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10155154,
-        "name": "妻を同窓会にいかせたら",
-        "name_cn": "妻を同窓会にいかせたら",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
           "score": 6.0
@@ -1433,12 +1453,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "妻を同窓会にいかせたら",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
           "score": 6.0
@@ -2013,15 +2033,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
+        "id": 10188933,
+        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2033,15 +2053,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188933,
-        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
-        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2101,7 +2121,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179722-rYsWrcrZRpGr.png"
         },
         "rating": {
-          "score": 4.7
+          "score": 4.8
         },
         "eps": 0,
         "air_weekday": 5,
