@@ -5,26 +5,6 @@
     },
     "items": [
       {
-        "id": 515018,
-        "name": "宗门里除了我都是卧底",
-        "name_cn": "宗门里除了我都是卧底",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
-        },
-        "rating": {
-          "score": 5.9
-        },
-        "eps": 100,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第143话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
         "id": 405232,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
@@ -39,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第3话",
+        "pub_index": "第4话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
         "is_nsfw": false
@@ -426,26 +406,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10178445,
-        "name": "ボクの理想の異世界生活",
-        "name_cn": "ボクの理想の異世界生活",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178445-Vx7wQLiwH664.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178445-Vx7wQLiwH664.png"
-        },
-        "rating": {
-          "score": 6.5
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第4話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10196722,
         "name": "レイカは華麗な僕の女王 THE ANIMATION",
         "name_cn": "レイカは華麗な僕の女王 THE ANIMATION",
@@ -481,26 +441,6 @@
         "source": "anilist",
         "bgm_matched": false,
         "pub_index": "第3話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10194353,
-        "name": "ちょろ・めす・でいず",
-        "name_cn": "ちょろ・めす・でいず",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
@@ -592,6 +532,26 @@
         "images": {
           "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206004-gwD6l2pmSvCr.png",
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206004-gwD6l2pmSvCr.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10206003,
+        "name": "痴魅悶凌",
+        "name_cn": "痴魅悶凌",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206003-ve6GXbPBCHed.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206003-ve6GXbPBCHed.png"
         },
         "rating": {
           "score": 0
@@ -744,26 +704,6 @@
           "score": 6.1
         },
         "eps": 52,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 591580,
-        "name": "沧元图前传 东宁府的夏天",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/1d/63/591580_JEJ3x.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 3,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1273,6 +1213,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10178445,
+        "name": "ボクの理想の異世界生活",
+        "name_cn": "ボクの理想の異世界生活",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178445-Vx7wQLiwH664.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178445-Vx7wQLiwH664.png"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10168946,
         "name": "Sweet and Hot",
         "name_cn": "Sweet and Hot",
@@ -1602,6 +1562,26 @@
         },
         "rating": {
           "score": 4.8
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10194353,
+        "name": "ちょろ・めす・でいず",
+        "name_cn": "ちょろ・めす・でいず",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
+        },
+        "rating": {
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2380,6 +2360,26 @@
     },
     "items": [
       {
+        "id": 515018,
+        "name": "宗门里除了我都是卧底",
+        "name_cn": "宗门里除了我都是卧底",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 100,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第144话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 48518,
+        "is_nsfw": false
+      },
+      {
         "id": 453314,
         "name": "永生之气壮山河",
         "name_cn": "永生 第三季",
@@ -2535,7 +2535,7 @@
           "common": ""
         },
         "rating": {
-          "score": 5.5
+          "score": 6
         },
         "eps": 26,
         "air_weekday": 7,
