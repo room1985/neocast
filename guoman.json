@@ -29,8 +29,8 @@
         "name": "放开那个女巫",
         "name_cn": "放开那个女巫",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/1f/91/250224_BTPPK.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_BTPPK.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/1f/91/250224_7ZUS7.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_7ZUS7.jpg"
         },
         "rating": {
           "score": 7.5
@@ -143,26 +143,6 @@
           "score": 5.9
         },
         "eps": 1,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 624695,
-        "name": "喜羊羊与灰太狼之古古怪界有古怪番外篇",
-        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪番外篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/39/e3/624695_jg6sf.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/39/e3/624695_jg6sf.jpg"
-        },
-        "rating": {
-          "score": 7.4
-        },
-        "eps": 3,
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
@@ -337,6 +317,26 @@
           "score": 1
         },
         "eps": 19,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 395220,
+        "name": "盘龙",
+        "name_cn": "盘龙",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/be/e5/395220_MxbAG.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/be/e5/395220_MxbAG.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
