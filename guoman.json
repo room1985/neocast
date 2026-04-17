@@ -187,7 +187,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/48/90/497973_FeE1e.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.7
         },
         "eps": 26,
         "air_weekday": 3,
@@ -627,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第50话",
+        "pub_index": "第50话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -1061,7 +1061,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1133,26 +1133,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10172218,
-        "name": "夢見ル乙女",
-        "name_cn": "夢見ル乙女",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10185506,
         "name": "野々原柚花のヒミツのハイシン",
         "name_cn": "野々原柚花のヒミツのハイシン",
@@ -1173,15 +1153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10183602,
-        "name": "彼女フェイス THE ANIMATION",
-        "name_cn": "彼女フェイス THE ANIMATION",
+        "id": 10172218,
+        "name": "夢見ル乙女",
+        "name_cn": "夢見ル乙女",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183602-8yGvSxmilgjW.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183602-8yGvSxmilgjW.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1201,7 +1181,27 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 7.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10183602,
+        "name": "彼女フェイス THE ANIMATION",
+        "name_cn": "彼女フェイス THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183602-8yGvSxmilgjW.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183602-8yGvSxmilgjW.png"
+        },
+        "rating": {
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1393,12 +1393,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "妻を同窓会にいかせたら",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
           "score": 6.0
@@ -1413,12 +1413,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10155154,
-        "name": "妻を同窓会にいかせたら",
-        "name_cn": "妻を同窓会にいかせたら",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
           "score": 6.0
@@ -2013,15 +2013,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188933,
-        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
-        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2033,15 +2033,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
+        "id": 10188933,
+        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2201,7 +2201,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2233,15 +2233,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10187304,
-        "name": "淫触王デマール",
-        "name_cn": "淫触王デマール",
+        "id": 10204463,
+        "name": "蛇と蜘蛛",
+        "name_cn": "蛇と蜘蛛",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx187304-CwTKRUiG6kRd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2253,15 +2253,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10204463,
-        "name": "蛇と蜘蛛",
-        "name_cn": "蛇と蜘蛛",
+        "id": 10187304,
+        "name": "淫触王デマール",
+        "name_cn": "淫触王デマール",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx187304-CwTKRUiG6kRd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2495,7 +2495,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/a8/a9/456159_423P3.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.6
         },
         "eps": 26,
         "air_weekday": 7,
