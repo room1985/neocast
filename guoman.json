@@ -627,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第50话",
+        "pub_index": "即将更新 第50话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -637,8 +637,8 @@
         "name": "一人之下 第6季",
         "name_cn": "一人之下 第六季",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/ee/ae/507819_utzll.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_utzll.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/ee/ae/507819_OD5zd.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_OD5zd.jpg"
         },
         "rating": {
           "score": 6.6
