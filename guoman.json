@@ -33,7 +33,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_7ZUS7.jpg"
         },
         "rating": {
-          "score": 7.4
+          "score": 7.3
         },
         "eps": 8,
         "air_weekday": 1,
@@ -713,6 +713,26 @@
         "is_nsfw": false
       },
       {
+        "id": 591580,
+        "name": "沧元图前传 东宁府的夏天",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/1d/63/591580_JEJ3x.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 3,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 545972,
         "name": "喜羊羊与灰太狼之古古怪界有古怪",
         "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
@@ -853,15 +873,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10170599,
-        "name": "フルール The Animation",
-        "name_cn": "フルール The Animation",
+        "id": 10179368,
+        "name": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
+        "name_cn": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx170599-0aMEXpy9rak1.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx170599-0aMEXpy9rak1.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179368-LUseTIJVIjD4.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179368-LUseTIJVIjD4.png"
         },
         "rating": {
-          "score": 6.8
+          "score": 7.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -873,15 +893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10179368,
-        "name": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
-        "name_cn": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
+        "id": 10170599,
+        "name": "フルール The Animation",
+        "name_cn": "フルール The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179368-LUseTIJVIjD4.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179368-LUseTIJVIjD4.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx170599-0aMEXpy9rak1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx170599-0aMEXpy9rak1.png"
         },
         "rating": {
-          "score": 7.2
+          "score": 6.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1553,15 +1573,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10182104,
-        "name": "育精",
-        "name_cn": "育精",
+        "id": 10194353,
+        "name": "ちょろ・めす・でいず",
+        "name_cn": "ちょろ・めす・でいず",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182104-bEI58qeRFj9L.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx182104-bEI58qeRFj9L.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
         },
         "rating": {
-          "score": 4.8
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1573,15 +1593,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10194353,
-        "name": "ちょろ・めす・でいず",
-        "name_cn": "ちょろ・めす・でいず",
+        "id": 10182104,
+        "name": "育精",
+        "name_cn": "育精",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182104-bEI58qeRFj9L.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx182104-bEI58qeRFj9L.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 4.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1873,15 +1893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196547,
-        "name": "Hな義姉シリーズ The Animation",
-        "name_cn": "Hな義姉シリーズ The Animation",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1893,15 +1913,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10196547,
+        "name": "Hな義姉シリーズ The Animation",
+        "name_cn": "Hな義姉シリーズ The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2241,7 +2261,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2468,7 +2488,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.5
         },
         "eps": 1,
         "air_weekday": 6,
