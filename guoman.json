@@ -547,7 +547,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第58话",
+        "pub_index": "第59话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
         "is_nsfw": false
@@ -567,7 +567,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第16话",
+        "pub_index": "第17话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
         "is_nsfw": false
@@ -587,29 +587,9 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第50话",
+        "pub_index": "第51话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
-        "is_nsfw": false
-      },
-      {
-        "id": 9226692,
-        "name": "穿越兽世，神兽男仆助我成后",
-        "name_cn": "穿越兽世，神兽男仆助我成后",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第13话~第18话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
@@ -2360,23 +2340,23 @@
         "is_nsfw": false
       },
       {
-        "id": 453314,
-        "name": "永生之气壮山河",
-        "name_cn": "永生 第三季",
+        "id": 9226692,
+        "name": "穿越兽世，神兽男仆助我成后",
+        "name_cn": "穿越兽世，神兽男仆助我成后",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/af/22/453314_1vvwJ.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/af/22/453314_1vvwJ.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 6.4
+          "score": 0
         },
-        "eps": 16,
+        "eps": 0,
         "air_weekday": 6,
         "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第76话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 35213,
+        "bgm_matched": false,
+        "pub_index": "第19话~第24话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
@@ -2535,7 +2515,7 @@
           "common": ""
         },
         "rating": {
-          "score": 6
+          "score": 6.1
         },
         "eps": 26,
         "air_weekday": 7,
