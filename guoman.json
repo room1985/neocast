@@ -374,7 +374,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 4,
@@ -684,26 +684,6 @@
           "score": 6.1
         },
         "eps": 52,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 591580,
-        "name": "沧元图前传 东宁府的夏天",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/1d/63/591580_JEJ3x.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 3,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1393,12 +1373,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10155154,
-        "name": "妻を同窓会にいかせたら",
-        "name_cn": "妻を同窓会にいかせたら",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
           "score": 6.0
@@ -1413,12 +1393,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "妻を同窓会にいかせたら",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
           "score": 6.0
@@ -1673,15 +1653,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10167474,
-        "name": "魔法闘姫リルスティア",
-        "name_cn": "魔法闘姫リルスティア",
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "夏と箱",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx167474-zG5QI4WzZ5yC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx167474-zG5QI4WzZ5yC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
-          "score": 4.7
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1693,15 +1673,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188928,
-        "name": "夏と箱",
-        "name_cn": "夏と箱",
+        "id": 10167474,
+        "name": "魔法闘姫リルスティア",
+        "name_cn": "魔法闘姫リルスティア",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx167474-zG5QI4WzZ5yC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx167474-zG5QI4WzZ5yC.png"
         },
         "rating": {
-          "score": 6.5
+          "score": 4.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1781,7 +1761,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx175250-Dh06UaJ8VYAm.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 4.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1853,15 +1833,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10178557,
-        "name": "祓魔○女シャルロット",
-        "name_cn": "祓魔○女シャルロット",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178557-yjrjuYOOCCbs.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178557-yjrjuYOOCCbs.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1873,15 +1853,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10178557,
+        "name": "祓魔○女シャルロット",
+        "name_cn": "祓魔○女シャルロット",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178557-yjrjuYOOCCbs.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178557-yjrjuYOOCCbs.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1981,7 +1961,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186308-REUfR4DxBB18.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2213,12 +2193,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10199162,
-        "name": "クール de M",
-        "name_cn": "クール de M",
+        "id": 10204463,
+        "name": "蛇と蜘蛛",
+        "name_cn": "蛇と蜘蛛",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
         },
         "rating": {
           "score": 5.5
@@ -2233,15 +2213,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10204463,
-        "name": "蛇と蜘蛛",
-        "name_cn": "蛇と蜘蛛",
+        "id": 10199162,
+        "name": "クール de M",
+        "name_cn": "クール de M",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2261,7 +2241,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2555,7 +2535,7 @@
           "common": ""
         },
         "rating": {
-          "score": 6.2
+          "score": 6
         },
         "eps": 26,
         "air_weekday": 7,
