@@ -5,6 +5,26 @@
     },
     "items": [
       {
+        "id": 515018,
+        "name": "宗门里除了我都是卧底",
+        "name_cn": "宗门里除了我都是卧底",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+        },
+        "rating": {
+          "score": 6
+        },
+        "eps": 100,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第145话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 48518,
+        "is_nsfw": false
+      },
+      {
         "id": 405232,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
@@ -2340,43 +2360,23 @@
     },
     "items": [
       {
-        "id": 515018,
-        "name": "宗门里除了我都是卧底",
-        "name_cn": "宗门里除了我都是卧底",
+        "id": 453314,
+        "name": "永生之气壮山河",
+        "name_cn": "永生 第三季",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/af/22/453314_1vvwJ.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/af/22/453314_1vvwJ.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 6.4
         },
-        "eps": 100,
+        "eps": 16,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第144话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
-        "id": 9226692,
-        "name": "穿越兽世，神兽男仆助我成后",
-        "name_cn": "穿越兽世，神兽男仆助我成后",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第19话~第24话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 226692,
+        "pub_index": "第77话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 35213,
         "is_nsfw": false
       },
       {
@@ -2504,6 +2504,26 @@
         "pub_index": "第79话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
+        "is_nsfw": false
+      },
+      {
+        "id": 9226692,
+        "name": "穿越兽世，神兽男仆助我成后",
+        "name_cn": "穿越兽世，神兽男仆助我成后",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第25话~第30话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
