@@ -45,6 +45,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9226692,
+        "name": "穿越兽世，神兽男仆助我成后",
+        "name_cn": "穿越兽世，神兽男仆助我成后",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第31话~第36话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 226692,
+        "is_nsfw": false
+      },
+      {
         "id": 250224,
         "name": "放开那个女巫",
         "name_cn": "放开那个女巫",
@@ -73,7 +93,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.7
         },
         "eps": 52,
         "air_weekday": 1,
@@ -2467,26 +2487,6 @@
     },
     "items": [
       {
-        "id": 270242,
-        "name": "王者？别闹！",
-        "name_cn": "王者？别闹！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/78/99/270242_hyJ8E.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/78/99/270242_hyJ8E.jpg"
-        },
-        "rating": {
-          "score": 5.6
-        },
-        "eps": 13,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第85话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 26015,
-        "is_nsfw": false
-      },
-      {
         "id": 456159,
         "name": "牧神记",
         "name_cn": "牧神记",
@@ -2501,29 +2501,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第79话",
+        "pub_index": "第80话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
-        "is_nsfw": false
-      },
-      {
-        "id": 9226692,
-        "name": "穿越兽世，神兽男仆助我成后",
-        "name_cn": "穿越兽世，神兽男仆助我成后",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第25话~第30话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
