@@ -5,26 +5,6 @@
     },
     "items": [
       {
-        "id": 515018,
-        "name": "宗门里除了我都是卧底",
-        "name_cn": "宗门里除了我都是卧底",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
-        },
-        "rating": {
-          "score": 6
-        },
-        "eps": 100,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第145话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
         "id": 405232,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
@@ -39,29 +19,9 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
-        "is_nsfw": false
-      },
-      {
-        "id": 9226692,
-        "name": "穿越兽世，神兽男仆助我成后",
-        "name_cn": "穿越兽世，神兽男仆助我成后",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第31话~第36话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
@@ -172,6 +132,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9226692,
+        "name": "穿越兽世，神兽男仆助我成后",
+        "name_cn": "穿越兽世，神兽男仆助我成后",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第37话~第42话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 226692,
+        "is_nsfw": false
+      },
+      {
         "id": 569761,
         "name": "熊出没·年年有熊",
         "name_cn": "",
@@ -274,7 +254,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/12/ec/406488_YUXzx.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.4
         },
         "eps": 19,
         "air_weekday": 4,
@@ -440,27 +420,7 @@
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
-        "pub_index": "第3話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10160701,
-        "name": "告白……",
-        "name_cn": "告白……",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
-        },
-        "rating": {
-          "score": 5.3
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第3話",
+        "pub_index": "第4話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
@@ -526,26 +486,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10201153,
-        "name": "聖光閃姫ポニーセレス",
-        "name_cn": "聖光閃姫ポニーセレス",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx201153-9xwz47bJi3wp.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10206004,
         "name": "ラブはギャルから始まる運命",
         "name_cn": "ラブはギャルから始まる運命",
@@ -557,6 +497,26 @@
           "score": 0
         },
         "eps": 2,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10206840,
+        "name": "とどの妻り",
+        "name_cn": "とどの妻り",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206840-WSrKIJA0GFci.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
@@ -1553,6 +1513,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10160701,
+        "name": "告白……",
+        "name_cn": "告白……",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10164239,
         "name": "so_low",
         "name_cn": "so_low",
@@ -2353,6 +2333,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10201153,
+        "name": "聖光閃姫ポニーセレス",
+        "name_cn": "聖光閃姫ポニーセレス",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx201153-9xwz47bJi3wp.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10207035,
         "name": "彼女がセパレートをまとう理由",
         "name_cn": "彼女がセパレートをまとう理由",
@@ -2379,6 +2379,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 515018,
+        "name": "宗门里除了我都是卧底",
+        "name_cn": "宗门里除了我都是卧底",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+        },
+        "rating": {
+          "score": 6
+        },
+        "eps": 100,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第146话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 48518,
+        "is_nsfw": false
+      },
       {
         "id": 453314,
         "name": "永生之气壮山河",
