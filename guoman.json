@@ -33,7 +33,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_7ZUS7.jpg"
         },
         "rating": {
-          "score": 7.3
+          "score": 7.2
         },
         "eps": 8,
         "air_weekday": 1,
@@ -254,7 +254,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/12/ec/406488_YUXzx.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 6.1
         },
         "eps": 19,
         "air_weekday": 4,
@@ -426,6 +426,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10164239,
+        "name": "so_low",
+        "name_cn": "so_low",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第3話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10200930,
         "name": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
         "name_cn": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
@@ -472,6 +492,26 @@
         "images": {
           "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10204560,
+        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
         },
         "rating": {
           "score": 0
@@ -601,7 +641,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 7
         },
         "eps": 12,
         "air_weekday": 5,
@@ -627,7 +667,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第51话",
+        "pub_index": "第51话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -1493,26 +1533,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10176907,
-        "name": "糸を撚る",
-        "name_cn": "糸を撚る",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176907-YzsMqplVkGQ3.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176907-YzsMqplVkGQ3.jpg"
-        },
-        "rating": {
-          "score": 5.2
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10160701,
         "name": "告白……",
         "name_cn": "告白……",
@@ -1533,15 +1553,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10164239,
-        "name": "so_low",
-        "name_cn": "so_low",
+        "id": 10176907,
+        "name": "糸を撚る",
+        "name_cn": "糸を撚る",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176907-YzsMqplVkGQ3.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176907-YzsMqplVkGQ3.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2221,7 +2241,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2299,26 +2319,6 @@
         "images": {
           "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199164-kQ2sVvNXU392.jpg",
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10204560,
-        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
-        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
         },
         "rating": {
           "score": 0
