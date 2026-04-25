@@ -153,29 +153,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第24话",
+        "pub_index": "第25话",
         "pub_time": "10:00",
         "bilibili_season_id": 73973,
-        "is_nsfw": false
-      },
-      {
-        "id": 9226692,
-        "name": "穿越兽世，神兽男仆助我成后",
-        "name_cn": "穿越兽世，神兽男仆助我成后",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第43话~第48话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
@@ -283,6 +263,26 @@
         "pub_index": "第1017话",
         "pub_time": "19:00",
         "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
+        "id": 9226692,
+        "name": "穿越兽世，神兽男仆助我成后",
+        "name_cn": "穿越兽世，神兽男仆助我成后",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第49话~第54话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
