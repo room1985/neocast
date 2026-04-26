@@ -434,7 +434,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 4,
@@ -641,7 +641,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.7
         },
         "eps": 12,
         "air_weekday": 5,
@@ -981,7 +981,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174634-mKIuuDwfTkY9.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1061,7 +1061,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1733,15 +1733,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10176395,
-        "name": "やらかし",
-        "name_cn": "やらかし",
+        "id": 10177707,
+        "name": "リジネッタさんの冒険",
+        "name_cn": "リジネッタさんの冒険",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176395-xqKh8N2LTiph.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176395-xqKh8N2LTiph.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177707-v3mFU4F2mJkI.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177707-v3mFU4F2mJkI.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1753,15 +1753,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10177707,
-        "name": "リジネッタさんの冒険",
-        "name_cn": "リジネッタさんの冒険",
+        "id": 10176395,
+        "name": "やらかし",
+        "name_cn": "やらかし",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177707-v3mFU4F2mJkI.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177707-v3mFU4F2mJkI.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176395-xqKh8N2LTiph.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176395-xqKh8N2LTiph.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1873,15 +1873,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10178557,
-        "name": "祓魔○女シャルロット",
-        "name_cn": "祓魔○女シャルロット",
+        "id": 10196547,
+        "name": "Hな義姉シリーズ The Animation",
+        "name_cn": "Hな義姉シリーズ The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178557-yjrjuYOOCCbs.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178557-yjrjuYOOCCbs.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1893,15 +1893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196547,
-        "name": "Hな義姉シリーズ The Animation",
-        "name_cn": "Hな義姉シリーズ The Animation",
+        "id": 10178557,
+        "name": "祓魔○女シャルロット",
+        "name_cn": "祓魔○女シャルロット",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178557-yjrjuYOOCCbs.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178557-yjrjuYOOCCbs.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2061,7 +2061,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196540-bgmJs8Kou7zD.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2081,7 +2081,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2193,6 +2193,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10204463,
+        "name": "蛇と蜘蛛",
+        "name_cn": "蛇と蜘蛛",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10198046,
         "name": "ドＳなペット",
         "name_cn": "ドＳなペット",
@@ -2213,26 +2233,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10204463,
-        "name": "蛇と蜘蛛",
-        "name_cn": "蛇と蜘蛛",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
-        },
-        "rating": {
-          "score": 5.5
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10199162,
         "name": "クール de M",
         "name_cn": "クール de M",
@@ -2241,7 +2241,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
