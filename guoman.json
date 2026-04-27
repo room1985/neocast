@@ -214,7 +214,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/12/ec/406488_YUXzx.jpg"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.2
         },
         "eps": 19,
         "air_weekday": 4,
@@ -1293,26 +1293,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10164240,
-        "name": "くノ一○○伝　紫陽花",
-        "name_cn": "くノ一○○伝　紫陽花",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
-        },
-        "rating": {
-          "score": 5.3
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10186058,
         "name": "黒ギャルアラカルト",
         "name_cn": "黒ギャルアラカルト",
@@ -1342,6 +1322,26 @@
         },
         "rating": {
           "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10164240,
+        "name": "くノ一○○伝　紫陽花",
+        "name_cn": "くノ一○○伝　紫陽花",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
+        },
+        "rating": {
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1681,7 +1681,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx167474-zG5QI4WzZ5yC.png"
         },
         "rating": {
-          "score": 4.8
+          "score": 4.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1793,15 +1793,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10185779,
-        "name": "ハメツの誘惑",
-        "name_cn": "ハメツの誘惑",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185779-uzQoDrD3Sy6r.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185779-uzQoDrD3Sy6r.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1813,15 +1813,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10185779,
+        "name": "ハメツの誘惑",
+        "name_cn": "ハメツの誘惑",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185779-uzQoDrD3Sy6r.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185779-uzQoDrD3Sy6r.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
