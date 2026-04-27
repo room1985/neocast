@@ -567,9 +567,49 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第59话",
+        "pub_index": "第60话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
+        "is_nsfw": false
+      },
+      {
+        "id": 501950,
+        "name": "凹凸世界REBORN 先行集",
+        "name_cn": "凹凸世界·新生 先行集",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/5a/63/501950_8XV4h.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/5a/63/501950_8XV4h.jpg"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 2,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第3话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 84438,
+        "is_nsfw": false
+      },
+      {
+        "id": 9227876,
+        "name": "叶罗丽-金鎏心",
+        "name_cn": "叶罗丽-金鎏心",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1话~第2话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 227876,
         "is_nsfw": false
       },
       {
@@ -587,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第17话",
+        "pub_index": "第18话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
         "is_nsfw": false
@@ -607,7 +647,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第2话",
+        "pub_index": "第3话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
         "is_nsfw": false
@@ -627,29 +667,9 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第51话",
+        "pub_index": "第52话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
-        "is_nsfw": false
-      },
-      {
-        "id": 9226692,
-        "name": "穿越兽世，神兽男仆助我成后",
-        "name_cn": "穿越兽世，神兽男仆助我成后",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第55话~第60话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
@@ -2360,26 +2380,6 @@
         "is_nsfw": false
       },
       {
-        "id": 453314,
-        "name": "永生之气壮山河",
-        "name_cn": "永生 第三季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/af/22/453314_1vvwJ.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/af/22/453314_1vvwJ.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 16,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第77话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 35213,
-        "is_nsfw": false
-      },
-      {
         "id": 565411,
         "name": "我是不白吃",
         "name_cn": "我是不白吃",
@@ -2397,6 +2397,26 @@
         "pub_index": "第1018话",
         "pub_time": "19:00",
         "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
+        "id": 9226692,
+        "name": "穿越兽世，神兽男仆助我成后",
+        "name_cn": "穿越兽世，神兽男仆助我成后",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第61话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 226692,
         "is_nsfw": false
       },
       {
