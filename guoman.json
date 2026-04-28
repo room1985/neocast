@@ -286,26 +286,6 @@
         "is_nsfw": false
       },
       {
-        "id": 395220,
-        "name": "盘龙",
-        "name_cn": "盘龙",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/be/e5/395220_QcmgC.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/be/e5/395220_QcmgC.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10021828,
         "name": "小女ラムネ",
         "name_cn": "小女ラムネ",
@@ -2491,6 +2471,26 @@
           "score": 6.4
         },
         "eps": 1,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 577226,
+        "name": "诡秘之主特别篇 猎物",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/b9/99/577226_68Dfj.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_68Dfj.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
