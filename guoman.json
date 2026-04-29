@@ -45,26 +45,6 @@
         "is_nsfw": false
       },
       {
-        "id": 250224,
-        "name": "放开那个女巫",
-        "name_cn": "放开那个女巫",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/1f/91/250224_7ZUS7.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_7ZUS7.jpg"
-        },
-        "rating": {
-          "score": 7.3
-        },
-        "eps": 8,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 630676,
         "name": "仙逆 年番3",
         "name_cn": "",
@@ -653,6 +633,26 @@
         "is_nsfw": false
       },
       {
+        "id": 250224,
+        "name": "放开那个女巫",
+        "name_cn": "放开那个女巫",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1f/91/250224_7ZUS7.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1f/91/250224_7ZUS7.jpg"
+        },
+        "rating": {
+          "score": 7.3
+        },
+        "eps": 8,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1话~第3话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 229649,
+        "is_nsfw": false
+      },
+      {
         "id": 493777,
         "name": "深空彼岸",
         "name_cn": "深空彼岸",
@@ -681,7 +681,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.8
         },
         "eps": 12,
         "air_weekday": 5,
@@ -1033,15 +1033,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10148148,
-        "name": "SUMMER ～田舎の性活～",
-        "name_cn": "SUMMER ～田舎の性活～",
+        "id": 10174633,
+        "name": "みだれうち",
+        "name_cn": "みだれうち",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx148148-vxVvdujEBy1C.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174633-8PVPsJ4yKthq.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174633-8PVPsJ4yKthq.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1053,15 +1053,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10174633,
-        "name": "みだれうち",
-        "name_cn": "みだれうち",
+        "id": 10148148,
+        "name": "SUMMER ～田舎の性活～",
+        "name_cn": "SUMMER ～田舎の性活～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174633-8PVPsJ4yKthq.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174633-8PVPsJ4yKthq.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx148148-vxVvdujEBy1C.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1161,7 +1161,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx146837-Ot4gdIYCA34z.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1601,7 +1601,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1633,15 +1633,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10166461,
-        "name": "子作り妊活部！",
-        "name_cn": "子作り妊活部！",
+        "id": 10200228,
+        "name": "おしかけ！爆乳ギャルハーレム性活",
+        "name_cn": "おしかけ！爆乳ギャルハーレム性活",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166461-1RCN93WTfXyN.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx166461-1RCN93WTfXyN.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200228-r8Bm5BulKKOS.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200228-r8Bm5BulKKOS.jpg"
         },
         "rating": {
-          "score": 5.9
+          "score": 6.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1653,15 +1653,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10200228,
-        "name": "おしかけ！爆乳ギャルハーレム性活",
-        "name_cn": "おしかけ！爆乳ギャルハーレム性活",
+        "id": 10166461,
+        "name": "子作り妊活部！",
+        "name_cn": "子作り妊活部！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200228-r8Bm5BulKKOS.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200228-r8Bm5BulKKOS.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166461-1RCN93WTfXyN.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx166461-1RCN93WTfXyN.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1693,15 +1693,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10198048,
-        "name": "夏妻",
-        "name_cn": "夏妻",
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "夏と箱",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1713,15 +1713,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188928,
-        "name": "夏と箱",
-        "name_cn": "夏と箱",
+        "id": 10198048,
+        "name": "夏妻",
+        "name_cn": "夏妻",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1893,15 +1893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195068,
-        "name": "ピュアピュア ぺろぺろ プリンセス",
-        "name_cn": "ピュアピュア ぺろぺろ プリンセス",
+        "id": 10196547,
+        "name": "Hな義姉シリーズ The Animation",
+        "name_cn": "Hな義姉シリーズ The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195068-LOr1MKlDtH4Y.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
         },
         "rating": {
-          "score": 5.9
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1913,15 +1913,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196547,
-        "name": "Hな義姉シリーズ The Animation",
-        "name_cn": "Hな義姉シリーズ The Animation",
+        "id": 10195068,
+        "name": "ピュアピュア ぺろぺろ プリンセス",
+        "name_cn": "ピュアピュア ぺろぺろ プリンセス",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195068-LOr1MKlDtH4Y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2121,7 +2121,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2161,7 +2161,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195034-kh5FbK07fShG.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2181,7 +2181,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193347-EnTUvSR3JOgd.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
