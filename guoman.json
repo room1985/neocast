@@ -5,26 +5,6 @@
     },
     "items": [
       {
-        "id": 515018,
-        "name": "宗门里除了我都是卧底",
-        "name_cn": "宗门里除了我都是卧底",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
-        },
-        "rating": {
-          "score": 6
-        },
-        "eps": 100,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第147话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
         "id": 405232,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
@@ -39,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第5话",
+        "pub_index": "第6话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
         "is_nsfw": false
@@ -2419,6 +2399,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 515018,
+        "name": "宗门里除了我都是卧底",
+        "name_cn": "宗门里除了我都是卧底",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+        },
+        "rating": {
+          "score": 6
+        },
+        "eps": 100,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第148话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 48518,
+        "is_nsfw": false
+      },
       {
         "id": 453314,
         "name": "永生之气壮山河",
