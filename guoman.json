@@ -52,26 +52,6 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.5
-        },
-        "eps": 60,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第22话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
         "id": 473671,
         "name": "为喵人生",
         "name_cn": "为喵人生",
@@ -86,29 +66,29 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第27话",
+        "pub_index": "第28话",
         "pub_time": "11:00",
         "bilibili_season_id": 73971,
         "is_nsfw": false
       },
       {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
+        "id": 453309,
+        "name": "非人哉 第三季 Part.2",
+        "name_cn": "非人哉 第三季 13-24集",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/49/11/453309_8W3ZB.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_8W3ZB.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 7.8
         },
-        "eps": 0,
+        "eps": 12,
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1019话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
+        "pub_index": "第13话~第14话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 101854,
         "is_nsfw": false
       },
       {
@@ -206,6 +186,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 60,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第23话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 406488,
         "name": "将夜",
         "name_cn": "将夜",
@@ -243,6 +243,26 @@
         "pub_index": "第12话",
         "pub_time": "11:00",
         "bilibili_season_id": 45979,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1020话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -294,7 +314,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 4,
@@ -661,7 +681,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.6
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2428,7 +2448,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/20/3f/627556_tk605.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.6
         },
         "eps": 1,
         "air_weekday": 6,
@@ -2448,7 +2468,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 8.1
+          "score": 8
         },
         "eps": 52,
         "air_weekday": 6,
