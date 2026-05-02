@@ -153,9 +153,29 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第25话",
+        "pub_index": "第26话",
         "pub_time": "10:00",
         "bilibili_season_id": 73973,
+        "is_nsfw": false
+      },
+      {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
         "is_nsfw": false
       },
       {
@@ -314,7 +334,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 4,
@@ -681,7 +701,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.6
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2448,7 +2468,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/20/3f/627556_tk605.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.7
         },
         "eps": 1,
         "air_weekday": 6,
