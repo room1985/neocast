@@ -159,6 +159,26 @@
         "is_nsfw": false
       },
       {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
