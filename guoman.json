@@ -106,7 +106,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第13话~第14话",
+        "pub_index": "即将更新 第13话~第14话",
         "pub_time": "12:00",
         "bilibili_season_id": 101854,
         "is_nsfw": false
@@ -2555,7 +2555,7 @@
           "common": ""
         },
         "rating": {
-          "score": 6.7
+          "score": 6.8
         },
         "eps": 26,
         "air_weekday": 7,
