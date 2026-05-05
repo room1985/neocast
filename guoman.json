@@ -5,6 +5,26 @@
     },
     "items": [
       {
+        "id": 515018,
+        "name": "宗门里除了我都是卧底",
+        "name_cn": "宗门里除了我都是卧底",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+        },
+        "rating": {
+          "score": 6
+        },
+        "eps": 100,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第149话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 48518,
+        "is_nsfw": false
+      },
+      {
         "id": 405232,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
@@ -33,7 +53,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.8
         },
         "eps": 52,
         "air_weekday": 1,
@@ -100,7 +120,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_597ky.jpg"
         },
         "rating": {
-          "score": 7.7
+          "score": 7.4
         },
         "eps": 12,
         "air_weekday": 2,
@@ -109,6 +129,26 @@
         "pub_index": "第13话~第14话",
         "pub_time": "12:00",
         "bilibili_season_id": 101854,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1022话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -406,26 +446,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10200930,
-        "name": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
-        "name_cn": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200930-LilV7nMGiVKm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200930-LilV7nMGiVKm.png"
-        },
-        "rating": {
-          "score": 5.2
-        },
-        "eps": 2,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10208314,
         "name": "巨乳が2人いないと勃起しない夫のために友達を連れてきた妻",
         "name_cn": "巨乳が2人いないと勃起しない夫のために友達を連れてきた妻",
@@ -441,6 +461,26 @@
         "source": "anilist",
         "bgm_matched": false,
         "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10200930,
+        "name": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
+        "name_cn": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200930-LilV7nMGiVKm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200930-LilV7nMGiVKm.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 2,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
@@ -973,15 +1013,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10148148,
-        "name": "SUMMER ～田舎の性活～",
-        "name_cn": "SUMMER ～田舎の性活～",
+        "id": 10174633,
+        "name": "みだれうち",
+        "name_cn": "みだれうち",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx148148-vxVvdujEBy1C.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174633-8PVPsJ4yKthq.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174633-8PVPsJ4yKthq.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -993,15 +1033,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10174633,
-        "name": "みだれうち",
-        "name_cn": "みだれうち",
+        "id": 10148148,
+        "name": "SUMMER ～田舎の性活～",
+        "name_cn": "SUMMER ～田舎の性活～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174633-8PVPsJ4yKthq.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174633-8PVPsJ4yKthq.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx148148-vxVvdujEBy1C.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1033,12 +1073,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10186827,
-        "name": "風紀委員とフーゾク活動",
-        "name_cn": "風紀委員とフーゾク活動",
+        "id": 10196750,
+        "name": "シスターブリーダー",
+        "name_cn": "シスターブリーダー",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186827-B9FgO0n9G0IC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
         },
         "rating": {
           "score": 7.0
@@ -1053,12 +1093,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10196750,
-        "name": "シスターブリーダー",
-        "name_cn": "シスターブリーダー",
+        "id": 10186827,
+        "name": "風紀委員とフーゾク活動",
+        "name_cn": "風紀委員とフーゾク活動",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186827-B9FgO0n9G0IC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
         },
         "rating": {
           "score": 7.0
@@ -1413,6 +1453,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10194353,
+        "name": "ちょろ・めす・でいず",
+        "name_cn": "ちょろ・めす・でいず",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10176396,
         "name": "誤爆〜萌えママ徒然〜",
         "name_cn": "誤爆〜萌えママ徒然〜",
@@ -1462,26 +1522,6 @@
         },
         "rating": {
           "score": 5.1
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10194353,
-        "name": "ちょろ・めす・でいず",
-        "name_cn": "ちょろ・めす・でいず",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
-        },
-        "rating": {
-          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1913,15 +1953,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10165439,
-        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
-        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "id": 10193707,
+        "name": "無人駅 The Animation ",
+        "name_cn": "無人駅 The Animation ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193707-kOyJ9fzeQPZC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193707-kOyJ9fzeQPZC.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1933,15 +1973,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10193707,
-        "name": "無人駅 The Animation ",
-        "name_cn": "無人駅 The Animation ",
+        "id": 10165439,
+        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193707-kOyJ9fzeQPZC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193707-kOyJ9fzeQPZC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1973,15 +2013,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10192452,
-        "name": "好色の忠義くノ一ぼたん",
-        "name_cn": "好色の忠義くノ一ぼたん",
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx192452-sPIuxMLvBMNT.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx192452-sPIuxMLvBMNT.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1993,15 +2033,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
+        "id": 10192452,
+        "name": "好色の忠義くノ一ぼたん",
+        "name_cn": "好色の忠義くノ一ぼたん",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx192452-sPIuxMLvBMNT.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx192452-sPIuxMLvBMNT.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2340,63 +2380,23 @@
     },
     "items": [
       {
-        "id": 515018,
-        "name": "宗门里除了我都是卧底",
-        "name_cn": "宗门里除了我都是卧底",
+        "id": 453314,
+        "name": "永生之气壮山河",
+        "name_cn": "永生 第三季",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/42/20/515018_o7Yo4.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/42/20/515018_o7Yo4.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/af/22/453314_1vvwJ.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/af/22/453314_1vvwJ.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 6.4
         },
-        "eps": 100,
+        "eps": 16,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第148话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
-        "id": 9227876,
-        "name": "叶罗丽-金鎏心",
-        "name_cn": "叶罗丽-金鎏心",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第3话~第4话",
+        "pub_index": "第79话",
         "pub_time": "10:00",
-        "bilibili_season_id": 227876,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1021话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
+        "bilibili_season_id": 35213,
         "is_nsfw": false
       },
       {
@@ -2506,6 +2506,26 @@
       "id": 7
     },
     "items": [
+      {
+        "id": 9227876,
+        "name": "叶罗丽-金鎏心",
+        "name_cn": "叶罗丽-金鎏心",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第5话~第6话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 227876,
+        "is_nsfw": false
+      },
       {
         "id": 456159,
         "name": "牧神记",
