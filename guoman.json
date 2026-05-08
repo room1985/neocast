@@ -681,13 +681,13 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第4话",
+        "pub_index": "第4话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
         "is_nsfw": false
@@ -707,7 +707,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第53话",
+        "pub_index": "即将更新 第53话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
