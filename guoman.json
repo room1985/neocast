@@ -179,6 +179,26 @@
         "is_nsfw": false
       },
       {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -187,7 +207,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202895-tyPbaoibtuEA.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 3,
@@ -454,7 +474,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200930-LilV7nMGiVKm.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 5.2
         },
         "eps": 2,
         "air_weekday": 4,
@@ -506,26 +526,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10202893,
-        "name": "L'amour fou de l'automate",
-        "name_cn": "L'amour fou de l'automate",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
-        },
-        "rating": {
-          "score": 5.3
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10206004,
         "name": "ラブはギャルから始まる運命",
         "name_cn": "ラブはギャルから始まる運命",
@@ -537,6 +537,26 @@
           "score": 0
         },
         "eps": 2,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10202893,
+        "name": "L'amour fou de l'automate",
+        "name_cn": "L'amour fou de l'automate",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
@@ -933,15 +953,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10177255,
-        "name": "性欲つよつよ THE ANIMATION",
-        "name_cn": "性欲つよつよ THE ANIMATION",
+        "id": 10155170,
+        "name": "ママ喝っ",
+        "name_cn": "ママ喝っ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177255-9p0ee1xmvcpZ.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177255-9p0ee1xmvcpZ.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155170-rgYkDP4pQmgc.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155170-rgYkDP4pQmgc.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -953,15 +973,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10155170,
-        "name": "ママ喝っ",
-        "name_cn": "ママ喝っ",
+        "id": 10177255,
+        "name": "性欲つよつよ THE ANIMATION",
+        "name_cn": "性欲つよつよ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155170-rgYkDP4pQmgc.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155170-rgYkDP4pQmgc.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177255-9p0ee1xmvcpZ.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177255-9p0ee1xmvcpZ.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1153,15 +1173,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10185506,
-        "name": "野々原柚花のヒミツのハイシン",
-        "name_cn": "野々原柚花のヒミツのハイシン",
+        "id": 10172218,
+        "name": "夢見ル乙女",
+        "name_cn": "夢見ル乙女",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185506-e6BT2M2TFz3i.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1173,15 +1193,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10172218,
-        "name": "夢見ル乙女",
-        "name_cn": "夢見ル乙女",
+        "id": 10185506,
+        "name": "野々原柚花のヒミツのハイシン",
+        "name_cn": "野々原柚花のヒミツのハイシン",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185506-e6BT2M2TFz3i.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1221,7 +1241,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183602-8yGvSxmilgjW.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1241,7 +1261,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178445-Vx7wQLiwH664.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1353,15 +1373,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10180704,
-        "name": "エルフに淫紋を付ける本 The Animation",
-        "name_cn": "エルフに淫紋を付ける本 The Animation",
+        "id": 10164240,
+        "name": "くノ一○○伝　紫陽花",
+        "name_cn": "くノ一○○伝　紫陽花",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1373,15 +1393,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10164240,
-        "name": "くノ一○○伝　紫陽花",
-        "name_cn": "くノ一○○伝　紫陽花",
+        "id": 10180704,
+        "name": "エルフに淫紋を付ける本 The Animation",
+        "name_cn": "エルフに淫紋を付ける本 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
