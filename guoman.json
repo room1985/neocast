@@ -13,7 +13,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/b0/e1/405232_bUuUk.jpg"
         },
         "rating": {
-          "score": 4.6
+          "score": 4.7
         },
         "eps": 16,
         "air_weekday": 1,
@@ -567,7 +567,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "10:00",
         "bilibili_season_id": 84438,
         "is_nsfw": false
@@ -587,7 +587,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "10:00",
         "bilibili_season_id": 229649,
         "is_nsfw": false
@@ -607,7 +607,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第19话",
+        "pub_index": "第20话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
         "is_nsfw": false
@@ -627,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
         "is_nsfw": false
@@ -647,7 +647,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第53话",
+        "pub_index": "第54话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2357,26 +2357,6 @@
         "pub_index": "第150话",
         "pub_time": "09:00",
         "bilibili_season_id": 48518,
-        "is_nsfw": false
-      },
-      {
-        "id": 453314,
-        "name": "永生之气壮山河",
-        "name_cn": "永生 第三季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/af/22/453314_1vvwJ.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/af/22/453314_1vvwJ.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 16,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第79话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 35213,
         "is_nsfw": false
       },
       {
