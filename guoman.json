@@ -33,7 +33,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.9
         },
         "eps": 52,
         "air_weekday": 1,
@@ -179,26 +179,6 @@
     },
     "items": [
       {
-        "id": 467711,
-        "name": "乐乐便利店",
-        "name_cn": "乐乐便利店",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
-        },
-        "rating": {
-          "score": 6.7
-        },
-        "eps": 10,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -314,7 +294,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 4,
@@ -466,26 +446,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10204560,
-        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
-        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10206004,
         "name": "ラブはギャルから始まる運命",
         "name_cn": "ラブはギャルから始まる運命",
@@ -497,6 +457,26 @@
           "score": 0
         },
         "eps": 2,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10204560,
+        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
@@ -1161,7 +1141,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1333,15 +1313,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10164240,
-        "name": "くノ一○○伝　紫陽花",
-        "name_cn": "くノ一○○伝　紫陽花",
+        "id": 10180704,
+        "name": "エルフに淫紋を付ける本 The Animation",
+        "name_cn": "エルフに淫紋を付ける本 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1353,15 +1333,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10180704,
-        "name": "エルフに淫紋を付ける本 The Animation",
-        "name_cn": "エルフに淫紋を付ける本 The Animation",
+        "id": 10164240,
+        "name": "くノ一○○伝　紫陽花",
+        "name_cn": "くノ一○○伝　紫陽花",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164240-PzB0NizdTXdF.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1453,15 +1433,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10176396,
-        "name": "誤爆〜萌えママ徒然〜",
-        "name_cn": "誤爆〜萌えママ徒然〜",
+        "id": 10180832,
+        "name": "おにちちハーレム",
+        "name_cn": "おにちちハーレム",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176396-WnffuWa1xEA1.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176396-WnffuWa1xEA1.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180832-N1TzYgyWcKiB.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1473,15 +1453,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10180832,
-        "name": "おにちちハーレム",
-        "name_cn": "おにちちハーレム",
+        "id": 10176396,
+        "name": "誤爆〜萌えママ徒然〜",
+        "name_cn": "誤爆〜萌えママ徒然〜",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180832-N1TzYgyWcKiB.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176396-WnffuWa1xEA1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176396-WnffuWa1xEA1.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1513,15 +1493,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10183742,
-        "name": "亜人がお好きなんですね♡",
-        "name_cn": "亜人がお好きなんですね♡",
+        "id": 10160701,
+        "name": "告白……",
+        "name_cn": "告白……",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
         },
         "rating": {
-          "score": 5.9
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1533,15 +1513,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10160701,
-        "name": "告白……",
-        "name_cn": "告白……",
+        "id": 10183742,
+        "name": "亜人がお好きなんですね♡",
+        "name_cn": "亜人がお好きなんですね♡",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1773,15 +1753,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10175250,
-        "name": "夢獄の国のアリス",
-        "name_cn": "夢獄の国のアリス",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx175250-Dh06UaJ8VYAm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx175250-Dh06UaJ8VYAm.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 4.9
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1793,15 +1773,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10175250,
+        "name": "夢獄の国のアリス",
+        "name_cn": "夢獄の国のアリス",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx175250-Dh06UaJ8VYAm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx175250-Dh06UaJ8VYAm.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 4.9
         },
         "eps": 0,
         "air_weekday": 5,
