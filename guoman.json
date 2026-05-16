@@ -139,26 +139,6 @@
     },
     "items": [
       {
-        "id": 467711,
-        "name": "乐乐便利店",
-        "name_cn": "乐乐便利店",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
-        },
-        "rating": {
-          "score": 6.7
-        },
-        "eps": 10,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -167,7 +147,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202895-tyPbaoibtuEA.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 3,
@@ -374,7 +354,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.2
         },
         "eps": 0,
         "air_weekday": 4,
@@ -414,7 +394,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208314-Lw3CFRCPkprM.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 4,
@@ -454,7 +434,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202894-vv6EPa1MKCmD.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 4.9
         },
         "eps": 0,
         "air_weekday": 4,
@@ -494,7 +474,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -1361,7 +1341,27 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10194353,
+        "name": "ちょろ・めす・でいず",
+        "name_cn": "ちょろ・めす・でいず",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
+        },
+        "rating": {
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1413,15 +1413,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10194353,
-        "name": "ちょろ・めす・でいず",
-        "name_cn": "ちょろ・めす・でいず",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1441,27 +1441,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
         },
         "rating": {
-          "score": 5.4
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
-        },
-        "rating": {
-          "score": 6.0
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1541,7 +1521,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1613,15 +1593,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10182104,
-        "name": "育精",
-        "name_cn": "育精",
+        "id": 10200228,
+        "name": "おしかけ！爆乳ギャルハーレム性活",
+        "name_cn": "おしかけ！爆乳ギャルハーレム性活",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182104-bEI58qeRFj9L.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx182104-bEI58qeRFj9L.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200228-r8Bm5BulKKOS.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200228-r8Bm5BulKKOS.jpg"
         },
         "rating": {
-          "score": 4.9
+          "score": 6.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1633,15 +1613,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10200228,
-        "name": "おしかけ！爆乳ギャルハーレム性活",
-        "name_cn": "おしかけ！爆乳ギャルハーレム性活",
+        "id": 10182104,
+        "name": "育精",
+        "name_cn": "育精",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200228-r8Bm5BulKKOS.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200228-r8Bm5BulKKOS.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182104-bEI58qeRFj9L.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx182104-bEI58qeRFj9L.png"
         },
         "rating": {
-          "score": 6.8
+          "score": 4.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1721,7 +1701,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1761,7 +1741,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx167474-zG5QI4WzZ5yC.png"
         },
         "rating": {
-          "score": 4.7
+          "score": 4.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1793,15 +1773,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10176395,
-        "name": "やらかし",
-        "name_cn": "やらかし",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176395-xqKh8N2LTiph.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176395-xqKh8N2LTiph.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1813,15 +1793,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10176395,
+        "name": "やらかし",
+        "name_cn": "やらかし",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176395-xqKh8N2LTiph.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176395-xqKh8N2LTiph.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1921,7 +1901,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2113,15 +2093,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184824,
-        "name": "勇者ちゃんの冒険は終わってしまった！",
-        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
+        "id": 10195034,
+        "name": "これってナ～ニ？",
+        "name_cn": "これってナ～ニ？",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195034-kh5FbK07fShG.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195034-kh5FbK07fShG.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2133,15 +2113,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195034,
-        "name": "これってナ～ニ？",
-        "name_cn": "これってナ～ニ？",
+        "id": 10184824,
+        "name": "勇者ちゃんの冒険は終わってしまった！",
+        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195034-kh5FbK07fShG.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195034-kh5FbK07fShG.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2281,7 +2261,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2595,7 +2575,7 @@
           "common": ""
         },
         "rating": {
-          "score": 6.8
+          "score": 6.9
         },
         "eps": 26,
         "air_weekday": 7,
