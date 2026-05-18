@@ -5,20 +5,20 @@
     },
     "items": [
       {
-        "id": 405232,
+        "id": 9043351,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/b0/e1/405232_bUuUk.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/b0/e1/405232_bUuUk.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 4.7
+          "score": 0
         },
-        "eps": 16,
+        "eps": 0,
         "air_weekday": 1,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第8话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
@@ -43,6 +43,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 405232,
+        "name": "大道独行之蝶龙变",
+        "name_cn": "大道独行之蝶龙变",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/b0/e1/405232_bUuUk.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b0/e1/405232_bUuUk.jpg"
+        },
+        "rating": {
+          "score": 4.7
+        },
+        "eps": 16,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
       }
     ]
   },
@@ -52,20 +72,20 @@
     },
     "items": [
       {
-        "id": 608049,
+        "id": 9148433,
         "name": "盗妖行",
         "name_cn": "盗妖行",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 5.5
+          "score": 0
         },
-        "eps": 60,
+        "eps": 0,
         "air_weekday": 2,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第28话",
         "pub_time": "09:00",
         "bilibili_season_id": 148433,
@@ -159,26 +179,6 @@
     },
     "items": [
       {
-        "id": 467711,
-        "name": "乐乐便利店",
-        "name_cn": "乐乐便利店",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
-        },
-        "rating": {
-          "score": 6.7
-        },
-        "eps": 10,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -205,6 +205,26 @@
       "id": 4
     },
     "items": [
+      {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 60,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第29话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
       {
         "id": 406488,
         "name": "将夜",
