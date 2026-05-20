@@ -641,7 +641,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2541,7 +2541,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第83话",
+        "pub_index": "第84话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
