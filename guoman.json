@@ -25,6 +25,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9235975,
+        "name": "奔跑的木头",
+        "name_cn": "奔跑的木头",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 235975,
+        "is_nsfw": false
+      },
+      {
         "id": 630676,
         "name": "仙逆 年番3",
         "name_cn": "",
@@ -274,7 +294,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/11/9f/456169_8zzyK.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7
         },
         "eps": 18,
         "air_weekday": 4,
@@ -334,7 +354,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 4,
@@ -667,7 +687,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第55话",
+        "pub_index": "第55话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -1441,7 +1461,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164240-PzB0NizdTXdF.jpg"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1541,7 +1561,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
