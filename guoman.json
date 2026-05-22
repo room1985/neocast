@@ -199,6 +199,26 @@
         "is_nsfw": false
       },
       {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -434,7 +454,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200930-LilV7nMGiVKm.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.3
         },
         "eps": 2,
         "air_weekday": 4,
@@ -647,7 +667,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第55话",
+        "pub_index": "即将更新 第55话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -1073,15 +1093,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10142229,
-        "name": "エロリーマン",
-        "name_cn": "エロリーマン",
+        "id": 10186827,
+        "name": "風紀委員とフーゾク活動",
+        "name_cn": "風紀委員とフーゾク活動",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx142229-ux7lcdcfJhN1.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx142229-ux7lcdcfJhN1.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186827-B9FgO0n9G0IC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1093,15 +1113,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10186827,
-        "name": "風紀委員とフーゾク活動",
-        "name_cn": "風紀委員とフーゾク活動",
+        "id": 10142229,
+        "name": "エロリーマン",
+        "name_cn": "エロリーマン",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186827-B9FgO0n9G0IC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx142229-ux7lcdcfJhN1.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx142229-ux7lcdcfJhN1.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1173,15 +1193,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10146837,
-        "name": "ツグナヒ",
-        "name_cn": "ツグナヒ",
+        "id": 10184810,
+        "name": "インモラルーティーン The Animation",
+        "name_cn": "インモラルーティーン The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx146837-Ot4gdIYCA34z.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx146837-Ot4gdIYCA34z.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184810-BJhp0LMwWKpP.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1193,15 +1213,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184810,
-        "name": "インモラルーティーン The Animation",
-        "name_cn": "インモラルーティーン The Animation",
+        "id": 10146837,
+        "name": "ツグナヒ",
+        "name_cn": "ツグナヒ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184810-BJhp0LMwWKpP.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx146837-Ot4gdIYCA34z.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx146837-Ot4gdIYCA34z.jpg"
         },
         "rating": {
-          "score": 7.0
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1381,7 +1401,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1493,6 +1513,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10183742,
+        "name": "亜人がお好きなんですね♡",
+        "name_cn": "亜人がお好きなんですね♡",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10160701,
         "name": "告白……",
         "name_cn": "告白……",
@@ -1522,26 +1562,6 @@
         },
         "rating": {
           "score": 6.1
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10183742,
-        "name": "亜人がお好きなんですね♡",
-        "name_cn": "亜人がお好きなんですね♡",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
-        },
-        "rating": {
-          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1873,15 +1893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196547,
-        "name": "Hな義姉シリーズ The Animation",
-        "name_cn": "Hな義姉シリーズ The Animation",
+        "id": 10195068,
+        "name": "ピュアピュア ぺろぺろ プリンセス",
+        "name_cn": "ピュアピュア ぺろぺろ プリンセス",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195068-LOr1MKlDtH4Y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1893,15 +1913,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195068,
-        "name": "ピュアピュア ぺろぺろ プリンセス",
-        "name_cn": "ピュアピュア ぺろぺろ プリンセス",
+        "id": 10196547,
+        "name": "Hな義姉シリーズ The Animation",
+        "name_cn": "Hな義姉シリーズ The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195068-LOr1MKlDtH4Y.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1941,7 +1961,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178557-yjrjuYOOCCbs.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
