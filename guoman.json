@@ -112,6 +112,26 @@
         "is_nsfw": false
       },
       {
+        "id": 577148,
+        "name": "武神主宰 异魔篇",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/5a/3a/577148_zL4d5.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/5a/3a/577148_zL4d5.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 56,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 569761,
         "name": "熊出没·年年有熊",
         "name_cn": "",
@@ -170,6 +190,26 @@
           "score": 6.9
         },
         "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
