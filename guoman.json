@@ -2587,6 +2587,26 @@
         "is_nsfw": false
       },
       {
+        "id": 270242,
+        "name": "王者？别闹！",
+        "name_cn": "王者？别闹！",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/78/99/270242_hyJ8E.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/78/99/270242_hyJ8E.jpg"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 13,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第86话",
+        "pub_time": "11:40",
+        "bilibili_season_id": 26015,
+        "is_nsfw": false
+      },
+      {
         "id": 521431,
         "name": "成何体统 第二季",
         "name_cn": "",
