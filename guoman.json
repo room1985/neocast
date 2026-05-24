@@ -53,7 +53,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.9
         },
         "eps": 52,
         "air_weekday": 1,
@@ -1181,7 +1181,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185506-e6BT2M2TFz3i.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1513,26 +1513,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10183742,
-        "name": "亜人がお好きなんですね♡",
-        "name_cn": "亜人がお好きなんですね♡",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
-        },
-        "rating": {
-          "score": 5.9
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10180832,
         "name": "おにちちハーレム",
         "name_cn": "おにちちハーレム",
@@ -1562,6 +1542,26 @@
         },
         "rating": {
           "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10183742,
+        "name": "亜人がお好きなんですね♡",
+        "name_cn": "亜人がお好きなんですね♡",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
+        },
+        "rating": {
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1981,7 +1981,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178557-yjrjuYOOCCbs.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
