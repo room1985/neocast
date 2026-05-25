@@ -406,6 +406,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10160701,
+        "name": "告白……",
+        "name_cn": "告白……",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第4話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10164239,
         "name": "so_low",
         "name_cn": "so_low",
@@ -1502,26 +1522,6 @@
         },
         "rating": {
           "score": 5.6
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10160701,
-        "name": "告白……",
-        "name_cn": "告白……",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
-        },
-        "rating": {
-          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
