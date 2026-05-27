@@ -239,6 +239,26 @@
         "is_nsfw": false
       },
       {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -621,7 +641,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/1f/91/250224_7ZUS7.jpg"
         },
         "rating": {
-          "score": 7.4
+          "score": 7.3
         },
         "eps": 8,
         "air_weekday": 5,
@@ -2541,29 +2561,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第84话",
+        "pub_index": "第85话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
-        "is_nsfw": false
-      },
-      {
-        "id": 270242,
-        "name": "王者？别闹！",
-        "name_cn": "王者？别闹！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/78/99/270242_hyJ8E.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/78/99/270242_hyJ8E.jpg"
-        },
-        "rating": {
-          "score": 5.6
-        },
-        "eps": 13,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第86话",
-        "pub_time": "11:40",
-        "bilibili_season_id": 26015,
         "is_nsfw": false
       },
       {
