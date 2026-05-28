@@ -19,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第9话",
+        "pub_index": "第10话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
         "is_nsfw": false
@@ -39,7 +39,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第1话",
+        "pub_index": "第2话",
         "pub_time": "12:00",
         "bilibili_season_id": 235975,
         "is_nsfw": false
@@ -210,26 +210,6 @@
           "score": 6.9
         },
         "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 467711,
-        "name": "乐乐便利店",
-        "name_cn": "乐乐便利店",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
-        },
-        "rating": {
-          "score": 6.7
-        },
-        "eps": 10,
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
@@ -426,26 +406,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10196722,
-        "name": "レイカは華麗な僕の女王 THE ANIMATION",
-        "name_cn": "レイカは華麗な僕の女王 THE ANIMATION",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196722-mpsggThw5jFv.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
-        },
-        "rating": {
-          "score": 7.1
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第4話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10160701,
         "name": "告白……",
         "name_cn": "告白……",
@@ -506,26 +466,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10200930,
-        "name": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
-        "name_cn": "アナルマニアオタクとアナニー大好きなお嬢様～奇跡のマッチング～",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx200930-LilV7nMGiVKm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200930-LilV7nMGiVKm.png"
-        },
-        "rating": {
-          "score": 5.3
-        },
-        "eps": 2,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10206004,
         "name": "ラブはギャルから始まる運命",
         "name_cn": "ラブはギャルから始まる運命",
@@ -537,26 +477,6 @@
           "score": 5.5
         },
         "eps": 2,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10202894,
-        "name": "剣鬼バルゴ",
-        "name_cn": "剣鬼バルゴ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202894-vv6EPa1MKCmD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202894-vv6EPa1MKCmD.png"
-        },
-        "rating": {
-          "score": 5.0
-        },
-        "eps": 0,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
@@ -606,15 +526,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10202893,
-        "name": "L'amour fou de l'automate",
-        "name_cn": "L'amour fou de l'automate",
+        "id": 10208264,
+        "name": "霧中ノ塔",
+        "name_cn": "霧中ノ塔",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -741,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_8OmeD.jpg"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1261,7 +1181,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx146837-Ot4gdIYCA34z.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1302,6 +1222,26 @@
         },
         "rating": {
           "score": 6.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10196722,
+        "name": "レイカは華麗な僕の女王 THE ANIMATION",
+        "name_cn": "レイカは華麗な僕の女王 THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196722-mpsggThw5jFv.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
+        },
+        "rating": {
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2313,6 +2253,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10202894,
+        "name": "剣鬼バルゴ",
+        "name_cn": "剣鬼バルゴ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202894-vv6EPa1MKCmD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202894-vv6EPa1MKCmD.png"
+        },
+        "rating": {
+          "score": 5.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10187304,
         "name": "淫触王デマール",
         "name_cn": "淫触王デマール",
@@ -2322,6 +2282,26 @@
         },
         "rating": {
           "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10202893,
+        "name": "L'amour fou de l'automate",
+        "name_cn": "L'amour fou de l'automate",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+        },
+        "rating": {
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2393,12 +2373,72 @@
         "is_nsfw": true
       },
       {
+        "id": 10209981,
+        "name": "はーとまーく多め。",
+        "name_cn": "はーとまーく多め。",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209981-rXlkRNX1unMb.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10209982,
+        "name": "パイハメ家族",
+        "name_cn": "パイハメ家族",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209982-4qVPmKV8LmXS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10207035,
         "name": "彼女がセパレートをまとう理由",
         "name_cn": "彼女がセパレートをまとう理由",
         "images": {
           "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10208361,
+        "name": "性指導員のお仕事 The Animation",
+        "name_cn": "性指導員のお仕事 The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208361-4uMcLF44TJmM.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208361-4uMcLF44TJmM.png"
         },
         "rating": {
           "score": 0
