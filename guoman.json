@@ -199,26 +199,6 @@
         "is_nsfw": false
       },
       {
-        "id": 467711,
-        "name": "乐乐便利店",
-        "name_cn": "乐乐便利店",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
-        },
-        "rating": {
-          "score": 6.7
-        },
-        "eps": 10,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -601,7 +581,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 12,
         "air_weekday": 5,
@@ -1113,15 +1093,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10172218,
-        "name": "夢見ル乙女",
-        "name_cn": "夢見ル乙女",
+        "id": 10184810,
+        "name": "インモラルーティーン The Animation",
+        "name_cn": "インモラルーティーン The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184810-BJhp0LMwWKpP.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1133,15 +1113,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184810,
-        "name": "インモラルーティーン The Animation",
-        "name_cn": "インモラルーティーン The Animation",
+        "id": 10172218,
+        "name": "夢見ル乙女",
+        "name_cn": "夢見ル乙女",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184810-BJhp0LMwWKpP.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx172218-r6MOczPWLoif.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx172218-r6MOczPWLoif.png"
         },
         "rating": {
-          "score": 7.0
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1353,15 +1333,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10180704,
+        "name": "エルフに淫紋を付ける本 The Animation",
+        "name_cn": "エルフに淫紋を付ける本 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1373,15 +1353,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10180704,
-        "name": "エルフに淫紋を付ける本 The Animation",
-        "name_cn": "エルフに淫紋を付ける本 The Animation",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1833,15 +1813,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196116,
-        "name": "ながちち永井さん THE ANIMATION",
-        "name_cn": "ながちち永井さん THE ANIMATION",
+        "id": 10195068,
+        "name": "ピュアピュア ぺろぺろ プリンセス",
+        "name_cn": "ピュアピュア ぺろぺろ プリンセス",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196116-3bli0EwyZlBM.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196116-3bli0EwyZlBM.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195068-LOr1MKlDtH4Y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1853,15 +1833,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195068,
-        "name": "ピュアピュア ぺろぺろ プリンセス",
-        "name_cn": "ピュアピュア ぺろぺろ プリンセス",
+        "id": 10196116,
+        "name": "ながちち永井さん THE ANIMATION",
+        "name_cn": "ながちち永井さん THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195068-LOr1MKlDtH4Y.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196116-3bli0EwyZlBM.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196116-3bli0EwyZlBM.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2073,6 +2053,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10204463,
+        "name": "蛇と蜘蛛",
+        "name_cn": "蛇と蜘蛛",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10184824,
         "name": "勇者ちゃんの冒険は終わってしまった！",
         "name_cn": "勇者ちゃんの冒険は終わってしまった！",
@@ -2102,26 +2102,6 @@
         },
         "rating": {
           "score": 4.8
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10204463,
-        "name": "蛇と蜘蛛",
-        "name_cn": "蛇と蜘蛛",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
-        },
-        "rating": {
-          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
