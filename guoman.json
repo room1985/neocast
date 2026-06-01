@@ -547,7 +547,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第7话",
+        "pub_index": "第8话",
         "pub_time": "10:00",
         "bilibili_season_id": 229649,
         "is_nsfw": false
@@ -567,7 +567,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第22话",
+        "pub_index": "第23话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
         "is_nsfw": false
@@ -587,7 +587,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第7话",
+        "pub_index": "第8话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
         "is_nsfw": false
@@ -607,7 +607,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第56话",
+        "pub_index": "第57话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2419,26 +2419,6 @@
       "id": 6
     },
     "items": [
-      {
-        "id": 453314,
-        "name": "永生之气壮山河",
-        "name_cn": "永生 第三季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/af/22/453314_1vvwJ.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/af/22/453314_1vvwJ.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 16,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第82话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 35213,
-        "is_nsfw": false
-      },
       {
         "id": 565411,
         "name": "我是不白吃",
