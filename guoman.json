@@ -45,26 +45,6 @@
         "is_nsfw": false
       },
       {
-        "id": 250224,
-        "name": "放开那个女巫",
-        "name_cn": "放开那个女巫",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/1f/91/250224_7ZUS7.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1f/91/250224_7ZUS7.jpg"
-        },
-        "rating": {
-          "score": 7.4
-        },
-        "eps": 8,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 630676,
         "name": "仙逆 年番3",
         "name_cn": "",
@@ -92,20 +72,20 @@
     },
     "items": [
       {
-        "id": 9148433,
+        "id": 608049,
         "name": "盗妖行",
         "name_cn": "盗妖行",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 5.5
         },
-        "eps": 0,
+        "eps": 60,
         "air_weekday": 2,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第32话",
         "pub_time": "09:00",
         "bilibili_season_id": 148433,
@@ -132,15 +112,15 @@
         "is_nsfw": false
       },
       {
-        "id": 233593,
-        "name": "非人哉",
-        "name_cn": "非人哉",
+        "id": 453309,
+        "name": "非人哉 第三季 Part.2",
+        "name_cn": "非人哉 第三季 13-24集",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/b7/b5/233593_r0O3D.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/b7/b5/233593_r0O3D.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/49/11/453309_597ky.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_597ky.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.3
         },
         "eps": 12,
         "air_weekday": 2,
@@ -239,6 +219,26 @@
         "is_nsfw": false
       },
       {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -265,26 +265,6 @@
       "id": 4
     },
     "items": [
-      {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.5
-        },
-        "eps": 60,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第33话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
       {
         "id": 456169,
         "name": "驭灵师",
@@ -573,20 +553,20 @@
     },
     "items": [
       {
-        "id": 9229649,
+        "id": 250224,
         "name": "放开那个女巫",
         "name_cn": "放开那个女巫",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/1f/91/250224_7ZUS7.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1f/91/250224_7ZUS7.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 7.4
         },
-        "eps": 0,
+        "eps": 8,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第8话",
         "pub_time": "10:00",
         "bilibili_season_id": 229649,
@@ -2480,26 +2460,6 @@
     },
     "items": [
       {
-        "id": 9034149,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1036话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 627556,
         "name": "呼唤少女特别篇 想做的事到底是什么",
         "name_cn": "",
@@ -2621,7 +2581,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第85话",
+        "pub_index": "第86话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
