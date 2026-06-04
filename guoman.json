@@ -446,26 +446,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10206004,
-        "name": "ラブはギャルから始まる運命",
-        "name_cn": "ラブはギャルから始まる運命",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206004-gwD6l2pmSvCr.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206004-gwD6l2pmSvCr.png"
-        },
-        "rating": {
-          "score": 5.6
-        },
-        "eps": 2,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10206840,
         "name": "とどの妻り",
         "name_cn": "とどの妻り",
