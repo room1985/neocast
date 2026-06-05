@@ -45,6 +45,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9238243,
+        "name": "以一龙之力打倒整个世界！",
+        "name_cn": "以一龙之力打倒整个世界！",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1话~第24话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 238243,
+        "is_nsfw": false
+      },
+      {
         "id": 630676,
         "name": "仙逆 年番3",
         "name_cn": "",
