@@ -219,6 +219,26 @@
         "is_nsfw": false
       },
       {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -684,6 +704,26 @@
           "score": 5.8
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 577199,
+        "name": "吞噬星空剧场版 决战原始星",
+        "name_cn": "吞噬星空剧场版 决战原始星",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/7b/2f/577199_YH31g.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/7b/2f/577199_YH31g.jpg"
+        },
+        "rating": {
+          "score": 7.1
+        },
+        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
