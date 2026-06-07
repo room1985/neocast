@@ -1233,15 +1233,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10183602,
-        "name": "彼女フェイス THE ANIMATION",
-        "name_cn": "彼女フェイス THE ANIMATION",
+        "id": 10196722,
+        "name": "レイカは華麗な僕の女王 THE ANIMATION",
+        "name_cn": "レイカは華麗な僕の女王 THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183602-8yGvSxmilgjW.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183602-8yGvSxmilgjW.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196722-mpsggThw5jFv.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
         },
         "rating": {
-          "score": 6.5
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1253,15 +1253,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196722,
-        "name": "レイカは華麗な僕の女王 THE ANIMATION",
-        "name_cn": "レイカは華麗な僕の女王 THE ANIMATION",
+        "id": 10183602,
+        "name": "彼女フェイス THE ANIMATION",
+        "name_cn": "彼女フェイス THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196722-mpsggThw5jFv.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183602-8yGvSxmilgjW.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183602-8yGvSxmilgjW.png"
         },
         "rating": {
-          "score": 7.1
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2631,8 +2631,8 @@
         "name": "牧神记 肆",
         "name_cn": "牧神记4",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "https://lain.bgm.tv/pic/cover/l/d0/aa/641036_aCRTc.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d0/aa/641036_aCRTc.jpg"
         },
         "rating": {
           "score": 6.7
