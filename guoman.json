@@ -192,6 +192,26 @@
         "is_nsfw": false
       },
       {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1037话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -2480,23 +2500,23 @@
     },
     "items": [
       {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
+        "id": 607915,
+        "name": "凡人修仙传 第五季",
+        "name_cn": "凡人修仙传 第五季",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/ac/c9/607915_RBL8u.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 8.1
         },
-        "eps": 0,
+        "eps": 52,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1036话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
+        "pub_index": "第177话~第178话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 28747,
         "is_nsfw": false
       },
       {
@@ -2511,26 +2531,6 @@
           "score": 6.6
         },
         "eps": 1,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 607915,
-        "name": "凡人修仙传 第五季",
-        "name_cn": "凡人修仙传 第五季",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/ac/c9/607915_RBL8u.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ac/c9/607915_RBL8u.jpg"
-        },
-        "rating": {
-          "score": 8.1
-        },
-        "eps": 52,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
