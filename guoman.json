@@ -661,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_OD5zd.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 26,
         "air_weekday": 5,
@@ -2601,7 +2601,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第86话",
+        "pub_index": "第87话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
