@@ -140,7 +140,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/3e/65/345822_XBZSU.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 6
         },
         "eps": 6,
         "air_weekday": 2,
@@ -270,6 +270,26 @@
           "score": 6.8
         },
         "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2561,8 +2581,8 @@
       },
       {
         "id": 577226,
-        "name": "诡秘之主特别篇 猎物",
-        "name_cn": "",
+        "name": "诡秘之主特别篇",
+        "name_cn": "诡秘之主特别篇",
         "images": {
           "large": "https://lain.bgm.tv/pic/cover/l/b9/99/577226_68Dfj.jpg",
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_68Dfj.jpg"
@@ -2570,7 +2590,7 @@
         "rating": {
           "score": 0
         },
-        "eps": 0,
+        "eps": 3,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
