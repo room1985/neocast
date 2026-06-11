@@ -326,26 +326,6 @@
         "is_nsfw": false
       },
       {
-        "id": 553397,
-        "name": "临安：芳好",
-        "name_cn": "临安：芳好",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/32/e6/553397_z9Bb3.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/32/e6/553397_z9Bb3.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 423036,
         "name": "中国奇谭 第二季",
         "name_cn": "",
@@ -357,6 +337,26 @@
           "score": 6.2
         },
         "eps": 9,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 553397,
+        "name": "临安：芳好",
+        "name_cn": "临安：芳好",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/32/e6/553397_z9Bb3.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/32/e6/553397_z9Bb3.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
