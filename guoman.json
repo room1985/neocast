@@ -92,26 +92,6 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.5
-        },
-        "eps": 60,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第34话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
         "id": 345822,
         "name": "城隍录",
         "name_cn": "城隍录",
@@ -126,7 +106,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第2话",
+        "pub_index": "第3话",
         "pub_time": "10:00",
         "bilibili_season_id": 243229,
         "is_nsfw": false
@@ -146,7 +126,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第33话",
+        "pub_index": "第34话",
         "pub_time": "11:00",
         "bilibili_season_id": 73971,
         "is_nsfw": false
@@ -166,29 +146,9 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第19话",
+        "pub_index": "第20话",
         "pub_time": "12:00",
         "bilibili_season_id": 101854,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1037话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -306,6 +266,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 60,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第35话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 406488,
         "name": "将夜",
         "name_cn": "将夜",
@@ -343,6 +323,26 @@
         "pub_index": "第18话",
         "pub_time": "11:00",
         "bilibili_season_id": 45979,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1038话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
