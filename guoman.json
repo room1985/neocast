@@ -92,6 +92,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 60,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第36话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 345822,
         "name": "城隍录",
         "name_cn": "城隍录",
@@ -266,26 +286,6 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.5
-        },
-        "eps": 60,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第35话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
         "id": 406488,
         "name": "将夜",
         "name_cn": "将夜",
@@ -300,49 +300,9 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第9话",
+        "pub_index": "第10话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
-        "is_nsfw": false
-      },
-      {
-        "id": 456169,
-        "name": "驭灵师",
-        "name_cn": "驭灵师",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/11/9f/456169_8zzyK.jpg"
-        },
-        "rating": {
-          "score": 6.5
-        },
-        "eps": 18,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第18话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 45979,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1038话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -377,6 +337,26 @@
           "score": 0
         },
         "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 456169,
+        "name": "驭灵师",
+        "name_cn": "驭灵师",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 18,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2520,6 +2500,26 @@
         "is_nsfw": false
       },
       {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1039话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
         "id": 627556,
         "name": "呼唤少女特别篇 想做的事到底是什么",
         "name_cn": "",
@@ -2584,8 +2584,8 @@
         "name": "诡秘之主特别篇",
         "name_cn": "诡秘之主特别篇",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/b9/99/577226_68Dfj.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_68Dfj.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/b9/99/577226_IXB16.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_IXB16.jpg"
         },
         "rating": {
           "score": 0
