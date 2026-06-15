@@ -346,6 +346,26 @@
         "is_nsfw": false
       },
       {
+        "id": 659266,
+        "name": "师兄啊师兄 最终季",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/b6/58/659266_fLr5z.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b6/58/659266_fLr5z.jpg"
+        },
+        "rating": {
+          "score": 6
+        },
+        "eps": 26,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 456169,
         "name": "驭灵师",
         "name_cn": "驭灵师",
