@@ -106,7 +106,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第36话",
+        "pub_index": "即将更新 第36话",
         "pub_time": "09:00",
         "bilibili_season_id": 148433,
         "is_nsfw": false
@@ -120,7 +120,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/3e/65/345822_XBZSU.jpg"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.5
         },
         "eps": 6,
         "air_weekday": 2,
@@ -627,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第24话",
+        "pub_index": "第25话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
         "is_nsfw": false
@@ -647,7 +647,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第9话",
+        "pub_index": "第10话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
         "is_nsfw": false
@@ -667,7 +667,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第58话",
+        "pub_index": "第59话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
