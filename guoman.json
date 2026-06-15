@@ -267,7 +267,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202895-tyPbaoibtuEA.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 3,
@@ -374,7 +374,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 18,
         "air_weekday": 4,
@@ -534,7 +534,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
         },
         "rating": {
-          "score": 4.9
+          "score": 5.0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -554,7 +554,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 4,
@@ -2153,15 +2153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184824,
-        "name": "勇者ちゃんの冒険は終わってしまった！",
-        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
+        "id": 10193347,
+        "name": "社畜シンデレラ",
+        "name_cn": "社畜シンデレラ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193347-EnTUvSR3JOgd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193347-EnTUvSR3JOgd.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2173,15 +2173,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10193347,
-        "name": "社畜シンデレラ",
-        "name_cn": "社畜シンデレラ",
+        "id": 10184824,
+        "name": "勇者ちゃんの冒険は終わってしまった！",
+        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193347-EnTUvSR3JOgd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193347-EnTUvSR3JOgd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2321,7 +2321,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
         },
         "rating": {
-          "score": 5.9
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2413,12 +2413,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10191451,
-        "name": "今日は指輪を外すから……",
-        "name_cn": "今日は指輪を外すから……",
+        "id": 10209982,
+        "name": "パイハメ家族",
+        "name_cn": "パイハメ家族",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191451-weddKt3utNpb.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191451-weddKt3utNpb.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209982-4qVPmKV8LmXS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
         },
         "rating": {
           "score": 0
@@ -2433,12 +2433,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10209982,
-        "name": "パイハメ家族",
-        "name_cn": "パイハメ家族",
+        "id": 10191451,
+        "name": "今日は指輪を外すから……",
+        "name_cn": "今日は指輪を外すから……",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209982-4qVPmKV8LmXS.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191451-weddKt3utNpb.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191451-weddKt3utNpb.png"
         },
         "rating": {
           "score": 0
@@ -2508,7 +2508,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 8
+          "score": 7.9
         },
         "eps": 52,
         "air_weekday": 6,
