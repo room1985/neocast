@@ -172,6 +172,26 @@
         "is_nsfw": false
       },
       {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1040话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -434,7 +454,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx112936-MOPqLdKu7dgJ.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -2514,29 +2534,9 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第177话~第178话",
+        "pub_index": "第179话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1039话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
