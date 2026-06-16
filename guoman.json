@@ -120,7 +120,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/3e/65/345822_XBZSU.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.4
         },
         "eps": 6,
         "air_weekday": 2,
@@ -981,7 +981,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155170-rgYkDP4pQmgc.jpg"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1741,7 +1741,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2273,6 +2273,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10209981,
+        "name": "はーとまーく多め。",
+        "name_cn": "はーとまーく多め。",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209981-rXlkRNX1unMb.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10199162,
         "name": "クール de M",
         "name_cn": "クール de M",
@@ -2302,26 +2322,6 @@
         },
         "rating": {
           "score": 4.5
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10209981,
-        "name": "はーとまーく多め。",
-        "name_cn": "はーとまーく多め。",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209981-rXlkRNX1unMb.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
-        },
-        "rating": {
-          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2393,15 +2393,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10201153,
-        "name": "聖光閃姫ポニーセレス",
-        "name_cn": "聖光閃姫ポニーセレス",
+        "id": 10209982,
+        "name": "パイハメ家族",
+        "name_cn": "パイハメ家族",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx201153-9xwz47bJi3wp.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209982-4qVPmKV8LmXS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
         },
         "rating": {
-          "score": 4.7
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2413,15 +2413,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10209982,
-        "name": "パイハメ家族",
-        "name_cn": "パイハメ家族",
+        "id": 10201153,
+        "name": "聖光閃姫ポニーセレス",
+        "name_cn": "聖光閃姫ポニーセレス",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209982-4qVPmKV8LmXS.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx201153-9xwz47bJi3wp.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
         },
         "rating": {
-          "score": 0
+          "score": 4.7
         },
         "eps": 0,
         "air_weekday": 5,
