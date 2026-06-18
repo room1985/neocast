@@ -19,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第12话",
+        "pub_index": "第13话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
         "is_nsfw": false
@@ -39,7 +39,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "12:00",
         "bilibili_season_id": 235975,
         "is_nsfw": false
@@ -374,7 +374,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b6/58/659266_fLr5z.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.3
         },
         "eps": 26,
         "air_weekday": 4,
