@@ -259,6 +259,26 @@
         "is_nsfw": false
       },
       {
+        "id": 637591,
+        "name": "遮天 第四季",
+        "name_cn": "遮天 第四季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ba/b7/637591_YJ8p8.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ba/b7/637591_YJ8p8.jpg"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 467711,
         "name": "乐乐便利店",
         "name_cn": "乐乐便利店",
@@ -314,7 +334,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/12/ec/406488_YUXzx.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 19,
         "air_weekday": 4,
