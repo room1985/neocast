@@ -286,6 +286,26 @@
         "is_nsfw": false
       },
       {
+        "id": 423976,
+        "name": "苍兰诀2",
+        "name_cn": "苍兰诀 第二季",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/83/17/423976_9OEsn.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/83/17/423976_9OEsn.jpg"
+        },
+        "rating": {
+          "score": 4.9
+        },
+        "eps": 26,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1话~第26话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 248319,
+        "is_nsfw": false
+      },
+      {
         "id": 423036,
         "name": "中国奇谭 第二季",
         "name_cn": "",
@@ -593,20 +613,20 @@
         "is_nsfw": false
       },
       {
-        "id": 493777,
+        "id": 9073968,
         "name": "深空彼岸",
         "name_cn": "深空彼岸",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/ef/2c/493777_G0G0p.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 5.6
+          "score": 0
         },
-        "eps": 26,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第25话",
         "pub_time": "11:00",
         "bilibili_season_id": 73968,
@@ -633,20 +653,20 @@
         "is_nsfw": false
       },
       {
-        "id": 572689,
+        "id": 9096881,
         "name": "开心锤锤世界",
         "name_cn": "开心锤锤世界",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
           "score": 0
         },
-        "eps": 30,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第59话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
@@ -704,6 +724,26 @@
           "score": 4.7
         },
         "eps": 12,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 493777,
+        "name": "深空彼岸",
+        "name_cn": "深空彼岸",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ef/2c/493777_G0G0p.jpg"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 26,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2508,7 +2548,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.8
+          "score": 7.7
         },
         "eps": 52,
         "air_weekday": 6,
