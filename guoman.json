@@ -166,7 +166,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第21话",
+        "pub_index": "即将更新 第21话",
         "pub_time": "12:00",
         "bilibili_season_id": 101854,
         "is_nsfw": false
@@ -236,6 +236,26 @@
         "pub_index": "第4话",
         "pub_time": "10:00",
         "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
+      {
+        "id": 467711,
+        "name": "乐乐便利店",
+        "name_cn": "乐乐便利店",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 10,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
         "is_nsfw": false
       },
       {
