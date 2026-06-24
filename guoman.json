@@ -152,15 +152,15 @@
         "is_nsfw": false
       },
       {
-        "id": 233593,
-        "name": "非人哉",
-        "name_cn": "非人哉",
+        "id": 453309,
+        "name": "非人哉 第三季 Part.2",
+        "name_cn": "非人哉 第三季 13-24集",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/b7/b5/233593_r0O3D.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/b7/b5/233593_r0O3D.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/49/11/453309_597ky.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_597ky.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.4
         },
         "eps": 12,
         "air_weekday": 2,
@@ -363,26 +363,6 @@
         "pub_index": "第1话~第26话",
         "pub_time": "12:00",
         "bilibili_season_id": 248319,
-        "is_nsfw": false
-      },
-      {
-        "id": 9034149,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1044话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -681,7 +661,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ef/2c/493777_G0G0p.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 26,
         "air_weekday": 5,
@@ -693,20 +673,20 @@
         "is_nsfw": false
       },
       {
-        "id": 9045968,
+        "id": 456303,
         "name": "开拍啦！怪兽大电影",
         "name_cn": "开拍啦！怪兽大电影",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/36/ae/456303_bcCE2.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 6.3
         },
-        "eps": 0,
+        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第11话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
@@ -773,26 +753,6 @@
         "is_nsfw": false
       },
       {
-        "id": 456303,
-        "name": "开拍啦！怪兽大电影",
-        "name_cn": "开拍啦！怪兽大电影",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_bcCE2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_bcCE2.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 12,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 555710,
         "name": "时光代理人Ⅲ Part One",
         "name_cn": "时光代理人 第三季 Part 1",
@@ -824,6 +784,26 @@
           "score": 7.1
         },
         "eps": 1,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 607337,
+        "name": "凹凸世界·Reborn",
+        "name_cn": "凹凸世界·新生",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/e0/52/607337_Um1p7.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/e0/52/607337_Um1p7.jpg"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 13,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2688,7 +2668,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.8
         },
         "eps": 3,
         "air_weekday": 6,
@@ -2707,21 +2687,21 @@
     },
     "items": [
       {
-        "id": 9045969,
+        "id": 456159,
         "name": "牧神记",
         "name_cn": "牧神记",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/a8/a9/456159_423P3.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a8/a9/456159_423P3.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 6.5
         },
-        "eps": 0,
+        "eps": 26,
         "air_weekday": 7,
         "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第88话",
+        "bgm_matched": true,
+        "pub_index": "第89话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
