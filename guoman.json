@@ -19,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第13话",
+        "pub_index": "第14话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
         "is_nsfw": false
@@ -39,7 +39,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第5话",
+        "pub_index": "第6话",
         "pub_time": "12:00",
         "bilibili_season_id": 235975,
         "is_nsfw": false
@@ -500,7 +500,7 @@
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
-        "pub_index": "第11話",
+        "pub_index": "第12話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
@@ -586,26 +586,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10206840,
-        "name": "とどの妻り",
-        "name_cn": "とどの妻り",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206840-WSrKIJA0GFci.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
-        },
-        "rating": {
-          "score": 5.1
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10204560,
         "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
         "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
@@ -652,6 +632,26 @@
         "images": {
           "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10209873,
+        "name": "ハメハラ",
+        "name_cn": "ハメハラ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
         },
         "rating": {
           "score": 0
@@ -2333,6 +2333,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10206840,
+        "name": "とどの妻り",
+        "name_cn": "とどの妻り",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206840-WSrKIJA0GFci.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10202894,
         "name": "剣鬼バルゴ",
         "name_cn": "剣鬼バルゴ",
@@ -2564,6 +2584,46 @@
           "score": 5.3
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10210116,
+        "name": "彼の知らない秘密を入れて。 The Animation",
+        "name_cn": "彼の知らない秘密を入れて。 The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210116-CRuoaXeZO5qU.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10211557,
+        "name": "フラチ",
+        "name_cn": "フラチ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211557-PN1R4dpTOekY.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211557-PN1R4dpTOekY.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
