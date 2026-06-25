@@ -466,6 +466,26 @@
         "is_nsfw": false
       },
       {
+        "id": 520299,
+        "name": "斩神之凡尘神域 第2季",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/06/9c/520299_IS833.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/06/9c/520299_IS833.jpg"
+        },
+        "rating": {
+          "score": 9
+        },
+        "eps": 15,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10021828,
         "name": "小女ラムネ",
         "name_cn": "小女ラムネ",
@@ -853,26 +873,6 @@
         "is_nsfw": false
       },
       {
-        "id": 591580,
-        "name": "沧元图前传 东宁府的夏天",
-        "name_cn": "",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/1d/63/591580_JEJ3x.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/63/591580_JEJ3x.jpg"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 3,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10132203,
         "name": "今泉ん家はどうやらギャルの溜まり場になってるらしい",
         "name_cn": "今泉ん家はどうやらギャルの溜まり場になってるらしい",
@@ -1133,15 +1133,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10174633,
-        "name": "みだれうち",
-        "name_cn": "みだれうち",
+        "id": 10196750,
+        "name": "シスターブリーダー",
+        "name_cn": "シスターブリーダー",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174633-8PVPsJ4yKthq.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174633-8PVPsJ4yKthq.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
         },
         "rating": {
-          "score": 6.2
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1153,15 +1153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196750,
-        "name": "シスターブリーダー",
-        "name_cn": "シスターブリーダー",
+        "id": 10174633,
+        "name": "みだれうち",
+        "name_cn": "みだれうち",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174633-8PVPsJ4yKthq.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174633-8PVPsJ4yKthq.png"
         },
         "rating": {
-          "score": 7.1
+          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2273,15 +2273,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184824,
-        "name": "勇者ちゃんの冒険は終わってしまった！",
-        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
+        "id": 10209981,
+        "name": "はーとまーく多め。",
+        "name_cn": "はーとまーく多め。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209981-rXlkRNX1unMb.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2293,15 +2293,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10209981,
-        "name": "はーとまーく多め。",
-        "name_cn": "はーとまーく多め。",
+        "id": 10184824,
+        "name": "勇者ちゃんの冒険は終わってしまった！",
+        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209981-rXlkRNX1unMb.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
