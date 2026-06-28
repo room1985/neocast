@@ -5,20 +5,20 @@
     },
     "items": [
       {
-        "id": 9043351,
+        "id": 405232,
         "name": "大道独行之蝶龙变",
         "name_cn": "大道独行之蝶龙变",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/b0/e1/405232_bUuUk.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/b0/e1/405232_bUuUk.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 4.8
         },
-        "eps": 0,
+        "eps": 16,
         "air_weekday": 1,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第14话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
@@ -83,26 +83,6 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
-      },
-      {
-        "id": 405232,
-        "name": "大道独行之蝶龙变",
-        "name_cn": "大道独行之蝶龙变",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/b0/e1/405232_bUuUk.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b0/e1/405232_bUuUk.jpg"
-        },
-        "rating": {
-          "score": 4.8
-        },
-        "eps": 16,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
       }
     ]
   },
@@ -111,26 +91,6 @@
       "id": 2
     },
     "items": [
-      {
-        "id": 9148433,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第40话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
       {
         "id": 345822,
         "name": "城隍录",
@@ -172,15 +132,15 @@
         "is_nsfw": false
       },
       {
-        "id": 233593,
-        "name": "非人哉",
-        "name_cn": "非人哉",
+        "id": 453309,
+        "name": "非人哉 第三季 Part.2",
+        "name_cn": "非人哉 第三季 13-24集",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/b7/b5/233593_r0O3D.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/b7/b5/233593_r0O3D.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/49/11/453309_597ky.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_597ky.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.4
         },
         "eps": 12,
         "air_weekday": 2,
@@ -454,7 +414,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/06/9c/520299_IS833.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.3
         },
         "eps": 15,
         "air_weekday": 4,
@@ -753,40 +713,40 @@
         "is_nsfw": false
       },
       {
-        "id": 9045968,
+        "id": 456303,
         "name": "开拍啦！怪兽大电影",
         "name_cn": "开拍啦！怪兽大电影",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/36/ae/456303_bcCE2.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 6.3
         },
-        "eps": 0,
+        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第11话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
         "is_nsfw": false
       },
       {
-        "id": 9096881,
+        "id": 572689,
         "name": "开心锤锤世界",
         "name_cn": "开心锤锤世界",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
         },
         "rating": {
           "score": 0
         },
-        "eps": 0,
+        "eps": 30,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第60话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
@@ -824,26 +784,6 @@
           "score": 5.9
         },
         "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 456303,
-        "name": "开拍啦！怪兽大电影",
-        "name_cn": "开拍啦！怪兽大电影",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_bcCE2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_bcCE2.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2213,6 +2153,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10209981,
+        "name": "はーとまーく多め。",
+        "name_cn": "はーとまーく多め。",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209981-rXlkRNX1unMb.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10196540,
         "name": "聖痕のアリア",
         "name_cn": "聖痕のアリア",
@@ -2262,26 +2222,6 @@
         },
         "rating": {
           "score": 5.2
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10209981,
-        "name": "はーとまーく多め。",
-        "name_cn": "はーとまーく多め。",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209981-rXlkRNX1unMb.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209981-rXlkRNX1unMb.png"
-        },
-        "rating": {
-          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2633,26 +2573,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10210116,
-        "name": "彼の知らない秘密を入れて。 The Animation",
-        "name_cn": "彼の知らない秘密を入れて。 The Animation",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210116-CRuoaXeZO5qU.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10211557,
         "name": "フラチ",
         "name_cn": "フラチ",
@@ -2664,6 +2584,26 @@
           "score": 0
         },
         "eps": 2,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10210116,
+        "name": "彼の知らない秘密を入れて。 The Animation",
+        "name_cn": "彼の知らない秘密を入れて。 The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210116-CRuoaXeZO5qU.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -2768,7 +2708,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.2
         },
         "eps": 3,
         "air_weekday": 6,
@@ -2851,8 +2791,8 @@
         "name": "牧神记 肆",
         "name_cn": "牧神记4",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/d0/aa/641036_aCRTc.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d0/aa/641036_aCRTc.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/d0/aa/641036_ylPZn.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d0/aa/641036_ylPZn.jpg"
         },
         "rating": {
           "score": 6.5
