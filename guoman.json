@@ -112,6 +112,26 @@
     },
     "items": [
       {
+        "id": 9148433,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第40话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 9243229,
         "name": "城隍录",
         "name_cn": "城隍录",
@@ -152,20 +172,20 @@
         "is_nsfw": false
       },
       {
-        "id": 453309,
-        "name": "非人哉 第三季 Part.2",
-        "name_cn": "非人哉 第三季 13-24集",
+        "id": 9101854,
+        "name": "非人哉 第三季",
+        "name_cn": "非人哉 第三季",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/49/11/453309_597ky.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_597ky.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 7.4
+          "score": 0
         },
-        "eps": 12,
+        "eps": 0,
         "air_weekday": 2,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第22话",
         "pub_time": "12:00",
         "bilibili_season_id": 101854,
@@ -219,26 +239,6 @@
     },
     "items": [
       {
-        "id": 467711,
-        "name": "乐乐便利店",
-        "name_cn": "乐乐便利店",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/65/96/467711_YYLt2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/65/96/467711_YYLt2.jpg"
-        },
-        "rating": {
-          "score": 6.7
-        },
-        "eps": 10,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 572768,
         "name": "一念永恒 完结季",
         "name_cn": "一念永恒 完结季",
@@ -286,26 +286,6 @@
     },
     "items": [
       {
-        "id": 9148433,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第39话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
         "id": 9045962,
         "name": "将夜",
         "name_cn": "将夜",
@@ -320,49 +300,9 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第11话",
+        "pub_index": "第12话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
-        "is_nsfw": false
-      },
-      {
-        "id": 9248319,
-        "name": "苍兰诀 第二季",
-        "name_cn": "苍兰诀 第二季",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第26话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 248319,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1044话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -454,7 +394,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/06/9c/520299_IS833.jpg"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.4
         },
         "eps": 15,
         "air_weekday": 4,
@@ -753,20 +693,20 @@
         "is_nsfw": false
       },
       {
-        "id": 456303,
+        "id": 9045968,
         "name": "开拍啦！怪兽大电影",
         "name_cn": "开拍啦！怪兽大电影",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/36/ae/456303_bcCE2.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 6.3
+          "score": 0
         },
-        "eps": 12,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第11话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
@@ -824,6 +764,26 @@
           "score": 5.9
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 456303,
+        "name": "开拍啦！怪兽大电影",
+        "name_cn": "开拍啦！怪兽大电影",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_bcCE2.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_bcCE2.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2808,7 +2768,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7
         },
         "eps": 3,
         "air_weekday": 6,
