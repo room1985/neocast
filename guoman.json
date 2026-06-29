@@ -219,6 +219,26 @@
     },
     "items": [
       {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第6话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
+      {
         "id": 467711,
         "name": "乐乐便利店",
         "name_cn": "乐乐便利店",
@@ -633,46 +653,6 @@
     },
     "items": [
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第5话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
-        "is_nsfw": false
-      },
-      {
-        "id": 493777,
-        "name": "深空彼岸",
-        "name_cn": "深空彼岸",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/ef/2c/493777_G0G0p.jpg"
-        },
-        "rating": {
-          "score": 5.7
-        },
-        "eps": 26,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第26话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 73968,
-        "is_nsfw": false
-      },
-      {
         "id": 456303,
         "name": "开拍啦！怪兽大电影",
         "name_cn": "开拍啦！怪兽大电影",
@@ -687,29 +667,9 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第11话",
+        "pub_index": "第12话",
         "pub_time": "12:00",
         "bilibili_season_id": 45968,
-        "is_nsfw": false
-      },
-      {
-        "id": 572689,
-        "name": "开心锤锤世界",
-        "name_cn": "开心锤锤世界",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 30,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第60话",
-        "pub_time": "18:00",
-        "bilibili_season_id": 96881,
         "is_nsfw": false
       },
       {
@@ -764,6 +724,26 @@
           "score": 4.7
         },
         "eps": 12,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 493777,
+        "name": "深空彼岸",
+        "name_cn": "深空彼岸",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ef/2c/493777_G0G0p.jpg"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 26,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2688,7 +2668,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.8
         },
         "eps": 3,
         "air_weekday": 6,
