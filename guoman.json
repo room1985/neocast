@@ -19,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第14话",
+        "pub_index": "第15话",
         "pub_time": "11:00",
         "bilibili_season_id": 43351,
         "is_nsfw": false
@@ -39,7 +39,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "12:00",
         "bilibili_season_id": 235975,
         "is_nsfw": false
@@ -474,13 +474,13 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
-        "pub_index": "第7話",
+        "pub_index": "第8話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
@@ -2631,6 +2631,46 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
+      },
+      {
+        "id": 10202896,
+        "name": "チートアイテム管理局のお仕事EX 散々ヤラれた後だし、どうせ全部忘れるから、被害者つまみ食いしてもいいよね",
+        "name_cn": "チートアイテム管理局のお仕事EX 散々ヤラれた後だし、どうせ全部忘れるから、被害者つまみ食いしてもいいよね",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202896-bqOOG4UCuTTi.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202896-bqOOG4UCuTTi.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10198044,
+        "name": "蹂躙王国 エルフ王国は巨大苗床に",
+        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -2728,7 +2768,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.7
         },
         "eps": 3,
         "air_weekday": 6,
