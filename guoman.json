@@ -681,7 +681,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.1
         },
         "eps": 12,
         "air_weekday": 5,
@@ -701,7 +701,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 7
         },
         "eps": 25,
         "air_weekday": 5,
@@ -727,7 +727,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第61话",
+        "pub_index": "第61话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -1413,15 +1413,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10156162,
-        "name": "ヤリ上がり",
-        "name_cn": "ヤリ上がり",
+        "id": 10194353,
+        "name": "ちょろ・めす・でいず",
+        "name_cn": "ちょろ・めす・でいず",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx156162-Gzv9Xy1jweEL.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx156162-Gzv9Xy1jweEL.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1433,15 +1433,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10194353,
-        "name": "ちょろ・めす・でいず",
-        "name_cn": "ちょろ・めす・でいず",
+        "id": 10156162,
+        "name": "ヤリ上がり",
+        "name_cn": "ヤリ上がり",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194353-DYQodQxpFuXD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx194353-DYQodQxpFuXD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx156162-Gzv9Xy1jweEL.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx156162-Gzv9Xy1jweEL.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2815,7 +2815,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b5/82/521431_6BRB6.jpg"
         },
         "rating": {
-          "score": 7
+          "score": 6.9
         },
         "eps": 24,
         "air_weekday": 7,
