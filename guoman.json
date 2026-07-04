@@ -179,23 +179,23 @@
     },
     "items": [
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
+        "id": 500458,
+        "name": "胶囊计划·奇迹",
+        "name_cn": "胶囊计划 奇迹",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/f5/23/500458_jXNh1.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/f5/23/500458_jXNh1.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 6
         },
-        "eps": 0,
+        "eps": 8,
         "air_weekday": 3,
         "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第6话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
+        "bgm_matched": true,
+        "pub_index": "第1话~第2话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 118963,
         "is_nsfw": false
       },
       {
@@ -653,6 +653,26 @@
     },
     "items": [
       {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第7话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
+      {
         "id": 456303,
         "name": "开拍啦！怪兽大电影",
         "name_cn": "开拍啦！怪兽大电影",
@@ -661,7 +681,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.2
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2700,26 +2720,6 @@
         "is_nsfw": false
       },
       {
-        "id": 577190,
-        "name": "遮天剧场版 背棺战王腾",
-        "name_cn": "遮天剧场版 背棺战王腾",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_sSD00.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
-        },
-        "rating": {
-          "score": 6.5
-        },
-        "eps": 1,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 577226,
         "name": "诡秘之主特别篇",
         "name_cn": "诡秘之主特别篇",
@@ -2728,7 +2728,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.8
         },
         "eps": 3,
         "air_weekday": 6,
