@@ -120,7 +120,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/3e/65/345822_XBZSU.jpg"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.1
         },
         "eps": 6,
         "air_weekday": 2,
@@ -354,7 +354,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/12/ec/406488_YUXzx.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 19,
         "air_weekday": 4,
@@ -434,7 +434,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/06/9c/520299_IS833.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.7
         },
         "eps": 15,
         "air_weekday": 4,
@@ -474,7 +474,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 4,
@@ -2721,7 +2721,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第90话",
+        "pub_index": "第91话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
