@@ -434,7 +434,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/06/9c/520299_IS833.jpg"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.5
         },
         "eps": 15,
         "air_weekday": 4,
@@ -501,26 +501,6 @@
         "source": "anilist",
         "bgm_matched": false,
         "pub_index": "第12話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10161680,
-        "name": "1LDK＋JK いきなり同居？密着！？初エッチ！！？",
-        "name_cn": "1LDK＋JK いきなり同居？密着！？初エッチ！！？",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx161680-NjggzN5hw0UL.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx161680-NjggzN5hw0UL.jpg"
-        },
-        "rating": {
-          "score": 6.6
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第8話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
@@ -615,26 +595,6 @@
         },
         "rating": {
           "score": 5.2
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10208749,
-        "name": "ヌきヌき♡ずっぽしイズム",
-        "name_cn": "ヌきヌき♡ずっぽしイズム",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
-        },
-        "rating": {
-          "score": 0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -913,26 +873,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10179823,
-        "name": "入り浸りギャルにま〇こ使わせて貰う話 Animation",
-        "name_cn": "入り浸りギャルにま〇こ使わせて貰う話 Animation",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179823-bRAv7uaS8mxl.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179823-bRAv7uaS8mxl.png"
-        },
-        "rating": {
-          "score": 7.1
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10147622,
         "name": "メイド教育。－没落貴族 瑠璃川椿－ THE ANIMATION",
         "name_cn": "メイド教育。－没落貴族 瑠璃川椿－ THE ANIMATION",
@@ -953,15 +893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10179368,
-        "name": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
-        "name_cn": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
+        "id": 10179823,
+        "name": "入り浸りギャルにま〇こ使わせて貰う話 Animation",
+        "name_cn": "入り浸りギャルにま〇こ使わせて貰う話 Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179368-LUseTIJVIjD4.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179368-LUseTIJVIjD4.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179823-bRAv7uaS8mxl.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179823-bRAv7uaS8mxl.png"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -993,6 +933,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10179368,
+        "name": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
+        "name_cn": "陰キャカップルが陽ギャル達とSEXトレーニングする話",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx179368-LUseTIJVIjD4.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179368-LUseTIJVIjD4.png"
+        },
+        "rating": {
+          "score": 7.2
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10170599,
         "name": "フルール The Animation",
         "name_cn": "フルール The Animation",
@@ -1002,6 +962,26 @@
         },
         "rating": {
           "score": 6.8
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10161680,
+        "name": "1LDK＋JK いきなり同居？密着！？初エッチ！！？",
+        "name_cn": "1LDK＋JK いきなり同居？密着！？初エッチ！！？",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx161680-NjggzN5hw0UL.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx161680-NjggzN5hw0UL.jpg"
+        },
+        "rating": {
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1161,7 +1141,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2542,6 +2522,26 @@
         },
         "rating": {
           "score": 5.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10208749,
+        "name": "ヌきヌき♡ずっぽしイズム",
+        "name_cn": "ヌきヌき♡ずっぽしイズム",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
+        },
+        "rating": {
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
