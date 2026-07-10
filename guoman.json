@@ -267,7 +267,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/f5/23/500458_jXNh1.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 8,
         "air_weekday": 3,
@@ -667,7 +667,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第62话",
+        "pub_index": "即将更新 第62话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2441,7 +2441,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211557-PN1R4dpTOekY.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.2
         },
         "eps": 2,
         "air_weekday": 5,
@@ -2481,7 +2481,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2513,15 +2513,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10191451,
-        "name": "今日は指輪を外すから……",
-        "name_cn": "今日は指輪を外すから……",
+        "id": 10208749,
+        "name": "ヌきヌき♡ずっぽしイズム",
+        "name_cn": "ヌきヌき♡ずっぽしイズム",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191451-weddKt3utNpb.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191451-weddKt3utNpb.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2533,15 +2533,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10208749,
-        "name": "ヌきヌき♡ずっぽしイズム",
-        "name_cn": "ヌきヌき♡ずっぽしイズム",
+        "id": 10191451,
+        "name": "今日は指輪を外すから……",
+        "name_cn": "今日は指輪を外すから……",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191451-weddKt3utNpb.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191451-weddKt3utNpb.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2619,6 +2619,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 589368,
+        "name": "如果历史是一群喵 大明皇朝篇",
+        "name_cn": "如果历史是一群喵 大明皇朝篇",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/66/56/589368_ze71z.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/66/56/589368_ze71z.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 12,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1话~第2话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 252364,
+        "is_nsfw": false
+      },
       {
         "id": 607915,
         "name": "凡人修仙传 第五季",
@@ -2755,7 +2775,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b5/82/521431_6BRB6.jpg"
         },
         "rating": {
-          "score": 7
+          "score": 6.9
         },
         "eps": 24,
         "air_weekday": 7,
@@ -2797,7 +2817,7 @@
         "rating": {
           "score": 0
         },
-        "eps": 0,
+        "eps": 8,
         "air_weekday": 7,
         "source": "anilist",
         "bgm_matched": false,
