@@ -39,7 +39,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第8话",
+        "pub_index": "即将更新 第8话",
         "pub_time": "12:00",
         "bilibili_season_id": 235975,
         "is_nsfw": false
@@ -601,7 +601,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.8
         },
         "eps": 25,
         "air_weekday": 5,
