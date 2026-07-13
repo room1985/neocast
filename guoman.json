@@ -13,7 +13,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/b0/e1/405232_bUuUk.jpg"
         },
         "rating": {
-          "score": 4.5
+          "score": 5
         },
         "eps": 16,
         "air_weekday": 1,
@@ -132,6 +132,26 @@
         "is_nsfw": false
       },
       {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 5.8
+        },
+        "eps": 25,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第7话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 118920,
+        "is_nsfw": false
+      },
+      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -178,6 +198,26 @@
       "id": 3
     },
     "items": [
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第10话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
       {
         "id": 500458,
         "name": "胶囊计划·奇迹",
@@ -593,46 +633,6 @@
     },
     "items": [
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第9话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
-        "is_nsfw": false
-      },
-      {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 25,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第6话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 118920,
-        "is_nsfw": false
-      },
-      {
         "id": 572689,
         "name": "开心锤锤世界",
         "name_cn": "开心锤锤世界",
@@ -647,7 +647,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第62话",
+        "pub_index": "第63话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -681,7 +681,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_8OmeD.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 6
         },
         "eps": 0,
         "air_weekday": 5,
