@@ -120,7 +120,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_597ky.jpg"
         },
         "rating": {
-          "score": 7.4
+          "score": 7.3
         },
         "eps": 12,
         "air_weekday": 2,
@@ -149,6 +149,26 @@
         "pub_index": "第7话",
         "pub_time": "12:00",
         "bilibili_season_id": 118920,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1052话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -2614,7 +2634,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第2话",
+        "pub_index": "第3话",
         "pub_time": "10:00",
         "bilibili_season_id": 252364,
         "is_nsfw": false
@@ -2634,29 +2654,9 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第182话",
+        "pub_index": "第183话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1051话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
