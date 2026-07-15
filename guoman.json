@@ -120,7 +120,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/49/11/453309_597ky.jpg"
         },
         "rating": {
-          "score": 7.3
+          "score": 7.2
         },
         "eps": 12,
         "air_weekday": 2,
@@ -247,7 +247,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/f5/23/500458_jXNh1.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.5
         },
         "eps": 8,
         "air_weekday": 3,
@@ -701,7 +701,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_8OmeD.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2741,7 +2741,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第91话",
+        "pub_index": "第92话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
