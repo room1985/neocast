@@ -360,9 +360,109 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第14话",
+        "pub_index": "第14话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259087,
+        "name": "王爷深信我爱他成瘾",
+        "name_cn": "王爷深信我爱他成瘾",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "即将更新 第1话~第50话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 259087,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259513,
+        "name": "女扮男装后开始攻略疯批奸臣",
+        "name_cn": "女扮男装后开始攻略疯批奸臣",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "即将更新 第1话~第50话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 259513,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259889,
+        "name": "恶毒长公主开始恋爱脑",
+        "name_cn": "恶毒长公主开始恋爱脑",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "即将更新 第1话~第50话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 259889,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259955,
+        "name": "大佬要嫁盲夫君",
+        "name_cn": "大佬要嫁盲夫君",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "即将更新 第1话~第50话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 259955,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259991,
+        "name": "重回老公当校草的那年",
+        "name_cn": "重回老公当校草的那年",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "即将更新 第1话~第50话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 259991,
         "is_nsfw": false
       },
       {
