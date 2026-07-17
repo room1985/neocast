@@ -5,6 +5,26 @@
     },
     "items": [
       {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1话~第3话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
+      {
         "id": 9235975,
         "name": "奔跑的木头",
         "name_cn": "奔跑的木头",
@@ -724,6 +744,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
+      },
+      {
+        "id": 10209873,
+        "name": "ハメハラ",
+        "name_cn": "ハメハラ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -747,7 +787,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第63话",
+        "pub_index": "即将更新 第63话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2671,6 +2711,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
+      },
+      {
+        "id": 10198044,
+        "name": "蹂躙王国 エルフ王国は巨大苗床に",
+        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -2786,6 +2846,26 @@
       "id": 7
     },
     "items": [
+      {
+        "id": 29792,
+        "name": "搜神记",
+        "name_cn": "搜神记",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/cb/99/29792_4uN0v.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/cb/99/29792_4uN0v.jpg"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 52,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1集~第20集",
+        "pub_time": "09:00",
+        "bilibili_season_id": 262354,
+        "is_nsfw": false
+      },
       {
         "id": 456159,
         "name": "牧神记",
