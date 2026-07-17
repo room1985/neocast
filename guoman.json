@@ -724,26 +724,6 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
-      },
-      {
-        "id": 10209873,
-        "name": "ハメハラ",
-        "name_cn": "ハメハラ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
       }
     ]
   },
@@ -2684,26 +2664,6 @@
           "score": 0
         },
         "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10198044,
-        "name": "蹂躙王国 エルフ王国は巨大苗床に",
-        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
