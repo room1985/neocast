@@ -314,7 +314,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/12/ec/406488_YUXzx.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.5
         },
         "eps": 19,
         "air_weekday": 4,
@@ -692,26 +692,6 @@
         "images": {
           "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10209873,
-        "name": "ハメハラ",
-        "name_cn": "ハメハラ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
         },
         "rating": {
           "score": 0
@@ -2691,26 +2671,6 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
-      },
-      {
-        "id": 10198044,
-        "name": "蹂躙王国 エルフ王国は巨大苗床に",
-        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 2,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
       }
     ]
   },
@@ -2748,13 +2708,13 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.6
+          "score": 7.5
         },
         "eps": 52,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第183话",
+        "pub_index": "第183话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
         "is_nsfw": false
@@ -2844,6 +2804,26 @@
         "pub_index": "第1集~第20集",
         "pub_time": "09:00",
         "bilibili_season_id": 262354,
+        "is_nsfw": false
+      },
+      {
+        "id": 9263296,
+        "name": "重生警犬后，我成了名侦探？",
+        "name_cn": "重生警犬后，我成了名侦探？",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1话~第5话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263296,
         "is_nsfw": false
       },
       {
