@@ -704,6 +704,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
+      },
+      {
+        "id": 10209873,
+        "name": "ハメハラ",
+        "name_cn": "ハメハラ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -1673,15 +1693,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10155154,
-        "name": "妻を同窓会にいかせたら",
-        "name_cn": "妻を同窓会にいかせたら",
+        "id": 10180832,
+        "name": "おにちちハーレム",
+        "name_cn": "おにちちハーレム",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180832-N1TzYgyWcKiB.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1693,15 +1713,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10180832,
-        "name": "おにちちハーレム",
-        "name_cn": "おにちちハーレム",
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "妻を同窓会にいかせたら",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180832-N1TzYgyWcKiB.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1813,15 +1833,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10166461,
-        "name": "子作り妊活部！",
-        "name_cn": "子作り妊活部！",
+        "id": 10198048,
+        "name": "夏妻",
+        "name_cn": "夏妻",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166461-1RCN93WTfXyN.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx166461-1RCN93WTfXyN.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1833,15 +1853,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10198048,
-        "name": "夏妻",
-        "name_cn": "夏妻",
+        "id": 10166461,
+        "name": "子作り妊活部！",
+        "name_cn": "子作り妊活部！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166461-1RCN93WTfXyN.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx166461-1RCN93WTfXyN.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2533,15 +2553,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10199164,
-        "name": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
-        "name_cn": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
+        "id": 10208749,
+        "name": "ヌきヌき♡ずっぽしイズム",
+        "name_cn": "ヌきヌき♡ずっぽしイズム",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199164-kQ2sVvNXU392.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
         },
         "rating": {
-          "score": 4.8
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2553,15 +2573,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10208749,
-        "name": "ヌきヌき♡ずっぽしイズム",
-        "name_cn": "ヌきヌき♡ずっぽしイズム",
+        "id": 10199164,
+        "name": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
+        "name_cn": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199164-kQ2sVvNXU392.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 4.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2633,6 +2653,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10210116,
+        "name": "彼の知らない秘密を入れて。 The Animation",
+        "name_cn": "彼の知らない秘密を入れて。 The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210116-CRuoaXeZO5qU.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10207035,
         "name": "彼女がセパレートをまとう理由",
         "name_cn": "彼女がセパレートをまとう理由",
@@ -2653,17 +2693,17 @@
         "is_nsfw": true
       },
       {
-        "id": 10210116,
-        "name": "彼の知らない秘密を入れて。 The Animation",
-        "name_cn": "彼の知らない秘密を入れて。 The Animation",
+        "id": 10198044,
+        "name": "蹂躙王国 エルフ王国は巨大苗床に",
+        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210116-CRuoaXeZO5qU.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
         },
         "rating": {
           "score": 0
         },
-        "eps": 0,
+        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
