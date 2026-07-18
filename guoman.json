@@ -159,26 +159,6 @@
     },
     "items": [
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第10话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
-        "is_nsfw": false
-      },
-      {
         "id": 500458,
         "name": "胶囊计划·奇迹",
         "name_cn": "胶囊计划 奇迹",
@@ -193,29 +173,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第3话",
+        "pub_index": "第4话",
         "pub_time": "11:00",
         "bilibili_season_id": 118963,
-        "is_nsfw": false
-      },
-      {
-        "id": 9259075,
-        "name": "十二层宝塔",
-        "name_cn": "十二层宝塔",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第4话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 259075,
         "is_nsfw": false
       },
       {
@@ -323,6 +283,26 @@
         "pub_index": "第14话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259075,
+        "name": "十二层宝塔",
+        "name_cn": "十二层宝塔",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第5话~第6话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 259075,
         "is_nsfw": false
       },
       {
@@ -732,6 +712,26 @@
       "id": 5
     },
     "items": [
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第11话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
       {
         "id": 607929,
         "name": "百日成王",
@@ -2728,7 +2728,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/66/56/589368_ze71z.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 6
         },
         "eps": 12,
         "air_weekday": 6,
