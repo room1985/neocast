@@ -160,7 +160,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.3
         },
         "eps": 25,
         "air_weekday": 2,
@@ -169,6 +169,26 @@
         "pub_index": "第9话",
         "pub_time": "12:00",
         "bilibili_season_id": 118920,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1055话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -2594,7 +2614,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第3话",
+        "pub_index": "第4话",
         "pub_time": "10:00",
         "bilibili_season_id": 252364,
         "is_nsfw": false
@@ -2614,49 +2634,9 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第183话",
+        "pub_index": "第184话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
-        "is_nsfw": false
-      },
-      {
-        "id": 9259075,
-        "name": "十二层宝塔",
-        "name_cn": "十二层宝塔",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第9话~第10话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 259075,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1054话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -2708,7 +2688,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/af/9c/526975_quBRr.jpg"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.9
         },
         "eps": 26,
         "air_weekday": 6,
@@ -2804,6 +2784,26 @@
         "pub_index": "第92话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259075,
+        "name": "十二层宝塔",
+        "name_cn": "十二层宝塔",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第11话~第12话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 259075,
         "is_nsfw": false
       },
       {
