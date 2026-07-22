@@ -303,13 +303,13 @@
         "name": "一念永恒 完结季",
         "name_cn": "一念永恒 完结季",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/fa/da/572768_D25Ve.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/fa/da/572768_D25Ve.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/fa/da/572768_iX280.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/fa/da/572768_iX280.jpg"
         },
         "rating": {
           "score": 10
         },
-        "eps": 0,
+        "eps": 46,
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1622,26 +1622,6 @@
         },
         "rating": {
           "score": 6.0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10176396,
-        "name": "誤爆〜萌えママ徒然〜",
-        "name_cn": "誤爆〜萌えママ徒然〜",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176396-WnffuWa1xEA1.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176396-WnffuWa1xEA1.png"
-        },
-        "rating": {
-          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
