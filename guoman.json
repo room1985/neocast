@@ -307,7 +307,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/fa/da/572768_iX280.jpg"
         },
         "rating": {
-          "score": 10
+          "score": 8.2
         },
         "eps": 46,
         "air_weekday": 3,
@@ -652,6 +652,26 @@
       "id": 5
     },
     "items": [
+      {
+        "id": 9263296,
+        "name": "重生警犬后，我成了名侦探？",
+        "name_cn": "重生警犬后，我成了名侦探？",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第6话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263296,
+        "is_nsfw": false
+      },
       {
         "id": 572689,
         "name": "开心锤锤世界",
@@ -2721,29 +2741,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第20话",
+        "pub_index": "第21话",
         "pub_time": "09:00",
         "bilibili_season_id": 262354,
-        "is_nsfw": false
-      },
-      {
-        "id": 9263296,
-        "name": "重生警犬后，我成了名侦探？",
-        "name_cn": "重生警犬后，我成了名侦探？",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第5话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 263296,
         "is_nsfw": false
       },
       {
@@ -2761,29 +2761,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第92话",
+        "pub_index": "第93话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
-        "is_nsfw": false
-      },
-      {
-        "id": 9259075,
-        "name": "十二层宝塔",
-        "name_cn": "十二层宝塔",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第11话~第12话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 259075,
         "is_nsfw": false
       },
       {
