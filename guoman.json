@@ -92,29 +92,9 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.5
-        },
-        "eps": 60,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第46话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
-        "id": 9263605,
-        "name": "气运世界杯，我能复制所有球星技能",
-        "name_cn": "气运世界杯，我能复制所有球星技能",
+        "id": 9265936,
+        "name": "唐山凤羽集",
+        "name_cn": "唐山凤羽集",
         "images": {
           "large": "",
           "common": ""
@@ -126,49 +106,9 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第1话~第5话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 263605,
-        "is_nsfw": false
-      },
-      {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 25,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第9话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 118920,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1055话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
+        "pub_index": "第1话~第7话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 265936,
         "is_nsfw": false
       },
       {
@@ -326,6 +266,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 60,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第47话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 574794,
         "name": "是王者啊？ 第六季",
         "name_cn": "是王者啊？ 第6季",
@@ -363,6 +323,26 @@
         "pub_index": "第15话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1056话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -670,6 +650,26 @@
         "pub_index": "第6话",
         "pub_time": "10:00",
         "bilibili_season_id": 263296,
+        "is_nsfw": false
+      },
+      {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 25,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第10话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 118920,
         "is_nsfw": false
       },
       {
@@ -2437,6 +2437,26 @@
         "pub_index": "第4话",
         "pub_time": "10:00",
         "bilibili_season_id": 252364,
+        "is_nsfw": false
+      },
+      {
+        "id": 9263605,
+        "name": "气运世界杯，我能复制所有球星技能",
+        "name_cn": "气运世界杯，我能复制所有球星技能",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第6话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263605,
         "is_nsfw": false
       },
       {
