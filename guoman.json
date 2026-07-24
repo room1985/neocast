@@ -326,6 +326,26 @@
     },
     "items": [
       {
+        "id": 574794,
+        "name": "是王者啊？ 第六季",
+        "name_cn": "是王者啊？ 第6季",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/53/ba/574794_Y4JJj.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/53/ba/574794_Y4JJj.jpg"
+        },
+        "rating": {
+          "score": 1
+        },
+        "eps": 14,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "Ⅱ-1~Ⅱ-2",
+        "pub_time": "10:00",
+        "bilibili_season_id": 105565,
+        "is_nsfw": false
+      },
+      {
         "id": 406488,
         "name": "将夜",
         "name_cn": "将夜",
@@ -2655,7 +2675,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/4c/1d/358568_qNj44.jpg"
         },
         "rating": {
-          "score": 7.3
+          "score": 7.6
         },
         "eps": 7,
         "air_weekday": 7,
