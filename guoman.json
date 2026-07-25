@@ -159,9 +159,9 @@
     },
     "items": [
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
+        "id": 9262397,
+        "name": "李熊猫",
+        "name_cn": "李熊猫",
         "images": {
           "large": "",
           "common": ""
@@ -173,9 +173,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第12话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
+        "pub_index": "第1话~第3话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 262397,
         "is_nsfw": false
       },
       {
@@ -193,7 +193,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "11:00",
         "bilibili_season_id": 118963,
         "is_nsfw": false
@@ -227,7 +227,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/fa/da/572768_iX280.jpg"
         },
         "rating": {
-          "score": 7.4
+          "score": 7.3
         },
         "eps": 46,
         "air_weekday": 3,
@@ -632,6 +632,26 @@
       "id": 5
     },
     "items": [
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第13话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
       {
         "id": 9263296,
         "name": "重生警犬后，我成了名侦探？",
@@ -2500,26 +2520,6 @@
         "is_nsfw": false
       },
       {
-        "id": 577226,
-        "name": "诡秘之主特别篇",
-        "name_cn": "诡秘之主特别篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/b9/99/577226_CLc9Z.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
-        },
-        "rating": {
-          "score": 6.8
-        },
-        "eps": 3,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 492481,
         "name": "八仙！",
         "name_cn": "八仙！",
@@ -2531,6 +2531,26 @@
           "score": 7.1
         },
         "eps": 1,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 577226,
+        "name": "诡秘之主特别篇",
+        "name_cn": "诡秘之主特别篇",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/b9/99/577226_CLc9Z.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 3,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2655,7 +2675,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b5/82/521431_6BRB6.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.8
         },
         "eps": 24,
         "air_weekday": 7,
