@@ -5,6 +5,26 @@
     },
     "items": [
       {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 3
+        },
+        "eps": 0,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第5话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
+      {
         "id": 9235975,
         "name": "奔跑的木头",
         "name_cn": "奔跑的木头",
@@ -149,6 +169,26 @@
         "pub_index": "第11话",
         "pub_time": "12:00",
         "bilibili_season_id": 118920,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1058话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -2380,26 +2420,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 3
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第4话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
         "id": 589368,
         "name": "如果历史是一群喵 大明皇朝篇",
         "name_cn": "如果历史是一群喵 大明皇朝篇",
@@ -2414,7 +2434,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "10:00",
         "bilibili_season_id": 252364,
         "is_nsfw": false
@@ -2434,7 +2454,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "10:00",
         "bilibili_season_id": 263605,
         "is_nsfw": false
@@ -2454,29 +2474,9 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第184话",
+        "pub_index": "第185话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1057话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
