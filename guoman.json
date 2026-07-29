@@ -73,7 +73,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.8
         },
         "eps": 52,
         "air_weekday": 1,
@@ -692,6 +692,26 @@
       "id": 5
     },
     "items": [
+      {
+        "id": 9263296,
+        "name": "重生警犬后，我成了名侦探？",
+        "name_cn": "重生警犬后，我成了名侦探？",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第8话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263296,
+        "is_nsfw": false
+      },
       {
         "id": 9269837,
         "name": "当上神明后，我带着信徒干翻了废土",
@@ -2621,15 +2641,15 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第21话",
+        "pub_index": "第22话",
         "pub_time": "09:00",
         "bilibili_season_id": 262354,
         "is_nsfw": false
       },
       {
-        "id": 9263296,
-        "name": "重生警犬后，我成了名侦探？",
-        "name_cn": "重生警犬后，我成了名侦探？",
+        "id": 9259837,
+        "name": "1999！神秘学对策部 中配版",
+        "name_cn": "1999！神秘学对策部 中配版",
         "images": {
           "large": "",
           "common": ""
@@ -2641,9 +2661,29 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第7话",
+        "pub_index": "第1话~第2话",
         "pub_time": "10:00",
-        "bilibili_season_id": 263296,
+        "bilibili_season_id": 259837,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259875,
+        "name": "1999！神秘学对策部 英配版",
+        "name_cn": "1999！神秘学对策部 英配版",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1话~第2话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 259875,
         "is_nsfw": false
       },
       {
@@ -2661,7 +2701,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第93话",
+        "pub_index": "第94话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
@@ -2671,8 +2711,8 @@
         "name": "记忆管理局",
         "name_cn": "记忆管理局",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/4c/1d/358568_qNj44.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/4c/1d/358568_qNj44.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/4c/1d/358568_qNj44.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/4c/1d/358568_qNj44.jpg"
         },
         "rating": {
           "score": 7.6
@@ -2681,9 +2721,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
+        "pub_index": "第1话~第3话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 73957,
         "is_nsfw": false
       },
       {
