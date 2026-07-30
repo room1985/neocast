@@ -5,43 +5,23 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
+        "id": 434813,
+        "name": "成也萧河",
+        "name_cn": "成也萧河",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/15/4d/434813_HKhzh.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/15/4d/434813_HKhzh.jpg"
         },
         "rating": {
-          "score": 3
+          "score": 10
         },
-        "eps": 0,
+        "eps": 16,
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第5话",
+        "pub_index": "第1话~第3话",
         "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
-        "id": 9235975,
-        "name": "奔跑的木头",
-        "name_cn": "奔跑的木头",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第10话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 235975,
+        "bilibili_season_id": 264634,
         "is_nsfw": false
       },
       {
@@ -606,46 +586,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10164239,
-        "name": "so_low",
-        "name_cn": "so_low",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
-        },
-        "rating": {
-          "score": 5.7
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第3話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10204560,
-        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
-        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
-        },
-        "rating": {
-          "score": 5.1
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10208361,
         "name": "性指導員のお仕事 The Animation",
         "name_cn": "性指導員のお仕事 The Animation",
@@ -657,6 +597,26 @@
           "score": 5.2
         },
         "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10211338,
+        "name": "ハーレム島へようこそ！",
+        "name_cn": "ハーレム島へようこそ！",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211338-If49uIjNKPgt.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211338-If49uIjNKPgt.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 1,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
@@ -1673,6 +1633,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10164239,
+        "name": "so_low",
+        "name_cn": "so_low",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10203367,
         "name": "もう一度、してみたい。",
         "name_cn": "もう一度、してみたい。",
@@ -2273,6 +2253,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10204560,
+        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10195033,
         "name": "危険な森 おにごっこ",
         "name_cn": "危険な森 おにごっこ",
@@ -2453,6 +2453,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10212617,
+        "name": "田舎にはこれくらいしか娯楽がない",
+        "name_cn": "田舎にはこれくらいしか娯楽がない",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10198044,
         "name": "蹂躙王国 エルフ王国は巨大苗床に",
         "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
@@ -2471,6 +2491,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
+      },
+      {
+        "id": 10212272,
+        "name": "デコ×デコ THE ANIMATION",
+        "name_cn": "デコ×デコ THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -2479,6 +2519,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 3
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第6话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
       {
         "id": 589368,
         "name": "如果历史是一群喵 大明皇朝篇",
@@ -2548,7 +2608,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/20/3f/627556_tk605.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.6
         },
         "eps": 1,
         "air_weekday": 6,
