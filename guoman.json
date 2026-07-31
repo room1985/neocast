@@ -727,7 +727,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第65话",
+        "pub_index": "即将更新 第65话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2580,6 +2580,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9269798,
+        "name": "千金归来：我清算了枕边人",
+        "name_cn": "千金归来：我清算了枕边人",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1话~第4话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 269798,
+        "is_nsfw": false
+      },
+      {
         "id": 607915,
         "name": "凡人修仙传 第五季",
         "name_cn": "凡人修仙传 第五季",
@@ -2815,7 +2835,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b5/82/521431_6BRB6.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.7
         },
         "eps": 24,
         "air_weekday": 7,
