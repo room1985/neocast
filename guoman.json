@@ -140,7 +140,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.5
         },
         "eps": 25,
         "air_weekday": 2,
@@ -727,7 +727,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第65话",
+        "pub_index": "第65话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2213,15 +2213,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10199162,
-        "name": "クール de M",
-        "name_cn": "クール de M",
+        "id": 10198046,
+        "name": "ドＳなペット",
+        "name_cn": "ドＳなペット",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2233,15 +2233,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10198046,
-        "name": "ドＳなペット",
-        "name_cn": "ドＳなペット",
+        "id": 10199162,
+        "name": "クール de M",
+        "name_cn": "クール de M",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2433,15 +2433,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10207035,
-        "name": "彼女がセパレートをまとう理由",
-        "name_cn": "彼女がセパレートをまとう理由",
+        "id": 10212617,
+        "name": "田舎にはこれくらいしか娯楽がない",
+        "name_cn": "田舎にはこれくらいしか娯楽がない",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2453,15 +2453,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10212617,
-        "name": "田舎にはこれくらいしか娯楽がない",
-        "name_cn": "田舎にはこれくらいしか娯楽がない",
+        "id": 10207035,
+        "name": "彼女がセパレートをまとう理由",
+        "name_cn": "彼女がセパレートをまとう理由",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
