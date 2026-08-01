@@ -153,29 +153,29 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第1话~第3话",
+        "pub_index": "第4话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
       },
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
+        "id": 442553,
+        "name": "有兽焉 第二季",
+        "name_cn": "有兽焉 第二季",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/d0/de/442553_CZs48.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/d0/de/442553_CZs48.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 7
         },
-        "eps": 0,
+        "eps": 12,
         "air_weekday": 3,
         "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第14话",
+        "bgm_matched": true,
+        "pub_index": "第61话~第62话",
         "pub_time": "10:00",
-        "bilibili_season_id": 247422,
+        "bilibili_season_id": 39947,
         "is_nsfw": false
       },
       {
@@ -193,7 +193,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第5话",
+        "pub_index": "第6话",
         "pub_time": "11:00",
         "bilibili_season_id": 118963,
         "is_nsfw": false
@@ -632,6 +632,26 @@
       "id": 5
     },
     "items": [
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第15话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
       {
         "id": 9263296,
         "name": "重生警犬后，我成了名侦探？",
