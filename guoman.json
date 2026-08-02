@@ -53,7 +53,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.7
         },
         "eps": 52,
         "air_weekday": 1,
@@ -761,7 +761,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 6.1
         },
         "eps": 12,
         "air_weekday": 5,
@@ -824,6 +824,26 @@
           "score": 5.8
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 478223,
+        "name": "三国第一部：争洛阳",
+        "name_cn": "三国第一部：争洛阳",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/d1/2c/478223_8SSP1.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d1/2c/478223_8SSP1.jpg"
+        },
+        "rating": {
+          "score": 6.9
+        },
+        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2815,13 +2835,13 @@
           "common": "http://lain.bgm.tv/pic/cover/c/4c/1d/358568_qNj44.jpg"
         },
         "rating": {
-          "score": 7.6
+          "score": 7.2
         },
         "eps": 7,
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第1话~第3话",
+        "pub_index": "第1话~第3话",
         "pub_time": "12:00",
         "bilibili_season_id": 73957,
         "is_nsfw": false
