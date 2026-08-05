@@ -733,6 +733,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9263296,
+        "name": "重生警犬后，我成了名侦探？",
+        "name_cn": "重生警犬后，我成了名侦探？",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第10话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263296,
+        "is_nsfw": false
+      },
+      {
         "id": 572689,
         "name": "开心锤锤世界",
         "name_cn": "开心锤锤世界",
@@ -2640,6 +2660,46 @@
         "is_nsfw": false
       },
       {
+        "id": 9259837,
+        "name": "1999！神秘学对策部 中配版",
+        "name_cn": "1999！神秘学对策部 中配版",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第3话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 259837,
+        "is_nsfw": false
+      },
+      {
+        "id": 9259875,
+        "name": "1999！神秘学对策部 英配版",
+        "name_cn": "1999！神秘学对策部 英配版",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第3话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 259875,
+        "is_nsfw": false
+      },
+      {
         "id": 627556,
         "name": "呼唤少女特别篇 想做的事到底是什么",
         "name_cn": "",
@@ -2781,69 +2841,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第22话",
+        "pub_index": "第23话",
         "pub_time": "09:00",
         "bilibili_season_id": 262354,
-        "is_nsfw": false
-      },
-      {
-        "id": 9259837,
-        "name": "1999！神秘学对策部 中配版",
-        "name_cn": "1999！神秘学对策部 中配版",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第2话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 259837,
-        "is_nsfw": false
-      },
-      {
-        "id": 9259875,
-        "name": "1999！神秘学对策部 英配版",
-        "name_cn": "1999！神秘学对策部 英配版",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第2话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 259875,
-        "is_nsfw": false
-      },
-      {
-        "id": 9263296,
-        "name": "重生警犬后，我成了名侦探？",
-        "name_cn": "重生警犬后，我成了名侦探？",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第9话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 263296,
         "is_nsfw": false
       },
       {
@@ -2861,7 +2861,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第5话",
+        "pub_index": "第6话",
         "pub_time": "10:00",
         "bilibili_season_id": 269798,
         "is_nsfw": false
@@ -2881,7 +2881,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "10:00",
         "bilibili_season_id": 269837,
         "is_nsfw": false
@@ -2901,7 +2901,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第94话",
+        "pub_index": "第95话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
@@ -2921,7 +2921,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第3话",
+        "pub_index": "第4话",
         "pub_time": "12:00",
         "bilibili_season_id": 73957,
         "is_nsfw": false
