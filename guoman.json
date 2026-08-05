@@ -313,7 +313,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第1话~第29话",
+        "pub_index": "第1话~第29话",
         "pub_time": "18:00",
         "bilibili_season_id": 274627,
         "is_nsfw": false
@@ -333,9 +333,29 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第1话~第50话",
+        "pub_index": "第1话~第50话",
         "pub_time": "18:00",
         "bilibili_season_id": 274631,
+        "is_nsfw": false
+      },
+      {
+        "id": 637591,
+        "name": "遮天 第四季",
+        "name_cn": "遮天 第四季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ba/b7/637591_1F43i.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ba/b7/637591_1F43i.jpg"
+        },
+        "rating": {
+          "score": 6.7
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
         "is_nsfw": false
       },
       {
@@ -497,6 +517,26 @@
           "score": 5.6
         },
         "eps": 15,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 456169,
+        "name": "驭灵师",
+        "name_cn": "驭灵师",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 18,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2093,15 +2133,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195034,
-        "name": "これってナ～ニ？",
-        "name_cn": "これってナ～ニ？",
+        "id": 10206840,
+        "name": "とどの妻り",
+        "name_cn": "とどの妻り",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195034-kh5FbK07fShG.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195034-kh5FbK07fShG.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206840-WSrKIJA0GFci.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2113,15 +2153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10206840,
-        "name": "とどの妻り",
-        "name_cn": "とどの妻り",
+        "id": 10195034,
+        "name": "これってナ～ニ？",
+        "name_cn": "これってナ～ニ？",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206840-WSrKIJA0GFci.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195034-kh5FbK07fShG.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195034-kh5FbK07fShG.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2313,15 +2353,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10202893,
-        "name": "L'amour fou de l'automate",
-        "name_cn": "L'amour fou de l'automate",
+        "id": 10208749,
+        "name": "ヌきヌき♡ずっぽしイズム",
+        "name_cn": "ヌきヌき♡ずっぽしイズム",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2333,15 +2373,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10208749,
-        "name": "ヌきヌき♡ずっぽしイズム",
-        "name_cn": "ヌきヌき♡ずっぽしイズム",
+        "id": 10202893,
+        "name": "L'amour fou de l'automate",
+        "name_cn": "L'amour fou de l'automate",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2393,6 +2433,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10212617,
+        "name": "田舎にはこれくらいしか娯楽がない",
+        "name_cn": "田舎にはこれくらいしか娯楽がない",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10201153,
         "name": "聖光閃姫ポニーセレス",
         "name_cn": "聖光閃姫ポニーセレス",
@@ -2421,27 +2481,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
         },
         "rating": {
-          "score": 4.9
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10212617,
-        "name": "田舎にはこれくらいしか娯楽がない",
-        "name_cn": "田舎にはこれくらいしか娯楽がない",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
-        },
-        "rating": {
-          "score": 0
+          "score": 5.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2493,26 +2533,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10198044,
-        "name": "蹂躙王国 エルフ王国は巨大苗床に",
-        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 2,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10212272,
         "name": "デコ×デコ THE ANIMATION",
         "name_cn": "デコ×デコ THE ANIMATION",
@@ -2524,6 +2544,26 @@
           "score": 0
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10198044,
+        "name": "蹂躙王国 エルフ王国は巨大苗床に",
+        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -2651,6 +2691,26 @@
           "score": 6.8
         },
         "eps": 3,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 577190,
+        "name": "遮天剧场版 背棺战王腾",
+        "name_cn": "遮天剧场版 背棺战王腾",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_sSD00.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
