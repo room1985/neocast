@@ -440,7 +440,7 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第17话",
+        "pub_index": "第17话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
         "is_nsfw": false
@@ -877,8 +877,8 @@
         "name": "去你的岛",
         "name_cn": "去你的岛",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/07/aa/425543_QqS72.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/07/aa/425543_QqS72.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/07/aa/425543_68654.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/07/aa/425543_68654.jpg"
         },
         "rating": {
           "score": 0
@@ -904,26 +904,6 @@
           "score": 5.8
         },
         "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 478223,
-        "name": "三国第一部：争洛阳",
-        "name_cn": "三国第一部：争洛阳",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/d1/2c/478223_8SSP1.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d1/2c/478223_8SSP1.jpg"
-        },
-        "rating": {
-          "score": 6.8
-        },
-        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
