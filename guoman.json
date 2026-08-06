@@ -440,7 +440,7 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第17话",
+        "pub_index": "即将更新 第17话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
         "is_nsfw": false
@@ -712,6 +712,26 @@
       "id": 5
     },
     "items": [
+      {
+        "id": 691159,
+        "name": "掌门低调点",
+        "name_cn": "掌门低调点",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1话~第5话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
       {
         "id": 676026,
         "name": "缔灵爱水心缠",
