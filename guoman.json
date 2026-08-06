@@ -313,29 +313,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第1话~第29话",
+        "pub_index": "第1话~第28话",
         "pub_time": "18:00",
         "bilibili_season_id": 274627,
-        "is_nsfw": false
-      },
-      {
-        "id": 9274631,
-        "name": "劈柴十年女仙跪地求我收她为徒",
-        "name_cn": "劈柴十年女仙跪地求我收她为徒",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第50话",
-        "pub_time": "18:00",
-        "bilibili_season_id": 274631,
         "is_nsfw": false
       },
       {
@@ -387,7 +367,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202895-sAj8ZJSRQ2SR.png"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 3,
@@ -574,7 +554,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx112936-MOPqLdKu7dgJ.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -904,6 +884,26 @@
           "score": 5.8
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 478223,
+        "name": "三国第一部：争洛阳",
+        "name_cn": "三国第一部：争洛阳",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/d1/2c/478223_8SSP1.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d1/2c/478223_8SSP1.jpg"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1913,15 +1913,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196547,
-        "name": "Hな義姉シリーズ The Animation",
-        "name_cn": "Hな義姉シリーズ The Animation",
+        "id": 10185779,
+        "name": "ハメツの誘惑",
+        "name_cn": "ハメツの誘惑",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185779-uzQoDrD3Sy6r.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185779-uzQoDrD3Sy6r.png"
         },
         "rating": {
-          "score": 6.2
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1933,15 +1933,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10185779,
-        "name": "ハメツの誘惑",
-        "name_cn": "ハメツの誘惑",
+        "id": 10196547,
+        "name": "Hな義姉シリーズ The Animation",
+        "name_cn": "Hな義姉シリーズ The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx185779-uzQoDrD3Sy6r.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185779-uzQoDrD3Sy6r.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2233,6 +2233,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10211557,
+        "name": "フラチ",
+        "name_cn": "フラチ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211557-PN1R4dpTOekY.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211557-PN1R4dpTOekY.png"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 2,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10202894,
         "name": "剣鬼バルゴ",
         "name_cn": "剣鬼バルゴ",
@@ -2244,26 +2264,6 @@
           "score": 5.1
         },
         "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10211557,
-        "name": "フラチ",
-        "name_cn": "フラチ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211557-PN1R4dpTOekY.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211557-PN1R4dpTOekY.png"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -2975,7 +2975,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/0e/4c/646611_3UHpV.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 52,
         "air_weekday": 7,
