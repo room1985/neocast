@@ -92,66 +92,6 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.4
-        },
-        "eps": 60,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第50话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 25,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第13话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 118920,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1061话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -366,6 +306,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 60,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第51话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 574794,
         "name": "是王者啊？ 第六季",
         "name_cn": "是王者啊？ 第6季",
@@ -403,6 +363,26 @@
         "pub_index": "第17话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1062话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -733,6 +713,26 @@
         "is_nsfw": false
       },
       {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 25,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第14话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 118920,
+        "is_nsfw": false
+      },
+      {
         "id": 572689,
         "name": "开心锤锤世界",
         "name_cn": "开心锤锤世界",
@@ -841,7 +841,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/07/aa/425543_68654.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.3
         },
         "eps": 1,
         "air_weekday": 5,
@@ -864,6 +864,26 @@
           "score": 5.8
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 478223,
+        "name": "三国第一部：争洛阳",
+        "name_cn": "三国第一部：争洛阳",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/d1/2c/478223_8SSP1.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d1/2c/478223_8SSP1.jpg"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
