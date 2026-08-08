@@ -2614,7 +2614,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第6话",
+        "pub_index": "第6话",
         "pub_time": "10:00",
         "bilibili_season_id": 252364,
         "is_nsfw": false
@@ -2634,7 +2634,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第8话",
+        "pub_index": "第8话",
         "pub_time": "10:00",
         "bilibili_season_id": 263605,
         "is_nsfw": false
@@ -2654,7 +2654,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第186话",
+        "pub_index": "第186话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
         "is_nsfw": false
@@ -2674,7 +2674,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第3话",
+        "pub_index": "第3话",
         "pub_time": "12:00",
         "bilibili_season_id": 259837,
         "is_nsfw": false
@@ -2694,7 +2694,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第3话",
+        "pub_index": "第3话",
         "pub_time": "12:00",
         "bilibili_season_id": 259875,
         "is_nsfw": false
