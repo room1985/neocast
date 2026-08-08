@@ -267,7 +267,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/fa/da/572768_iX280.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7
         },
         "eps": 46,
         "air_weekday": 3,
@@ -841,7 +841,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/07/aa/425543_68654.jpg"
         },
         "rating": {
-          "score": 6.3
+          "score": 6
         },
         "eps": 1,
         "air_weekday": 5,
@@ -2113,12 +2113,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10206840,
-        "name": "とどの妻り",
-        "name_cn": "とどの妻り",
+        "id": 10188933,
+        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206840-WSrKIJA0GFci.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
         },
         "rating": {
           "score": 5.2
@@ -2133,12 +2133,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10188933,
-        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
-        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "id": 10206840,
+        "name": "とどの妻り",
+        "name_cn": "とどの妻り",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx206840-WSrKIJA0GFci.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
         },
         "rating": {
           "score": 5.2
@@ -2261,27 +2261,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
         },
         "rating": {
-          "score": 5.0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10198046,
-        "name": "ドＳなペット",
-        "name_cn": "ドＳなペット",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
-        },
-        "rating": {
-          "score": 5.3
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2313,15 +2293,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195033,
-        "name": "危険な森 おにごっこ",
-        "name_cn": "危険な森 おにごっこ",
+        "id": 10198046,
+        "name": "ドＳなペット",
+        "name_cn": "ドＳなペット",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195033-U5Y8Hy5zbnMC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195033-U5Y8Hy5zbnMC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
         },
         "rating": {
-          "score": 4.5
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2342,6 +2322,26 @@
         },
         "rating": {
           "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10195033,
+        "name": "危険な森 おにごっこ",
+        "name_cn": "危険な森 おにごっこ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195033-U5Y8Hy5zbnMC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195033-U5Y8Hy5zbnMC.png"
+        },
+        "rating": {
+          "score": 4.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2393,15 +2393,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10199164,
-        "name": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
-        "name_cn": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
+        "id": 10212617,
+        "name": "田舎にはこれくらいしか娯楽がない",
+        "name_cn": "田舎にはこれくらいしか娯楽がない",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199164-kQ2sVvNXU392.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
         },
         "rating": {
-          "score": 4.8
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2413,15 +2413,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10212617,
-        "name": "田舎にはこれくらいしか娯楽がない",
-        "name_cn": "田舎にはこれくらいしか娯楽がない",
+        "id": 10199164,
+        "name": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
+        "name_cn": "聖宝晶華セイントライムVN ～VeasTubeエロエロ配信Edition♪～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199164-kQ2sVvNXU392.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 4.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2728,7 +2728,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/7b/6e/492481_9NJYA.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 1,
         "air_weekday": 6,
@@ -2995,7 +2995,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208685-tI4qWvbliBRE.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 8,
         "air_weekday": 7,
