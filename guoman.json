@@ -153,7 +153,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
@@ -173,29 +173,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第61话~第62话",
+        "pub_index": "第63话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
-        "is_nsfw": false
-      },
-      {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第16话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
@@ -213,29 +193,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "11:00",
         "bilibili_season_id": 118963,
-        "is_nsfw": false
-      },
-      {
-        "id": 9274627,
-        "name": "驱魔录",
-        "name_cn": "驱魔录",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第28话",
-        "pub_time": "18:00",
-        "bilibili_season_id": 274627,
         "is_nsfw": false
       },
       {
@@ -366,6 +326,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9274627,
+        "name": "驱魔录",
+        "name_cn": "驱魔录",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第29话",
+        "pub_time": "18:01",
+        "bilibili_season_id": 274627,
+        "is_nsfw": false
+      },
+      {
         "id": 565411,
         "name": "我是不白吃",
         "name_cn": "我是不白吃",
@@ -454,7 +434,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/06/9c/520299_IS833.jpg"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.6
         },
         "eps": 15,
         "air_weekday": 4,
@@ -673,6 +653,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第17话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
+      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -721,7 +721,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 25,
         "air_weekday": 5,
@@ -864,26 +864,6 @@
           "score": 5.8
         },
         "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 478223,
-        "name": "三国第一部：争洛阳",
-        "name_cn": "三国第一部：争洛阳",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/d1/2c/478223_8SSP1.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d1/2c/478223_8SSP1.jpg"
-        },
-        "rating": {
-          "score": 6.8
-        },
-        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
