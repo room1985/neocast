@@ -1873,26 +1873,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10196547,
-        "name": "Hな義姉シリーズ The Animation",
-        "name_cn": "Hな義姉シリーズ The Animation",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196547-hXnKykN7Ky4Z.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196547-hXnKykN7Ky4Z.png"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10185779,
         "name": "ハメツの誘惑",
         "name_cn": "ハメツの誘惑",
@@ -2881,7 +2861,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第95话",
+        "pub_index": "即将更新 第95话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
@@ -2901,7 +2881,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "即将更新 第4话",
         "pub_time": "12:00",
         "bilibili_season_id": 73957,
         "is_nsfw": false
