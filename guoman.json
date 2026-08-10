@@ -112,6 +112,26 @@
         "is_nsfw": false
       },
       {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 25,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第15话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 118920,
+        "is_nsfw": false
+      },
+      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -196,6 +216,26 @@
         "pub_index": "第63话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
+        "is_nsfw": false
+      },
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第18话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
@@ -593,46 +633,6 @@
     },
     "items": [
       {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 40,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1话~第5话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第17话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
-        "is_nsfw": false
-      },
-      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -647,69 +647,29 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第2话",
+        "pub_index": "第3话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
       },
       {
-        "id": 9263296,
-        "name": "重生警犬后，我成了名侦探？",
-        "name_cn": "重生警犬后，我成了名侦探？",
+        "id": 341311,
+        "name": "时光代理人 第二季",
+        "name_cn": "时光代理人 第二季",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/a0/e6/341311_127Gp.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a0/e6/341311_127Gp.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 5.7
         },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第10话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 263296,
-        "is_nsfw": false
-      },
-      {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 25,
+        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第14话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 118920,
-        "is_nsfw": false
-      },
-      {
-        "id": 572689,
-        "name": "开心锤锤世界",
-        "name_cn": "开心锤锤世界",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 30,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第66话",
-        "pub_time": "18:00",
-        "bilibili_season_id": 96881,
+        "pub_index": "第1话~第2话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 105212,
         "is_nsfw": false
       },
       {
@@ -2540,6 +2500,26 @@
         "is_nsfw": false
       },
       {
+        "id": 691159,
+        "name": "掌门低调点",
+        "name_cn": "掌门低调点",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 40,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第6话~第10话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
+      {
         "id": 589368,
         "name": "如果历史是一群喵 大明皇朝篇",
         "name_cn": "如果历史是一群喵 大明皇朝篇",
@@ -2548,7 +2528,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/66/56/589368_ze71z.jpg"
         },
         "rating": {
-          "score": 4.3
+          "score": 4.8
         },
         "eps": 12,
         "air_weekday": 6,
@@ -2784,6 +2764,26 @@
         "pub_index": "第23话",
         "pub_time": "09:00",
         "bilibili_season_id": 262354,
+        "is_nsfw": false
+      },
+      {
+        "id": 9263296,
+        "name": "重生警犬后，我成了名侦探？",
+        "name_cn": "重生警犬后，我成了名侦探？",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第11话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263296,
         "is_nsfw": false
       },
       {
