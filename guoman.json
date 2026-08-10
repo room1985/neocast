@@ -454,7 +454,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx112936-MOPqLdKu7dgJ.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -801,7 +801,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/07/aa/425543_68654.jpg"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.4
         },
         "eps": 1,
         "air_weekday": 5,
@@ -824,6 +824,26 @@
           "score": 5.8
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 478223,
+        "name": "三国第一部：争洛阳",
+        "name_cn": "三国第一部：争洛阳",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/d1/2c/478223_8SSP1.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/d1/2c/478223_8SSP1.jpg"
+        },
+        "rating": {
+          "score": 6.8
+        },
+        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1173,15 +1193,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10142229,
-        "name": "エロリーマン",
-        "name_cn": "エロリーマン",
+        "id": 10177149,
+        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx142229-ux7lcdcfJhN1.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx142229-ux7lcdcfJhN1.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1193,15 +1213,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10177149,
-        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
-        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "id": 10142229,
+        "name": "エロリーマン",
+        "name_cn": "エロリーマン",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx142229-ux7lcdcfJhN1.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx142229-ux7lcdcfJhN1.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2241,7 +2261,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2281,7 +2301,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2321,7 +2341,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2381,7 +2401,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
