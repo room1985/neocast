@@ -126,7 +126,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第15话",
+        "pub_index": "第15话",
         "pub_time": "12:00",
         "bilibili_season_id": 118920,
         "is_nsfw": false
@@ -670,6 +670,26 @@
         "pub_index": "第1话~第2话",
         "pub_time": "11:00",
         "bilibili_season_id": 105212,
+        "is_nsfw": false
+      },
+      {
+        "id": 572689,
+        "name": "开心锤锤世界",
+        "name_cn": "开心锤锤世界",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 30,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第67话",
+        "pub_time": "18:00",
+        "bilibili_season_id": 96881,
         "is_nsfw": false
       },
       {
@@ -2855,7 +2875,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/4c/1d/358568_qNj44.jpg"
         },
         "rating": {
-          "score": 7
+          "score": 6.9
         },
         "eps": 7,
         "air_weekday": 7,
