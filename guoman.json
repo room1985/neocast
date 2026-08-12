@@ -45,6 +45,26 @@
         "is_nsfw": false
       },
       {
+        "id": 454781,
+        "name": "霸王龙雷奇",
+        "name_cn": "霸王龙雷奇之雷奇知多少",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 52,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第11话~第12话",
+        "pub_time": "17:30",
+        "bilibili_season_id": 270683,
+        "is_nsfw": false
+      },
+      {
         "id": 250224,
         "name": "放开那个女巫",
         "name_cn": "放开那个女巫",
@@ -129,6 +149,26 @@
         "pub_index": "第52话",
         "pub_time": "09:00",
         "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
+        "id": 691159,
+        "name": "掌门低调点",
+        "name_cn": "掌门低调点",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+        },
+        "rating": {
+          "score": 1
+        },
+        "eps": 40,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第16话~第18话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 272443,
         "is_nsfw": false
       },
       {
@@ -673,6 +713,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9263296,
+        "name": "重生警犬后，我成了名侦探？",
+        "name_cn": "重生警犬后，我成了名侦探？",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第12话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263296,
+        "is_nsfw": false
+      },
+      {
         "id": 341311,
         "name": "时光代理人 第二季",
         "name_cn": "时光代理人 第二季",
@@ -801,7 +861,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/07/aa/425543_68654.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 5.7
         },
         "eps": 1,
         "air_weekday": 5,
@@ -2701,49 +2761,29 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第23话",
+        "pub_index": "第24话",
         "pub_time": "09:00",
         "bilibili_season_id": 262354,
         "is_nsfw": false
       },
       {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
+        "id": 552778,
+        "name": "财神窦占龙",
+        "name_cn": "财神窦占龙",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 1
-        },
-        "eps": 40,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第11话~第15话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 9263296,
-        "name": "重生警犬后，我成了名侦探？",
-        "name_cn": "重生警犬后，我成了名侦探？",
-        "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/07/2d/552778_22cct.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/07/2d/552778_22cct.jpg"
         },
         "rating": {
           "score": 0
         },
-        "eps": 0,
+        "eps": 16,
         "air_weekday": 7,
         "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第11话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 263296,
+        "bgm_matched": true,
+        "pub_index": "第1话~第3话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 264970,
         "is_nsfw": false
       },
       {
@@ -2761,7 +2801,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "10:00",
         "bilibili_season_id": 269798,
         "is_nsfw": false
@@ -2781,7 +2821,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第7话",
+        "pub_index": "第8话",
         "pub_time": "10:00",
         "bilibili_season_id": 269837,
         "is_nsfw": false
@@ -2801,7 +2841,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第95话",
+        "pub_index": "第96话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
@@ -2821,29 +2861,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "第5话",
         "pub_time": "12:00",
         "bilibili_season_id": 73957,
-        "is_nsfw": false
-      },
-      {
-        "id": 454781,
-        "name": "霸王龙雷奇",
-        "name_cn": "霸王龙雷奇之雷奇知多少",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 52,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第9话~第10话",
-        "pub_time": "17:30",
-        "bilibili_season_id": 270683,
         "is_nsfw": false
       },
       {
