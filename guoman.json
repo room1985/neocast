@@ -33,7 +33,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/15/4d/434813_HKhzh.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6
         },
         "eps": 16,
         "air_weekday": 1,
@@ -420,7 +420,7 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第18话",
+        "pub_index": "第18话",
         "pub_time": "11:00",
         "bilibili_season_id": 45962,
         "is_nsfw": false
@@ -733,6 +733,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9283583,
+        "name": "孟婆辞职，阎王哭着求我回来上班",
+        "name_cn": "孟婆辞职，阎王哭着求我回来上班",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1话~第4话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 283583,
+        "is_nsfw": false
+      },
+      {
         "id": 341311,
         "name": "时光代理人 第二季",
         "name_cn": "时光代理人 第二季",
@@ -801,7 +821,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_bcCE2.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 6
         },
         "eps": 12,
         "air_weekday": 5,
