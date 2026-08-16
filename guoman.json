@@ -227,7 +227,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/17/9e/695405_CQqgz.jpg"
         },
         "rating": {
-          "score": 4.3
+          "score": 3.6
         },
         "eps": 1,
         "air_weekday": 3,
@@ -466,26 +466,6 @@
         "is_nsfw": false
       },
       {
-        "id": 456169,
-        "name": "驭灵师",
-        "name_cn": "驭灵师",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 18,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10021828,
         "name": "小女ラムネ",
         "name_cn": "小女ラムネ",
@@ -534,7 +514,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208314-Lw3CFRCPkprM.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -1173,15 +1153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10142229,
-        "name": "エロリーマン",
-        "name_cn": "エロリーマン",
+        "id": 10177149,
+        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx142229-ux7lcdcfJhN1.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx142229-ux7lcdcfJhN1.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1193,15 +1173,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10177149,
-        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
-        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "id": 10142229,
+        "name": "エロリーマン",
+        "name_cn": "エロリーマン",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx142229-ux7lcdcfJhN1.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx142229-ux7lcdcfJhN1.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1513,15 +1493,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10180832,
-        "name": "おにちちハーレム",
-        "name_cn": "おにちちハーレム",
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "妻を同窓会にいかせたら",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180832-N1TzYgyWcKiB.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1533,15 +1513,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10155154,
-        "name": "妻を同窓会にいかせたら",
-        "name_cn": "妻を同窓会にいかせたら",
+        "id": 10180832,
+        "name": "おにちちハーレム",
+        "name_cn": "おにちちハーレム",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180832-N1TzYgyWcKiB.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1781,7 +1761,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
         },
         "rating": {
-          "score": 5.9
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2033,26 +2013,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10193347,
-        "name": "社畜シンデレラ",
-        "name_cn": "社畜シンデレラ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193347-EnTUvSR3JOgd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193347-EnTUvSR3JOgd.png"
-        },
-        "rating": {
-          "score": 5.4
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10211557,
         "name": "フラチ",
         "name_cn": "フラチ",
@@ -2064,6 +2024,26 @@
           "score": 6.5
         },
         "eps": 2,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10193347,
+        "name": "社畜シンデレラ",
+        "name_cn": "社畜シンデレラ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193347-EnTUvSR3JOgd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193347-EnTUvSR3JOgd.png"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 0,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -2133,15 +2113,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10199162,
-        "name": "クール de M",
-        "name_cn": "クール de M",
+        "id": 10208749,
+        "name": "ヌきヌき♡ずっぽしイズム",
+        "name_cn": "ヌきヌき♡ずっぽしイズム",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2153,15 +2133,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10208749,
-        "name": "ヌきヌき♡ずっぽしイズム",
-        "name_cn": "ヌきヌき♡ずっぽしイズム",
+        "id": 10199162,
+        "name": "クール de M",
+        "name_cn": "クール de M",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208749-8Tw6LuaE6oQF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2193,15 +2173,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10198046,
-        "name": "ドＳなペット",
-        "name_cn": "ドＳなペット",
+        "id": 10204560,
+        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2213,15 +2193,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10204560,
-        "name": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
-        "name_cn": "ファントム・アルケミア ～シルヴィアのドキドキ搾精都市計画～",
+        "id": 10198046,
+        "name": "ドＳなペット",
+        "name_cn": "ドＳなペット",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204560-p9A5TzVb3mB1.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204560-p9A5TzVb3mB1.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
