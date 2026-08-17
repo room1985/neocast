@@ -39,7 +39,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第1话~第5话",
+        "pub_index": "第1话~第5话",
         "pub_time": "23:00",
         "bilibili_season_id": 284272,
         "is_nsfw": false
@@ -129,6 +129,46 @@
         "pub_index": "第54话",
         "pub_time": "09:00",
         "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
+        "id": 691159,
+        "name": "掌门低调点",
+        "name_cn": "掌门低调点",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+        },
+        "rating": {
+          "score": 1
+        },
+        "eps": 40,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第20话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
+      {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 25,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第17话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 118920,
         "is_nsfw": false
       },
       {
@@ -236,6 +276,26 @@
         "pub_index": "第64话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
+        "is_nsfw": false
+      },
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第20话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
@@ -446,26 +506,6 @@
         "is_nsfw": false
       },
       {
-        "id": 456169,
-        "name": "驭灵师",
-        "name_cn": "驭灵师",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 18,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10021828,
         "name": "小女ラムネ",
         "name_cn": "小女ラムネ",
@@ -633,46 +673,6 @@
     },
     "items": [
       {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 1
-        },
-        "eps": 40,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第19话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第19话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
-        "is_nsfw": false
-      },
-      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -687,49 +687,9 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第3话",
+        "pub_index": "第4话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
-        "is_nsfw": false
-      },
-      {
-        "id": 9263296,
-        "name": "重生警犬后，我成了名侦探？",
-        "name_cn": "重生警犬后，我成了名侦探？",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第12话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 263296,
-        "is_nsfw": false
-      },
-      {
-        "id": 9283583,
-        "name": "孟婆辞职，阎王哭着求我回来上班",
-        "name_cn": "孟婆辞职，阎王哭着求我回来上班",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第4话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 283583,
         "is_nsfw": false
       },
       {
@@ -747,69 +707,29 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第2话",
+        "pub_index": "第3话",
         "pub_time": "11:00",
         "bilibili_season_id": 105212,
         "is_nsfw": false
       },
       {
-        "id": 270242,
-        "name": "王者？别闹！",
-        "name_cn": "王者？别闹！",
+        "id": 665620,
+        "name": "雪王来了！",
+        "name_cn": "雪王来了！",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/78/99/270242_hyJ8E.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/78/99/270242_hyJ8E.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_lJCsp.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_lJCsp.jpg"
         },
         "rating": {
-          "score": 5.6
+          "score": 0
         },
-        "eps": 13,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第88话",
-        "pub_time": "11:30",
-        "bilibili_season_id": 26015,
-        "is_nsfw": false
-      },
-      {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 25,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第16话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 118920,
-        "is_nsfw": false
-      },
-      {
-        "id": 454781,
-        "name": "霸王龙雷奇",
-        "name_cn": "霸王龙雷奇之雷奇知多少",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 52,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第19话~第20话",
-        "pub_time": "17:30",
-        "bilibili_season_id": 270683,
+        "pub_index": "第1话~第6话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 283870,
         "is_nsfw": false
       },
       {
@@ -827,7 +747,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第67话",
+        "pub_index": "第68话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -861,7 +781,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
         },
         "rating": {
-          "score": 5
+          "score": 5.1
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2560,6 +2480,26 @@
         "is_nsfw": false
       },
       {
+        "id": 454781,
+        "name": "霸王龙雷奇",
+        "name_cn": "霸王龙雷奇之雷奇知多少",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 52,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第21话~第22话",
+        "pub_time": "17:30",
+        "bilibili_season_id": 270683,
+        "is_nsfw": false
+      },
+      {
         "id": 565411,
         "name": "我是不白吃",
         "name_cn": "我是不白吃",
@@ -2727,6 +2667,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9263296,
+        "name": "重生警犬后，我成了名侦探？",
+        "name_cn": "重生警犬后，我成了名侦探？",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第13话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 263296,
+        "is_nsfw": false
+      },
+      {
         "id": 9269798,
         "name": "千金归来：我清算了枕边人",
         "name_cn": "千金归来：我清算了枕边人",
@@ -2767,6 +2727,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9283583,
+        "name": "孟婆辞职，阎王哭着求我回来上班",
+        "name_cn": "孟婆辞职，阎王哭着求我回来上班",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第5话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 283583,
+        "is_nsfw": false
+      },
+      {
         "id": 456159,
         "name": "牧神记",
         "name_cn": "牧神记",
@@ -2775,7 +2755,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/a8/a9/456159_423P3.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.6
         },
         "eps": 26,
         "air_weekday": 7,
