@@ -347,7 +347,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/f5/23/500458_jXNh1.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.3
         },
         "eps": 8,
         "air_weekday": 3,
@@ -367,7 +367,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/17/9e/695405_j9Ucs.jpg"
         },
         "rating": {
-          "score": 3.4
+          "score": 3.5
         },
         "eps": 1,
         "air_weekday": 3,
@@ -1441,7 +1441,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
         },
         "rating": {
-          "score": 5.9
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2101,7 +2101,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2333,15 +2333,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10207035,
-        "name": "彼女がセパレートをまとう理由",
-        "name_cn": "彼女がセパレートをまとう理由",
+        "id": 10212272,
+        "name": "デコ×デコ THE ANIMATION",
+        "name_cn": "デコ×デコ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2353,15 +2353,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10212272,
-        "name": "デコ×デコ THE ANIMATION",
-        "name_cn": "デコ×デコ THE ANIMATION",
+        "id": 10207035,
+        "name": "彼女がセパレートをまとう理由",
+        "name_cn": "彼女がセパレートをまとう理由",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
