@@ -313,7 +313,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第64话",
+        "pub_index": "第64话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
         "is_nsfw": false
@@ -333,7 +333,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第20话",
+        "pub_index": "第20话",
         "pub_time": "10:00",
         "bilibili_season_id": 247422,
         "is_nsfw": false
@@ -347,13 +347,13 @@
           "common": "http://lain.bgm.tv/pic/cover/c/f5/23/500458_jXNh1.jpg"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.2
         },
         "eps": 8,
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第8话",
+        "pub_index": "第8话",
         "pub_time": "11:00",
         "bilibili_season_id": 118963,
         "is_nsfw": false
@@ -537,26 +537,6 @@
           "score": 6
         },
         "eps": 15,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 456169,
-        "name": "驭灵师",
-        "name_cn": "驭灵师",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 18,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
