@@ -5,26 +5,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 2
-        },
-        "eps": 0,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第11话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
         "id": 434813,
         "name": "成也萧河",
         "name_cn": "成也萧河",
@@ -39,49 +19,9 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第5话",
+        "pub_index": "第6话",
         "pub_time": "09:00",
         "bilibili_season_id": 264634,
-        "is_nsfw": false
-      },
-      {
-        "id": 454781,
-        "name": "霸王龙雷奇",
-        "name_cn": "霸王龙雷奇之雷奇知多少",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 52,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第25话~第26话",
-        "pub_time": "17:30",
-        "bilibili_season_id": 270683,
-        "is_nsfw": false
-      },
-      {
-        "id": 9284272,
-        "name": "公主驾到，天才厨子已超神！",
-        "name_cn": "公主驾到，天才厨子已超神！",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1话~第5话",
-        "pub_time": "23:00",
-        "bilibili_season_id": 284272,
         "is_nsfw": false
       },
       {
@@ -232,6 +172,26 @@
         "is_nsfw": false
       },
       {
+        "id": 454781,
+        "name": "霸王龙雷奇",
+        "name_cn": "霸王龙雷奇之雷奇知多少",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 52,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第27话~第28话",
+        "pub_time": "17:30",
+        "bilibili_season_id": 270683,
+        "is_nsfw": false
+      },
+      {
         "id": 565411,
         "name": "我是不白吃",
         "name_cn": "我是不白吃",
@@ -367,7 +327,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/f5/23/500458_jXNh1.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 6.1
         },
         "eps": 8,
         "air_weekday": 3,
@@ -387,7 +347,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/17/9e/695405_j9Ucs.jpg"
         },
         "rating": {
-          "score": 3.4
+          "score": 3.3
         },
         "eps": 1,
         "air_weekday": 3,
@@ -557,6 +517,26 @@
           "score": 6.1
         },
         "eps": 15,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 456169,
+        "name": "驭灵师",
+        "name_cn": "驭灵师",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 18,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -830,6 +810,26 @@
         "pub_index": "第68话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
+        "is_nsfw": false
+      },
+      {
+        "id": 9284272,
+        "name": "公主驾到，天才厨子已超神！",
+        "name_cn": "公主驾到，天才厨子已超神！",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第6话",
+        "pub_time": "23:00",
+        "bilibili_season_id": 284272,
         "is_nsfw": false
       },
       {
@@ -2439,6 +2439,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 2
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第12话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
       {
         "id": 589368,
         "name": "如果历史是一群喵 大明皇朝篇",
