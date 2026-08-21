@@ -347,7 +347,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/17/9e/695405_j9Ucs.jpg"
         },
         "rating": {
-          "score": 3.3
+          "score": 3.4
         },
         "eps": 1,
         "air_weekday": 3,
@@ -727,7 +727,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第4话",
+        "pub_index": "即将更新 第4话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
@@ -747,7 +747,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第14话",
+        "pub_index": "即将更新 第14话",
         "pub_time": "10:00",
         "bilibili_season_id": 263296,
         "is_nsfw": false
@@ -767,7 +767,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第3话",
+        "pub_index": "即将更新 第3话",
         "pub_time": "11:00",
         "bilibili_season_id": 105212,
         "is_nsfw": false
@@ -787,7 +787,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1话~第6话",
+        "pub_index": "即将更新 第1话~第6话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
         "is_nsfw": false
