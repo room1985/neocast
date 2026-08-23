@@ -426,6 +426,26 @@
         "is_nsfw": false
       },
       {
+        "id": 456169,
+        "name": "驭灵师",
+        "name_cn": "驭灵师",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 18,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10021828,
         "name": "小女ラムネ",
         "name_cn": "小女ラムネ",
@@ -1333,15 +1353,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10186058,
-        "name": "黒ギャルアラカルト",
-        "name_cn": "黒ギャルアラカルト",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1353,12 +1373,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10186058,
+        "name": "黒ギャルアラカルト",
+        "name_cn": "黒ギャルアラカルト",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
           "score": 6.1
@@ -1553,15 +1573,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10198048,
-        "name": "夏妻",
-        "name_cn": "夏妻",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1573,15 +1593,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10198048,
+        "name": "夏妻",
+        "name_cn": "夏妻",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2253,15 +2273,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10187304,
-        "name": "淫触王デマール",
-        "name_cn": "淫触王デマール",
+        "id": 10212272,
+        "name": "デコ×デコ THE ANIMATION",
+        "name_cn": "デコ×デコ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx187304-CwTKRUiG6kRd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2273,15 +2293,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10212272,
-        "name": "デコ×デコ THE ANIMATION",
-        "name_cn": "デコ×デコ THE ANIMATION",
+        "id": 10187304,
+        "name": "淫触王デマール",
+        "name_cn": "淫触王デマール",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx187304-CwTKRUiG6kRd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2589,6 +2609,26 @@
         },
         "rating": {
           "score": 6.5
+        },
+        "eps": 1,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 576780,
+        "name": "炼气十万年特别篇 阳极天下",
+        "name_cn": "炼气十万年特别篇 阳极天下",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
+        },
+        "rating": {
+          "score": 6.3
         },
         "eps": 1,
         "air_weekday": 6,
