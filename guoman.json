@@ -396,7 +396,7 @@
         "rating": {
           "score": 0
         },
-        "eps": 0,
+        "eps": 40,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -666,12 +666,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10209873,
-        "name": "ハメハラ",
-        "name_cn": "ハメハラ",
+        "id": 10208264,
+        "name": "霧中ノ塔",
+        "name_cn": "霧中ノ塔",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
         },
         "rating": {
           "score": 0
@@ -686,12 +686,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10208264,
-        "name": "霧中ノ塔",
-        "name_cn": "霧中ノ塔",
+        "id": 10209873,
+        "name": "ハメハラ",
+        "name_cn": "ハメハラ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
         },
         "rating": {
           "score": 0
@@ -2301,7 +2301,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
         },
         "rating": {
-          "score": 4.8
+          "score": 4.7
         },
         "eps": 0,
         "air_weekday": 5,
