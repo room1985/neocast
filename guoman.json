@@ -92,106 +92,6 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.4
-        },
-        "eps": 60,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第56话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 1
-        },
-        "eps": 40,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第22话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_2ffk5.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_2ffk5.jpg"
-        },
-        "rating": {
-          "score": 6.1
-        },
-        "eps": 25,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第19话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 118920,
-        "is_nsfw": false
-      },
-      {
-        "id": 454781,
-        "name": "霸王龙雷奇",
-        "name_cn": "霸王龙雷奇之雷奇知多少",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 52,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第41话~第42话",
-        "pub_time": "17:30",
-        "bilibili_season_id": 270683,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1070话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -319,6 +219,26 @@
         "is_nsfw": false
       },
       {
+        "id": 454781,
+        "name": "霸王龙雷奇",
+        "name_cn": "霸王龙雷奇之雷奇知多少",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 52,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第43话~第44话",
+        "pub_time": "17:30",
+        "bilibili_season_id": 270683,
+        "is_nsfw": false
+      },
+      {
         "id": 695405,
         "name": "牛来",
         "name_cn": "牛来",
@@ -406,6 +326,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 60,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第57话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 665620,
         "name": "雪王来了！",
         "name_cn": "雪王来了！",
@@ -423,6 +363,26 @@
         "pub_index": "第7话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1071话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -517,6 +477,26 @@
           "score": 6
         },
         "eps": 15,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 456169,
+        "name": "驭灵师",
+        "name_cn": "驭灵师",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 18,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -693,6 +673,26 @@
     },
     "items": [
       {
+        "id": 691159,
+        "name": "掌门低调点",
+        "name_cn": "掌门低调点",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+        },
+        "rating": {
+          "score": 1
+        },
+        "eps": 40,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第23话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
+      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -750,6 +750,26 @@
         "pub_index": "第4话",
         "pub_time": "11:00",
         "bilibili_season_id": 105212,
+        "is_nsfw": false
+      },
+      {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 25,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第20话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 118920,
         "is_nsfw": false
       },
       {
@@ -2454,7 +2474,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第14话",
+        "pub_index": "即将更新 第14话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
         "is_nsfw": false
@@ -2649,6 +2669,26 @@
         },
         "rating": {
           "score": 6.5
+        },
+        "eps": 1,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 576780,
+        "name": "炼气十万年特别篇 阳极天下",
+        "name_cn": "炼气十万年特别篇 阳极天下",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
+        },
+        "rating": {
+          "score": 6.3
         },
         "eps": 1,
         "air_weekday": 6,
