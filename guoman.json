@@ -466,6 +466,26 @@
         "is_nsfw": false
       },
       {
+        "id": 456169,
+        "name": "驭灵师",
+        "name_cn": "驭灵师",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 18,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10021828,
         "name": "小女ラムネ",
         "name_cn": "小女ラムネ",
