@@ -2678,26 +2678,6 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
-      },
-      {
-        "id": 576780,
-        "name": "炼气十万年特别篇 阳极天下",
-        "name_cn": "炼气十万年特别篇 阳极天下",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 1,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
       }
     ]
   },
