@@ -5,20 +5,20 @@
     },
     "items": [
       {
-        "id": 434813,
+        "id": 9264634,
         "name": "成也萧河",
         "name_cn": "成也萧河",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/15/4d/434813_HKhzh.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/15/4d/434813_HKhzh.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 6
+          "score": 0
         },
-        "eps": 16,
+        "eps": 0,
         "air_weekday": 1,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第7话",
         "pub_time": "09:00",
         "bilibili_season_id": 264634,
@@ -92,6 +92,26 @@
     },
     "items": [
       {
+        "id": 9148433,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第58话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -159,20 +179,20 @@
         "is_nsfw": false
       },
       {
-        "id": 442553,
-        "name": "有兽焉 第二季",
-        "name_cn": "有兽焉 第二季",
+        "id": 9039947,
+        "name": "有兽焉",
+        "name_cn": "有兽焉",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/d0/de/442553_CZs48.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/d0/de/442553_CZs48.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 7
+          "score": 0
         },
-        "eps": 12,
+        "eps": 0,
         "air_weekday": 3,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第66话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
@@ -266,106 +286,6 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.4
-        },
-        "eps": 60,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第57话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
-        "id": 665620,
-        "name": "雪王来了！",
-        "name_cn": "雪王来了！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 40,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第7话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 283870,
-        "is_nsfw": false
-      },
-      {
-        "id": 562147,
-        "name": "和平精英：地铁逃生",
-        "name_cn": "和平精英：地铁逃生",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/c0/26/562147_ezwP3.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/c0/26/562147_ezwP3.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 8,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第4话~第5话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 284458,
-        "is_nsfw": false
-      },
-      {
-        "id": 454781,
-        "name": "霸王龙雷奇",
-        "name_cn": "霸王龙雷奇之雷奇知多少",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 52,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第45话~第46话",
-        "pub_time": "17:30",
-        "bilibili_season_id": 270683,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1071话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 423036,
         "name": "中国奇谭 第二季",
         "name_cn": "",
@@ -457,6 +377,26 @@
           "score": 6.1
         },
         "eps": 15,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 456169,
+        "name": "驭灵师",
+        "name_cn": "驭灵师",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/11/9f/456169_8zzyK.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/11/9f/456169_8zzyK.jpg"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 18,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -633,20 +573,20 @@
     },
     "items": [
       {
-        "id": 691159,
+        "id": 9272443,
         "name": "掌门低调点",
         "name_cn": "掌门低调点",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 1
+          "score": 0
         },
-        "eps": 40,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第23话",
         "pub_time": "09:00",
         "bilibili_season_id": 272443,
@@ -673,20 +613,20 @@
         "is_nsfw": false
       },
       {
-        "id": 676026,
+        "id": 9263198,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/72/95/676026_gTSoS.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/72/95/676026_gTSoS.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
           "score": 0
         },
-        "eps": 20,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第5话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
@@ -713,60 +653,100 @@
         "is_nsfw": false
       },
       {
-        "id": 341311,
-        "name": "时光代理人 第二季",
-        "name_cn": "时光代理人 第二季",
+        "id": 9283870,
+        "name": "雪王来了！",
+        "name_cn": "雪王来了！",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a0/e6/341311_127Gp.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a0/e6/341311_127Gp.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 5.7
+          "score": 0
         },
-        "eps": 12,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第4话",
+        "bgm_matched": false,
+        "pub_index": "第8话",
         "pub_time": "11:00",
-        "bilibili_season_id": 105212,
+        "bilibili_season_id": 283870,
         "is_nsfw": false
       },
       {
-        "id": 607929,
+        "id": 9118920,
         "name": "百日成王",
         "name_cn": "百日成王",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 6.1
+          "score": 0
         },
-        "eps": 25,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第20话",
         "pub_time": "12:00",
         "bilibili_season_id": 118920,
         "is_nsfw": false
       },
       {
-        "id": 572689,
-        "name": "开心锤锤世界",
-        "name_cn": "开心锤锤世界",
+        "id": 9284458,
+        "name": "和平精英：地铁逃生",
+        "name_cn": "和平精英：地铁逃生",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
           "score": 0
         },
-        "eps": 30,
+        "eps": 0,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
+        "pub_index": "第6话~第8话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 284458,
+        "is_nsfw": false
+      },
+      {
+        "id": 9270683,
+        "name": "霸王龙雷奇之雷奇知多少",
+        "name_cn": "霸王龙雷奇之雷奇知多少",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第47话~第48话",
+        "pub_time": "17:30",
+        "bilibili_season_id": 270683,
+        "is_nsfw": false
+      },
+      {
+        "id": 9096881,
+        "name": "开心锤锤世界",
+        "name_cn": "开心锤锤世界",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
         "pub_index": "第69话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
@@ -904,6 +884,26 @@
           "score": 5.8
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 25,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2440,20 +2440,20 @@
     },
     "items": [
       {
-        "id": 607933,
+        "id": 9119017,
         "name": "万古至尊：李云霄传",
         "name_cn": "万古至尊：李云霄传",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 2
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 6,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第14话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
@@ -2580,6 +2580,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9034149,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第1072话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
         "id": 627556,
         "name": "呼唤少女特别篇 想做的事到底是什么",
         "name_cn": "",
@@ -2687,20 +2707,20 @@
     },
     "items": [
       {
-        "id": 552778,
+        "id": 9264970,
         "name": "财神窦占龙",
         "name_cn": "财神窦占龙",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/07/2d/552778_I4uFv.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/07/2d/552778_I4uFv.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 4.5
+          "score": 0
         },
-        "eps": 16,
+        "eps": 0,
         "air_weekday": 7,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第5话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
@@ -2767,23 +2787,43 @@
         "is_nsfw": false
       },
       {
-        "id": 456159,
+        "id": 9045969,
         "name": "牧神记",
         "name_cn": "牧神记",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a8/a9/456159_423P3.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a8/a9/456159_423P3.jpg"
+          "large": "",
+          "common": ""
         },
         "rating": {
-          "score": 6.6
+          "score": 0
         },
-        "eps": 26,
+        "eps": 0,
         "air_weekday": 7,
         "source": "bilibili",
-        "bgm_matched": true,
+        "bgm_matched": false,
         "pub_index": "第98话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
+        "is_nsfw": false
+      },
+      {
+        "id": 9073957,
+        "name": "记忆管理局",
+        "name_cn": "记忆管理局",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第7话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 73957,
         "is_nsfw": false
       },
       {
@@ -2791,8 +2831,8 @@
         "name": "记忆管理局",
         "name_cn": "记忆管理局",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/4c/1d/358568_qNj44.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/4c/1d/358568_qNj44.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/4c/1d/358568_qNj44.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/4c/1d/358568_qNj44.jpg"
         },
         "rating": {
           "score": 7.1
@@ -2801,9 +2841,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第7话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 73957,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
         "is_nsfw": false
       },
       {
@@ -2881,7 +2921,7 @@
         "air_weekday": 7,
         "source": "anilist",
         "bgm_matched": false,
-        "pub_index": "第7話",
+        "pub_index": "第8話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
