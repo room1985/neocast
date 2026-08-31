@@ -1453,15 +1453,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10155154,
-        "name": "妻を同窓会にいかせたら",
-        "name_cn": "妻を同窓会にいかせたら",
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "夏と箱",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1473,15 +1473,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188928,
-        "name": "夏と箱",
-        "name_cn": "夏と箱",
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "妻を同窓会にいかせたら",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1721,7 +1721,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195068-LOr1MKlDtH4Y.png"
         },
         "rating": {
-          "score": 5.9
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2021,7 +2021,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193347-EnTUvSR3JOgd.png"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2153,15 +2153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10198046,
-        "name": "ドＳなペット",
-        "name_cn": "ドＳなペット",
+        "id": 10212272,
+        "name": "デコ×デコ THE ANIMATION",
+        "name_cn": "デコ×デコ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2173,15 +2173,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10212272,
-        "name": "デコ×デコ THE ANIMATION",
-        "name_cn": "デコ×デコ THE ANIMATION",
+        "id": 10198046,
+        "name": "ドＳなペット",
+        "name_cn": "ドＳなペット",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198046-M34Xlo7MyCLL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
         },
         "rating": {
-          "score": 6.2
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2695,7 +2695,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/07/2d/552778_I4uFv.jpg"
         },
         "rating": {
-          "score": 4.5
+          "score": 3.3
         },
         "eps": 16,
         "air_weekday": 7,
