@@ -5,6 +5,26 @@
     },
     "items": [
       {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 2
+        },
+        "eps": 0,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第15话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
+      {
         "id": 434813,
         "name": "成也萧河",
         "name_cn": "成也萧河",
@@ -149,6 +169,26 @@
         "pub_index": "第21话",
         "pub_time": "12:00",
         "bilibili_season_id": 118920,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1073话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -864,6 +904,26 @@
           "score": 6.4
         },
         "eps": 4,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 545972,
+        "name": "喜羊羊与灰太狼之古古怪界有古怪",
+        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 60,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2360,26 +2420,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 2
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第14话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
         "id": 589368,
         "name": "如果历史是一群喵 大明皇朝篇",
         "name_cn": "如果历史是一群喵 大明皇朝篇",
@@ -2394,7 +2434,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第9话",
+        "pub_index": "第10话",
         "pub_time": "10:00",
         "bilibili_season_id": 252364,
         "is_nsfw": false
@@ -2414,7 +2454,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第11话",
+        "pub_index": "第12话",
         "pub_time": "10:00",
         "bilibili_season_id": 263605,
         "is_nsfw": false
@@ -2434,7 +2474,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第189话",
+        "pub_index": "第190话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
         "is_nsfw": false
@@ -2454,7 +2494,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "12:00",
         "bilibili_season_id": 259837,
         "is_nsfw": false
@@ -2474,7 +2514,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "12:00",
         "bilibili_season_id": 259875,
         "is_nsfw": false
@@ -2494,49 +2534,9 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第8话",
+        "pub_index": "第9话",
         "pub_time": "12:00",
         "bilibili_season_id": 285345,
-        "is_nsfw": false
-      },
-      {
-        "id": 454781,
-        "name": "霸王龙雷奇",
-        "name_cn": "霸王龙雷奇之雷奇知多少",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 52,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第49话~第50话",
-        "pub_time": "17:30",
-        "bilibili_season_id": 270683,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1072话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -2609,6 +2609,26 @@
         },
         "rating": {
           "score": 6.5
+        },
+        "eps": 1,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 576780,
+        "name": "炼气十万年特别篇 阳极天下",
+        "name_cn": "炼气十万年特别篇 阳极天下",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
+        },
+        "rating": {
+          "score": 6.3
         },
         "eps": 1,
         "air_weekday": 6,
@@ -2744,6 +2764,26 @@
         "pub_index": "第7话",
         "pub_time": "12:00",
         "bilibili_season_id": 73957,
+        "is_nsfw": false
+      },
+      {
+        "id": 454781,
+        "name": "霸王龙雷奇",
+        "name_cn": "霸王龙雷奇之雷奇知多少",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2e/38/454781_Jd6ib.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2e/38/454781_Jd6ib.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 52,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第51话~第52话",
+        "pub_time": "17:30",
+        "bilibili_season_id": 270683,
         "is_nsfw": false
       },
       {
