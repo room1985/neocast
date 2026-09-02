@@ -761,7 +761,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_OD5zd.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.6
         },
         "eps": 26,
         "air_weekday": 5,
@@ -1293,15 +1293,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10186058,
+        "name": "黒ギャルアラカルト",
+        "name_cn": "黒ギャルアラカルト",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1313,15 +1313,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10186058,
-        "name": "黒ギャルアラカルト",
-        "name_cn": "黒ギャルアラカルト",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1913,26 +1913,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10211557,
-        "name": "フラチ",
-        "name_cn": "フラチ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211557-PN1R4dpTOekY.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211557-PN1R4dpTOekY.png"
-        },
-        "rating": {
-          "score": 6.6
-        },
-        "eps": 2,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10212617,
         "name": "田舎にはこれくらいしか娯楽がない",
         "name_cn": "田舎にはこれくらいしか娯楽がない",
@@ -1944,6 +1924,26 @@
           "score": 6.5
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10211557,
+        "name": "フラチ",
+        "name_cn": "フラチ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211557-PN1R4dpTOekY.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211557-PN1R4dpTOekY.png"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -2113,15 +2113,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10199162,
-        "name": "クール de M",
-        "name_cn": "クール de M",
+        "id": 10212272,
+        "name": "デコ×デコ THE ANIMATION",
+        "name_cn": "デコ×デコ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2133,15 +2133,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10212272,
-        "name": "デコ×デコ THE ANIMATION",
-        "name_cn": "デコ×デコ THE ANIMATION",
+        "id": 10199162,
+        "name": "クール de M",
+        "name_cn": "クール de M",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212272-VcnUqLIAarAD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212272-VcnUqLIAarAD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199162-8ZpNn7vPn2rY.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2241,7 +2241,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
         },
         "rating": {
-          "score": 4.8
+          "score": 4.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2353,26 +2353,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10198044,
-        "name": "蹂躙王国 エルフ王国は巨大苗床に",
-        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 2,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10213733,
         "name": "彼女催眠",
         "name_cn": "彼女催眠",
@@ -2384,6 +2364,26 @@
           "score": 0
         },
         "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10198044,
+        "name": "蹂躙王国 エルフ王国は巨大苗床に",
+        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -2448,7 +2448,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.5
+          "score": 7.4
         },
         "eps": 52,
         "air_weekday": 6,
