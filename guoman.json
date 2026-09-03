@@ -5,26 +5,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 2
-        },
-        "eps": 0,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第15话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
         "id": 434813,
         "name": "成也萧河",
         "name_cn": "成也萧河",
@@ -39,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第7话",
+        "pub_index": "第8话",
         "pub_time": "09:00",
         "bilibili_season_id": 264634,
         "is_nsfw": false
@@ -526,26 +506,6 @@
         "is_nsfw": false
       },
       {
-        "id": 10021828,
-        "name": "小女ラムネ",
-        "name_cn": "小女ラムネ",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21828-3KDKm3Zu2DyX.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
-        },
-        "rating": {
-          "score": 6.5
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第8話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10112936,
         "name": "○○交配",
         "name_cn": "援助交配",
@@ -931,6 +891,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": false
+      },
+      {
+        "id": 10021828,
+        "name": "小女ラムネ",
+        "name_cn": "小女ラムネ",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21828-3KDKm3Zu2DyX.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21828-3KDKm3Zu2DyX.jpg"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       },
       {
         "id": 10132203,
@@ -2419,6 +2399,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 2
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第16话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
       {
         "id": 589368,
         "name": "如果历史是一群喵 大明皇朝篇",
