@@ -1373,15 +1373,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10174181,
-        "name": "サキュバス★コネクト！",
-        "name_cn": "サキュバス★コネクト！",
+        "id": 10183742,
+        "name": "亜人がお好きなんですね♡",
+        "name_cn": "亜人がお好きなんですね♡",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174181-vHbr7mnWOxK7.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1393,15 +1393,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10183742,
-        "name": "亜人がお好きなんですね♡",
-        "name_cn": "亜人がお好きなんですね♡",
+        "id": 10174181,
+        "name": "サキュバス★コネクト！",
+        "name_cn": "サキュバス★コネクト！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174181-vHbr7mnWOxK7.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1481,7 +1481,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1833,26 +1833,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10195360,
-        "name": "ハニーブロンド2",
-        "name_cn": "ハニーブロンド2",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
-        },
-        "rating": {
-          "score": 6.1
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10204463,
         "name": "蛇と蜘蛛",
         "name_cn": "蛇と蜘蛛",
@@ -1873,6 +1853,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10195360,
+        "name": "ハニーブロンド2",
+        "name_cn": "ハニーブロンド2",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195360-PAlYR0UnuGdV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10186308,
         "name": "甘いイジワル",
         "name_cn": "甘いイジワル",
@@ -1882,6 +1882,26 @@
         },
         "rating": {
           "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10212617,
+        "name": "田舎にはこれくらいしか娯楽がない",
+        "name_cn": "田舎にはこれくらいしか娯楽がない",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
+        },
+        "rating": {
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1921,27 +1941,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx206840-WSrKIJA0GFci.png"
         },
         "rating": {
-          "score": 5.2
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10212617,
-        "name": "田舎にはこれくらいしか娯楽がない",
-        "name_cn": "田舎にはこれくらいしか娯楽がない",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212617-hHf09tkVkiGz.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
-        },
-        "rating": {
-          "score": 6.5
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2221,7 +2221,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
