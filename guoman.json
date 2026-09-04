@@ -92,86 +92,6 @@
     },
     "items": [
       {
-        "id": 608049,
-        "name": "盗妖行",
-        "name_cn": "盗妖行",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
-        },
-        "rating": {
-          "score": 5.4
-        },
-        "eps": 60,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第58话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 148433,
-        "is_nsfw": false
-      },
-      {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 1
-        },
-        "eps": 40,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第24话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
-        },
-        "rating": {
-          "score": 6.1
-        },
-        "eps": 25,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第21话",
-        "pub_time": "12:00",
-        "bilibili_season_id": 118920,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1073话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -386,6 +306,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "盗妖行",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.4
+        },
+        "eps": 60,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第59话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 148433,
+        "is_nsfw": false
+      },
+      {
         "id": 665620,
         "name": "雪王来了！",
         "name_cn": "雪王来了！",
@@ -403,6 +343,26 @@
         "pub_index": "第9话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1074话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -653,6 +613,26 @@
     },
     "items": [
       {
+        "id": 691159,
+        "name": "掌门低调点",
+        "name_cn": "掌门低调点",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+        },
+        "rating": {
+          "score": 1
+        },
+        "eps": 40,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第25话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
+      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -690,6 +670,26 @@
         "pub_index": "第5话",
         "pub_time": "11:00",
         "bilibili_season_id": 105212,
+        "is_nsfw": false
+      },
+      {
+        "id": 607929,
+        "name": "百日成王",
+        "name_cn": "百日成王",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/1d/82/607929_h9X29.jpg"
+        },
+        "rating": {
+          "score": 6.1
+        },
+        "eps": 25,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第22话",
+        "pub_time": "12:00",
+        "bilibili_season_id": 118920,
         "is_nsfw": false
       },
       {
