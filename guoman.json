@@ -574,7 +574,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211338-If49uIjNKPgt.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 4.9
         },
         "eps": 1,
         "air_weekday": 4,
@@ -777,8 +777,8 @@
         "name": "开拍啦！怪兽大电影",
         "name_cn": "开拍啦！怪兽大电影",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_bcCE2.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_bcCE2.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/36/ae/456303_fV9xR.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/36/ae/456303_fV9xR.jpg"
         },
         "rating": {
           "score": 6
@@ -1533,15 +1533,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10198048,
-        "name": "夏妻",
-        "name_cn": "夏妻",
+        "id": 10203367,
+        "name": "もう一度、してみたい。",
+        "name_cn": "もう一度、してみたい。",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1553,15 +1553,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10203367,
-        "name": "もう一度、してみたい。",
-        "name_cn": "もう一度、してみたい。",
+        "id": 10198048,
+        "name": "夏妻",
+        "name_cn": "夏妻",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx203367-4TejHeBRRVYu.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2013,15 +2013,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10184824,
-        "name": "勇者ちゃんの冒険は終わってしまった！",
-        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
+        "id": 10202894,
+        "name": "剣鬼バルゴ",
+        "name_cn": "剣鬼バルゴ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202894-vv6EPa1MKCmD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202894-vv6EPa1MKCmD.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2033,15 +2033,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10202894,
-        "name": "剣鬼バルゴ",
-        "name_cn": "剣鬼バルゴ",
+        "id": 10184824,
+        "name": "勇者ちゃんの冒険は終わってしまった！",
+        "name_cn": "勇者ちゃんの冒険は終わってしまった！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202894-vv6EPa1MKCmD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202894-vv6EPa1MKCmD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184824-UcbgUai3o3xd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184824-UcbgUai3o3xd.png"
         },
         "rating": {
-          "score": 5.1
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2181,7 +2181,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195033-U5Y8Hy5zbnMC.png"
         },
         "rating": {
-          "score": 4.5
+          "score": 4.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2221,7 +2221,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2313,6 +2313,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10213733,
+        "name": "彼女催眠",
+        "name_cn": "彼女催眠",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10207035,
         "name": "彼女がセパレートをまとう理由",
         "name_cn": "彼女がセパレートをまとう理由",
@@ -2339,26 +2359,6 @@
         "images": {
           "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10213733,
-        "name": "彼女催眠",
-        "name_cn": "彼女催眠",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
         },
         "rating": {
           "score": 0
