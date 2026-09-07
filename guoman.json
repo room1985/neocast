@@ -513,6 +513,26 @@
         "is_nsfw": false
       },
       {
+        "id": 506836,
+        "name": "狐妖小红娘 黄风岭篇",
+        "name_cn": "狐妖小红娘13 黄风岭篇",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/e6/52/506836_Zz9Bm.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/e6/52/506836_Zz9Bm.jpg"
+        },
+        "rating": {
+          "score": 6.6
+        },
+        "eps": 16,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 555710,
         "name": "时光代理人Ⅲ Part One",
         "name_cn": "时光代理人 第三季 Part 1",
@@ -860,6 +880,26 @@
         "is_nsfw": false
       },
       {
+        "id": 577190,
+        "name": "遮天剧场版 背棺战王腾",
+        "name_cn": "遮天剧场版 背棺战王腾",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_sSD00.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
+        },
+        "rating": {
+          "score": 6.5
+        },
+        "eps": 1,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 577226,
         "name": "诡秘之主特别篇",
         "name_cn": "诡秘之主特别篇",
@@ -880,15 +920,15 @@
         "is_nsfw": false
       },
       {
-        "id": 577190,
-        "name": "遮天剧场版 背棺战王腾",
-        "name_cn": "遮天剧场版 背棺战王腾",
+        "id": 576780,
+        "name": "炼气十万年特别篇 阳极天下",
+        "name_cn": "炼气十万年特别篇 阳极天下",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/75/3c/577190_sSD00.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.3
         },
         "eps": 1,
         "air_weekday": 6,
