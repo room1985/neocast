@@ -1001,7 +1001,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第6话",
+        "pub_index": "第7话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
         "is_nsfw": false
@@ -1021,7 +1021,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第10话",
+        "pub_index": "第11话",
         "pub_time": "10:00",
         "bilibili_season_id": 269798,
         "is_nsfw": false
@@ -1041,7 +1041,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第11话",
+        "pub_index": "第12话",
         "pub_time": "10:00",
         "bilibili_season_id": 269837,
         "is_nsfw": false
@@ -1061,7 +1061,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第8话",
+        "pub_index": "第9话",
         "pub_time": "10:00",
         "bilibili_season_id": 283583,
         "is_nsfw": false
@@ -1081,7 +1081,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第99话",
+        "pub_index": "第100话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
