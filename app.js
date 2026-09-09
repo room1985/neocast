@@ -195,7 +195,10 @@ function lsSave() {
     localStorage.setItem(LS_KEY, json);
   } catch(_) {}
 
-  if (S.cfg.token && S.cfg.gistId) {
+  // 只有曾經成功與這個 Gist 同步過，才允許自動 Push。
+  // 清除瀏覽器資料後重新輸入 Token/Gist ID 時，_lastModified 尚不存在，
+  // 因此不會把空白的初始狀態自動覆蓋到雲端。
+  if (S.cfg.token && S.cfg.gistId && S.cfg._lastModified) {
     clearTimeout(_autoSyncTimer);
     _autoSyncTimer = setTimeout(() => {
       gistPush(true);
@@ -636,6 +639,29 @@ async function migrateGalleryToCloud() {
 /* ─────────────────────────────────────
    GITHUB GIST SYNC
 ───────────────────────────────────── */
+// 計算真正需要保護的「核心資料」數量。widgets 有預設值，因此不列入。
+function gistCoreItemCount(data = S) {
+  const anime = data.animeState || {};
+  const yt = data.yt || {};
+  return (
+    (data.shortcuts?.length || 0) +
+    (data.groups?.length || 0) +
+    (data.stickies?.length || 0) +
+    (data.stickyTags?.length || 0) +
+    (anime.tracked?.length || 0) +
+    (yt.channels?.length || 0) +
+    (yt.groups?.length || 0)
+  );
+}
+
+// 防呆：若相較上次成功同步，核心資料突然大幅減少，禁止背景自動覆蓋。
+// 使用者仍可按「同步到雲端」手動確認，保留真的想大量刪除時的出口。
+function isSuspiciousGistShrink() {
+  const baseline = Number(S.cfg._lastSyncedCoreCount || 0);
+  const current = gistCoreItemCount(S);
+  return baseline >= 10 && current <= Math.max(1, Math.floor(baseline * 0.25));
+}
+
 const gistData = () => ({
   shortcuts:       S.shortcuts,
   groups:          S.groups,
@@ -654,7 +680,28 @@ async function gistPush(silent = false) {
   const { token, gistId } = S.cfg;
   if (!token) {
     if (!silent) toast('請先在設定中填入 GitHub Token','warn');
-    return;
+    return false;
+  }
+
+  // 既有 Gist 必須先成功 Pull 過，才能 Push。
+  // 這是清除 localStorage 後避免「空白本機覆蓋雲端」的第一層保護。
+  if (gistId && !S.cfg._lastModified) {
+    if (!silent) toast('⚠️ 為保護雲端資料，請先按「從雲端還原設定」再同步', 'warn');
+    return false;
+  }
+
+  // 第二層保護：相較最後一次成功同步，若資料瞬間掉到 25% 以下，
+  // 背景自動同步直接阻止；手動同步則要求使用者再次確認。
+  if (gistId && isSuspiciousGistShrink()) {
+    const baseline = Number(S.cfg._lastSyncedCoreCount || 0);
+    const current = gistCoreItemCount(S);
+    if (silent) {
+      console.warn(`[NeoCast] 已阻止疑似大量刪除的自動 Gist 同步：${baseline} → ${current}`);
+      toast('⚠️ 已阻止疑似大量刪除的自動同步', 'warn');
+      return false;
+    }
+    const ok = confirm(`偵測到資料數量大幅減少（${baseline} → ${current}）。\n\n若繼續，雲端舊資料可能被大量刪除。確定仍要同步嗎？`);
+    if (!ok) return false;
   }
 
   if (!silent) $('sync-btn').classList.add('spin');
@@ -683,7 +730,9 @@ async function gistPush(silent = false) {
     }
     const data = await res.json();
     if (!gistId) { S.cfg.gistId = data.id; lsSaveLocal(); $('cfg-gid').value = data.id; }
-    S.cfg._lastModified = Date.now(); lsSaveLocal();
+    S.cfg._lastModified = Date.now();
+    S.cfg._lastSyncedCoreCount = gistCoreItemCount(S);
+    lsSaveLocal();
     if (!silent) toast('已同步到 Gist ✓');
     else toast('已自動同步 ✓');
   } catch(e) {
@@ -735,7 +784,8 @@ async function gistPull() {
     if (d.animeState)      Object.assign(S.animeState, d.animeState);
     mergeRemoteYt(d.yt);
     if (d.stickyTags)      S.stickyTags = d.stickyTags;
-    if (d.lastModified)    S.cfg._lastModified = d.lastModified;
+    S.cfg._lastModified = d.lastModified || Date.now();
+    S.cfg._lastSyncedCoreCount = gistCoreItemCount(d);
     lsSaveLocal();
     renderAll();
     return true;
@@ -785,6 +835,7 @@ async function gistAutoSync() {
     mergeRemoteYt(remote.yt);
     if (remote.stickyTags)      S.stickyTags = remote.stickyTags;
     S.cfg._lastModified = remoteTs;
+    S.cfg._lastSyncedCoreCount = gistCoreItemCount(remote);
     lsSaveLocal();
     renderAll();
     cloudGalleryPull();
@@ -3594,12 +3645,27 @@ async function saveSettings() {
   if (vidFile) await saveVideo(vidFile);
 
   S.news.fetchedAt = 0;
-  lsSave();
+
+  // 設定頁可能是清除瀏覽器資料後的第一次重新登入。
+  // 先只存本機，絕不能在這一步排程 gistPush()。
+  lsSaveLocal();
+
+  // 已填既有 Gist ID：第一次必須先由雲端還原，成功後才開放後續自動 Push。
+  // 若只是一般修改設定、且本機已有同步時間戳，也仍可安全 Pull 最新雲端狀態。
+  let pulledExistingGist = false;
+  if (token && gistId && !S.cfg._lastModified) {
+    pulledExistingGist = await gistPull();
+    if (!pulledExistingGist) {
+      toast('⚠️ 設定已存於本機，但尚未與 Gist 連線；已停止自動上傳以保護雲端資料', 'warn');
+    }
+  }
+
   closeModal('m-cfg');
   renderNewsKws();
   fetchNews(true);
   if (S.cfg.weatherLat) initWeather();
-  toast('設定已儲存 ✓');
+  if (pulledExistingGist) toast('設定已儲存，並已先從 Gist 還原 ✓');
+  else if (!token || !gistId || S.cfg._lastModified) toast('設定已儲存 ✓');
 }
 
 /* ─────────────────────────────────────
