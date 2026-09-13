@@ -286,46 +286,6 @@
     },
     "items": [
       {
-        "id": 665620,
-        "name": "雪王来了！",
-        "name_cn": "雪王来了！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 40,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第11话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 283870,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1077话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 423036,
         "name": "中国奇谭 第二季",
         "name_cn": "",
@@ -673,23 +633,23 @@
         "is_nsfw": false
       },
       {
-        "id": 341311,
-        "name": "时光代理人 第二季",
-        "name_cn": "时光代理人 第二季",
+        "id": 665620,
+        "name": "雪王来了！",
+        "name_cn": "雪王来了！",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a0/e6/341311_127Gp.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a0/e6/341311_127Gp.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
         },
         "rating": {
-          "score": 5.7
+          "score": 0
         },
-        "eps": 12,
+        "eps": 40,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第6话",
+        "pub_index": "第12话",
         "pub_time": "11:00",
-        "bilibili_season_id": 105212,
+        "bilibili_season_id": 283870,
         "is_nsfw": false
       },
       {
@@ -781,7 +741,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_OD5zd.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.5
         },
         "eps": 26,
         "air_weekday": 5,
@@ -2557,6 +2517,26 @@
         "pub_index": "第10话",
         "pub_time": "12:00",
         "bilibili_season_id": 285345,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1078话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
