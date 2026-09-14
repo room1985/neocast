@@ -454,7 +454,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211338-If49uIjNKPgt.png"
         },
         "rating": {
-          "score": 4.9
+          "score": 5.0
         },
         "eps": 1,
         "air_weekday": 4,
@@ -1353,15 +1353,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10174181,
-        "name": "サキュバス★コネクト！",
-        "name_cn": "サキュバス★コネクト！",
+        "id": 10183742,
+        "name": "亜人がお好きなんですね♡",
+        "name_cn": "亜人がお好きなんですね♡",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174181-vHbr7mnWOxK7.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1373,15 +1373,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10183742,
-        "name": "亜人がお好きなんですね♡",
-        "name_cn": "亜人がお好きなんですね♡",
+        "id": 10174181,
+        "name": "サキュバス★コネクト！",
+        "name_cn": "サキュバス★コネクト！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx183742-WOUbrnj69mhF.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx183742-WOUbrnj69mhF.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174181-vHbr7mnWOxK7.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1441,7 +1441,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1513,26 +1513,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10164239,
-        "name": "so_low",
-        "name_cn": "so_low",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
-        },
-        "rating": {
-          "score": 5.7
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10203367,
         "name": "もう一度、してみたい。",
         "name_cn": "もう一度、してみたい。",
@@ -1553,6 +1533,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10164239,
+        "name": "so_low",
+        "name_cn": "so_low",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10198048,
         "name": "夏妻",
         "name_cn": "夏妻",
@@ -1561,7 +1561,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1813,15 +1813,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10165439,
-        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
-        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "id": 10204463,
+        "name": "蛇と蜘蛛",
+        "name_cn": "蛇と蜘蛛",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1833,15 +1833,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10204463,
-        "name": "蛇と蜘蛛",
-        "name_cn": "蛇と蜘蛛",
+        "id": 10165439,
+        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2173,6 +2173,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10202893,
+        "name": "L'amour fou de l'automate",
+        "name_cn": "L'amour fou de l'automate",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10195033,
         "name": "危険な森 おにごっこ",
         "name_cn": "危険な森 おにごっこ",
@@ -2193,15 +2213,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10202893,
-        "name": "L'amour fou de l'automate",
-        "name_cn": "L'amour fou de l'automate",
+        "id": 10213733,
+        "name": "彼女催眠",
+        "name_cn": "彼女催眠",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2242,26 +2262,6 @@
         },
         "rating": {
           "score": 4.9
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10213733,
-        "name": "彼女催眠",
-        "name_cn": "彼女催眠",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
-        },
-        "rating": {
-          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
