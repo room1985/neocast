@@ -173,7 +173,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第10话",
+        "pub_index": "第11话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
@@ -193,29 +193,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第68话",
+        "pub_index": "第69话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
-        "is_nsfw": false
-      },
-      {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第28话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
@@ -650,6 +630,26 @@
         "pub_index": "第29话",
         "pub_time": "09:00",
         "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第29话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
