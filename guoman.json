@@ -893,26 +893,6 @@
         "is_nsfw": false
       },
       {
-        "id": 607929,
-        "name": "百日成王",
-        "name_cn": "百日成王",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/1d/82/607929_h9X29.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/1d/82/607929_h9X29.jpg"
-        },
-        "rating": {
-          "score": 5.9
-        },
-        "eps": 25,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 607337,
         "name": "凹凸世界·新生 第一篇章 魔女陷阱",
         "name_cn": "凹凸世界·新生 第一篇章 魔女陷阱",
@@ -2488,7 +2468,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/66/56/589368_ze71z.jpg"
         },
         "rating": {
-          "score": 4.8
+          "score": 5
         },
         "eps": 12,
         "air_weekday": 6,
@@ -2554,7 +2534,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第11话",
+        "pub_index": "即将更新 第11话",
         "pub_time": "12:00",
         "bilibili_season_id": 285345,
         "is_nsfw": false
