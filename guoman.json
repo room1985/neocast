@@ -300,29 +300,9 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第13话",
+        "pub_index": "第14话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1080话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -670,26 +650,6 @@
         "pub_index": "第8话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
-        "is_nsfw": false
-      },
-      {
-        "id": 341311,
-        "name": "时光代理人 第二季",
-        "name_cn": "时光代理人 第二季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a0/e6/341311_127Gp.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a0/e6/341311_127Gp.jpg"
-        },
-        "rating": {
-          "score": 5.7
-        },
-        "eps": 12,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第7话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 105212,
         "is_nsfw": false
       },
       {
@@ -1617,8 +1577,8 @@
         "name": "夏妻",
         "name_cn": "夏妻",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-ChBdGvIIDqrk.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-ChBdGvIIDqrk.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198048-hqioP9q8uR9j.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-hqioP9q8uR9j.png"
         },
         "rating": {
           "score": 6.7
@@ -2557,6 +2517,26 @@
         "pub_index": "第11话",
         "pub_time": "12:00",
         "bilibili_season_id": 285345,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1081话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
