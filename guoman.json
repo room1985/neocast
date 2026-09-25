@@ -92,20 +92,20 @@
     },
     "items": [
       {
-        "id": 9272443,
+        "id": 691159,
         "name": "掌门低调点",
         "name_cn": "掌门低调点",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 1
         },
-        "eps": 0,
+        "eps": 40,
         "air_weekday": 2,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第30话",
         "pub_time": "09:00",
         "bilibili_season_id": 272443,
@@ -653,26 +653,6 @@
     },
     "items": [
       {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 1
-        },
-        "eps": 40,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第31话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -767,7 +747,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第11话",
+        "pub_index": "即将更新 第11话",
         "pub_time": "23:00",
         "bilibili_season_id": 284272,
         "is_nsfw": false
@@ -857,8 +837,8 @@
         "name": "罗小黑战记 学前篇",
         "name_cn": "",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/86/cd/593863_ukKpq.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_ukKpq.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/86/cd/593863_7u0XX.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_7u0XX.jpg"
         },
         "rating": {
           "score": 7
@@ -1721,7 +1701,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174184-N7eCrGXa2isV.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1953,26 +1933,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10165439,
-        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
-        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
-        },
-        "rating": {
-          "score": 5.3
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10211557,
         "name": "フラチ",
         "name_cn": "フラチ",
@@ -1984,6 +1944,26 @@
           "score": 6.6
         },
         "eps": 2,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10165439,
+        "name": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "name_cn": "魔法少女ノーブル・ローズ THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx165439-QgztrAbYHeTS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
+        },
+        "rating": {
+          "score": 5.3
+        },
+        "eps": 0,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
