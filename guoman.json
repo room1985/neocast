@@ -53,7 +53,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/19/71/630676_6v15K.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.5
         },
         "eps": 52,
         "air_weekday": 1,
@@ -434,7 +434,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/06/9c/520299_IS833.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 6
         },
         "eps": 15,
         "air_weekday": 4,
@@ -761,7 +761,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ee/ae/507819_OD5zd.jpg"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.5
         },
         "eps": 26,
         "air_weekday": 5,
@@ -901,7 +901,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_8OmeD.jpg"
         },
         "rating": {
-          "score": 5.9
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2574,7 +2574,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第22话",
+        "pub_index": "第22话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
         "is_nsfw": false
@@ -2688,7 +2688,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/75/3c/577190_sSD00.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 1,
         "air_weekday": 6,
@@ -2711,6 +2711,26 @@
           "score": 6.8
         },
         "eps": 3,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 576780,
+        "name": "炼气十万年特别篇 阳极天下",
+        "name_cn": "炼气十万年特别篇 阳极天下",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
