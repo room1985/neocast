@@ -19,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第11话",
+        "pub_index": "第11话",
         "pub_time": "09:00",
         "bilibili_season_id": 264634,
         "is_nsfw": false
@@ -2624,8 +2624,8 @@
         "name": "八仙！",
         "name_cn": "八仙！",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/7b/6e/492481_9NJYA.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/7b/6e/492481_9NJYA.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/7b/6e/492481_JWdNk.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/7b/6e/492481_JWdNk.jpg"
         },
         "rating": {
           "score": 7.1
