@@ -801,7 +801,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
         },
         "rating": {
-          "score": 4.9
+          "score": 5
         },
         "eps": 12,
         "air_weekday": 5,
@@ -1041,7 +1041,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx112936-MOPqLdKu7dgJ.jpg"
         },
         "rating": {
-          "score": 7.0
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1181,7 +1181,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
         },
         "rating": {
-          "score": 6.0
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1421,7 +1421,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1493,15 +1493,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10174181,
-        "name": "サキュバス★コネクト！",
-        "name_cn": "サキュバス★コネクト！",
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "夏と箱",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174181-vHbr7mnWOxK7.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1513,15 +1513,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188928,
-        "name": "夏と箱",
-        "name_cn": "夏と箱",
+        "id": 10174181,
+        "name": "サキュバス★コネクト！",
+        "name_cn": "サキュバス★コネクト！",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx174181-vHbr7mnWOxK7.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx174181-vHbr7mnWOxK7.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1681,7 +1681,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-hqioP9q8uR9j.png"
         },
         "rating": {
-          "score": 6.6
+          "score": 6.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2133,6 +2133,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10213733,
+        "name": "彼女催眠",
+        "name_cn": "彼女催眠",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
+        },
+        "rating": {
+          "score": 6.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10193347,
         "name": "社畜シンデレラ",
         "name_cn": "社畜シンデレラ",
@@ -2162,26 +2182,6 @@
         },
         "rating": {
           "score": 5.1
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10213733,
-        "name": "彼女催眠",
-        "name_cn": "彼女催眠",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
-        },
-        "rating": {
-          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2241,7 +2241,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198046-M34Xlo7MyCLL.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2433,15 +2433,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10208264,
-        "name": "霧中ノ塔",
-        "name_cn": "霧中ノ塔",
+        "id": 10207035,
+        "name": "彼女がセパレートをまとう理由",
+        "name_cn": "彼女がセパレートをまとう理由",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2453,15 +2453,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10207035,
-        "name": "彼女がセパレートをまとう理由",
-        "name_cn": "彼女がセパレートをまとう理由",
+        "id": 10208264,
+        "name": "霧中ノ塔",
+        "name_cn": "霧中ノ塔",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx207035-0LwEG7t0xlpV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx207035-0LwEG7t0xlpV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx208264-suCmiuMBZfBy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208264-suCmiuMBZfBy.png"
         },
         "rating": {
-          "score": 5.3
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2631,26 +2631,6 @@
           "score": 6.8
         },
         "eps": 3,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 576780,
-        "name": "炼气十万年特别篇 阳极天下",
-        "name_cn": "炼气十万年特别篇 阳极天下",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
