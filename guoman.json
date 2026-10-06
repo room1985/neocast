@@ -106,7 +106,7 @@
         "air_weekday": 2,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第34话",
+        "pub_index": "第34话",
         "pub_time": "09:00",
         "bilibili_season_id": 272443,
         "is_nsfw": false
@@ -924,26 +924,6 @@
           "score": 6.4
         },
         "eps": 60,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 700676,
-        "name": "完美世界 第七季",
-        "name_cn": "",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 6.5
-        },
-        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
