@@ -2588,7 +2588,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/32/ed/507820_9O2xR.jpg"
         },
         "rating": {
-          "score": 7.9
+          "score": 7.4
         },
         "eps": 16,
         "air_weekday": 6,
@@ -2661,89 +2661,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第10话",
+        "pub_index": "第11话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
-        "is_nsfw": false
-      },
-      {
-        "id": 316789,
-        "name": "肥志百科 第1季",
-        "name_cn": "肥志百科 第1季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/4c/14/316789_kzwkB.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/4c/14/316789_kzwkB.jpg"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 12,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第170话~第171话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 34569,
-        "is_nsfw": false
-      },
-      {
-        "id": 9269798,
-        "name": "千金归来：我清算了枕边人",
-        "name_cn": "千金归来：我清算了枕边人",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第14话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 269798,
-        "is_nsfw": false
-      },
-      {
-        "id": 9269837,
-        "name": "当上神明后，我带着信徒干翻了废土",
-        "name_cn": "当上神明后，我带着信徒干翻了废土",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第15话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 269837,
-        "is_nsfw": false
-      },
-      {
-        "id": 9283583,
-        "name": "孟婆辞职，阎王哭着求我回来上班",
-        "name_cn": "孟婆辞职，阎王哭着求我回来上班",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第12话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 283583,
         "is_nsfw": false
       },
       {
@@ -2761,7 +2681,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第103话",
+        "pub_index": "第104话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
