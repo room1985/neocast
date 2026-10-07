@@ -233,7 +233,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第13话",
+        "pub_index": "第13话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
@@ -253,7 +253,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第71话",
+        "pub_index": "第71话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
         "is_nsfw": false
@@ -273,7 +273,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第34话",
+        "pub_index": "第34话",
         "pub_time": "10:00",
         "bilibili_season_id": 247422,
         "is_nsfw": false
@@ -864,26 +864,6 @@
           "score": 5.7
         },
         "eps": 26,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 425543,
-        "name": "去你的岛",
-        "name_cn": "去你的岛",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/07/aa/425543_68654.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/07/aa/425543_68654.jpg"
-        },
-        "rating": {
-          "score": 5.9
-        },
-        "eps": 1,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2591,6 +2571,26 @@
           "score": 7.1
         },
         "eps": 1,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 507820,
+        "name": "大王饶命 第三季",
+        "name_cn": "大王饶命 第三季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/32/ed/507820_9O2xR.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/32/ed/507820_9O2xR.jpg"
+        },
+        "rating": {
+          "score": 7.9
+        },
+        "eps": 16,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
