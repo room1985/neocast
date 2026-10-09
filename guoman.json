@@ -647,7 +647,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第11话",
+        "pub_index": "第11话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
@@ -667,7 +667,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第10话",
+        "pub_index": "第10话",
         "pub_time": "11:00",
         "bilibili_season_id": 105212,
         "is_nsfw": false
@@ -924,26 +924,6 @@
           "score": 6.4
         },
         "eps": 60,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 700676,
-        "name": "完美世界 第七季",
-        "name_cn": "",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 6.5
-        },
-        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2580,26 +2560,6 @@
         "is_nsfw": false
       },
       {
-        "id": 507820,
-        "name": "大王饶命 第三季",
-        "name_cn": "大王饶命 第三季",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/32/ed/507820_9O2xR.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/32/ed/507820_9O2xR.jpg"
-        },
-        "rating": {
-          "score": 7.6
-        },
-        "eps": 16,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 577190,
         "name": "遮天剧场版 背棺战王腾",
         "name_cn": "遮天剧场版 背棺战王腾",
@@ -2628,7 +2588,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b9/99/577226_CLc9Z.jpg"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.9
         },
         "eps": 3,
         "air_weekday": 6,
