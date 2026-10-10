@@ -833,26 +833,6 @@
         "is_nsfw": false
       },
       {
-        "id": 493777,
-        "name": "深空彼岸",
-        "name_cn": "深空彼岸",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ef/2c/493777_G0G0p.jpg"
-        },
-        "rating": {
-          "score": 5.7
-        },
-        "eps": 26,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 575244,
         "name": "沧元图3",
         "name_cn": "沧元图 第三季",
@@ -924,26 +904,6 @@
           "score": 6.4
         },
         "eps": 60,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 700676,
-        "name": "完美世界 第七季",
-        "name_cn": "",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 7.2
-        },
-        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2474,7 +2434,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第26话",
+        "pub_index": "第26话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
         "is_nsfw": false
@@ -2494,7 +2454,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第17话",
+        "pub_index": "第17话",
         "pub_time": "10:00",
         "bilibili_season_id": 263605,
         "is_nsfw": false
@@ -2631,26 +2591,6 @@
           "score": 6.8
         },
         "eps": 3,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 576780,
-        "name": "炼气十万年特别篇 阳极天下",
-        "name_cn": "炼气十万年特别篇 阳极天下",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
