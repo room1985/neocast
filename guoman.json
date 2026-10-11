@@ -781,7 +781,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
         },
         "rating": {
-          "score": 5
+          "score": 4.9
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2661,7 +2661,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第11话",
+        "pub_index": "第11话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
         "is_nsfw": false
@@ -2815,7 +2815,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/d0/aa/641036_ylPZn.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.6
         },
         "eps": 26,
         "air_weekday": 7,
