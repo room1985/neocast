@@ -19,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第13话",
+        "pub_index": "即将更新 第13话",
         "pub_time": "09:00",
         "bilibili_season_id": 264634,
         "is_nsfw": false
@@ -207,7 +207,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/17/9e/695405_j9Ucs.jpg"
         },
         "rating": {
-          "score": 3.4
+          "score": 3.3
         },
         "eps": 1,
         "air_weekday": 3,
@@ -285,46 +285,6 @@
       "id": 4
     },
     "items": [
-      {
-        "id": 665620,
-        "name": "雪王来了！",
-        "name_cn": "雪王来了！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 40,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第18话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 283870,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1089话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
       {
         "id": 423036,
         "name": "中国奇谭 第二季",
@@ -653,23 +613,23 @@
         "is_nsfw": false
       },
       {
-        "id": 341311,
-        "name": "时光代理人 第二季",
-        "name_cn": "时光代理人 第二季",
+        "id": 665620,
+        "name": "雪王来了！",
+        "name_cn": "雪王来了！",
         "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a0/e6/341311_127Gp.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a0/e6/341311_127Gp.jpg"
+          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
         },
         "rating": {
-          "score": 5.7
+          "score": 5
         },
-        "eps": 12,
+        "eps": 40,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第10话",
+        "pub_index": "第19话",
         "pub_time": "11:00",
-        "bilibili_season_id": 105212,
+        "bilibili_season_id": 283870,
         "is_nsfw": false
       },
       {
@@ -833,6 +793,26 @@
         "is_nsfw": false
       },
       {
+        "id": 493777,
+        "name": "深空彼岸",
+        "name_cn": "深空彼岸",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ef/2c/493777_G0G0p.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ef/2c/493777_G0G0p.jpg"
+        },
+        "rating": {
+          "score": 5.7
+        },
+        "eps": 26,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 575244,
         "name": "沧元图3",
         "name_cn": "沧元图 第三季",
@@ -904,6 +884,26 @@
           "score": 6.4
         },
         "eps": 60,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 700676,
+        "name": "完美世界 第七季",
+        "name_cn": "",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 7.2
+        },
+        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2500,6 +2500,26 @@
         "is_nsfw": false
       },
       {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1090话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
         "id": 627556,
         "name": "呼唤少女特别篇 想做的事到底是什么",
         "name_cn": "",
@@ -2821,7 +2841,7 @@
         "air_weekday": 7,
         "source": "anilist",
         "bgm_matched": false,
-        "pub_index": "第2話",
+        "pub_index": "第3話",
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
