@@ -5,6 +5,26 @@
     },
     "items": [
       {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 1.7
+        },
+        "eps": 34,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第27话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
+      {
         "id": 434813,
         "name": "成也萧河",
         "name_cn": "成也萧河",
@@ -112,6 +132,26 @@
         "is_nsfw": false
       },
       {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1091话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
         "id": 608049,
         "name": "盗妖行",
         "name_cn": "",
@@ -193,27 +233,27 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第14话",
+        "pub_index": "即将更新 第14话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
       },
       {
-        "id": 9039947,
-        "name": "有兽焉",
-        "name_cn": "有兽焉",
+        "id": 442553,
+        "name": "有兽焉 第二季",
+        "name_cn": "有兽焉 第二季",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/d0/de/442553_CZs48.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/d0/de/442553_CZs48.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 7
         },
-        "eps": 0,
+        "eps": 12,
         "air_weekday": 3,
         "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第72话",
+        "bgm_matched": true,
+        "pub_index": "即将更新 第72话",
         "pub_time": "10:00",
         "bilibili_season_id": 39947,
         "is_nsfw": false
@@ -233,7 +273,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第36话",
+        "pub_index": "即将更新 第36话",
         "pub_time": "10:00",
         "bilibili_season_id": 247422,
         "is_nsfw": false
@@ -326,43 +366,23 @@
     },
     "items": [
       {
-        "id": 9283870,
+        "id": 665620,
         "name": "雪王来了！",
         "name_cn": "雪王来了！",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 5
         },
-        "eps": 0,
+        "eps": 40,
         "air_weekday": 4,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第20话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
-        "is_nsfw": false
-      },
-      {
-        "id": 9034149,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第1092话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -633,100 +653,80 @@
     },
     "items": [
       {
-        "id": 9272443,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第37话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 9263198,
+        "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/72/95/676026_gTSoS.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/72/95/676026_gTSoS.jpg"
         },
         "rating": {
           "score": 0
         },
-        "eps": 0,
+        "eps": 20,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第12话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
       },
       {
-        "id": 9105212,
-        "name": "时光代理人 第三季",
-        "name_cn": "时光代理人 第三季",
+        "id": 341311,
+        "name": "时光代理人 第二季",
+        "name_cn": "时光代理人 第二季",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/a0/e6/341311_127Gp.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a0/e6/341311_127Gp.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 5.7
         },
-        "eps": 0,
+        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第11话",
         "pub_time": "11:00",
         "bilibili_season_id": 105212,
         "is_nsfw": false
       },
       {
-        "id": 9291215,
-        "name": "请吃红小豆吧！第五季",
-        "name_cn": "请吃红小豆吧！第五季",
+        "id": 308028,
+        "name": "请吃红小豆吧！ 第四季",
+        "name_cn": "请吃红小豆吧！ 第四季",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/b5/b7/308028_frdjs.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/b5/b7/308028_frdjs.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 6.7
         },
-        "eps": 0,
+        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第7话",
         "pub_time": "17:30",
         "bilibili_season_id": 291215,
         "is_nsfw": false
       },
       {
-        "id": 9096881,
+        "id": 572689,
         "name": "开心锤锤世界",
         "name_cn": "开心锤锤世界",
         "images": {
-          "large": "",
-          "common": ""
+          "large": "http://lain.bgm.tv/pic/cover/l/75/29/572689_hq2rF.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/75/29/572689_hq2rF.jpg"
         },
         "rating": {
-          "score": 0
+          "score": 1
         },
-        "eps": 0,
+        "eps": 30,
         "air_weekday": 5,
         "source": "bilibili",
-        "bgm_matched": false,
+        "bgm_matched": true,
         "pub_index": "第76话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
@@ -2480,46 +2480,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 1.7
-        },
-        "eps": 34,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第26话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
-        "id": 9263605,
-        "name": "气运世界杯，我能复制所有球星技能",
-        "name_cn": "气运世界杯，我能复制所有球星技能",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第17话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 263605,
-        "is_nsfw": false
-      },
-      {
         "id": 607915,
         "name": "凡人修仙传 第五季",
         "name_cn": "凡人修仙传 第五季",
@@ -2534,7 +2494,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第195话",
+        "pub_index": "第196话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
         "is_nsfw": false
@@ -2554,29 +2514,9 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第14话",
+        "pub_index": "第15话",
         "pub_time": "12:00",
         "bilibili_season_id": 285345,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1090话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
