@@ -466,6 +466,26 @@
         "is_nsfw": false
       },
       {
+        "id": 449346,
+        "name": "大理寺日志 叁",
+        "name_cn": "大理寺日志 第三季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/fc/d2/449346_0ql6W.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/fc/d2/449346_0ql6W.jpg"
+        },
+        "rating": {
+          "score": 7.7
+        },
+        "eps": 16,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10196750,
         "name": "シスターブリーダー",
         "name_cn": "シスターブリーダー",
@@ -801,7 +821,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
         },
         "rating": {
-          "score": 5
+          "score": 4.9
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2621,29 +2641,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第11话",
+        "pub_index": "第12话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
-        "is_nsfw": false
-      },
-      {
-        "id": 316789,
-        "name": "肥志百科 第1季",
-        "name_cn": "肥志百科 第1季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/4c/14/316789_kzwkB.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/4c/14/316789_kzwkB.jpg"
-        },
-        "rating": {
-          "score": 6.2
-        },
-        "eps": 12,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第172话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 34569,
         "is_nsfw": false
       },
       {
@@ -2661,7 +2661,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第15话",
+        "pub_index": "第16话",
         "pub_time": "10:00",
         "bilibili_season_id": 269798,
         "is_nsfw": false
@@ -2681,7 +2681,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第16话",
+        "pub_index": "第17话",
         "pub_time": "10:00",
         "bilibili_season_id": 269837,
         "is_nsfw": false
@@ -2701,7 +2701,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第13话",
+        "pub_index": "第14话",
         "pub_time": "10:00",
         "bilibili_season_id": 283583,
         "is_nsfw": false
@@ -2721,7 +2721,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第104话",
+        "pub_index": "第105话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
