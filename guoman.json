@@ -92,46 +92,6 @@
     },
     "items": [
       {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 1
-        },
-        "eps": 40,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第36话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1091话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 608049,
         "name": "盗妖行",
         "name_cn": "",
@@ -363,6 +323,26 @@
         "pub_index": "第20话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1092话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -624,6 +604,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
+      },
+      {
+        "id": 10214551,
+        "name": "桜春女学院の男優",
+        "name_cn": "桜春女学院の男優",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx214551-uDaf7UPVxN2v.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx214551-uDaf7UPVxN2v.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -632,6 +632,26 @@
       "id": 5
     },
     "items": [
+      {
+        "id": 691159,
+        "name": "掌门低调点",
+        "name_cn": "掌门低调点",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
+        },
+        "rating": {
+          "score": 1
+        },
+        "eps": 40,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第37话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
       {
         "id": 676026,
         "name": "缔灵爱水心缠",
@@ -727,7 +747,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第14话",
+        "pub_index": "第14话",
         "pub_time": "23:00",
         "bilibili_season_id": 284272,
         "is_nsfw": false
@@ -2422,26 +2442,6 @@
         },
         "rating": {
           "score": 5.3
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10214551,
-        "name": "桜春女学院の男優",
-        "name_cn": "桜春女学院の男優",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx214551-uDaf7UPVxN2v.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx214551-uDaf7UPVxN2v.jpg"
-        },
-        "rating": {
-          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
