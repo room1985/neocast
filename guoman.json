@@ -727,7 +727,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第14话",
+        "pub_index": "即将更新 第14话",
         "pub_time": "23:00",
         "bilibili_season_id": 284272,
         "is_nsfw": false
@@ -1373,12 +1373,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10186058,
-        "name": "黒ギャルアラカルト",
-        "name_cn": "黒ギャルアラカルト",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
           "score": 6.1
@@ -1393,12 +1393,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10186058,
+        "name": "黒ギャルアラカルト",
+        "name_cn": "黒ギャルアラカルト",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
           "score": 6.1
@@ -1553,15 +1553,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10155154,
-        "name": "妻を同窓会にいかせたら",
-        "name_cn": "妻を同窓会にいかせたら",
+        "id": 10160701,
+        "name": "告白……",
+        "name_cn": "告白……",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1573,15 +1573,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10160701,
-        "name": "告白……",
-        "name_cn": "告白……",
+        "id": 10155154,
+        "name": "妻を同窓会にいかせたら",
+        "name_cn": "妻を同窓会にいかせたら",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx160701-UuWLpshlhjVG.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx160701-UuWLpshlhjVG.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155154-JlRlEo3sZOU6.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155154-JlRlEo3sZOU6.jpg"
         },
         "rating": {
-          "score": 5.3
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2033,26 +2033,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10188933,
-        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
-        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
-        },
-        "rating": {
-          "score": 5.2
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10195034,
         "name": "これってナ～ニ？",
         "name_cn": "これってナ～ニ？",
@@ -2082,6 +2062,26 @@
         },
         "rating": {
           "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10188933,
+        "name": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "name_cn": "プリンセスバースト！～危険日の種付け孕ませ羞恥バトル！～",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188933-akAyf4m11e0y.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
+        },
+        "rating": {
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
