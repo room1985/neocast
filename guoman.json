@@ -73,49 +73,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第14话",
+        "pub_index": "第15话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
-        "is_nsfw": false
-      },
-      {
-        "id": 9039947,
-        "name": "有兽焉",
-        "name_cn": "有兽焉",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第72话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 39947,
-        "is_nsfw": false
-      },
-      {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第36话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
@@ -393,6 +353,26 @@
         "is_nsfw": false
       },
       {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第37话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
+      {
         "id": 9263198,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -624,26 +604,6 @@
           "score": 6.7
         },
         "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10168947,
-        "name": "NO 猥婦 NO LIFE！",
-        "name_cn": "NO 猥婦 NO LIFE！",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx168947-WSTbOv30uTYR.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx168947-WSTbOv30uTYR.png"
-        },
-        "rating": {
-          "score": 6.1
-        },
-        "eps": 2,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
