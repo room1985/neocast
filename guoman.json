@@ -1313,12 +1313,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10186058,
-        "name": "黒ギャルアラカルト",
-        "name_cn": "黒ギャルアラカルト",
+        "id": 10191452,
+        "name": "淫モラル・ゲームマスター THE ANIMATION",
+        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
           "score": 6.1
@@ -1333,12 +1333,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10191452,
-        "name": "淫モラル・ゲームマスター THE ANIMATION",
-        "name_cn": "淫モラル・ゲームマスター THE ANIMATION",
+        "id": 10186058,
+        "name": "黒ギャルアラカルト",
+        "name_cn": "黒ギャルアラカルト",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx191452-5303uC2Sntze.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186058-knK1uJxYFkVy.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186058-knK1uJxYFkVy.png"
         },
         "rating": {
           "score": 6.1
@@ -1581,7 +1581,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1773,26 +1773,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10193707,
-        "name": "無人駅 The Animation",
-        "name_cn": "無人駅 The Animation",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193707-kOyJ9fzeQPZC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193707-kOyJ9fzeQPZC.png"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10211557,
         "name": "フラチ",
         "name_cn": "フラチ",
@@ -1804,6 +1784,26 @@
           "score": 6.6
         },
         "eps": 2,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10193707,
+        "name": "無人駅 The Animation",
+        "name_cn": "無人駅 The Animation",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx193707-kOyJ9fzeQPZC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx193707-kOyJ9fzeQPZC.png"
+        },
+        "rating": {
+          "score": 5.8
+        },
+        "eps": 0,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -1873,6 +1873,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10213733,
+        "name": "彼女催眠",
+        "name_cn": "彼女催眠",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
+        },
+        "rating": {
+          "score": 6.2
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10186308,
         "name": "甘いイジワル",
         "name_cn": "甘いイジワル",
@@ -1922,26 +1942,6 @@
         },
         "rating": {
           "score": 5.3
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10213733,
-        "name": "彼女催眠",
-        "name_cn": "彼女催眠",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
-        },
-        "rating": {
-          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2181,7 +2181,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
