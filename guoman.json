@@ -533,6 +533,26 @@
         "is_nsfw": false
       },
       {
+        "id": 555710,
+        "name": "时光代理人Ⅲ Part One",
+        "name_cn": "时光代理人 第三季 Part 1",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ff/a7/555710_aI3a3.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
+        },
+        "rating": {
+          "score": 4.8
+        },
+        "eps": 12,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 506836,
         "name": "狐妖小红娘 黄风岭篇",
         "name_cn": "狐妖小红娘13 黄风岭篇",
@@ -544,26 +564,6 @@
           "score": 6.6
         },
         "eps": 16,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 555710,
-        "name": "时光代理人Ⅲ Part One",
-        "name_cn": "时光代理人 第三季 Part 1",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/ff/a7/555710_aI3a3.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
-        },
-        "rating": {
-          "score": 4.9
-        },
-        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -704,26 +704,6 @@
           "score": 6.4
         },
         "eps": 60,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 700676,
-        "name": "完美世界 第七季",
-        "name_cn": "",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 7.7
-        },
-        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1058,6 +1038,26 @@
           "score": 7.3
         },
         "eps": 52,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 712000,
+        "name": "牧神记 伍",
+        "name_cn": "牧神记5",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/da/c8/712000_Z5S1J.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/da/c8/712000_Z5S1J.jpg"
+        },
+        "rating": {
+          "score": 6
+        },
+        "eps": 26,
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
