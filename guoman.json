@@ -213,7 +213,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "即将更新 第15话",
+        "pub_index": "第15话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
@@ -2428,7 +2428,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.2
         },
         "eps": 52,
         "air_weekday": 6,
