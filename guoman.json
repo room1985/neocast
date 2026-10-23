@@ -753,6 +753,26 @@
         "is_nsfw": false
       },
       {
+        "id": 555710,
+        "name": "时光代理人Ⅲ Part One",
+        "name_cn": "时光代理人 第三季 Part 1",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ff/a7/555710_aI3a3.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
+        },
+        "rating": {
+          "score": 4.9
+        },
+        "eps": 12,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 456303,
         "name": "开拍啦！怪兽大电影",
         "name_cn": "开拍啦！怪兽大电影",
@@ -784,46 +804,6 @@
           "score": 5.7
         },
         "eps": 26,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 516076,
-        "name": "镇魂街 第五季",
-        "name_cn": "镇魂街 王国纷争篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_3PIei.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_3PIei.jpg"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 30,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 555710,
-        "name": "时光代理人Ⅲ Part One",
-        "name_cn": "时光代理人 第三季 Part 1",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/ff/a7/555710_aI3a3.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
-        },
-        "rating": {
-          "score": 4.9
-        },
-        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -904,26 +884,6 @@
           "score": 6.4
         },
         "eps": 60,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 700676,
-        "name": "完美世界 第七季",
-        "name_cn": "",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 7.7
-        },
-        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2434,7 +2394,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第30话",
+        "pub_index": "即将更新 第30话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
         "is_nsfw": false
