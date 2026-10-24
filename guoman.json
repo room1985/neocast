@@ -2394,7 +2394,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第30话",
+        "pub_index": "第30话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
         "is_nsfw": false
@@ -2434,7 +2434,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第16话",
+        "pub_index": "即将更新 第16话",
         "pub_time": "12:00",
         "bilibili_season_id": 285345,
         "is_nsfw": false
