@@ -733,26 +733,6 @@
         "is_nsfw": false
       },
       {
-        "id": 555710,
-        "name": "时光代理人Ⅲ Part One",
-        "name_cn": "时光代理人 第三季 Part 1",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/ff/a7/555710_aI3a3.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
-        },
-        "rating": {
-          "score": 4.9
-        },
-        "eps": 12,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 506836,
         "name": "狐妖小红娘 黄风岭篇",
         "name_cn": "狐妖小红娘13 黄风岭篇",
@@ -764,6 +744,26 @@
           "score": 6.4
         },
         "eps": 16,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 555710,
+        "name": "时光代理人Ⅲ Part One",
+        "name_cn": "时光代理人 第三季 Part 1",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ff/a7/555710_aI3a3.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
+        },
+        "rating": {
+          "score": 4.9
+        },
+        "eps": 12,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -804,26 +804,6 @@
           "score": 5.7
         },
         "eps": 26,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 516076,
-        "name": "镇魂街 第五季",
-        "name_cn": "镇魂街 王国纷争篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_3PIei.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_3PIei.jpg"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 30,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
