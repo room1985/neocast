@@ -773,6 +773,26 @@
         "is_nsfw": false
       },
       {
+        "id": 516076,
+        "name": "镇魂街 第五季",
+        "name_cn": "镇魂街 王国纷争篇",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_3PIei.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_3PIei.jpg"
+        },
+        "rating": {
+          "score": 5.8
+        },
+        "eps": 30,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 575244,
         "name": "沧元图3",
         "name_cn": "沧元图 第三季",
@@ -2368,7 +2388,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 52,
         "air_weekday": 6,
