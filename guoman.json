@@ -5,6 +5,26 @@
     },
     "items": [
       {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 1.7
+        },
+        "eps": 34,
+        "air_weekday": 1,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第31话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
+      {
         "id": 434813,
         "name": "成也萧河",
         "name_cn": "成也萧河",
@@ -91,6 +111,26 @@
       "id": 2
     },
     "items": [
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1097话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
       {
         "id": 608049,
         "name": "盗妖行",
@@ -2340,26 +2380,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 1.7
-        },
-        "eps": 34,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第30话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
         "id": 607915,
         "name": "凡人修仙传 第五季",
         "name_cn": "凡人修仙传 第五季",
@@ -2368,35 +2388,15 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.2
         },
         "eps": 52,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第197话",
+        "pub_index": "第198话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1096话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
