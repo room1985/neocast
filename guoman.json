@@ -287,7 +287,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/fa/da/572768_iX280.jpg"
         },
         "rating": {
-          "score": 7
+          "score": 6.9
         },
         "eps": 46,
         "air_weekday": 3,
@@ -761,7 +761,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/e6/52/506836_Zz9Bm.jpg"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 16,
         "air_weekday": 5,
@@ -2521,29 +2521,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第13话",
+        "pub_index": "第14话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
-        "is_nsfw": false
-      },
-      {
-        "id": 316789,
-        "name": "肥志百科 第1季",
-        "name_cn": "肥志百科 第1季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/4c/14/316789_kzwkB.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/4c/14/316789_kzwkB.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 12,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第174话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 34569,
         "is_nsfw": false
       },
       {
@@ -2561,7 +2541,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第106话",
+        "pub_index": "第107话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
