@@ -5,26 +5,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 1.7
-        },
-        "eps": 34,
-        "air_weekday": 1,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第31话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
         "id": 434813,
         "name": "成也萧河",
         "name_cn": "成也萧河",
@@ -39,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第15话",
+        "pub_index": "第16话",
         "pub_time": "09:00",
         "bilibili_season_id": 264634,
         "is_nsfw": false
@@ -446,26 +426,6 @@
         "is_nsfw": false
       },
       {
-        "id": 10196750,
-        "name": "シスターブリーダー",
-        "name_cn": "シスターブリーダー",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
-        },
-        "rating": {
-          "score": 7.2
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第5話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10161680,
         "name": "1LDK＋J系 いきなり同居？密着！？初エッチ！！？",
         "name_cn": "1LDK＋J系 いきなり同居？密着！？初エッチ！！？",
@@ -486,26 +446,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10211338,
-        "name": "ハーレム島へようこそ！",
-        "name_cn": "ハーレム島へようこそ！",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211338-If49uIjNKPgt.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211338-If49uIjNKPgt.png"
-        },
-        "rating": {
-          "score": 5.5
-        },
-        "eps": 1,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10213066,
         "name": "村又さんの愛情",
         "name_cn": "村又さんの愛情",
@@ -517,26 +457,6 @@
           "score": 6.1
         },
         "eps": 3,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第3話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10213732,
-        "name": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
-        "name_cn": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213732-pPypc7kubQJ3.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213732-pPypc7kubQJ3.png"
-        },
-        "rating": {
-          "score": 6.5
-        },
-        "eps": 0,
         "air_weekday": 4,
         "source": "anilist",
         "bgm_matched": false,
@@ -604,6 +524,26 @@
         "pub_time": "",
         "bilibili_season_id": 0,
         "is_nsfw": true
+      },
+      {
+        "id": 10214443,
+        "name": "ヒトリ妻",
+        "name_cn": "ヒトリ妻",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx214443-0xrurj3XnjFD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx214443-0xrurj3XnjFD.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
       }
     ]
   },
@@ -627,7 +567,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第14话",
+        "pub_index": "即将更新 第14话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
@@ -761,7 +701,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/e6/52/506836_Zz9Bm.jpg"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.4
         },
         "eps": 16,
         "air_weekday": 5,
@@ -1022,6 +962,26 @@
         },
         "rating": {
           "score": 7.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10196750,
+        "name": "シスターブリーダー",
+        "name_cn": "シスターブリーダー",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196750-qwkwqdNMXIwD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196750-qwkwqdNMXIwD.png"
+        },
+        "rating": {
+          "score": 7.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2053,6 +2013,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10211338,
+        "name": "ハーレム島へようこそ！",
+        "name_cn": "ハーレム島へようこそ！",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx211338-If49uIjNKPgt.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx211338-If49uIjNKPgt.png"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 1,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10202894,
         "name": "剣鬼バルゴ",
         "name_cn": "剣鬼バルゴ",
@@ -2182,6 +2162,26 @@
         },
         "rating": {
           "score": 5.0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10213732,
+        "name": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
+        "name_cn": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213732-pPypc7kubQJ3.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213732-pPypc7kubQJ3.png"
+        },
+        "rating": {
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2399,6 +2399,26 @@
       "id": 6
     },
     "items": [
+      {
+        "id": 607933,
+        "name": "万古至尊：李云霄传",
+        "name_cn": "万古至尊：李云霄传",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
+        },
+        "rating": {
+          "score": 1.7
+        },
+        "eps": 34,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第32话",
+        "pub_time": "09:00",
+        "bilibili_season_id": 119017,
+        "is_nsfw": false
+      },
       {
         "id": 607915,
         "name": "凡人修仙传 第五季",
