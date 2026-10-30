@@ -661,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_7u0XX.jpg"
         },
         "rating": {
-          "score": 7.8
+          "score": 7.4
         },
         "eps": 6,
         "air_weekday": 5,
@@ -1001,7 +1001,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186827-B9FgO0n9G0IC.png"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1101,7 +1101,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1421,7 +1421,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx203367-4TejHeBRRVYu.png"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1481,7 +1481,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176907-YzsMqplVkGQ3.jpg"
         },
         "rating": {
-          "score": 5.4
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1661,7 +1661,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212617-hHf09tkVkiGz.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1773,15 +1773,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10204463,
-        "name": "蛇と蜘蛛",
-        "name_cn": "蛇と蜘蛛",
+        "id": 10213733,
+        "name": "彼女催眠",
+        "name_cn": "彼女催眠",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1793,15 +1793,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10213733,
-        "name": "彼女催眠",
-        "name_cn": "彼女催眠",
+        "id": 10204463,
+        "name": "蛇と蜘蛛",
+        "name_cn": "蛇と蜘蛛",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213733-cZ0bFNkypDtV.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213733-cZ0bFNkypDtV.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204463-2QQfFwEZL77K.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1973,26 +1973,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10209982,
-        "name": "パイハメ家族",
-        "name_cn": "パイハメ家族",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209982-4qVPmKV8LmXS.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
-        },
-        "rating": {
-          "score": 5.6
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10211338,
         "name": "ハーレム島へようこそ！",
         "name_cn": "ハーレム島へようこそ！",
@@ -2004,6 +1984,26 @@
           "score": 5.5
         },
         "eps": 1,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10209982,
+        "name": "パイハメ家族",
+        "name_cn": "パイハメ家族",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209982-4qVPmKV8LmXS.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209982-4qVPmKV8LmXS.png"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 0,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
@@ -2133,15 +2133,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10195033,
-        "name": "危険な森 おにごっこ",
-        "name_cn": "危険な森 おにごっこ",
+        "id": 10213732,
+        "name": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
+        "name_cn": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195033-U5Y8Hy5zbnMC.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195033-U5Y8Hy5zbnMC.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213732-pPypc7kubQJ3.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213732-pPypc7kubQJ3.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 6.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2153,15 +2153,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10213732,
-        "name": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
-        "name_cn": "無自覚な幼馴染と興味本位でヤってみたら THE ANIMATION",
+        "id": 10195033,
+        "name": "危険な森 おにごっこ",
+        "name_cn": "危険な森 おにごっこ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213732-pPypc7kubQJ3.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213732-pPypc7kubQJ3.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx195033-U5Y8Hy5zbnMC.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195033-U5Y8Hy5zbnMC.png"
         },
         "rating": {
-          "score": 6.5
+          "score": 5.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2544,6 +2544,26 @@
         "pub_index": "第14话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
+        "is_nsfw": false
+      },
+      {
+        "id": 316789,
+        "name": "肥志百科 第1季",
+        "name_cn": "肥志百科 第1季",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/4c/14/316789_kzwkB.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/4c/14/316789_kzwkB.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 12,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第175话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 34569,
         "is_nsfw": false
       },
       {
