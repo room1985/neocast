@@ -681,7 +681,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_7u0XX.jpg"
         },
         "rating": {
-          "score": 7.6
+          "score": 7.5
         },
         "eps": 6,
         "air_weekday": 5,
@@ -824,6 +824,26 @@
           "score": 6.4
         },
         "eps": 4,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 545972,
+        "name": "喜羊羊与灰太狼之古古怪界有古怪",
+        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 60,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2394,7 +2414,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第32话",
+        "pub_index": "第32话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
         "is_nsfw": false
