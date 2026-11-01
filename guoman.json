@@ -833,26 +833,6 @@
         "is_nsfw": false
       },
       {
-        "id": 545972,
-        "name": "喜羊羊与灰太狼之古古怪界有古怪",
-        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 60,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 10021828,
         "name": "小女ラムネ",
         "name_cn": "小女ラムネ",
@@ -2428,7 +2408,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.2
         },
         "eps": 52,
         "air_weekday": 6,
@@ -2561,7 +2541,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第14话",
+        "pub_index": "第14话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
         "is_nsfw": false
