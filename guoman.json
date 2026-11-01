@@ -19,7 +19,7 @@
         "air_weekday": 1,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第16话",
+        "pub_index": "即将更新 第16话",
         "pub_time": "09:00",
         "bilibili_season_id": 264634,
         "is_nsfw": false
@@ -285,46 +285,6 @@
       "id": 4
     },
     "items": [
-      {
-        "id": 665620,
-        "name": "雪王来了！",
-        "name_cn": "雪王来了！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 40,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第24话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 283870,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1098话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
       {
         "id": 423036,
         "name": "中国奇谭 第二季",
@@ -593,6 +553,26 @@
         "is_nsfw": false
       },
       {
+        "id": 665620,
+        "name": "雪王来了！",
+        "name_cn": "雪王来了！",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 40,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第25话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 283870,
+        "is_nsfw": false
+      },
+      {
         "id": 13603,
         "name": "罗小黑战记",
         "name_cn": "罗小黑战记",
@@ -773,6 +753,26 @@
         "is_nsfw": false
       },
       {
+        "id": 516076,
+        "name": "镇魂街 第五季",
+        "name_cn": "镇魂街 王国纷争篇",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_3PIei.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_3PIei.jpg"
+        },
+        "rating": {
+          "score": 5.8
+        },
+        "eps": 30,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 575244,
         "name": "沧元图3",
         "name_cn": "沧元图 第三季",
@@ -824,6 +824,26 @@
           "score": 6.4
         },
         "eps": 4,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 545972,
+        "name": "喜羊羊与灰太狼之古古怪界有古怪",
+        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 60,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2408,7 +2428,7 @@
           "common": "http://lain.bgm.tv/pic/cover/c/ac/c9/607915_RBL8u.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 52,
         "air_weekday": 6,
@@ -2417,6 +2437,26 @@
         "pub_index": "第198话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1099话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
