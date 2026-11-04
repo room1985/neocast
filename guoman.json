@@ -360,7 +360,7 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第26话",
+        "pub_index": "即将更新 第26话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
         "is_nsfw": false
@@ -864,26 +864,6 @@
           "score": 6.4
         },
         "eps": 4,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 545972,
-        "name": "喜羊羊与灰太狼之古古怪界有古怪",
-        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 60,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2581,29 +2561,9 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第14话",
+        "pub_index": "第15话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
-        "is_nsfw": false
-      },
-      {
-        "id": 316789,
-        "name": "肥志百科 第1季",
-        "name_cn": "肥志百科 第1季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/4c/14/316789_kzwkB.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/4c/14/316789_kzwkB.jpg"
-        },
-        "rating": {
-          "score": 6.3
-        },
-        "eps": 12,
-        "air_weekday": 7,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第175话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 34569,
         "is_nsfw": false
       },
       {
@@ -2621,7 +2581,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第107话",
+        "pub_index": "第108话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
