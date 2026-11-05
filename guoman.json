@@ -360,7 +360,7 @@
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第26话",
+        "pub_index": "第26话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
         "is_nsfw": false
@@ -793,26 +793,6 @@
         "is_nsfw": false
       },
       {
-        "id": 516076,
-        "name": "镇魂街 第五季",
-        "name_cn": "镇魂街 王国纷争篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_3PIei.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_3PIei.jpg"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 30,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 575244,
         "name": "沧元图3",
         "name_cn": "沧元图 第三季",
@@ -864,6 +844,26 @@
           "score": 6.4
         },
         "eps": 4,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 545972,
+        "name": "喜羊羊与灰太狼之古古怪界有古怪",
+        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 60,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
