@@ -153,29 +153,9 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第17话",
+        "pub_index": "第18话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
-        "is_nsfw": false
-      },
-      {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 3,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第42话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
@@ -314,7 +294,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/6c/84/423036_H88sl.jpg"
         },
         "rating": {
-          "score": 6.1
+          "score": 6.2
         },
         "eps": 9,
         "air_weekday": 4,
@@ -550,6 +530,26 @@
         "pub_index": "第39话",
         "pub_time": "09:00",
         "bilibili_season_id": 272443,
+        "is_nsfw": false
+      },
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第43话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
         "is_nsfw": false
       },
       {
@@ -2561,7 +2561,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第15话",
+        "pub_index": "即将更新 第15话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
         "is_nsfw": false
