@@ -72,6 +72,26 @@
     },
     "items": [
       {
+        "id": 270242,
+        "name": "王者？别闹！",
+        "name_cn": "王者？别闹！",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/78/99/270242_hyJ8E.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/78/99/270242_hyJ8E.jpg"
+        },
+        "rating": {
+          "score": 5.6
+        },
+        "eps": 13,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第89话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 26015,
+        "is_nsfw": false
+      },
+      {
         "id": 608049,
         "name": "盗妖行",
         "name_cn": "",
@@ -153,7 +173,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第18話",
+        "pub_index": "第18话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
@@ -414,7 +434,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213686-HMUnc0zUKiTw.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.1
         },
         "eps": 0,
         "air_weekday": 4,
@@ -487,7 +507,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第39話",
+        "pub_index": "第39话",
         "pub_time": "09:00",
         "bilibili_season_id": 272443,
         "is_nsfw": false
@@ -507,7 +527,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第43話",
+        "pub_index": "第43话",
         "pub_time": "10:00",
         "bilibili_season_id": 247422,
         "is_nsfw": false
@@ -527,7 +547,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第15話",
+        "pub_index": "第15话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
@@ -547,7 +567,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第27話",
+        "pub_index": "第27话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
         "is_nsfw": false
@@ -567,7 +587,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第42話",
+        "pub_index": "第42话",
         "pub_time": "12:00",
         "bilibili_season_id": 1733,
         "is_nsfw": false
@@ -587,7 +607,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第10話",
+        "pub_index": "第10话",
         "pub_time": "17:30",
         "bilibili_season_id": 291215,
         "is_nsfw": false
@@ -607,7 +627,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第79話",
+        "pub_index": "第79话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -641,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_7u0XX.jpg"
         },
         "rating": {
-          "score": 7.6
+          "score": 7.7
         },
         "eps": 6,
         "air_weekday": 5,
@@ -1001,7 +1021,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx148148-vxVvdujEBy1C.jpg"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1121,7 +1141,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx178445-Vx7wQLiwH664.png"
         },
         "rating": {
-          "score": 6.7
+          "score": 6.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1181,7 +1201,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx168946-ueSFYB6Ym1FC.png"
         },
         "rating": {
-          "score": 5.9
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1273,15 +1293,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10188928,
-        "name": "夏と箱",
-        "name_cn": "夏と箱",
+        "id": 10180704,
+        "name": "エルフに淫紋を付ける本 The Animation",
+        "name_cn": "エルフに淫紋を付ける本 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1293,15 +1313,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10180704,
-        "name": "エルフに淫紋を付ける本 The Animation",
-        "name_cn": "エルフに淫紋を付ける本 The Animation",
+        "id": 10188928,
+        "name": "夏と箱",
+        "name_cn": "夏と箱",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx180704-ptQ5F6nRh6IZ.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180704-ptQ5F6nRh6IZ.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx188928-qzOaoEWGmpIA.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188928-qzOaoEWGmpIA.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1481,7 +1501,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176907-YzsMqplVkGQ3.jpg"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1501,7 +1521,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198048-hqioP9q8uR9j.png"
         },
         "rating": {
-          "score": 6.9
+          "score": 6.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2153,15 +2173,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10202893,
-        "name": "L'amour fou de l'automate",
-        "name_cn": "L'amour fou de l'automate",
+        "id": 10210116,
+        "name": "彼の知らない秘密を入れて。 The Animation",
+        "name_cn": "彼の知らない秘密を入れて。 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210116-CRuoaXeZO5qU.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2173,15 +2193,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10210116,
-        "name": "彼の知らない秘密を入れて。 The Animation",
-        "name_cn": "彼の知らない秘密を入れて。 The Animation",
+        "id": 10202893,
+        "name": "L'amour fou de l'automate",
+        "name_cn": "L'amour fou de l'automate",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx210116-CRuoaXeZO5qU.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx210116-CRuoaXeZO5qU.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx202893-z1PqTjt3fvEm.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202893-z1PqTjt3fvEm.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 6.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2233,15 +2253,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10201153,
-        "name": "聖光閃姫ポニーセレス",
-        "name_cn": "聖光閃姫ポニーセレス",
+        "id": 10209873,
+        "name": "ハメハラ",
+        "name_cn": "ハメハラ",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx201153-9xwz47bJi3wp.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
         },
         "rating": {
-          "score": 5.2
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2253,15 +2273,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10209873,
-        "name": "ハメハラ",
-        "name_cn": "ハメハラ",
+        "id": 10201153,
+        "name": "聖光閃姫ポニーセレス",
+        "name_cn": "聖光閃姫ポニーセレス",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx209873-bKlttpEcD4oL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx209873-bKlttpEcD4oL.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx201153-9xwz47bJi3wp.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx201153-9xwz47bJi3wp.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2374,7 +2394,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第34話",
+        "pub_index": "第34话",
         "pub_time": "09:00",
         "bilibili_season_id": 119017,
         "is_nsfw": false
@@ -2394,7 +2414,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第199話",
+        "pub_index": "第199话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
         "is_nsfw": false
@@ -2414,7 +2434,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第1102話",
+        "pub_index": "第1102话",
         "pub_time": "19:00",
         "bilibili_season_id": 34149,
         "is_nsfw": false
@@ -2541,7 +2561,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第15話",
+        "pub_index": "第15话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
         "is_nsfw": false
@@ -2561,7 +2581,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第176話",
+        "pub_index": "第176话",
         "pub_time": "10:00",
         "bilibili_season_id": 34569,
         "is_nsfw": false
@@ -2581,7 +2601,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第108話",
+        "pub_index": "第108话",
         "pub_time": "11:00",
         "bilibili_season_id": 45969,
         "is_nsfw": false
@@ -2695,7 +2715,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212667-8g5ktyrx34Yl.jpg"
         },
         "rating": {
-          "score": 6.5
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 7,
