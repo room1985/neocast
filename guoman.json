@@ -112,6 +112,26 @@
         "is_nsfw": false
       },
       {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1103话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
+        "is_nsfw": false
+      },
+      {
         "id": 608049,
         "name": "盗妖行",
         "name_cn": "",
@@ -193,7 +213,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第18话",
+        "pub_index": "即将更新 第18话",
         "pub_time": "09:00",
         "bilibili_season_id": 262397,
         "is_nsfw": false
@@ -213,7 +233,7 @@
         "air_weekday": 3,
         "source": "bilibili",
         "bgm_matched": false,
-        "pub_index": "第44话",
+        "pub_index": "即将更新 第44话",
         "pub_time": "10:00",
         "bilibili_season_id": 247422,
         "is_nsfw": false
@@ -824,26 +844,6 @@
           "score": 6.4
         },
         "eps": 4,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 545972,
-        "name": "喜羊羊与灰太狼之古古怪界有古怪",
-        "name_cn": "喜羊羊与灰太狼之古古怪界有古怪",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/93/19/545972_2Mopb.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/93/19/545972_2Mopb.jpg"
-        },
-        "rating": {
-          "score": 6.4
-        },
-        "eps": 60,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2400,26 +2400,6 @@
     },
     "items": [
       {
-        "id": 607933,
-        "name": "万古至尊：李云霄传",
-        "name_cn": "万古至尊：李云霄传",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/2f/c0/607933_uzVv6.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/2f/c0/607933_uzVv6.jpg"
-        },
-        "rating": {
-          "score": 1.7
-        },
-        "eps": 34,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第34话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 119017,
-        "is_nsfw": false
-      },
-      {
         "id": 607915,
         "name": "凡人修仙传 第五季",
         "name_cn": "凡人修仙传 第五季",
@@ -2434,29 +2414,9 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第199话",
+        "pub_index": "第200话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 6,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1102话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
