@@ -567,7 +567,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第16话",
+        "pub_index": "第16话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
@@ -607,7 +607,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第11话",
+        "pub_index": "即将更新 第11话",
         "pub_time": "17:30",
         "bilibili_season_id": 291215,
         "is_nsfw": false
@@ -661,7 +661,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_7u0XX.jpg"
         },
         "rating": {
-          "score": 7.6
+          "score": 7.5
         },
         "eps": 6,
         "air_weekday": 5,
