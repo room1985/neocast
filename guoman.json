@@ -72,66 +72,6 @@
     },
     "items": [
       {
-        "id": 691159,
-        "name": "掌门低调点",
-        "name_cn": "掌门低调点",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/a4/7f/691159_ppa83.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/a4/7f/691159_ppa83.jpg"
-        },
-        "rating": {
-          "score": 1
-        },
-        "eps": 40,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第40话",
-        "pub_time": "09:00",
-        "bilibili_season_id": 272443,
-        "is_nsfw": false
-      },
-      {
-        "id": 270242,
-        "name": "王者？别闹！",
-        "name_cn": "王者？别闹！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/78/99/270242_hyJ8E.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/78/99/270242_hyJ8E.jpg"
-        },
-        "rating": {
-          "score": 5.6
-        },
-        "eps": 13,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第89话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 26015,
-        "is_nsfw": false
-      },
-      {
-        "id": 565411,
-        "name": "我是不白吃",
-        "name_cn": "我是不白吃",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 2,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第1103话",
-        "pub_time": "19:00",
-        "bilibili_season_id": 34149,
-        "is_nsfw": false
-      },
-      {
         "id": 608049,
         "name": "盗妖行",
         "name_cn": "",
@@ -343,6 +283,26 @@
         "pub_index": "第28话",
         "pub_time": "11:00",
         "bilibili_season_id": 283870,
+        "is_nsfw": false
+      },
+      {
+        "id": 565411,
+        "name": "我是不白吃",
+        "name_cn": "我是不白吃",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/3d/fe/565411_sch55.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/3d/fe/565411_sch55.jpg"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第1104话",
+        "pub_time": "19:00",
+        "bilibili_season_id": 34149,
         "is_nsfw": false
       },
       {
@@ -681,7 +641,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/ff/a7/555710_aI3a3.jpg"
         },
         "rating": {
-          "score": 5.1
+          "score": 5.2
         },
         "eps": 12,
         "air_weekday": 5,
@@ -2394,7 +2354,7 @@
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第200话",
+        "pub_index": "即将更新 第200话",
         "pub_time": "11:00",
         "bilibili_season_id": 28747,
         "is_nsfw": false
