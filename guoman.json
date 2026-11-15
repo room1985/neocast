@@ -2455,13 +2455,13 @@
           "common": "http://lain.bgm.tv/pic/cover/c/07/2d/552778_I4uFv.jpg"
         },
         "rating": {
-          "score": 4.4
+          "score": 4.6
         },
         "eps": 16,
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第16话",
+        "pub_index": "第16话",
         "pub_time": "09:00",
         "bilibili_season_id": 264970,
         "is_nsfw": false
@@ -2481,7 +2481,7 @@
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第177话",
+        "pub_index": "第177话",
         "pub_time": "10:00",
         "bilibili_season_id": 34569,
         "is_nsfw": false
