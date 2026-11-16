@@ -346,26 +346,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10198044,
-        "name": "蹂躙王国 エルフ王国は巨大苗床に",
-        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
-        },
-        "rating": {
-          "score": 5.0
-        },
-        "eps": 2,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10213686,
         "name": "NTR騎士",
         "name_cn": "NTR騎士",
@@ -386,6 +366,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10198044,
+        "name": "蹂躙王国 エルフ王国は巨大苗床に",
+        "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx198044-0zDaRzQa1fk9.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
+        },
+        "rating": {
+          "score": 5.0
+        },
+        "eps": 2,
+        "air_weekday": 4,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "第2話",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10212575,
         "name": "サレ妻は奪われたい",
         "name_cn": "サレ妻は奪われたい",
@@ -394,7 +394,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212575-92x6aBTN9JCL.png"
         },
         "rating": {
-          "score": 0
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 4,
@@ -581,7 +581,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_7u0XX.jpg"
         },
         "rating": {
-          "score": 7.6
+          "score": 7.5
         },
         "eps": 6,
         "air_weekday": 5,
@@ -1001,7 +1001,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx184810-BJhp0LMwWKpP.png"
         },
         "rating": {
-          "score": 7.3
+          "score": 7.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1601,7 +1601,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx185779-uzQoDrD3Sy6r.png"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1701,7 +1701,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx192452-sPIuxMLvBMNT.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2213,6 +2213,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10214551,
+        "name": "桜春女学院の男優",
+        "name_cn": "桜春女学院の男優",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx214551-uDaf7UPVxN2v.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx214551-uDaf7UPVxN2v.jpg"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10208264,
         "name": "霧中ノ塔",
         "name_cn": "霧中ノ塔",
@@ -2242,26 +2262,6 @@
         },
         "rating": {
           "score": 5.6
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10214551,
-        "name": "桜春女学院の男優",
-        "name_cn": "桜春女学院の男優",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx214551-uDaf7UPVxN2v.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx214551-uDaf7UPVxN2v.jpg"
-        },
-        "rating": {
-          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
