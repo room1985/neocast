@@ -139,6 +139,26 @@
     },
     "items": [
       {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第46话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
+      {
         "id": 695405,
         "name": "牛来",
         "name_cn": "牛来",
@@ -225,6 +245,26 @@
       "id": 4
     },
     "items": [
+      {
+        "id": 665620,
+        "name": "雪王来了！",
+        "name_cn": "雪王来了！",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 40,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第30话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 283870,
+        "is_nsfw": false
+      },
       {
         "id": 423036,
         "name": "中国奇谭 第二季",
@@ -433,26 +473,6 @@
     },
     "items": [
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第45话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
-        "is_nsfw": false
-      },
-      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -467,29 +487,9 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第16话",
+        "pub_index": "第17话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
-        "is_nsfw": false
-      },
-      {
-        "id": 665620,
-        "name": "雪王来了！",
-        "name_cn": "雪王来了！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 40,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第29话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 283870,
         "is_nsfw": false
       },
       {
@@ -507,7 +507,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第43话",
+        "pub_index": "第44话",
         "pub_time": "12:00",
         "bilibili_season_id": 1733,
         "is_nsfw": false
@@ -527,7 +527,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第11话",
+        "pub_index": "第12话",
         "pub_time": "17:30",
         "bilibili_season_id": 291215,
         "is_nsfw": false
@@ -547,7 +547,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第80话",
+        "pub_index": "第81话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -1843,7 +1843,7 @@
         "rating": {
           "score": 5.6
         },
-        "eps": 1,
+        "eps": 0,
         "air_weekday": 5,
         "source": "anilist",
         "bgm_matched": false,
