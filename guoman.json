@@ -139,6 +139,46 @@
         "is_nsfw": false
       },
       {
+        "id": 572768,
+        "name": "一念永恒 完结季",
+        "name_cn": "一念永恒 完结季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/fa/da/572768_iX280.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/fa/da/572768_iX280.jpg"
+        },
+        "rating": {
+          "score": 7
+        },
+        "eps": 46,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 637591,
+        "name": "遮天 第四季",
+        "name_cn": "遮天 第四季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/ba/b7/637591_1F43i.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/ba/b7/637591_1F43i.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 52,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10202895,
         "name": "オタクの僕が一軍ギャルと付き合えるまでの話",
         "name_cn": "オタクの僕が一軍ギャルと付き合えるまでの話",
@@ -217,6 +257,26 @@
           "score": 6.4
         },
         "eps": 19,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 659266,
+        "name": "师兄啊师兄 最终季",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/b6/58/659266_fLr5z.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/b6/58/659266_fLr5z.jpg"
+        },
+        "rating": {
+          "score": 7.1
+        },
+        "eps": 26,
         "air_weekday": 4,
         "source": "bilibili",
         "bgm_matched": true,
@@ -387,7 +447,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第17话",
+        "pub_index": "第17话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
         "is_nsfw": false
@@ -407,7 +467,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "即将更新 第44话",
+        "pub_index": "第44话",
         "pub_time": "12:00",
         "bilibili_season_id": 1733,
         "is_nsfw": false
@@ -481,7 +541,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/86/cd/593863_7u0XX.jpg"
         },
         "rating": {
-          "score": 7.5
+          "score": 7.6
         },
         "eps": 6,
         "air_weekday": 5,
@@ -573,6 +633,26 @@
         "is_nsfw": false
       },
       {
+        "id": 575244,
+        "name": "沧元图3",
+        "name_cn": "沧元图 第三季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/a2/4a/575244_8OmeD.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/a2/4a/575244_8OmeD.jpg"
+        },
+        "rating": {
+          "score": 5.9
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 607929,
         "name": "百日成王",
         "name_cn": "百日成王",
@@ -584,6 +664,26 @@
           "score": 5.6
         },
         "eps": 25,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 700676,
+        "name": "完美世界 第七季",
+        "name_cn": "",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 7.4
+        },
+        "eps": 52,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -793,15 +893,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10177149,
-        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
-        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "id": 10196722,
+        "name": "レイカは華麗な僕の女王 THE ANIMATION",
+        "name_cn": "レイカは華麗な僕の女王 THE ANIMATION",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196722-mpsggThw5jFv.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
         },
         "rating": {
-          "score": 7.0
+          "score": 7.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -813,15 +913,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10196722,
-        "name": "レイカは華麗な僕の女王 THE ANIMATION",
-        "name_cn": "レイカは華麗な僕の女王 THE ANIMATION",
+        "id": 10177149,
+        "name": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
+        "name_cn": "バブルdeハウスde〇〇〇 〜お風呂メーカーのショールームがシェアハウスで…〜 The Animation",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx196722-mpsggThw5jFv.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177149-m1aT7SdzvbLc.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx177149-m1aT7SdzvbLc.png"
         },
         "rating": {
-          "score": 7.4
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -961,7 +1061,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx168946-ueSFYB6Ym1FC.png"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1021,7 +1121,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1181,7 +1281,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
         },
         "rating": {
-          "score": 5.7
+          "score": 5.8
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1601,7 +1701,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2260,17 +2360,17 @@
         "is_nsfw": false
       },
       {
-        "id": 526975,
-        "name": "择天记3D",
-        "name_cn": "择天记",
+        "id": 576780,
+        "name": "炼气十万年特别篇 阳极天下",
+        "name_cn": "炼气十万年特别篇 阳极天下",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/af/9c/526975_quBRr.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/af/9c/526975_quBRr.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
         },
         "rating": {
-          "score": 5.8
+          "score": 6.4
         },
-        "eps": 26,
+        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
@@ -2286,6 +2386,26 @@
       "id": 7
     },
     "items": [
+      {
+        "id": 316789,
+        "name": "肥志百科 第1季",
+        "name_cn": "肥志百科 第1季",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/4c/14/316789_kzwkB.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/4c/14/316789_kzwkB.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 12,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第178话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 34569,
+        "is_nsfw": false
+      },
       {
         "id": 456159,
         "name": "牧神记",
@@ -2358,6 +2478,26 @@
           "score": 6.6
         },
         "eps": 26,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 646611,
+        "name": "光阴之外2",
+        "name_cn": "光阴之外 第二季",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/0e/4c/646611_3UHpV.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/0e/4c/646611_3UHpV.jpg"
+        },
+        "rating": {
+          "score": 7.3
+        },
+        "eps": 52,
         "air_weekday": 7,
         "source": "bilibili",
         "bgm_matched": true,
