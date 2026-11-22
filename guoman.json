@@ -72,6 +72,26 @@
     },
     "items": [
       {
+        "id": 577148,
+        "name": "武神主宰 异魔篇",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/5a/3a/577148_zL4d5.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/5a/3a/577148_zL4d5.jpg"
+        },
+        "rating": {
+          "score": 5.8
+        },
+        "eps": 56,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 10154887,
         "name": "異世界来たのでスケベスキルで全力謳歌しようと思う THE ANIMATION",
         "name_cn": "異世界来たのでスケベスキルで全力謳歌しようと思う THE ANIMATION",
@@ -653,26 +673,6 @@
         "is_nsfw": false
       },
       {
-        "id": 516076,
-        "name": "镇魂街 第五季",
-        "name_cn": "镇魂街 王国纷争篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_3PIei.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_3PIei.jpg"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 30,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
         "id": 575244,
         "name": "沧元图3",
         "name_cn": "沧元图 第三季",
@@ -1161,7 +1161,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx191452-5303uC2Sntze.png"
         },
         "rating": {
-          "score": 6.3
+          "score": 6.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1861,7 +1861,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213732-pPypc7kubQJ3.png"
         },
         "rating": {
-          "score": 6.8
+          "score": 6.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2348,7 +2348,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/32/ed/507820_nLOH8.jpg"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 16,
         "air_weekday": 6,
@@ -2551,8 +2551,8 @@
         "name": "牧神记 伍",
         "name_cn": "牧神记5",
         "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/da/c8/712000_Z5S1J.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/da/c8/712000_Z5S1J.jpg"
+          "large": "https://lain.bgm.tv/pic/cover/l/da/c8/712000_lL46X.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/da/c8/712000_lL46X.jpg"
         },
         "rating": {
           "score": 6
