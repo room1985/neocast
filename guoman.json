@@ -72,6 +72,26 @@
     },
     "items": [
       {
+        "id": 608049,
+        "name": "盗妖行",
+        "name_cn": "",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/6b/d4/608049_8CyB6.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/6b/d4/608049_8CyB6.jpg"
+        },
+        "rating": {
+          "score": 5.5
+        },
+        "eps": 60,
+        "air_weekday": 2,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 577148,
         "name": "武神主宰 异魔篇",
         "name_cn": "",
@@ -118,6 +138,26 @@
       "id": 3
     },
     "items": [
+      {
+        "id": 9247422,
+        "name": "苏东坡与杭州的故事",
+        "name_cn": "苏东坡与杭州的故事",
+        "images": {
+          "large": "",
+          "common": ""
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 3,
+        "source": "bilibili",
+        "bgm_matched": false,
+        "pub_index": "第48话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 247422,
+        "is_nsfw": false
+      },
       {
         "id": 695405,
         "name": "牛来",
@@ -187,7 +227,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx202895-sAj8ZJSRQ2SR.png"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 3,
@@ -205,6 +245,26 @@
       "id": 4
     },
     "items": [
+      {
+        "id": 665620,
+        "name": "雪王来了！",
+        "name_cn": "雪王来了！",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
+        },
+        "rating": {
+          "score": 5
+        },
+        "eps": 40,
+        "air_weekday": 4,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第32话",
+        "pub_time": "11:00",
+        "bilibili_season_id": 283870,
+        "is_nsfw": false
+      },
       {
         "id": 423036,
         "name": "中国奇谭 第二季",
@@ -354,7 +414,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx198044-0zDaRzQa1fk9.png"
         },
         "rating": {
-          "score": 5.0
+          "score": 4.9
         },
         "eps": 2,
         "air_weekday": 4,
@@ -413,26 +473,6 @@
     },
     "items": [
       {
-        "id": 9247422,
-        "name": "苏东坡与杭州的故事",
-        "name_cn": "苏东坡与杭州的故事",
-        "images": {
-          "large": "",
-          "common": ""
-        },
-        "rating": {
-          "score": 0
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": false,
-        "pub_index": "第47话",
-        "pub_time": "10:00",
-        "bilibili_season_id": 247422,
-        "is_nsfw": false
-      },
-      {
         "id": 676026,
         "name": "缔灵爱水心缠",
         "name_cn": "缔灵爱水心缠",
@@ -447,29 +487,9 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第17话",
+        "pub_index": "第18话",
         "pub_time": "10:00",
         "bilibili_season_id": 263198,
-        "is_nsfw": false
-      },
-      {
-        "id": 665620,
-        "name": "雪王来了！",
-        "name_cn": "雪王来了！",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/96/78/665620_5NGRr.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/96/78/665620_5NGRr.jpg"
-        },
-        "rating": {
-          "score": 5
-        },
-        "eps": 40,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第31话",
-        "pub_time": "11:00",
-        "bilibili_season_id": 283870,
         "is_nsfw": false
       },
       {
@@ -487,29 +507,9 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第44话",
+        "pub_index": "第45话",
         "pub_time": "12:00",
         "bilibili_season_id": 1733,
-        "is_nsfw": false
-      },
-      {
-        "id": 308028,
-        "name": "请吃红小豆吧！ 第四季",
-        "name_cn": "请吃红小豆吧！ 第四季",
-        "images": {
-          "large": "http://lain.bgm.tv/pic/cover/l/b5/b7/308028_frdjs.jpg",
-          "common": "http://lain.bgm.tv/pic/cover/c/b5/b7/308028_frdjs.jpg"
-        },
-        "rating": {
-          "score": 6.7
-        },
-        "eps": 12,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "第12话",
-        "pub_time": "17:30",
-        "bilibili_season_id": 291215,
         "is_nsfw": false
       },
       {
@@ -527,7 +527,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第81话",
+        "pub_index": "第82话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -644,26 +644,6 @@
           "score": 5.7
         },
         "eps": 26,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 516076,
-        "name": "镇魂街 第五季",
-        "name_cn": "镇魂街 王国纷争篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_X181q.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_X181q.jpg"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 30,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -841,7 +821,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx179823-bRAv7uaS8mxl.png"
         },
         "rating": {
-          "score": 7.2
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -941,7 +921,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx196722-mpsggThw5jFv.png"
         },
         "rating": {
-          "score": 7.4
+          "score": 7.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1121,7 +1101,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200228-r8Bm5BulKKOS.jpg"
         },
         "rating": {
-          "score": 7.1
+          "score": 7.0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1321,7 +1301,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx180832-N1TzYgyWcKiB.png"
         },
         "rating": {
-          "score": 5.8
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1413,15 +1393,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10176907,
-        "name": "糸を撚る",
-        "name_cn": "糸を撚る",
+        "id": 10164239,
+        "name": "so_low",
+        "name_cn": "so_low",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176907-YzsMqplVkGQ3.jpg",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176907-YzsMqplVkGQ3.jpg"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1433,15 +1413,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10164239,
-        "name": "so_low",
-        "name_cn": "so_low",
+        "id": 10176907,
+        "name": "糸を撚る",
+        "name_cn": "糸を撚る",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164239-4RhY0BZyGWf2.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx164239-4RhY0BZyGWf2.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx176907-YzsMqplVkGQ3.jpg",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx176907-YzsMqplVkGQ3.jpg"
         },
         "rating": {
-          "score": 5.9
+          "score": 5.4
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1701,7 +1681,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx204463-2QQfFwEZL77K.png"
         },
         "rating": {
-          "score": 6.2
+          "score": 6.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1741,7 +1721,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx195360-PAlYR0UnuGdV.png"
         },
         "rating": {
-          "score": 6.4
+          "score": 6.3
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1761,7 +1741,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx186308-REUfR4DxBB18.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1821,7 +1801,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx165439-QgztrAbYHeTS.png"
         },
         "rating": {
-          "score": 5.5
+          "score": 5.6
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1841,7 +1821,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx208749-8Tw6LuaE6oQF.png"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -1921,7 +1901,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx188933-akAyf4m11e0y.png"
         },
         "rating": {
-          "score": 5.6
+          "score": 5.5
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2001,7 +1981,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199162-8ZpNn7vPn2rY.jpg"
         },
         "rating": {
-          "score": 6.0
+          "score": 5.9
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2121,27 +2101,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx199164-kQ2sVvNXU392.jpg"
         },
         "rating": {
-          "score": 5.3
-        },
-        "eps": 0,
-        "air_weekday": 5,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
-        "id": 10187304,
-        "name": "淫触王デマール",
-        "name_cn": "淫触王デマール",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx187304-CwTKRUiG6kRd.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
-        },
-        "rating": {
-          "score": 5.8
+          "score": 5.2
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2162,6 +2122,26 @@
         },
         "rating": {
           "score": 5.6
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10187304,
+        "name": "淫触王デマール",
+        "name_cn": "淫触王デマール",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx187304-CwTKRUiG6kRd.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx187304-CwTKRUiG6kRd.png"
+        },
+        "rating": {
+          "score": 5.7
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2411,6 +2391,26 @@
           "score": 6.9
         },
         "eps": 3,
+        "air_weekday": 6,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
+        "id": 576780,
+        "name": "炼气十万年特别篇 阳极天下",
+        "name_cn": "炼气十万年特别篇 阳极天下",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/f3/54/576780_uGF28.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/f3/54/576780_uGF28.jpg"
+        },
+        "rating": {
+          "score": 6.4
+        },
+        "eps": 1,
         "air_weekday": 6,
         "source": "bilibili",
         "bgm_matched": true,
