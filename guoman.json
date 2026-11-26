@@ -334,7 +334,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b6/58/659266_fLr5z.jpg"
         },
         "rating": {
-          "score": 6.9
+          "score": 7
         },
         "eps": 26,
         "air_weekday": 4,
@@ -406,26 +406,6 @@
         "is_nsfw": true
       },
       {
-        "id": 10213686,
-        "name": "NTR騎士",
-        "name_cn": "NTR騎士",
-        "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213686-HMUnc0zUKiTw.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213686-HMUnc0zUKiTw.png"
-        },
-        "rating": {
-          "score": 5.1
-        },
-        "eps": 0,
-        "air_weekday": 4,
-        "source": "anilist",
-        "bgm_matched": false,
-        "pub_index": "第2話",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": true
-      },
-      {
         "id": 10198044,
         "name": "蹂躙王国 エルフ王国は巨大苗床に",
         "name_cn": "蹂躙王国 エルフ王国は巨大苗床に",
@@ -446,15 +426,15 @@
         "is_nsfw": true
       },
       {
-        "id": 10212575,
-        "name": "サレ妻は奪われたい",
-        "name_cn": "サレ妻は奪われたい",
+        "id": 10214443,
+        "name": "ヒトリ妻",
+        "name_cn": "ヒトリ妻",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212575-92x6aBTN9JCL.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212575-92x6aBTN9JCL.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx214443-0xrurj3XnjFD.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx214443-0xrurj3XnjFD.png"
         },
         "rating": {
-          "score": 5.8
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 4,
@@ -466,12 +446,12 @@
         "is_nsfw": true
       },
       {
-        "id": 10214443,
-        "name": "ヒトリ妻",
-        "name_cn": "ヒトリ妻",
+        "id": 10215989,
+        "name": "堕ちるパート妻 年下男との情事に溺れた果てに…",
+        "name_cn": "堕ちるパート妻 年下男との情事に溺れた果てに…",
         "images": {
-          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx214443-0xrurj3XnjFD.png",
-          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx214443-0xrurj3XnjFD.png"
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx215989-jXzvgQ6QVAhj.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx215989-jXzvgQ6QVAhj.png"
         },
         "rating": {
           "score": 0
@@ -673,6 +653,26 @@
         "is_nsfw": false
       },
       {
+        "id": 516076,
+        "name": "镇魂街 第五季",
+        "name_cn": "镇魂街 王国纷争篇",
+        "images": {
+          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_X181q.jpg",
+          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_X181q.jpg"
+        },
+        "rating": {
+          "score": 5.8
+        },
+        "eps": 30,
+        "air_weekday": 5,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": false
+      },
+      {
         "id": 575244,
         "name": "沧元图3",
         "name_cn": "沧元图 第三季",
@@ -704,26 +704,6 @@
           "score": 5.6
         },
         "eps": 25,
-        "air_weekday": 5,
-        "source": "bilibili",
-        "bgm_matched": true,
-        "pub_index": "",
-        "pub_time": "",
-        "bilibili_season_id": 0,
-        "is_nsfw": false
-      },
-      {
-        "id": 516076,
-        "name": "镇魂街 第五季",
-        "name_cn": "镇魂街 王国纷争篇",
-        "images": {
-          "large": "https://lain.bgm.tv/pic/cover/l/15/95/516076_X181q.jpg",
-          "common": "https://lain.bgm.tv/r/400/pic/cover/l/15/95/516076_X181q.jpg"
-        },
-        "rating": {
-          "score": 5.8
-        },
-        "eps": 30,
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
@@ -1141,7 +1121,7 @@
           "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx200228-r8Bm5BulKKOS.jpg"
         },
         "rating": {
-          "score": 7.0
+          "score": 7.1
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2233,6 +2213,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10213686,
+        "name": "NTR騎士",
+        "name_cn": "NTR騎士",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx213686-HMUnc0zUKiTw.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx213686-HMUnc0zUKiTw.png"
+        },
+        "rating": {
+          "score": 5.1
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10208264,
         "name": "霧中ノ塔",
         "name_cn": "霧中ノ塔",
@@ -2273,6 +2273,26 @@
         "is_nsfw": true
       },
       {
+        "id": 10212575,
+        "name": "サレ妻は奪われたい",
+        "name_cn": "サレ妻は奪われたい",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx212575-92x6aBTN9JCL.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx212575-92x6aBTN9JCL.png"
+        },
+        "rating": {
+          "score": 5.8
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
         "id": 10191451,
         "name": "今日は指輪を外すから……",
         "name_cn": "今日は指輪を外すから……",
@@ -2282,6 +2302,46 @@
         },
         "rating": {
           "score": 5.4
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10216171,
+        "name": "真面目なキミにハマるカラダ THE ANIMATION",
+        "name_cn": "真面目なキミにハマるカラダ THE ANIMATION",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx216171-IhhbG5GAio2C.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx216171-IhhbG5GAio2C.png"
+        },
+        "rating": {
+          "score": 0
+        },
+        "eps": 0,
+        "air_weekday": 5,
+        "source": "anilist",
+        "bgm_matched": false,
+        "pub_index": "",
+        "pub_time": "",
+        "bilibili_season_id": 0,
+        "is_nsfw": true
+      },
+      {
+        "id": 10216926,
+        "name": "お隣の贄",
+        "name_cn": "お隣の贄",
+        "images": {
+          "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx216926-FDFaH12RueCw.png",
+          "common": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx216926-FDFaH12RueCw.png"
+        },
+        "rating": {
+          "score": 0
         },
         "eps": 0,
         "air_weekday": 5,
@@ -2535,7 +2595,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/da/c8/712000_U6uYG.jpg"
         },
         "rating": {
-          "score": 6
+          "score": 6.1
         },
         "eps": 26,
         "air_weekday": 7,
