@@ -334,7 +334,7 @@
           "common": "https://lain.bgm.tv/r/400/pic/cover/l/b6/58/659266_fLr5z.jpg"
         },
         "rating": {
-          "score": 7
+          "score": 6.9
         },
         "eps": 26,
         "air_weekday": 4,
@@ -527,7 +527,7 @@
         "air_weekday": 5,
         "source": "bilibili",
         "bgm_matched": true,
-        "pub_index": "第82话",
+        "pub_index": "即将更新 第82话",
         "pub_time": "18:00",
         "bilibili_season_id": 96881,
         "is_nsfw": false
@@ -2486,6 +2486,26 @@
       "id": 7
     },
     "items": [
+      {
+        "id": 316789,
+        "name": "肥志百科 第1季",
+        "name_cn": "肥志百科 第1季",
+        "images": {
+          "large": "http://lain.bgm.tv/pic/cover/l/4c/14/316789_kzwkB.jpg",
+          "common": "http://lain.bgm.tv/pic/cover/c/4c/14/316789_kzwkB.jpg"
+        },
+        "rating": {
+          "score": 6.3
+        },
+        "eps": 12,
+        "air_weekday": 7,
+        "source": "bilibili",
+        "bgm_matched": true,
+        "pub_index": "第179话",
+        "pub_time": "10:00",
+        "bilibili_season_id": 34569,
+        "is_nsfw": false
+      },
       {
         "id": 456159,
         "name": "牧神记",
